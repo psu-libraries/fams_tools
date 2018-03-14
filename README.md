@@ -1,24 +1,20 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+This app will pull data from various sources, store the data in a database, and integrate that data into Activity Insight.
 
-Things you may want to cover:
+Database:
 
-* Ruby version
+  -sqlite3
 
-* System dependencies
+Data:
 
-* Configuration
+  -dmresults.csv
+  -ai-user-accounts.xls
 
-* Database creation
+Dependencies:
 
-* Database initialization
+  -rest-client
 
-* How to run the test suite
+Usage:
 
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+  -rake osp_data
