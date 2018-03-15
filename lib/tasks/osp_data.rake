@@ -17,7 +17,9 @@ namespace :osp_data do
   end
 
   task format: :environment do
-    OspFormat.convert_date_to_id
+    my_sheet = OspFormat
+    my_sheet.format_accessid_field
+    my_sheet.format_date_fields
   end
 
 end
