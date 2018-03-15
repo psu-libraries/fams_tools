@@ -17,9 +17,11 @@ namespace :osp_data do
   end
 
   task format: :environment do
-    my_sheet = OspFormat
+    my_sheet = OspFormat.new
     my_sheet.format_accessid_field
     my_sheet.format_date_fields
+    my_sheet.filter_by_date
+    my_sheet.csv_object.each {|csv| puts csv[11]}
   end
 
 end
