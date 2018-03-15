@@ -17,7 +17,7 @@ namespace :osp_data do
   end
 
   task format: :environment do
-
+    OspFormat.convert_date_to_id
   end
 
 end
