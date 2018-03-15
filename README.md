@@ -15,6 +15,7 @@ This app will pull data from various sources, store the data in a database, and 
 ## Dependencies:
 
   -rest-client
+
   -spreadsheet
 
 ## Usage:
