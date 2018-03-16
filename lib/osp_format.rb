@@ -2,6 +2,7 @@ require 'spreadsheet'
 require 'csv'
 
 class OspFormat
+  #attr_accessor :csv_object
 
   #Creates CSV object.  Imported CSV must be tab delimited text.
   def initialize(csv_object = CSV.read('data/dmresults-tabdel.txt', encoding: "ISO8859-1", col_sep: "\t"))
@@ -25,7 +26,7 @@ class OspFormat
     end
   end
 
-  #Removes time and '/ /' from date fields
+  #Removes time, '/', and '/ /' from date fields
   def format_date_fields
     index_arr = [11, 12, 16, 17, 18, 19]
     self.csv_object.each do |csv|
@@ -39,12 +40,19 @@ class OspFormat
     end
   end
 
+  #Remove rows with 'submitted' dates <= 2011
   def filter_by_date
+    kept_rows = []
     self.csv_object.each do |csv|
-      unless (csv[11].split('/')[2].to_i >= 11) && (csv[11].split('/')[2].to_i <= 35) 
-        #Still working
+      if (csv[11].split('/')[2].to_i >= 11) && (csv[11].split('/')[2].to_i <= 35) 
+        @csv_object = kept_rows.push(csv)
       end
     end
+  end
+
+  #Remove columns we don't need
+  def remove_columns
+
   end
 end
 
