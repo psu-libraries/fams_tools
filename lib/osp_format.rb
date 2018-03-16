@@ -28,7 +28,7 @@ class OspFormat
 
   #Removes time, '/', and '/ /' from date fields
   def format_date_fields
-    index_arr = [11, 12, 16, 17, 18, 19]
+    index_arr = [11, 12, 16, 17]
     self.csv_object.each do |csv|
       index_arr.each do |i|
         unless csv[i] == '/' || csv[i] == '/  /'
@@ -45,14 +45,22 @@ class OspFormat
     kept_rows = []
     self.csv_object.each do |csv|
       if (csv[11].split('/')[2].to_i >= 11) && (csv[11].split('/')[2].to_i <= 35) 
-        @csv_object = kept_rows.push(csv)
+        kept_rows.push(csv)
       end
     end
+    @csv_object = kept_rows
   end
 
   #Remove columns we don't need
   def remove_columns
-
+    kept_columns = []
+    index_arr = [1, 5, 7, 18, 19, 22, 23]
+    self.csv_object.each do |csv|
+      index_arr.each do |i|
+        csv[i] = nil
+      end
+      csv.compact!
+    end
   end
 end
 

@@ -21,7 +21,8 @@ namespace :osp_data do
     my_sheet.format_accessid_field
     my_sheet.format_date_fields
     my_sheet.filter_by_date
-    my_sheet.csv_object.each {|csv| puts csv[11]}
+    my_sheet.remove_columns
+    my_sheet.csv_object.each {|csv| puts csv}
   end
 
 end
