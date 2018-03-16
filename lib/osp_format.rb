@@ -8,6 +8,7 @@ class OspFormat
                  xls_object = Spreadsheet.open('data/ai-user-accounts.xls'))
     @csv_object = csv_object
     @xls_object = xls_object.worksheet 0
+    @active_users = find_active_users
   end
 
   def csv_object
@@ -67,19 +68,27 @@ class OspFormat
     end
   end
 
+  #Remove rows that contain non-active users
   def filter_by_user
-
-  end
-
-  Private
-  def find_active_users
-    active_user_list = []
-    self.xls_object.each do |xls|
-      if xls[6].downcase == 'yes'
-        active_user_list << xls[4].downcase
+    kept_rows = []
+    self.csv_object.each do |csv|
+      if @active_users.include? csv[4]
+        kept_rows << csv
       end
     end
-    active_user_list
+    @csv_object = kept_rows
+  end
+
+  private
+  #Creates a list of 'Enabled' AI users
+  def find_active_users
+    active_user_arr = []
+    self.xls_object.each do |xls|
+      if xls[6].downcase == 'yes'
+        active_user_arr << xls[4].downcase
+      end
+    end
+    active_user_arr
   end
 end
 
