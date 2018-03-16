@@ -1,4 +1,3 @@
-require 'osp_filter'
 require 'osp_format'
 
 namespace :osp_data do
