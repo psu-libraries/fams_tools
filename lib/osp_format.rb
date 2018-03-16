@@ -2,15 +2,20 @@ require 'spreadsheet'
 require 'csv'
 
 class OspFormat
-  #attr_accessor :csv_object
 
-  #Creates CSV object.  Imported CSV must be tab delimited text.
-  def initialize(csv_object = CSV.read('data/dmresults-tabdel.txt', encoding: "ISO8859-1", col_sep: "\t"))
+  #Creates CSV and XLS object.  Imported CSV must be tab delimited text.
+  def initialize(csv_object = CSV.read('data/dmresults-tabdel.txt', encoding: "ISO8859-1", col_sep: "\t"), 
+                 xls_object = Spreadsheet.open('data/ai-user-accounts.xls'))
     @csv_object = csv_object
+    @xls_object = xls_object.worksheet 0
   end
 
   def csv_object
     @csv_object
+  end
+
+  def xls_object
+    @xls_object
   end
 
   #Converts calendar dates back to accessids
@@ -53,7 +58,6 @@ class OspFormat
 
   #Remove columns we don't need
   def remove_columns
-    kept_columns = []
     index_arr = [1, 5, 7, 18, 19, 22, 23]
     self.csv_object.each do |csv|
       index_arr.each do |i|
@@ -61,6 +65,21 @@ class OspFormat
       end
       csv.compact!
     end
+  end
+
+  def filter_by_user
+
+  end
+
+  Private
+  def find_active_users
+    active_user_list = []
+    self.xls_object.each do |xls|
+      if xls[6].downcase == 'yes'
+        active_user_list << xls[4].downcase
+      end
+    end
+    active_user_list
   end
 end
 

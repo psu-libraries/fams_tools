@@ -12,17 +12,17 @@ namespace :osp_data do
   task filter: :environment do
 
     active_users = OspFilter.get_active_ai_users
+
     grants = OspFilter.find_active_grants(active_users)
 
   end
 
   task format: :environment do
     my_sheet = OspFormat.new
-    my_sheet.format_accessid_field
-    my_sheet.format_date_fields
-    my_sheet.filter_by_date
-    my_sheet.remove_columns
-    my_sheet.csv_object.each {|csv| puts csv}
+    #my_sheet.format_accessid_field
+    #my_sheet.format_date_fields
+    #my_sheet.filter_by_date
+    #my_sheet.remove_columns
   end
 
 end
