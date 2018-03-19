@@ -15,7 +15,7 @@ namespace :osp_data do
     my_sheet.filter_by_date
     my_sheet.remove_columns
     my_sheet.filter_by_user
-    my_sheet.csv_object.each {|csv| puts csv}
+    my_sheet.write_results_to_xl
   end
 
 end
