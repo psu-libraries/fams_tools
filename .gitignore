@@ -21,3 +21,8 @@
 /yarn-error.log
 
 .byebug_history
+
+# Ignore other files
+/data/dmresults-formatted.xls
+/data/output.txt
+*.swp
