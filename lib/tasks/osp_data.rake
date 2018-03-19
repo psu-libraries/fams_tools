@@ -15,7 +15,22 @@ namespace :osp_data do
     my_sheet.filter_by_date
     my_sheet.remove_columns
     my_sheet.filter_by_user
-    my_sheet.csv_object.each {|csv| puts csv}
+    my_sheet.write_results_to_xl
+    my_sheet.csv_object.each_with_index do |row, index|
+      Contract.create(title:             row[1],
+                      sponsor:           row[2],
+                      status:            row[7],
+                      osp_key:           row[0],
+                      submitted:         row[8],
+                      awarded:           row[9],
+                      requested:         row[10],
+                      funded:            row[11],
+                      total_anticipated: row[12],
+                      start_date:        row[13],
+                      end_date:          row[14],
+                      grant_contract:    row[15],
+                      base_agreement:    row[16])
+      Faculty.create(f_name
   end
 
 end
