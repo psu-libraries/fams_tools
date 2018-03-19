@@ -51,7 +51,7 @@ class OspFormat
     kept_rows = []
     self.csv_object.each do |csv|
       if (csv[11].split('/')[2].to_i >= 11) && (csv[11].split('/')[2].to_i <= 35) 
-        kept_rows.push(csv)
+        kept_rows << csv
       end
     end
     @csv_object = kept_rows
@@ -77,6 +77,28 @@ class OspFormat
       end
     end
     @csv_object = kept_rows
+  end
+
+  #Write the cleaned and filtered array to xl file
+  def write_results_to_xl(filename = 'data/dmresults-formatted.xls')
+    
+    wb = Spreadsheet::Workbook.new filename
+    sheet = wb.create_worksheet
+    head_arr = ['ospkey', 'title', 'sponsor', 'sponsortype', 'accessid', 'role', 'pctcredit',
+                'status', 'submitted', 'awarded', 'requested', 'funded', 'totalanticipated',
+                'startdate', 'enddate', 'grantcontract', 'baseagreement']
+
+    head_arr.each do |head|
+      sheet.row(0).push(head)
+    end
+
+    @csv_object.each_with_index do |row, index|
+      row.each do |v|
+        sheet.row(index+1).push(v)
+      end
+    end
+
+    wb.write filename 
   end
 
   private
