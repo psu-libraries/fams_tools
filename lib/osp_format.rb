@@ -46,6 +46,25 @@ class OspFormat
     end
   end
 
+  #Changes 'Pending Award' and 'Pending Proposal' status to 'Pending'
+  def format_pending
+    self.csv_object.each do |csv|
+      if csv[10] == 'Pending Proposal' || csv[10] == 'Pending Award'
+        csv[10] = 'Pending'
+      end
+    end
+  end
+
+  #Removes start and end dates for any contract that was not 'Awarded'
+  def format_start_end
+    self.csv_object.each do |csv|
+      unless csv[10] == 'Awarded'
+        csv[16] = ''
+        csv[17] = ''
+      end
+    end
+  end
+
   #Remove rows with 'submitted' dates <= 2011
   def filter_by_date
     kept_rows = []
@@ -72,8 +91,12 @@ class OspFormat
   def filter_by_user
     kept_rows = []
     self.csv_object.each do |csv|
-      if @active_users.include? csv[4]
-        kept_rows << csv
+      @active_users.each do |user|
+        if user[2] == csv[4]
+          csv = csv.insert(5, user[0])
+          csv = csv.insert(5, user[1])
+          kept_rows << csv
+        end
       end
     end
     @csv_object = kept_rows
@@ -84,15 +107,16 @@ class OspFormat
     
     wb = Spreadsheet::Workbook.new filename
     sheet = wb.create_worksheet
-    head_arr = ['ospkey', 'title', 'sponsor', 'sponsortype', 'accessid', 'role', 'pctcredit',
-                'status', 'submitted', 'awarded', 'requested', 'funded', 'totalanticipated',
-                'startdate', 'enddate', 'grantcontract', 'baseagreement']
+    head_arr = ['ospkey', 'title', 'sponsor', 'sponsortype', 'accessid', 'f_name', 'l_name',
+                'role', 'pctcredit','status', 'submitted', 'awarded', 'requested', 'funded',
+                'totalanticipated', 'startdate', 'enddate', 'grantcontract', 'baseagreement',]
 
     head_arr.each do |head|
       sheet.row(0).push(head)
     end
 
     @csv_object.each_with_index do |row, index|
+      puts row
       row.each do |v|
         sheet.row(index+1).push(v)
       end
@@ -107,7 +131,7 @@ class OspFormat
     active_user_arr = []
     self.xls_object.each do |xls|
       if xls[6].downcase == 'yes'
-        active_user_arr << xls[4].downcase
+        active_user_arr << [xls[0], xls[1], xls[4].downcase]
       end
     end
     active_user_arr

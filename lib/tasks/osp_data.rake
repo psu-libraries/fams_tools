@@ -9,14 +9,17 @@ namespace :osp_data do
         Save that data in the database within corresponding models."
 
   task format: :environment do
+    start = Time.now
     my_sheet = OspFormat.new
     my_sheet.format_accessid_field
     my_sheet.format_date_fields
+    my_sheet.format_pending
+    my_sheet.format_start_end
     my_sheet.filter_by_date
     my_sheet.remove_columns
     my_sheet.filter_by_user
     my_sheet.write_results_to_xl
-    my_sheet.csv_object.each_with_index do |row, index|
+=begin    my_sheet.csv_object.each_with_index do |row, index|
       Contract.create(title:             row[1],
                       sponsor:           row[2],
                       status:            row[7],
@@ -31,6 +34,8 @@ namespace :osp_data do
                       grant_contract:    row[15],
                       base_agreement:    row[16])
       Faculty.create(f_name
+=end
+    finish = Time.now
+    puts(finish - start)
   end
-
 end
