@@ -1,0 +1,2 @@
+class ContractGrant < ApplicationRecord
+end
