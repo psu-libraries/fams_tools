@@ -19,23 +19,36 @@ namespace :osp_data do
     my_sheet.remove_columns
     my_sheet.filter_by_user
     my_sheet.write_results_to_xl
-=begin    my_sheet.csv_object.each_with_index do |row, index|
-      Contract.create(title:             row[1],
-                      sponsor:           row[2],
-                      status:            row[7],
-                      osp_key:           row[0],
-                      submitted:         row[8],
-                      awarded:           row[9],
-                      requested:         row[10],
-                      funded:            row[11],
-                      total_anticipated: row[12],
-                      start_date:        row[13],
-                      end_date:          row[14],
-                      grant_contract:    row[15],
-                      base_agreement:    row[16])
-      Faculty.create(f_name
-=end
+    my_sheet.csv_object.each do |row|
+
+      sponsor = Sponsor.create(sponsor_name: row[2],
+                               sponsor_type: row[3])
+
+      contract = Contract.create(osp_key:           row[0],
+                                 title:             row[1],
+                                 sponsor:           sponsor,
+                                 status:            row[9],
+                                 submitted:         row[10],
+                                 awarded:           row[11],
+                                 requested:         row[12],
+                                 funded:            row[13],
+                                 total_anticipated: row[14],
+                                 start_date:        row[15],
+                                 end_date:          row[16],
+                                 grant_contract:    row[17],
+                                 base_agreement:    row[18])
+
+      faculty = Faculty.create(access_id: row[4],
+                               f_name:    row[5],
+                               l_name:    row[6])
+
+      ContractFacultyLink.create(contract:   contract,
+                                 faculty:    faculty,
+                                 role:       row[7],
+                                 pct_credit: row[8])
+
+    end
     finish = Time.now
-    puts(finish - start)
+    puts(((finish - start)/60).to_s + ' mins')
   end
 end

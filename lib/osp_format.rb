@@ -116,7 +116,6 @@ class OspFormat
     end
 
     @csv_object.each_with_index do |row, index|
-      puts row
       row.each do |v|
         sheet.row(index+1).push(v)
       end
