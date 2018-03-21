@@ -12,16 +12,19 @@
 
 ActiveRecord::Schema.define(version: 20180319184109) do
 
-  create_table "contract_grants", force: :cascade do |t|
-    t.integer "osp_key"
-    t.string "title"
-    t.string "sponsor_name"
-    t.string "sponsor_type"
-    t.string "access_id"
-    t.string "f_name"
-    t.string "l_name"
+  create_table "contract_faculty_links", force: :cascade do |t|
+    t.integer "contract_id"
+    t.integer "faculty_id"
     t.string "role"
     t.integer "pct_credit"
+    t.index ["contract_id"], name: "index_contract_faculty_links_on_contract_id"
+    t.index ["faculty_id"], name: "index_contract_faculty_links_on_faculty_id"
+  end
+
+  create_table "contracts", force: :cascade do |t|
+    t.integer "osp_key"
+    t.string "title"
+    t.integer "sponsor_id"
     t.string "status"
     t.date "submitted"
     t.date "awarded"
@@ -32,8 +35,21 @@ ActiveRecord::Schema.define(version: 20180319184109) do
     t.date "end_date"
     t.string "grant_contract"
     t.string "base_agreement"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.index ["osp_key"], name: "index_contracts_on_osp_key", unique: true
+    t.index ["sponsor_id"], name: "index_contracts_on_sponsor_id"
+  end
+
+  create_table "faculties", force: :cascade do |t|
+    t.string "access_id"
+    t.string "f_name"
+    t.string "l_name"
+    t.index ["access_id"], name: "index_faculties_on_access_id", unique: true
+  end
+
+  create_table "sponsors", force: :cascade do |t|
+    t.string "sponsor_name"
+    t.string "sponsor_type"
+    t.index ["sponsor_name"], name: "index_sponsors_on_sponsor_name", unique: true
   end
 
 end
