@@ -1,15 +1,9 @@
-class CreateContractGrant < ActiveRecord::Migration[5.1]
-  def change
-    create_table :contract_grants do |t|
+class CreateContracts < ActiveRecord::Migration[5.1]
+  def up
+    create_table :contracts do |t|
       t.integer :osp_key
       t.string :title
-      t.string :sponsor
-      t.string :sponsor_type
-      t.string :access_id
-      t.string :f_name
-      t.string :l_name
-      t.string :role
-      t.integer :pct_credit
+      t.references :sponsor, foreign_key: true
       t.string :status
       t.date :submitted
       t.date :awarded
@@ -21,7 +15,13 @@ class CreateContractGrant < ActiveRecord::Migration[5.1]
       t.string :grant_contract
       t.string :base_agreement
 
-      t.timestamps
+    end
+    add_index :contracts, :osp_key, unique: true
+  end
+
+  def down
+    if ActiveRecord::Base.connection.data_source_exists? 'contracts'
+      drop_table :contracts
     end
   end
 end
