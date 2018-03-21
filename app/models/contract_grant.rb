@@ -1,2 +1,0 @@
-class ContractGrant < ApplicationRecord
-end
