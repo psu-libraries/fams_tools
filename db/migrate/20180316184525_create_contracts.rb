@@ -1,5 +1,5 @@
 class CreateContracts < ActiveRecord::Migration[5.1]
-  def change
+  def up
     create_table :contracts do |t|
       t.integer :osp_key
       t.string :title
@@ -15,7 +15,13 @@ class CreateContracts < ActiveRecord::Migration[5.1]
       t.string :grant_contract
       t.string :base_agreement
 
-      t.timestamps
+    end
+    add_index :contracts, :osp_key, unique: true
+  end
+
+  def down
+    if ActiveRecord::Base.connection.data_source_exists? 'contracts'
+      drop_table :contracts
     end
   end
 end

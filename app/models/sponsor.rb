@@ -1,3 +1,3 @@
 class Sponsor < ApplicationRecord
-  has_many :contracts, :uniq => true
+  has_many :contracts
 end
