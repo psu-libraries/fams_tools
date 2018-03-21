@@ -2,11 +2,9 @@ require 'osp_format'
 
 namespace :osp_data do
 
-  desc "Pull data from dmresults.csv.  
-        Format and clean data.
-        Join with ai-user-accounts.xls on username (accessid) to only import data for AI users.
-        Further filtering.
-        Save that data in the database within corresponding models."
+  desc "Clean and filter data from dmresults.csv.
+        Write to xls.
+        Store data in database with appropriate linkages."
 
   task format: :environment do
     start = Time.now
@@ -20,27 +18,41 @@ namespace :osp_data do
     my_sheet.filter_by_user
     my_sheet.write_results_to_xl
     my_sheet.csv_object.each do |row|
+      begin
+        sponsor = Sponsor.create(sponsor_name: row[2],
+                                 sponsor_type: row[3])
 
-      sponsor = Sponsor.create(sponsor_name: row[2],
-                               sponsor_type: row[3])
+      rescue ActiveRecord::RecordNotUnique
+        sponsor = Sponsor.find_by(sponsor_name: row[2])
+      end
 
-      contract = Contract.create(osp_key:           row[0],
-                                 title:             row[1],
-                                 sponsor:           sponsor,
-                                 status:            row[9],
-                                 submitted:         row[10],
-                                 awarded:           row[11],
-                                 requested:         row[12],
-                                 funded:            row[13],
-                                 total_anticipated: row[14],
-                                 start_date:        row[15],
-                                 end_date:          row[16],
-                                 grant_contract:    row[17],
-                                 base_agreement:    row[18])
+      begin
+        contract = Contract.create(osp_key:           row[0],
+                                   title:             row[1],
+                                   sponsor:           sponsor,
+                                   status:            row[9],
+                                   submitted:         row[10],
+                                   awarded:           row[11],
+                                   requested:         row[12],
+                                   funded:            row[13],
+                                   total_anticipated: row[14],
+                                   start_date:        row[15],
+                                   end_date:          row[16],
+                                   grant_contract:    row[17],
+                                   base_agreement:    row[18])
 
-      faculty = Faculty.create(access_id: row[4],
-                               f_name:    row[5],
-                               l_name:    row[6])
+      rescue ActiveRecord::RecordNotUnique
+        contract = Contract.find_by(osp_key: row[0])
+      end
+
+      begin
+        faculty = Faculty.create(access_id: row[4],
+                                 f_name:    row[5],
+                                 l_name:    row[6])
+
+      rescue ActiveRecord::RecordNotUnique
+        faculty = Faculty.find_by(access_id: row[4])
+      end
 
       ContractFacultyLink.create(contract:   contract,
                                  faculty:    faculty,

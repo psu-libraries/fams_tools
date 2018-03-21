@@ -17,10 +17,8 @@ ActiveRecord::Schema.define(version: 20180316184731) do
     t.integer "faculty_id"
     t.string "role"
     t.integer "pct_credit"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["contract_id"], name: "index_pub_fac_links_on_contract_id"
-    t.index ["faculty_id"], name: "index_pub_fac_links_on_faculty_id"
+    t.index ["contract_id"], name: "index_contract_faculty_links_on_contract_id"
+    t.index ["faculty_id"], name: "index_contract_faculty_links_on_faculty_id"
   end
 
   create_table "contracts", force: :cascade do |t|
@@ -37,8 +35,7 @@ ActiveRecord::Schema.define(version: 20180316184731) do
     t.date "end_date"
     t.string "grant_contract"
     t.string "base_agreement"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.index ["osp_key"], name: "index_contracts_on_osp_key", unique: true
     t.index ["sponsor_id"], name: "index_contracts_on_sponsor_id"
   end
 
@@ -46,15 +43,13 @@ ActiveRecord::Schema.define(version: 20180316184731) do
     t.string "access_id"
     t.string "f_name"
     t.string "l_name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.index ["access_id"], name: "index_faculties_on_access_id", unique: true
   end
 
   create_table "sponsors", force: :cascade do |t|
     t.string "sponsor_name"
     t.string "sponsor_type"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.index ["sponsor_name"], name: "index_sponsors_on_sponsor_name", unique: true
   end
 
 end
