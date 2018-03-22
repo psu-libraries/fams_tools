@@ -40,3 +40,5 @@ This app will pull data from various sources, store the data in a database, and 
 
   5. rake osp_data:format
 
+  6. rake osp_data:integrate
+
