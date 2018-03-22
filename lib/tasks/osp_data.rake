@@ -63,4 +63,9 @@ namespace :osp_data do
     finish = Time.now
     puts(((finish - start)/60).to_s + ' mins')
   end
+
+  task integrate: :environment do
+    my_osp = OspMaster.new
+    my_osp.hash_to_xml 
+  end
 end
