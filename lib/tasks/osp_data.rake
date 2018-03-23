@@ -66,6 +66,6 @@ namespace :osp_data do
 
   task integrate: :environment do
     my_osp = OspMaster.new
-    my_osp.hash_to_xml 
+    my_osp.build_xml 
   end
 end
