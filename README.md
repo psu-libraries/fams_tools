@@ -24,6 +24,8 @@ This app will pull data from various sources, store the data in a database, and 
 
   -rspec-rails (development and test)
 
+  -nokogiri
+
 ## Usage
 
   1. Download OSP data in csv format: [dmresults.csv](https://service.sims.psu.edu/digitalmeasures/dmresults.csv)
