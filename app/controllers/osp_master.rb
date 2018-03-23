@@ -3,34 +3,44 @@ require 'nokogiri'
 
 class OspMaster < ApplicationController
   def initialize
-    @contract_faculty_links = ContractFacultyLink.all
+    @faculties = Faculty.all
   end
 
-  def hash_to_xml
-    master_hash = {}
-    @contract_faculty_links.each do |link|
-      record_hash = {}
-      link.contract.attributes.each do |k, v|
-        record_hash[k] = v
-      end
-      link.contract.sponsor.attributes.each do |k, v|
-        record_hash[k] = v
-      end
-      link.faculty.attributes.each do |k, v|
-        record_hash[k] = v
-      end
-      master_hash[link.faculty.access_id] = record_hash
-    end
-    master_hash.each do |k, v|
+  def build_xml
+    @faculties.each do |faculty|
       builder = Nokogiri::XML::Builder.new do |xml|
-        xml.data {
-          xml.record('username' => k) {           
-            v.each do |key, value|
-              #finish building xml 
+        xml.Data {
+          xml.Record( 'username' => faculty.access_id )  {
+          faculty.contract_faculty_links.each do |link|
+            xml.CONGRANT {
+              xml.OSPKEY_ link.contract.osp_key
+              xml.BASE_AGREE_ link.contract.base_agreement
+              xml.TYPE_ link.contract.grant_contract
+              xml.TITLE_ link.contract.title
+              xml.SPONORG_ link.contract.sponsor.sponsor_name
+              xml.AWARDORG_ link.contract.sponsor.sponsor_type
+              xml.CONGRANT_INVEST {
+                xml.FACULTY_NAME_
+                xml.FNAME_ faculty.f_name
+                xml.MNAME_
+                xml.LNAME_ faculty.l_name
+                xml.ROLE_ link.role
+                xml.ASSIGN_ link.pct_credit
+              }
+              xml.AMOUNT_REQUEST_ link.contract.requested
+              xml.AMOUNT_ANTICIPATE_ link.contract.total_anticipated
+              xml.AMOUNT_ link.contract.funded
+              xml.STATUS_ link.contract.status
+              xml.SUB_START_ link.contract.submitted
+              xml.AWARD_START_ link.contract.awarded
+              xml.START_START_ link.contract.start_date
+              xml.END_END_ link.contract.end_date
+            }
+          end
           }
         }
-      }
+      end
+      puts builder.to_xml
     end
-    puts builder.to_xml
   end
 end
