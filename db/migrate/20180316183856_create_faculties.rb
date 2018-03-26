@@ -9,10 +9,7 @@ class CreateFaculties < ActiveRecord::Migration[5.1]
     end
     add_index :faculties, :access_id, unique: true
   end
-
   def down
-    if ActiveRecord::Base.connection.data_source_exists? 'faculties'
-      drop_table :faculties
-    end
+    drop_table :faculties
   end
 end

@@ -8,10 +8,7 @@ class CreateContractFacultyLinks < ActiveRecord::Migration[5.1]
 
     end
   end
-  
   def down
-    if ActiveRecord::Base.connection.data_source_exists? 'contract_faculty_links'
-      drop_table :contract_faculty_links
-    end
+    drop_table :contract_faculty_links
   end
 end

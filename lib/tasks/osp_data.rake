@@ -19,6 +19,7 @@ namespace :osp_data do
     my_sheet.filter_by_user
     my_sheet.write_results_to_xl
     my_sheet.csv_object.each do |row|
+      puts row
       begin
         sponsor = Sponsor.create(sponsor_name: row[2],
                                  sponsor_type: row[3])

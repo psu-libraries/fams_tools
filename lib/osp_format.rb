@@ -55,7 +55,7 @@ class OspFormat
           date = Date.strptime(csv[i], "%m/%d/%y")
           csv[i] = date.strftime("%m/%d/%Y")
         rescue ArgumentError => e
-          puts e
+          #puts e
         end
       end
     end
