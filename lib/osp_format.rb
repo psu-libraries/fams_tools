@@ -32,7 +32,16 @@ class OspFormat
     end
   end
 
-  #Removes time, '/', and '/ /' from date fields
+  #Converts 'Co-PI' to 'Co-Principal Investigator'
+  def format_role_field
+    @csv_object.each do |csv|
+      if csv[8] == 'Co-PI'
+        csv[8] = 'Co-Principal Investigator'
+      end
+    end
+  end
+
+  #Removes time, '/', and '/ /' from date fields.  Convert mm/dd/yy to Date object 
   def format_date_fields
     index_arr = [11, 12, 16, 17]
     self.csv_object.each do |csv|
@@ -41,6 +50,12 @@ class OspFormat
           csv[i] = csv[i].split(' ')[0]
         else
           csv[i] = ''
+        end
+        begin
+          date = Date.strptime(csv[i], "%m/%d/%y")
+          csv[i] = date.strftime("%m/%d/%Y")
+        rescue ArgumentError => e
+          puts e
         end
       end
     end
@@ -69,7 +84,7 @@ class OspFormat
   def filter_by_date
     kept_rows = []
     self.csv_object.each do |csv|
-      if (csv[11].split('/')[2].to_i >= 11) && (csv[11].split('/')[2].to_i <= 35) 
+      if (csv[11].split('/')[2].to_i >= 2011) && (csv[11].split('/')[2].to_i <= 2035) 
         kept_rows << csv
       end
     end
@@ -92,7 +107,8 @@ class OspFormat
     kept_rows = []
     self.csv_object.each do |csv|
       @active_users.each do |user|
-        if user[2] == csv[4]
+        if user[3] == csv[4]
+          csv = csv.insert(5, user[2])
           csv = csv.insert(5, user[0])
           csv = csv.insert(5, user[1])
           kept_rows << csv
@@ -108,8 +124,8 @@ class OspFormat
     wb = Spreadsheet::Workbook.new filename
     sheet = wb.create_worksheet
     head_arr = ['ospkey', 'title', 'sponsor', 'sponsortype', 'accessid', 'f_name', 'l_name',
-                'role', 'pctcredit','status', 'submitted', 'awarded', 'requested', 'funded',
-                'totalanticipated', 'startdate', 'enddate', 'grantcontract', 'baseagreement',]
+                'm_name', 'role', 'pctcredit','status', 'submitted', 'awarded', 'requested',
+                'funded', 'totalanticipated', 'startdate', 'enddate', 'grantcontract', 'baseagreement',]
 
     head_arr.each do |head|
       sheet.row(0).push(head)
@@ -130,7 +146,7 @@ class OspFormat
     active_user_arr = []
     self.xls_object.each do |xls|
       if xls[6].downcase == 'yes'
-        active_user_arr << [xls[0], xls[1], xls[4].downcase]
+        active_user_arr << [xls[0], xls[1], xls[2], xls[4].downcase]
       end
     end
     active_user_arr

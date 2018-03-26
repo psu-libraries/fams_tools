@@ -4,6 +4,7 @@ class CreateFaculties < ActiveRecord::Migration[5.1]
       t.string :access_id
       t.string :f_name
       t.string :l_name
+      t.string :m_name
 
     end
     add_index :faculties, :access_id, unique: true

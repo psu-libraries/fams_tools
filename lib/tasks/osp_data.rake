@@ -10,6 +10,7 @@ namespace :osp_data do
     start = Time.now
     my_sheet = OspFormat.new
     my_sheet.format_accessid_field
+    my_sheet.format_role_field
     my_sheet.format_date_fields
     my_sheet.format_pending
     my_sheet.format_start_end
@@ -30,16 +31,16 @@ namespace :osp_data do
         contract = Contract.create(osp_key:           row[0],
                                    title:             row[1],
                                    sponsor:           sponsor,
-                                   status:            row[9],
-                                   submitted:         row[10],
-                                   awarded:           row[11],
-                                   requested:         row[12],
-                                   funded:            row[13],
-                                   total_anticipated: row[14],
-                                   start_date:        row[15],
-                                   end_date:          row[16],
-                                   grant_contract:    row[17],
-                                   base_agreement:    row[18])
+                                   status:            row[10],
+                                   submitted:         row[11],
+                                   awarded:           row[12],
+                                   requested:         row[13],
+                                   funded:            row[14],
+                                   total_anticipated: row[15],
+                                   start_date:        row[16],
+                                   end_date:          row[17],
+                                   grant_contract:    row[18],
+                                   base_agreement:    row[19])
 
       rescue ActiveRecord::RecordNotUnique
         contract = Contract.find_by(osp_key: row[0])
@@ -48,7 +49,8 @@ namespace :osp_data do
       begin
         faculty = Faculty.create(access_id: row[4],
                                  f_name:    row[5],
-                                 l_name:    row[6])
+                                 l_name:    row[6],
+                                 m_name:    row[7])
 
       rescue ActiveRecord::RecordNotUnique
         faculty = Faculty.find_by(access_id: row[4])
@@ -56,8 +58,8 @@ namespace :osp_data do
 
       ContractFacultyLink.create(contract:   contract,
                                  faculty:    faculty,
-                                 role:       row[7],
-                                 pct_credit: row[8])
+                                 role:       row[8],
+                                 pct_credit: row[9])
 
     end
     finish = Time.now
