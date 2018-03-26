@@ -7,11 +7,7 @@ class CreateSponsors < ActiveRecord::Migration[5.1]
     end
     add_index :sponsors, :sponsor_name, unique: true
   end
-
   def down
-    if ActiveRecord::Base.connection.data_source_exists? 'sponsors'
-      drop_table :sponsors
-    end
+    drop_table :sponsors
   end
-
 end
