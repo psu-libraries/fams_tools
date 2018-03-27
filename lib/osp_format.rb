@@ -53,7 +53,7 @@ class OspFormat
         end
         begin
           date = Date.strptime(csv[i], "%m/%d/%y")
-          csv[i] = date.strftime("%m/%d/%Y")
+          csv[i] = date.strftime("%Y-%m-%d")
         rescue ArgumentError => e
           #puts e
         end
@@ -84,7 +84,7 @@ class OspFormat
   def filter_by_date
     kept_rows = []
     self.csv_object.each do |csv|
-      if (csv[11].split('/')[2].to_i >= 2011) && (csv[11].split('/')[2].to_i <= 2035) 
+      if (csv[11].split('-')[0].to_i >= 2011) && (csv[11].split('-')[0].to_i <= 2035) 
         kept_rows << csv
       end
     end

@@ -31,10 +31,26 @@ class OspMaster < ApplicationController
             xml.AMOUNT_ANTICIPATE_ link.contract.total_anticipated
             xml.AMOUNT_ link.contract.funded
             xml.STATUS_ link.contract.status
-            xml.SUB_START_ link.contract.submitted
-            xml.AWARD_START_ link.contract.awarded
-            xml.START_START_ link.contract.start_date
-            xml.END_END_ link.contract.end_date
+            begin
+              xml.SUB_START_ Date.strptime(link.contract.submitted.to_s, '%Y-%m-%d').strftime('%B')
+            rescue ArgumentError
+              xml.SUB_START_
+            end
+            begin
+              xml.AWARD_START_ Date.strptime(link.contract.awarded.to_s, '%Y-%m-%d').strftime('%B')
+            rescue ArgumentError
+              xml.AWARD_START_
+            end
+            begin
+              xml.START_START_ Date.strptime(link.contract.start_date.to_s, '%Y-%m-%d').strftime('%B')
+            rescue ArgumentError
+              xml.START_START_
+            end
+            begin
+              xml.END_END_ Date.strptime(link.contract.end_date.to_s, '%Y-%m-%d').strftime('%B')
+            rescue ArgumentError => e
+              xml.END_END_
+            end
           }
         end
         }

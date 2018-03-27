@@ -5,13 +5,13 @@ class CreateContracts < ActiveRecord::Migration[5.1]
       t.string :title
       t.references :sponsor, foreign_key: true
       t.string :status
-      t.string :submitted
-      t.string :awarded
+      t.date :submitted
+      t.date :awarded
       t.integer :requested
       t.integer :funded
       t.integer :total_anticipated
-      t.string :start_date
-      t.string :end_date
+      t.date :start_date
+      t.date :end_date
       t.string :grant_contract
       t.string :base_agreement
 

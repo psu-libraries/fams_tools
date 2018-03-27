@@ -19,7 +19,6 @@ namespace :osp_data do
     my_sheet.filter_by_user
     my_sheet.write_results_to_xl
     my_sheet.csv_object.each do |row|
-      puts row
       begin
         sponsor = Sponsor.create(sponsor_name: row[2],
                                  sponsor_type: row[3])
@@ -68,7 +67,10 @@ namespace :osp_data do
   end
 
   task integrate: :environment do
+    start = Time.now
     my_osp = OspMaster.new
-    my_osp.build_xml 
+    my_osp.build_xml
+    finish = Time.now
+    puts(((finish - start)/60).to_s + ' mins') 
   end
 end
