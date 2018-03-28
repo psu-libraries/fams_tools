@@ -19,6 +19,14 @@ class OspFormat
     @xls_object
   end
 
+  def format_grant_contract
+    @csv_object.each do |csv|
+      if csv[20] == nil
+        csv[20] = ''
+      end
+    end
+  end
+
   #Converts calendar dates back to accessids
   def format_accessid_field
     self.csv_object.each do |csv|
@@ -37,6 +45,15 @@ class OspFormat
     @csv_object.each do |csv|
       if csv[8] == 'Co-PI'
         csv[8] = 'Co-Principal Investigator'
+      end
+      if csv[8] == 'Faculty'
+        csv[8] = 'Core Faculty'
+      end
+      if csv[8] == 'Post Doctoral'
+        csv[8] = 'Post Doctoral Associate'
+      end
+      if csv[8] == 'unknown'
+        csv[8] = 'Unknown'
       end
     end
   end

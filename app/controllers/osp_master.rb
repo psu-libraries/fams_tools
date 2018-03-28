@@ -9,8 +9,7 @@ class OspMaster < ApplicationController
   def build_xml
     builder = Nokogiri::XML::Builder.new do |xml|
       xml.Data {
-        @faculties[0..10].each do |faculty|
-      #@faculties.each do |faculty|
+      @faculties.each do |faculty|
         xml.Record( 'username' => faculty.access_id )  {
         faculty.contract_faculty_links.each do |link|
           xml.CONGRANT {
