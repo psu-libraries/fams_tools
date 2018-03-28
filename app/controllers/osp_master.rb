@@ -9,7 +9,8 @@ class OspMaster < ApplicationController
   def build_xml
     builder = Nokogiri::XML::Builder.new do |xml|
       xml.Data {
-      @faculties.each do |faculty|
+        @faculties[0..10].each do |faculty|
+      #@faculties.each do |faculty|
         xml.Record( 'username' => faculty.access_id )  {
         faculty.contract_faculty_links.each do |link|
           xml.CONGRANT {
@@ -31,25 +32,35 @@ class OspMaster < ApplicationController
             xml.AMOUNT_ANTICIPATE_ link.contract.total_anticipated
             xml.AMOUNT_ link.contract.funded
             xml.STATUS_ link.contract.status
+            xml.DTM_SUB_ Date.strptime(link.contract.submitted.to_s, '%Y-%m-%d').strftime('%B')
+            xml.DTD_SUB_ Date.strptime(link.contract.submitted.to_s, '%Y-%m-%d').strftime('%d')
+            xml.DTY_SUB_ Date.strptime(link.contract.submitted.to_s, '%Y-%m-%d').strftime('%Y')
             begin
-              xml.SUB_START_ Date.strptime(link.contract.submitted.to_s, '%Y-%m-%d').strftime('%B')
+              xml.DTM_AWARD_ Date.strptime(link.contract.awarded.to_s, '%Y-%m-%d').strftime('%B')
+              xml.DTD_AWARD_ Date.strptime(link.contract.awarded.to_s, '%Y-%m-%d').strftime('%d')
+              xml.DTY_AWARD_ Date.strptime(link.contract.awarded.to_s, '%Y-%m-%d').strftime('%Y')
             rescue ArgumentError
-              xml.SUB_START_
+              xml.DTM_AWARD_
+              xml.DTD_AWARD_
+              xml.DTY_AWARD_
             end
             begin
-              xml.AWARD_START_ Date.strptime(link.contract.awarded.to_s, '%Y-%m-%d').strftime('%B')
+              xml.DTM_START_ Date.strptime(link.contract.start_date.to_s, '%Y-%m-%d').strftime('%B')
+              xml.DTD_START_ Date.strptime(link.contract.start_date.to_s, '%Y-%m-%d').strftime('%d')
+              xml.DTY_START_ Date.strptime(link.contract.start_date.to_s, '%Y-%m-%d').strftime('%Y')
             rescue ArgumentError
-              xml.AWARD_START_
+              xml.DTM_START_
+              xml.DTD_START_
+              xml.DTY_START_
             end
             begin
-              xml.START_START_ Date.strptime(link.contract.start_date.to_s, '%Y-%m-%d').strftime('%B')
+              xml.DTM_END_ Date.strptime(link.contract.end_date.to_s, '%Y-%m-%d').strftime('%B')
+              xml.DTD_END_ Date.strptime(link.contract.end_date.to_s, '%Y-%m-%d').strftime('%d')
+              xml.DTY_END_ Date.strptime(link.contract.end_date.to_s, '%Y-%m-%d').strftime('%Y')
             rescue ArgumentError
-              xml.START_START_
-            end
-            begin
-              xml.END_END_ Date.strptime(link.contract.end_date.to_s, '%Y-%m-%d').strftime('%B')
-            rescue ArgumentError => e
-              xml.END_END_
+              xml.DTM_END_
+              xml.DTD_END_
+              xml.DTY_END_
             end
           }
         end
@@ -57,6 +68,6 @@ class OspMaster < ApplicationController
       end
       }
     end
-    puts builder.to_xml
+    return builder.to_xml
   end
 end
