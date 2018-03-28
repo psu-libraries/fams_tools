@@ -1,4 +1,6 @@
+require 'rest-client'
 require 'osp_format'
+
 
 namespace :osp_data do
 
@@ -69,7 +71,11 @@ namespace :osp_data do
   task integrate: :environment do
     start = Time.now
     my_osp = OspMaster.new
-    my_osp.build_xml
+    puts my_osp.build_xml
+    auth = {:username => "psu/aisupport", :password => "hAeqxpAWubq"}
+    url = 'https://beta.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University'
+    response = HTTParty.post url, :body => my_osp.build_xml, :headers => {'Content-type' => 'text/xml'}, :basic_auth => auth
+    puts response
     finish = Time.now
     puts(((finish - start)/60).to_s + ' mins') 
   end
