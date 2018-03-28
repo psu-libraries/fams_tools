@@ -11,6 +11,7 @@ namespace :osp_data do
   task format: :environment do
     start = Time.now
     my_sheet = OspFormat.new
+    my_sheet.format_grant_contract
     my_sheet.format_accessid_field
     my_sheet.format_role_field
     my_sheet.format_date_fields
@@ -71,7 +72,6 @@ namespace :osp_data do
   task integrate: :environment do
     start = Time.now
     my_osp = OspMaster.new
-    puts my_osp.build_xml
     auth = {:username => "psu/aisupport", :password => "hAeqxpAWubq"}
     url = 'https://beta.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University'
     response = HTTParty.post url, :body => my_osp.build_xml, :headers => {'Content-type' => 'text/xml'}, :basic_auth => auth
