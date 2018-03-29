@@ -6,10 +6,21 @@ class OspMaster < ApplicationController
     @faculties = Faculty.all
   end
 
-  def build_xml
+  #Chunks osp data into batches so we don't overload AI with records
+  def batched_osp_xml
+    xml_batch = []
+    @faculties.each_slice(5) do |batch|
+      xml_batch << build_xml(batch)
+    end
+    return xml_batch 
+  end
+
+  private
+  #Generates xml from faculties table
+  def build_xml(faculty_data)
     builder = Nokogiri::XML::Builder.new do |xml|
       xml.Data {
-      @faculties.each do |faculty|
+      faculty_data.each do |faculty|
         xml.Record( 'username' => faculty.access_id )  {
         faculty.contract_faculty_links.each do |link|
           xml.CONGRANT {
