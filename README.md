@@ -26,13 +26,11 @@ This app will pull data from various sources, store the data in a database, and 
 
   -nokogiri
 
-## Usage
+## Usage (Beta Testing)
 
   1. Download OSP data in csv format: [dmresults.csv](https://service.sims.psu.edu/digitalmeasures/dmresults.csv)
 
-  2. Download ai-user information from DSRD Box. 
-
-  (All Files > Activity Insight files & folders > OSP data for Contracts_Grants > ai-user-accounts.xls)
+  2. Download ai-user (psu-users.xls) information from AI Beta Users and Security Page. 
 
   3. Store these files in /data/
 
