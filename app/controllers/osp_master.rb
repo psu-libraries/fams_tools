@@ -3,13 +3,13 @@ require 'nokogiri'
 
 class OspMaster < ApplicationController
   def initialize
-    @faculties = Faculty.all
+    @contract_faculty_links = ContractFacultyLink.all
   end
 
   #Chunks osp data into batches so we don't overload AI with records
   def batched_osp_xml
     xml_batch = []
-    @faculties.each_slice(5) do |batch|
+    @contract_faculty_links.each_slice(2) do |batch|
       xml_batch << build_xml(batch)
     end
     return xml_batch 
@@ -17,12 +17,11 @@ class OspMaster < ApplicationController
 
   private
   #Generates xml from faculties table
-  def build_xml(faculty_data)
+  def build_xml(osp_link_arr)
     builder = Nokogiri::XML::Builder.new do |xml|
       xml.Data {
-      faculty_data.each do |faculty|
-        xml.Record( 'username' => faculty.access_id )  {
-        faculty.contract_faculty_links.each do |link|
+      osp_link_arr.each do |link|
+        xml.Record( 'username' => link.faculty.access_id ) {
           xml.CONGRANT {
             xml.OSPKEY_ link.contract.osp_key
             xml.BASE_AGREE_ link.contract.base_agreement
@@ -32,9 +31,9 @@ class OspMaster < ApplicationController
             xml.AWARDORG_ link.contract.sponsor.sponsor_type
             xml.CONGRANT_INVEST {
               xml.FACULTY_NAME_
-              xml.FNAME_ faculty.f_name
-              xml.MNAME_ faculty.m_name
-              xml.LNAME_ faculty.l_name
+              xml.FNAME_ link.faculty.f_name
+              xml.MNAME_ link.faculty.m_name
+              xml.LNAME_ link.faculty.l_name
               xml.ROLE_ link.role
               xml.ASSIGN_ link.pct_credit
             }
@@ -73,7 +72,6 @@ class OspMaster < ApplicationController
               xml.DTY_END_
             end
           }
-        end
         }
       end
       }
