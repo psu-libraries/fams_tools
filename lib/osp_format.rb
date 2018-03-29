@@ -5,7 +5,7 @@ class OspFormat
 
   #Creates CSV and XLS object.  Imported CSV must be tab delimited text.
   def initialize(csv_object = CSV.read('data/dmresults-tabdel.txt', encoding: "ISO8859-1", col_sep: "\t"), 
-                 xls_object = Spreadsheet.open('data/ai-user-accounts.xls'))
+                 xls_object = Spreadsheet.open('data/psu-users.xls'))
     @csv_object = csv_object
     @xls_object = xls_object.worksheet 0
     @active_users = find_active_users
@@ -158,11 +158,11 @@ class OspFormat
   end
 
   private
-  #Creates a list of 'Enabled' AI users
+  #Creates a list of 'Enabled' and 'Has Access' AI users
   def find_active_users
     active_user_arr = []
-    self.xls_object.each do |xls|
-      if xls[6].downcase == 'yes'
+    self.xls_object.drop(3).each do |xls|
+      if xls[6].downcase == 'yes' && xls[7].downcase == 'yes'
         active_user_arr << [xls[0], xls[1], xls[2], xls[4].downcase]
       end
     end
