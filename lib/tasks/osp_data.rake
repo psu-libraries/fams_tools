@@ -74,10 +74,11 @@ namespace :osp_data do
     my_osp = OspMaster.new
     auth = {:username => "psu/aisupport", :password => "hAeqxpAWubq"}
     url = 'https://beta.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University'
-    puts my_osp.batched_osp_xml
-    my_osp.batched_osp_xml.each do |xml|
+    my_osp.batched_osp_xml[0..50].each do |xml|
+      puts xml
       response = HTTParty.post url, :body => xml, :headers => {'Content-type' => 'text/xml'}, :basic_auth => auth
       puts response
+      puts '##########################################################################################################'
     end
     finish = Time.now
     puts(((finish - start)/60).to_s + ' mins') 
