@@ -20,6 +20,7 @@ namespace :osp_data do
     my_sheet.filter_by_date
     my_sheet.remove_columns
     my_sheet.filter_by_user
+    my_sheet.filter_purged_withdrawn
     my_sheet.write_results_to_xl
     my_sheet.csv_object.each do |row|
       begin

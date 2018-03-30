@@ -137,7 +137,7 @@ class OspFormat
   end
 
   #Remove rows with 'Purged' or 'Withdrawn' status
-  def filter_pending_withdrawn
+  def filter_purged_withdrawn
     kept_rows = []
     self.csv_object.each do |csv|
       if (csv[10] == 'Purged') || (csv[10] == 'Withdrawn')
