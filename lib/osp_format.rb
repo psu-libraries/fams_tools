@@ -140,7 +140,7 @@ class OspFormat
   def filter_purged_withdrawn
     kept_rows = []
     self.csv_object.each do |csv|
-      if (csv[10] == 'Purged') || (csv[10] == 'Withdrawn')
+      unless (csv[10] == 'Purged') || (csv[10] == 'Withdrawn')
         kept_rows << csv
       end
       @csv_object = kept_rows
