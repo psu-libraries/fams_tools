@@ -19,6 +19,7 @@ class OspFormat
     @xls_object
   end
 
+  #Replace nil with empty space
   def format_grant_contract
     @csv_object.each do |csv|
       if csv[20] == nil
@@ -133,6 +134,17 @@ class OspFormat
       end
     end
     @csv_object = kept_rows
+  end
+
+  #Remove rows with 'Purged' or 'Withdrawn' status
+  def filter_pending_withdrawn
+    kept_rows = []
+    self.csv_object.each do |csv|
+      if (csv[10] == 'Purged') || (csv[10] == 'Withdrawn')
+        kept_rows << csv
+      end
+      @csv_object = kept_rows
+    end
   end
 
   #Write the cleaned and filtered array to xl file
