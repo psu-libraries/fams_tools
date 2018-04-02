@@ -1,5 +1,6 @@
 require 'rest-client'
 require 'osp_format'
+require 'osp_xml_builder'
 
 
 namespace :osp_data do
@@ -72,15 +73,20 @@ namespace :osp_data do
 
   task integrate: :environment do
     start = Time.now
-    my_osp = OspMaster.new
+    my_osp = OspXMLBuilder.new
     auth = {:username => "psu/aisupport", :password => "hAeqxpAWubq"}
     url = 'https://beta.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University'
-    my_osp.batched_osp_xml[50..70].each do |xml|
+    counter = 0
+    my_osp.batched_osp_xml.each do |xml|
       puts xml
       response = HTTParty.post url, :body => xml, :headers => {'Content-type' => 'text/xml'}, :basic_auth => auth
       puts response
       puts '##########################################################################################################'
+      if response.include? 'Error'
+        counter += 1
+      end
     end
+    puts counter
     finish = Time.now
     puts(((finish - start)/60).to_s + ' mins') 
   end
