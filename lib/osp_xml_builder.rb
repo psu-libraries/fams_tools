@@ -1,7 +1,6 @@
-require 'rest-client'
 require 'nokogiri'
 
-class OspMaster < ApplicationController
+class OspXMLBuilder
   def initialize
     @faculties = Faculty.all
   end
