@@ -64,13 +64,11 @@ class OspFormat
     index_arr = [11, 12, 16, 17]
     self.csv_object.each do |csv|
       index_arr.each do |i|
-        unless csv[i] == '/' || csv[i] == '/  /'
-          csv[i] = csv[i].split(' ')[0]
-        else
+        if csv[i] == '/' || csv[i] == '/  /'
           csv[i] = ''
         end
         begin
-          date = Date.strptime(csv[i], "%m/%d/%y")
+          date = Date.strptime(csv[i], "%m/%d/%Y")
           csv[i] = date.strftime("%Y-%m-%d")
         rescue ArgumentError => e
           #puts e
@@ -102,7 +100,7 @@ class OspFormat
   def filter_by_date
     kept_rows = []
     self.csv_object.each do |csv|
-      if (csv[11].split('-')[0].to_i >= 2011) && (csv[11].split('-')[0].to_i <= 2035) 
+      if (csv[11].split('-')[0].to_i >= 2011) && (csv[11].split('-')[0].to_i <= 2018) 
         kept_rows << csv
       end
     end
