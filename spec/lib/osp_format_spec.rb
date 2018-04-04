@@ -3,14 +3,22 @@ require 'spreadsheet'
 require 'osp_format'
 
 RSpec.describe OspFormat do
+  book = Spreadsheet::Workbook.new
+  sheet = book.create_worksheet
+  sheet.row(1).replace []
+  sheet.row(2).replace []
+  sheet.row(3).replace ['Last Name', 'First Name', 'Middle Name', 'Email', 'Username', 'PSU ID #', 'Enabled?', 'Has Access to Manage Activities?', 
+                'Campus', 'Campus Name', 'College', 'College Name', 'Department', 'Division', 'Institute', 'School', 'Security']
+  sheet.row(4).replace ['X', 'X', 'X', 'X', 'zzz999', 'X', 'Yes', 'Yes', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X']
+  sheet.row(5).replace ['X', 'X', 'X', 'X', 'xxx111', 'X', 'No', 'No', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X']
+
 
   context "#format_grant_contract" do
-
-    it "should convert nil to ' ' under 'grantcontract' column" do
+        it "should convert nil to ' ' under 'grantcontract' column" do
       osp_obj = OspFormat.new([[1, 1, 'X', 'X', 'X', 'X', 'X', 'X', 'X', 1, 'X', 'X',
                               'X', 1, 1, 1, 'X', 'X', 'X', 'X', nil, 'X', 'X', 'X'],
                               [1, 1, 'X', 'X', 'X', 'X', 'X', 'X', 'X', 1, 'X', 'X',
-                               'X', 1, 1, 1, 'X', 'X', 'X', 'X', 'Grant', 'X', 'X', 'X']])
+                               'X', 1, 1, 1, 'X', 'X', 'X', 'X', 'Grant', 'X', 'X', 'X']], book)
 
       osp_obj.format_grant_contract
       expect(osp_obj.csv_object[0][20]).to eq('')
@@ -26,7 +34,7 @@ RSpec.describe OspFormat do
                               [1, 1, 'X', 'X', 'X', 'X', 'Mar-26', 'X', 'X', 1, 'X', 'X',
                               'X', 1, 1, 1, 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'],
                               [1, 1, 'X', 'X', 'X', 'X', '2-Jan', 'X', 'X', 1, 'X', 'X',
-                              'X', 1, 1, 1, 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X']])
+                              'X', 1, 1, 1, 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X']], book)
 
       osp_obj.format_accessid_field
       expect(osp_obj.csv_object[0][6]).to eq('abc123')
@@ -49,7 +57,7 @@ RSpec.describe OspFormat do
                               [1, 1, 'X', 'X', 'X', 'X', 'X', 'X', 'Post Doctoral', 1, 'X', 'X',
                               'X', 1, 1, 1, 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'],
                               [1, 1, 'X', 'X', 'X', 'X', 'X', 'X', 'unknown', 1, 'X', 'X',
-                              'X', 1, 1, 1, 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X']])
+                              'X', 1, 1, 1, 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X']], book)
 
       osp_obj.format_role_field
       expect(osp_obj.csv_object[0][8]).to eq('Co-Principal Investigator')
@@ -65,7 +73,7 @@ RSpec.describe OspFormat do
 
       osp_obj = OspFormat.new([[1, 1, 'X', 'X', 'X', 'X', 'X', 'X', 'X', 1, 'X', '/',
                               '/  /', 1, 1, 1, '1/1/2017 12:00:00 AM', '12/12/2018 12:00:00 AM', 
-                              'X', 'X', 'X', 'X', 'X', 'X']])
+                              'X', 'X', 'X', 'X', 'X', 'X']], book)
 
       osp_obj.format_date_fields
       expect(osp_obj.csv_object[0][11]).to eq('')
@@ -82,7 +90,7 @@ RSpec.describe OspFormat do
       osp_obj = OspFormat.new([[1, 1, 'X', 'X', 'X', 'X', 'X', 'X', 'X', 1, 'Pending Award', 'X',
                               'X', 1, 1, 1, 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'],
                               [1, 1, 'X', 'X', 'X', 'X', 'X', 'X', 'X', 1, 'Pending Proposal', 'X',
-                              'X', 1, 1, 1, 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X']])
+                              'X', 1, 1, 1, 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X']], book)
 
 
       osp_obj.format_pending
@@ -98,7 +106,7 @@ RSpec.describe OspFormat do
       osp_obj = OspFormat.new([[1, 1, 'X', 'X', 'X', 'X', 'X', 'X', 'X', 1, 'Awarded', 'X',
                               'X', 1, 1, 1, '2017-01-01', '2018-12-12', 'X', 'X', 'X', 'X', 'X', 'X'],
                               [1, 1, 'X', 'X', 'X', 'X', 'X', 'X', 'X', 1, 'Purged', 'X',
-                              'X', 1, 1, 1, '2017-01-01', '2018-12-12', 'X', 'X', 'X', 'X', 'X', 'X']])
+                              'X', 1, 1, 1, '2017-01-01', '2018-12-12', 'X', 'X', 'X', 'X', 'X', 'X']], book)
 
 
       osp_obj.format_start_end
@@ -119,7 +127,7 @@ RSpec.describe OspFormat do
                               [1, 1, 'X', 'X', 'X', 'X', 'X', 'X', 'X', 1, 'X', '2020-03-01',
                               'X', 1, 1, 1, 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'],
                               [1, 1, 'X', 'X', 'X', 'X', 'X', 'X', 'X', 1, 'X', '1989-04-01',
-                              'X', 1, 1, 1, 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X']])
+                              'X', 1, 1, 1, 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X']], book)
 
       osp_obj.filter_by_date
       expect(osp_obj.csv_object.count).to eq(1)
@@ -132,7 +140,7 @@ RSpec.describe OspFormat do
       osp_obj = OspFormat.new([[1, 1, 'X', 'X', 'X', 'X', 'X', 'X', 'X', 1, 'X', 'X',
                               'X', 1, 1, 1, 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'],
                               [1, 1, 'X', 'X', 'X', 'X', 'X', 'X', 'X', 1, 'X', 'X',
-                              'X', 1, 1, 1, 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X']])
+                              'X', 1, 1, 1, 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X']], book)
 
       osp_obj.remove_columns
       expect(osp_obj.csv_object[0].length).to eq(17)
@@ -142,8 +150,32 @@ RSpec.describe OspFormat do
 
   context "#filter_by_user" do
 
-    it "should remove rows that contain non-active users"
+    it "should remove rows that contain non-active users" do
+      osp_obj = OspFormat.new([[1, 'X', 'X', 'X', 'zzz999', 'X', 1,
+                              'X', 'X', 'X', 1, 1, 1, 'X', 'X', 'X', 'X'],
+                              [1, 'X', 'X', 'X', 'xxx111', 'X', 1,
+                              'X', 'X', 'X', 1, 1, 1, 'X', 'X', 'X', 'X']], book)
 
+      osp_obj.filter_by_user
+      expect(osp_obj.csv_object.count).to eq(1)
+      expect(osp_obj.csv_object[0][4]).to eq('zzz999')
+      expect(osp_obj.csv_object[0].length).to eq(20)
+    end
+  end
+
+  context "#filter_purged_withdrawn" do
+
+    it "should remove rows with 'Purged' or 'Withdrawn' status" do
+      osp_obj = OspFormat.new([[1, 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 1,
+                              'Purged', 'X', 'X', 1, 1, 1, 'X', 'X', 'X', 'X'],
+                              [1, 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 1,
+                              'Awarded', 'X', 'X', 1, 1, 1, 'X', 'X', 'X', 'X'],
+                              [1, 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 1,
+                              'Withdrawn', 'X', 'X', 1, 1, 1, 'X', 'X', 'X', 'X']], book)
+    
+      osp_obj.filter_purged_withdrawn
+      expect(osp_obj.csv_object.count).to eq(1)
+      expect(osp_obj.csv_object[0][10]).to eq('Awarded')
     end
   end
 
