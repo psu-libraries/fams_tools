@@ -3,43 +3,43 @@ require 'spreadsheet'
 require 'osp_format'
 
 RSpec.describe OspFormat do
-  book = Spreadsheet::Workbook.new
-  sheet = book.create_worksheet
-  sheet.row(1).replace []
-  sheet.row(2).replace []
-  sheet.row(3).replace ['Last Name', 'First Name', 'Middle Name', 'Email', 'Username', 'PSU ID #', 'Enabled?', 'Has Access to Manage Activities?', 
-                'Campus', 'Campus Name', 'College', 'College Name', 'Department', 'Division', 'Institute', 'School', 'Security']
-  sheet.row(4).replace ['X', 'X', 'X', 'X', 'zzz999', 'X', 'Yes', 'Yes', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X']
-  sheet.row(5).replace ['X', 'X', 'X', 'X', 'xxx111', 'X', 'No', 'No', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X']
-
-
-  context "#format_grant_contract" do
-        it "should convert nil to ' ' under 'grantcontract' column" do
-      osp_obj = OspFormat.new([[1, 1, 'X', 'X', 'X', 'X', 'X', 'X', 'X', 1, 'X', 'X',
-                              'X', 1, 1, 1, 'X', 'X', 'X', 'X', nil, 'X', 'X', 'X'],
-                              [1, 1, 'X', 'X', 'X', 'X', 'X', 'X', 'X', 1, 'X', 'X',
-                               'X', 1, 1, 1, 'X', 'X', 'X', 'X', 'Grant', 'X', 'X', 'X']], book)
-
-      osp_obj.format_grant_contract
-      expect(osp_obj.csv_object[0][20]).to eq('')
-      expect(osp_obj.csv_object[1][20]).to eq('Grant')
-    end
+  let(:headers) {['ospkey', 'ordernumber', 'title', 'sponsor', 'sponsortype', 'parentsponsor', 
+                  'accessid', 'department', 'role', 'pctcredit', 'status', 'submitted', 'awarded', 
+                  'requested', 'funded', 'totalanticipated', 'startdate', 'enddate', 'totalstartdate',
+                  'totalenddate', 'grantcontract', 'baseagreement', 'agreementtype', 'agreement']}      
+  let(:line1) {[1, 1, 'X', 'X', 'X', 'X',
+                'abc123', 'X', 'X', 1, 'X', 'X', 'X',
+                1, 1, 1, 'X', 'X', 'X',
+                'X', nil, 'X', 'X', 'X']}
+  let(:line2) {[1, 1, 'X', 'X', 'X', 'X',
+                'Mar-26', 'X', 'X', 1, 'X', 'X', 'X',
+                1, 1, 1, 'X', 'X', 'X',
+                'X', 'Grant', 'X', 'X', 'X']}
+  let(:line3) {[1, 1, 'X', 'X', 'X', 'X',
+                '2-Jan', 'X', 'X', 1, 'X', 'X', 'X',
+                1, 1, 1, 'X', 'X', 'X',
+                'X', 'Grant', 'X', 'X', 'X']}
+  let(:osp_obj) {OspFormat.new([headers, line1, line2, line3], book)}
+  let(:book) do
+    book = Spreadsheet::Workbook.new  
+    sheet = book.create_worksheet
+    sheet.row(1).replace []
+    sheet.row(2).replace []
+    sheet.row(3).replace ['Last Name', 'First Name', 'Middle Name', 'Email', 'Username', 'PSU ID #', 'Enabled?', 'Has Access to Manage Activities?', 
+                  'Campus', 'Campus Name', 'College', 'College Name', 'Department', 'Division', 'Institute', 'School', 'Security']
+    sheet.row(4).replace ['X', 'X', 'X', 'X', 'zzz999', 'X', 'Yes', 'Yes', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X']
+    sheet.row(5).replace ['X', 'X', 'X', 'X', 'xxx111', 'X', 'No', 'No', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X']
+    book
   end
 
-  context "#format_accessid_field" do
-
-    it "should convert calendar dates to accessids in 'accessid' column" do
-      osp_obj = OspFormat.new([[1, 1, 'X', 'X', 'X', 'X', 'abc123', 'X', 'X', 1, 'X', 'X',
-                              'X', 1, 1, 1, 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'],
-                              [1, 1, 'X', 'X', 'X', 'X', 'Mar-26', 'X', 'X', 1, 'X', 'X',
-                              'X', 1, 1, 1, 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'],
-                              [1, 1, 'X', 'X', 'X', 'X', '2-Jan', 'X', 'X', 1, 'X', 'X',
-                              'X', 1, 1, 1, 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X']], book)
-
-      osp_obj.format_accessid_field
-      expect(osp_obj.csv_object[0][6]).to eq('abc123')
-      expect(osp_obj.csv_object[1][6]).to eq('mar26')
-      expect(osp_obj.csv_object[2][6]).to eq('jan2')
+  describe "#run" do
+    it "should convert nil to ' ' under 'grantcontract' column and should convert calendar dates to accessids in the 'accessid' column" do
+      osp_obj.run
+      expect(osp_obj.csv_hash[0]['grantcontract']).to eq('')
+      expect(osp_obj.csv_hash[1]['grantcontract']).to eq('Grant')
+      expect(osp_obj.csv_hash[0]['accessid']).to eq('abc123')
+      expect(osp_obj.csv_hash[1]['accessid']).to eq('mar26')
+      expect(osp_obj.csv_hash[2]['accessid']).to eq('jan2')
     end
   end
 
@@ -50,7 +50,7 @@ RSpec.describe OspFormat do
         'Post Doctoral' to 'Post Doctoral Associate' and
         'unknown' to 'Unknown' in 'role' column" do
 
-      osp_obj = OspFormat.new([[1, 1, 'X', 'X', 'X', 'X', 'X', 'X', 'Co-PI', 1, 'X', 'X',
+      osp_obj = OspFormat.new([headers, [1, 1, 'X', 'X', 'X', 'X', 'X', 'X', 'Co-PI', 1, 'X', 'X',
                               'X', 1, 1, 1, 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'],
                               [1, 1, 'X', 'X', 'X', 'X', 'X', 'X', 'Faculty', 1, 'X', 'X',
                               'X', 1, 1, 1, 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'],
@@ -60,10 +60,10 @@ RSpec.describe OspFormat do
                               'X', 1, 1, 1, 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X']], book)
 
       osp_obj.format_role_field
-      expect(osp_obj.csv_object[0][8]).to eq('Co-Principal Investigator')
-      expect(osp_obj.csv_object[1][8]).to eq('Core Faculty')
-      expect(osp_obj.csv_object[2][8]).to eq('Post Doctoral Associate')
-      expect(osp_obj.csv_object[3][8]).to eq('Unknown')
+      expect(osp_obj.csv_hash[0]['role']).to eq('Co-Principal Investigator')
+      expect(osp_obj.csv_hash[1]['role']).to eq('Core Faculty')
+      expect(osp_obj.csv_hash[2]['role']).to eq('Post Doctoral Associate')
+      expect(osp_obj.csv_hash[3]['role']).to eq('Unknown')
     end
   end
 
