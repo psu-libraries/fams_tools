@@ -11,6 +11,7 @@ namespace :ai_data do
     xml_arr = []
     college_arr.each do |college|
       url = 'https://beta.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University/COLLEGE:' + college + '/CONGRANT'
+      #url = 'https://www.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University/COLLEGE:' + college + '/CONGRANT'
       response = HTTParty.get url, :basic_auth => auth
       #puts response
       xml = Nokogiri::XML.parse(response.to_s)

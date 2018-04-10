@@ -7,64 +7,59 @@ namespace :osp_data do
 
   desc "Clean and filter data from dmresults.csv.
         Write to xls.
-        Store data in database with appropriate linkages."
+        Populate database with data.
+        Integrate data into AI."
 
   task format: :environment do
     start = Time.now
     my_sheet = OspFormat.new
-    my_sheet.format_grant_contract
-    my_sheet.format_accessid_field
-    my_sheet.format_role_field
-    my_sheet.format_date_fields
-    my_sheet.format_pending
-    my_sheet.format_start_end
+    my_sheet.format
+    my_sheet.filter_by_status
     my_sheet.filter_by_date
-    my_sheet.remove_columns
     my_sheet.filter_by_user
-    my_sheet.filter_purged_withdrawn
     my_sheet.write_results_to_xl
-    my_sheet.csv_object.each do |row|
+    my_sheet.csv_hash.each do |row|
       begin
-        sponsor = Sponsor.create(sponsor_name: row[2],
-                                 sponsor_type: row[3])
+        sponsor = Sponsor.create(sponsor_name: row['sponsor'],
+                                 sponsor_type: row['sponsortype'])
 
       rescue ActiveRecord::RecordNotUnique
-        sponsor = Sponsor.find_by(sponsor_name: row[2])
+        sponsor = Sponsor.find_by(sponsor_name: row['sponsor'])
       end
 
       begin
-        contract = Contract.create(osp_key:           row[0],
-                                   title:             row[1],
+        contract = Contract.create(osp_key:           row['ospkey'],
+                                   title:             row['title'],
                                    sponsor:           sponsor,
-                                   status:            row[10],
-                                   submitted:         row[11],
-                                   awarded:           row[12],
-                                   requested:         row[13],
-                                   funded:            row[14],
-                                   total_anticipated: row[15],
-                                   start_date:        row[16],
-                                   end_date:          row[17],
-                                   grant_contract:    row[18],
-                                   base_agreement:    row[19])
+                                   status:            row['status'],
+                                   submitted:         row['submitted'],
+                                   awarded:           row['awarded'],
+                                   requested:         row['requested'],
+                                   funded:            row['funded'],
+                                   total_anticipated: row['totalanticipated'],
+                                   start_date:        row['startdate'],
+                                   end_date:          row['enddate'],
+                                   grant_contract:    row['grantcontract'],
+                                   base_agreement:    row['baseagreement'])
 
       rescue ActiveRecord::RecordNotUnique
-        contract = Contract.find_by(osp_key: row[0])
+        contract = Contract.find_by(osp_key: row['ospkey'])
       end
 
       begin
-        faculty = Faculty.create(access_id: row[4],
-                                 f_name:    row[5],
-                                 l_name:    row[6],
-                                 m_name:    row[7])
+        faculty = Faculty.create(access_id: row['accessid'],
+                                 f_name:    row['f_name'],
+                                 l_name:    row['l_name'],
+                                 m_name:    row['m_name'])
 
       rescue ActiveRecord::RecordNotUnique
-        faculty = Faculty.find_by(access_id: row[4])
+        faculty = Faculty.find_by(access_id: row['accessid'])
       end
 
       ContractFacultyLink.create(contract:   contract,
                                  faculty:    faculty,
-                                 role:       row[8],
-                                 pct_credit: row[9])
+                                 role:       row['role'],
+                                 pct_credit: row['pctcredit'])
 
     end
     finish = Time.now

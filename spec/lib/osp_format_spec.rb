@@ -12,7 +12,7 @@ RSpec.describe OspFormat do
 
   let(:line1) {[1, 1, 'X', 'X', 'X', 'X',
                 'abc123', 'X', 'Co-PI', 1, 'Awarded', '/', '/  /',
-                1, 1, 1, '1/1/2017 12:00:00 AM', '12/12/2018 12:00:00 AM', 'X',
+                1, 1, 1, '1/1/17 0:00', '12/12/18 0:00', 'X',
                 'X', nil, 'X', 'X', 'X']}
 
   let(:line2) {[1, 1, 'X', 'X', 'X', 'X',
@@ -45,7 +45,7 @@ RSpec.describe OspFormat do
   end
 
   describe "#format" do
-    it "should convert nil to ' ' under 'grantcontract' column and 
+    it "should convert nils to ' ' and 
         should convert calendar dates to accessids in the 'accessid' column
         should convert 'Co-PI' to 'Co-Principal Investigator', 'Faculty' to 'Core Faculty', 
         should convert 'Post Doctoral' to 'Post Doctoral Associate', and 'unknown' to 'Unknown'
@@ -111,7 +111,7 @@ RSpec.describe OspFormat do
     end
   end
 
-  context "#filter_purged_withdrawn" do
+  context "#filter_by_status" do
 
     it "should remove rows with 'Purged' or 'Withdrawn' status" do
       osp_obj = OspFormat.new([headers, [1, 1, 'X', 'X', 'X', 'X', 'X', 'X', 'X', 1,
@@ -121,7 +121,7 @@ RSpec.describe OspFormat do
                               [1, 1, 'X', 'X', 'X', 'X', 'X', 'X', 'X', 1,
                               'Withdrawn', 'X', 'X', 1, 1, 1, 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X']], book)
     
-      osp_obj.filter_purged_withdrawn
+      osp_obj.filter_by_status
       expect(osp_obj.csv_hash.count).to eq(1)
       expect(osp_obj.csv_hash[0]['status']).to eq('Awarded')
     end
