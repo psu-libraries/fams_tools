@@ -14,7 +14,7 @@ class OspFormat
 
   #Run all local formatting methods
   def format
-    @csv_hash.each do |csv|
+    csv_hash.each do |csv|
       format_nils(csv)
       format_accessid_field(csv)
       format_role_field(csv)
