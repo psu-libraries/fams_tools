@@ -24,7 +24,7 @@ namespace :ai_data do
         congrant_hash[record.attr('username')] = []
         record.xpath('xmlns:CONGRANT').each do |congrant|
           unless congrant.xpath('xmlns:OSPKEY').text == ''
-            congrant_hash[record.attr('username')] << [congrant.xpath('xmlns:TITLE').text, congrant.xpath('xmlns:OSPKEY').text]
+            congrant_hash[record.attr('username')] << [congrant.xpath('xmlns:TITLE').text, congrant.xpath('xmlns:OSPKEY').text, congrant.attr('id')]
           end
         end
       end
@@ -40,7 +40,7 @@ namespace :ai_data do
       if duplicates
         v.each do |congrant| 
           if duplicates.include?(congrant[1])
-            duplicates_final << [k, congrant[0], congrant[1]]
+            duplicates_final << [k, congrant[0], congrant[1], congrant[2]]
           else
             puts 'NO DUPLICATES'
           end
@@ -50,7 +50,7 @@ namespace :ai_data do
 
     wb = Spreadsheet::Workbook.new 'data/duplicates.xls'
     sheet = wb.create_worksheet
-    head_arr = ['username', 'title', 'ospkey']
+    head_arr = ['username', 'title', 'ospkey', 'id']
     head_arr.each do |head|
       sheet.row(0).push(head)
     end
@@ -61,5 +61,19 @@ namespace :ai_data do
     end
     wb.write 'data/duplicates.xls'
 
+    builder = Nokogiri::XML::Builder.new do |xml|
+      xml.Data {
+	xml.CONGRANT {
+          duplicates_final.each do |duplicate|
+            xml.item( 'id' => duplicate[3] )
+          end
+        }
+       }
+    end
+    xml2 = builder.to_xml
+    puts xml2
+    url2 = 'https://beta.digitalmeasures.com/login/service/v4/SchemaData:delete/INDIVIDUAL-ACTIVITIES-University'
+    response2 = HTTParty.post url2, :basic_auth => auth, :body => xml2, :headers => {'Content-type' => 'text/xml'}
+    puts response2
   end
 end
