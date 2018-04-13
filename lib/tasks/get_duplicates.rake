@@ -4,16 +4,29 @@ namespace :ai_data do
 
   task get_duplicates: :environment do
 
-    college_arr = ['AA', 'AB', 'AG', 'AL', 'BA', 'BC', 'BK', 'CA', 'CM', 'ED',
-                   'EM', 'EN', 'GV', 'HH', 'IST', 'LA', 'LW', 'MD', 'NR', 'SC',
-                   'UC', 'UE', 'UL']
+    college_arr = ['AA', 'AB', 'AG', 'AL', 'BA', 'BC', 'BK', 'CA',
+                   'CM', 'ED', 'EM', 'EN', 'GV', 'HH', 'IST', 'LA',
+                   'LW', 'MD', 'NR', 'SC', 'UC', 'UE', 'UL']
     auth = {:username => "psu/aisupport", :password => "hAeqxpAWubq"}
     xml_arr = []
+    max_retries = 3
     college_arr.each do |college|
-      url = 'https://beta.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University/COLLEGE:' + college + '/CONGRANT'
-      #url = 'https://www.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University/COLLEGE:' + college + '/CONGRANT'
-      response = HTTParty.get url, :basic_auth => auth
-      #puts response
+      retries = 0
+      #url = 'https://beta.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University/COLLEGE:' + college + '/CONGRANT'
+      url = 'https://www.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University/COLLEGE:' + college + '/CONGRANT'
+      begin
+        response = HTTParty.get url, :basic_auth => auth
+        puts 'Success'
+      rescue Net::ReadTimeout => e
+        if retries < max_retries
+          puts 'Retrying'
+          retries += 1
+          retry
+        else
+          puts "Exiting script from GET stage.  Max retries reached."
+          exit(1)
+        end
+      end
       xml = Nokogiri::XML.parse(response.to_s)
       xml_arr << xml
     end
@@ -36,13 +49,13 @@ namespace :ai_data do
       v.each do |congrant|
         ospkey_arr << congrant[1]
       end
-      duplicates = ospkey_arr.detect{|e| ospkey_arr.count(e) > 1}
+      duplicates = ospkey_arr.select{|e| ospkey_arr.count(e) > 1}.uniq
       if duplicates
         v.each do |congrant| 
           if duplicates.include?(congrant[1])
             duplicates_final << [k, congrant[0], congrant[1], congrant[2]]
           else
-            puts 'NO DUPLICATES'
+            #puts 'NO DUPLICATES'
           end
         end
       end
@@ -60,7 +73,6 @@ namespace :ai_data do
       end
     end
     wb.write 'data/duplicates.xls'
-
     builder = Nokogiri::XML::Builder.new do |xml|
       xml.Data {
 	xml.CONGRANT {
@@ -72,8 +84,22 @@ namespace :ai_data do
     end
     xml2 = builder.to_xml
     puts xml2
-    url2 = 'https://beta.digitalmeasures.com/login/service/v4/SchemaData:delete/INDIVIDUAL-ACTIVITIES-University'
-    response2 = HTTParty.post url2, :basic_auth => auth, :body => xml2, :headers => {'Content-type' => 'text/xml'}
+    delete_url = 'https://beta.digitalmeasures.com/login/service/v4/SchemaData:delete/INDIVIDUAL-ACTIVITIES-University'
+    retries2 = 0
+    max_retries2 = 3
+    begin
+      response2 = HTTParty.post delete_url, :basic_auth => auth, :body => xml2, :headers => {'Content-type' => 'text/xml'}
+      puts 'Success!'
+    rescue Net::ReadTimeout => e
+      if retries2 < max_retries2
+        puts 'Retrying'
+        retries2 += 1
+        retry
+      else
+        puts "Exiting script from POST stage.  Max retries reached."
+        exit(1)
+      end
+    end
     puts response2
   end
 end
