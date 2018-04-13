@@ -72,10 +72,24 @@ namespace :osp_data do
     auth = {:username => "psu/aisupport", :password => "hAeqxpAWubq"}
     url = 'https://beta.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University'
     counter = 0
+    max_retries = 3
     my_osp.batched_osp_xml.each do |xml|
-      puts xml
-      response = HTTParty.post url, :body => xml, :headers => {'Content-type' => 'text/xml'}, :basic_auth => auth
-      puts response
+      retries = 0
+      #puts xml
+      begin
+        response = HTTParty.post url, :body => xml, :headers => {'Content-type' => 'text/xml'}, :basic_auth => auth
+        puts response
+        puts 'Success'
+      rescue Net::ReadTimeout => e
+        if retries < max_retries
+          puts 'Retrying'
+          retries += 1
+          retry
+        else
+          puts "Exiting script.  Max retries reached."
+          exit(1)
+        end
+      end
       puts '##########################################################################################################'
       if response.include? 'Error'
         counter += 1
