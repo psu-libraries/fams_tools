@@ -79,7 +79,6 @@ namespace :osp_data do
       begin
         response = HTTParty.post url, :body => xml, :headers => {'Content-type' => 'text/xml'}, :basic_auth => auth
         puts response
-        puts 'Success'
       rescue Net::ReadTimeout => e
         if retries < max_retries
           puts 'Retrying'
@@ -90,7 +89,6 @@ namespace :osp_data do
           exit(1)
         end
       end
-      puts '##########################################################################################################'
       if response.include? 'Error'
         counter += 1
       end
