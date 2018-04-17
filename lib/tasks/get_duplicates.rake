@@ -4,59 +4,35 @@ namespace :ai_data do
 
   task get_duplicates: :environment do
 
-    college_arr = ['AA', 'AB', 'AG', 'AL', 'BA', 'BC', 'BK', 'CA',
-                   'CM', 'ED', 'EM', 'EN', 'GV', 'HH', 'IST', 'LA',
-                   'LW', 'MD', 'NR', 'SC', 'UC', 'UE', 'UL']
-    auth = {:username => "psu/aisupport", :password => "hAeqxpAWubq"}
-    xml_arr = []
-    max_retries = 3
-    college_arr.each do |college|
-      retries = 0
-      #url = 'https://beta.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University/COLLEGE:' + college + '/CONGRANT'
-      url = 'https://www.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University/COLLEGE:' + college + '/CONGRANT'
-      begin
-        response = HTTParty.get url, :basic_auth => auth
-        puts 'Success'
-      rescue Net::ReadTimeout => e
-        if retries < max_retries
-          puts 'Retrying'
-          retries += 1
-          retry
-        else
-          puts "Exiting script from GET stage.  Max retries reached."
-          exit(1)
-        end
-      end
-      xml = Nokogiri::XML.parse(response.to_s)
-      xml_arr << xml
-    end
-
-    congrant_hash = {}
-    xml_arr.each do |xml|
-      xml.xpath('//Data:Record', 'Data' => 'http://www.digitalmeasures.com/schema/data').each do |record|
-        congrant_hash[record.attr('username')] = []
-        record.xpath('xmlns:CONGRANT').each do |congrant|
-          unless congrant.xpath('xmlns:OSPKEY').text == ''
-            congrant_hash[record.attr('username')] << [congrant.xpath('xmlns:TITLE').text, congrant.xpath('xmlns:OSPKEY').text, congrant.attr('id')]
-          end
-        end
-      end
-    end
+    congrant_data = CSV.read('data/CONGRANT-tabdel.txt', encoding: "ISO8859-1", col_sep: "\t")
+    keys = congrant_data[0]
+    congrant_hash = congrant_data[1..-1].map {|a| Hash[ keys.zip(a) ] }
 
     duplicates_final = []
-    congrant_hash.each do |k,v|
-      ospkey_arr = []
-      v.each do |congrant|
-        ospkey_arr << congrant[1]
+    ospkey_hash = {}
+    congrant_hash.each do |congrant|
+      if congrant['OSPKEY']
+        if ospkey_hash[congrant['USERNAME']]
+          ospkey_hash[congrant['USERNAME']] << congrant['OSPKEY']
+        else
+          ospkey_hash[congrant['USERNAME']] = [congrant['OSPKEY']]
+        end
       end
-      duplicates = ospkey_arr.select{|e| ospkey_arr.count(e) > 1}.uniq
-      if duplicates
-        v.each do |congrant| 
-          if duplicates.include?(congrant[1])
-            duplicates_final << [k, congrant[0], congrant[1], congrant[2]]
-          else
-            #puts 'NO DUPLICATES'
-          end
+    end
+    user_duplicates_hash = {}
+    ospkey_hash.each do |k,v|
+      if user_duplicates_hash[k]
+        user_duplicates_hash[k] << v.select {|e| v.count(e) > 1}.uniq
+      else
+        user_duplicates_hash[k] = v.select {|e| v.count(e) > 1}.uniq
+      end
+    end
+    congrant_hash.each do |congrant| 
+      if congrant['OSPKEY']
+        if user_duplicates_hash[congrant['USERNAME']].include? congrant['OSPKEY']
+          duplicates_final << [congrant['USERNAME'], congrant['TITLE'], congrant['OSPKEY'], congrant['ID']]
+        else
+          #puts 'NO DUPLICATES'
         end
       end
     end
@@ -73,6 +49,7 @@ namespace :ai_data do
       end
     end
     wb.write 'data/duplicates.xls'
+
     builder = Nokogiri::XML::Builder.new do |xml|
       xml.Data {
 	xml.CONGRANT {
@@ -82,24 +59,25 @@ namespace :ai_data do
         }
        }
     end
-    xml2 = builder.to_xml
-    puts xml2
-    delete_url = 'https://beta.digitalmeasures.com/login/service/v4/SchemaData:delete/INDIVIDUAL-ACTIVITIES-University'
-    retries2 = 0
-    max_retries2 = 3
+    delete_xml = builder.to_xml
+    puts delete_xml
+    auth = {:username => "psu/aisupport", :password => "hAeqxpAWubq"}
+    url = 'https://beta.digitalmeasures.com/login/service/v4/SchemaData:delete/INDIVIDUAL-ACTIVITIES-University'
+    retries = 0
+    max_retries = 3
     begin
-      response2 = HTTParty.post delete_url, :basic_auth => auth, :body => xml2, :headers => {'Content-type' => 'text/xml'}
+      response = HTTParty.post url, :basic_auth => auth, :body => delete_xml, :headers => {'Content-type' => 'text/xml'}
       puts 'Success!'
     rescue Net::ReadTimeout => e
-      if retries2 < max_retries2
+      if retries < max_retries
         puts 'Retrying'
-        retries2 += 1
+        retries += 1
         retry
       else
         puts "Exiting script from POST stage.  Max retries reached."
         exit(1)
       end
     end
-    puts response2
+    puts response
   end
 end
