@@ -69,7 +69,8 @@ namespace :osp_data do
   task integrate: :environment do
     start = Time.now
     my_osp = OspXMLBuilder.new
-    auth = {:username => "psu/aisupport", :password => "hAeqxpAWubq"}
+    auth = {:username => Rails.application.config_for(:activity_insight)[:username], 
+            :password => Rails.application.config_for(:activity_insight)[:password]}
     url = 'https://beta.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University'
     counter = 0
     max_retries = 3
