@@ -76,7 +76,7 @@ namespace :osp_data do
     max_retries = 3
     my_osp.batched_osp_xml.each do |xml|
       retries = 0
-      #puts xml
+      puts xml
       begin
         response = HTTParty.post url, :body => xml, :headers => {'Content-type' => 'text/xml'}, :basic_auth => auth
         puts response
