@@ -1,8 +1,61 @@
 namespace :ai_data do
 
-  desc "Grab duplicate records from Activity Insight"
+  desc "Find duplicates for user"
 
-  task get_duplicates: :environment do
+  task find_duplicates: :environment do
+
+    username_arr = ["XUZ14", "JMC56", "GAL4"]
+    auth = {:username => Rails.application.config_for(:activity_insight)[:username], 
+            :password => Rails.application.config_for(:activity_insight)[:password]}
+    xml_arr = []
+    max_retries = 3
+    username_arr.each do |username|
+      retries = 0
+      url = 'https://beta.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University/USERNAME:' + username + '/CONGRANT'
+      #url = 'https://www.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University/USERNAME:' + username + '/CONGRANT'
+      begin
+        response = HTTParty.get url, :basic_auth => auth
+        #puts response
+        puts 'Success'
+      rescue Net::ReadTimeout => e
+        if retries < max_retries
+          puts 'Retrying'
+          retries += 1
+          retry
+        else
+          puts "Exiting script from GET stage.  Max retries reached."
+          exit(1)
+        end
+      end
+      xml = Nokogiri::XML.parse(response.to_s)
+      xml_arr << xml
+    end
+
+    congrant_hashed = {}
+    xml_arr.each do |xml|
+      xml.xpath('//Data:Record', 'Data' => 'http://www.digitalmeasures.com/schema/data').each do |record|
+        congrant_hashed[record.attr('username')] = []
+        record.xpath('xmlns:CONGRANT').each do |congrant|
+          unless congrant.xpath('xmlns:OSPKEY').text == ''
+            congrant_hashed[record.attr('username')] << [congrant.xpath('xmlns:TITLE').text, congrant.xpath('xmlns:OSPKEY').text, congrant.attr('id')]
+          end
+        end
+      end
+    end
+    
+    congrant_hashed.each do |k, v|
+      ospkeys = []
+      v.each do |congrant|
+        ospkeys << congrant[1]
+      end
+      puts k
+      puts ospkeys.select{|e| ospkeys.count(e) > 1}.uniq
+    end
+  end
+
+  desc "Identify duplicate records from Activity Insight backup and delete them"
+
+  task remove_duplicates: :environment do
 
     congrant_data = CSV.read('data/CONGRANT-tabdel.txt', encoding: "ISO8859-1", col_sep: "\t")
     keys = congrant_data[0]
