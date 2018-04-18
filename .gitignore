@@ -23,8 +23,6 @@
 .byebug_history
 
 # Ignore other files
-/data/duplicates.xls
-/data/dmresults-formatted.xls
-/data/output.txt
-/data/output2.txt
+/data/*
 *.swp
+/config/activity_insight.yml

@@ -61,7 +61,8 @@ namespace :ai_data do
     end
     delete_xml = builder.to_xml
     puts delete_xml
-    auth = {:username => "psu/aisupport", :password => "hAeqxpAWubq"}
+    auth = {:username => Rails.application.config_for(:activity_insight)[:username], 
+            :password => Rails.application.config_for(:activity_insight)[:password]}
     url = 'https://beta.digitalmeasures.com/login/service/v4/SchemaData:delete/INDIVIDUAL-ACTIVITIES-University'
     retries = 0
     max_retries = 3
