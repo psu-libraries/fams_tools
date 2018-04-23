@@ -38,7 +38,7 @@ This app will pull data from various sources, store the data in a database, and 
 
   4. Convert CONGRANT.csv as a tab delimited text file called CONGRANT-tabdel.txt and format 'ID' column to a number with 0 decimal places.
 
-  5. rake ai_data:remove_duplicates
+  5. `rake ai_data:remove_duplicates`
 
 **Formatting and Populating Database**
   1. Download OSP data in csv format: [dmresults.csv](https://service.sims.psu.edu/digitalmeasures/dmresults.csv)
@@ -51,9 +51,9 @@ This app will pull data from various sources, store the data in a database, and 
 
   *Note: Some fields contain commas so comma delimited CSV files cannot be parsed by Ruby's built in CSV parser*
 
-  5. rake osp_data:format
+  5. `rake osp_data:format`
 
 **Integrating to AI**
 
-  1. rake osp_data:integrate
+  1. `rake osp_data:integrate`
 
