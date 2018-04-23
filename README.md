@@ -34,7 +34,7 @@ This app will pull data from various sources, store the data in a database, and 
 
   2. Download a backup of the AI data from: [https://www.digitalmeasures.com/login/service/v4/SchemaData:backup/INDIVIDUAL-ACTIVITIES-University](https://www.digitalmeasures.com/login/service/v4/SchemaData:backup/INDIVIDUAL-ACTIVITIES-University)
 
-  3. `cp ./CONGRANT.csv path/to/ai_integration/data`
+  3. `cp CONGRANT.csv path/to/ai_integration/data`
 
   4. Convert CONGRANT.csv as a tab delimited text file called CONGRANT-tabdel.txt and format 'ID' column to a number with 0 decimal places.
 
