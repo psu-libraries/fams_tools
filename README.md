@@ -12,7 +12,9 @@ This app will pull data from various sources, store the data in a database, and 
 
   *Note: This comes from dmresults.csv.  It must be converted to tab delimited text (hence dmresults-tabdel.txt) to be properly formatted.* 
 
-  -ai-user-accounts.xls
+  -psu-users.xls
+
+  -CONGRANT-tabdel.txt
 
 ## Dependencies
 
@@ -24,10 +26,21 @@ This app will pull data from various sources, store the data in a database, and 
 
   -rspec-rails (development and test)
 
-  -nokogiri
-
 ## Usage (Beta Testing)
 
+**Removing Duplicates**
+
+  1. Duplicate records must be removed from AI before the integration.
+
+  2. Download a backup of the AI data from: [https://www.digitalmeasures.com/login/service/v4/SchemaData:backup/INDIVIDUAL-ACTIVITIES-University](https://www.digitalmeasures.com/login/service/v4/SchemaData:backup/INDIVIDUAL-ACTIVITIES-University)
+
+  3. cp CONGRANT.csv to /data/
+
+  4. Convert CONGRANT.csv as a tab delimited text file called CONGRANT-tabdel.txt and format 'ID' column to a number with 0 decimal places.
+
+  5. rake ai_data:remove_duplicates
+
+**Formatting and Population Database**
   1. Download OSP data in csv format: [dmresults.csv](https://service.sims.psu.edu/digitalmeasures/dmresults.csv)
 
   2. Download ai-user (psu-users.xls) information from AI Beta Users and Security Page. 
@@ -40,5 +53,7 @@ This app will pull data from various sources, store the data in a database, and 
 
   5. rake osp_data:format
 
-  6. rake osp_data:integrate
+**Integrating to AI**
+
+  1. rake osp_data:integrate
 

@@ -4,29 +4,15 @@ namespace :ai_data do
 
   task find_duplicates: :environment do
 
-    username_arr = ["XUZ14", "JMC56", "GAL4"]
+    username_arr = ["XUZ14", "JMC56", "GAL4", "DCH12"]
     auth = {:username => Rails.application.config_for(:activity_insight)[:username], 
             :password => Rails.application.config_for(:activity_insight)[:password]}
     xml_arr = []
-    max_retries = 3
     username_arr.each do |username|
-      retries = 0
       url = 'https://beta.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University/USERNAME:' + username + '/CONGRANT'
       #url = 'https://www.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University/USERNAME:' + username + '/CONGRANT'
-      begin
-        response = HTTParty.get url, :basic_auth => auth
-        #puts response
-        puts 'Success'
-      rescue Net::ReadTimeout => e
-        if retries < max_retries
-          puts 'Retrying'
-          retries += 1
-          retry
-        else
-          puts "Exiting script from GET stage.  Max retries reached."
-          exit(1)
-        end
-      end
+      response = HTTParty.get url, :basic_auth => auth
+      #puts response
       xml = Nokogiri::XML.parse(response.to_s)
       xml_arr << xml
     end
@@ -103,6 +89,11 @@ namespace :ai_data do
     end
     wb.write 'data/duplicates.xls'
 
+    unless duplicates_final
+      puts 'No Duplicates. Exiting Script.'
+      exit
+    end
+
     builder = Nokogiri::XML::Builder.new do |xml|
       xml.Data {
 	xml.CONGRANT {
@@ -117,21 +108,7 @@ namespace :ai_data do
     auth = {:username => Rails.application.config_for(:activity_insight)[:username], 
             :password => Rails.application.config_for(:activity_insight)[:password]}
     url = 'https://beta.digitalmeasures.com/login/service/v4/SchemaData:delete/INDIVIDUAL-ACTIVITIES-University'
-    retries = 0
-    max_retries = 3
-    begin
-      response = HTTParty.post url, :basic_auth => auth, :body => delete_xml, :headers => {'Content-type' => 'text/xml'}
-      puts 'Success!'
-    rescue Net::ReadTimeout => e
-      if retries < max_retries
-        puts 'Retrying'
-        retries += 1
-        retry
-      else
-        puts "Exiting script from POST stage.  Max retries reached."
-        exit(1)
-      end
-    end
+    response = HTTParty.post url, :basic_auth => auth, :body => delete_xml, :headers => {'Content-type' => 'text/xml'}, :timeout => 180
     puts response
   end
 end
