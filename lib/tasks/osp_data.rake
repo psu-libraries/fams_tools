@@ -1,4 +1,3 @@
-require 'rest-client'
 require 'osp_format'
 require 'osp_xml_builder'
 
