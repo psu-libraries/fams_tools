@@ -1,7 +1,6 @@
 require 'osp_format'
 require 'osp_xml_builder'
 
-
 namespace :osp_data do
 
   desc "Clean and filter data from dmresults.csv.
