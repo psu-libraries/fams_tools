@@ -20,11 +20,13 @@ This app will pull data from various sources, store the data in a database, and 
 
 **Gems**
 
-  -rest-client
+  -httparty
 
   -spreadsheet
 
   -rspec-rails (development and test)
+
+  -nokogiri
 
 ## Usage (Beta Testing)
 
