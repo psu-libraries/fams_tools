@@ -47,7 +47,7 @@ def put_duplicates(congrant_hash)
   end
 end
 
-#The final methods of this module are used to find duplicates in ai using a backup and removing those duplicates frpom beta or production
+#The final methods of this module are used to find duplicates in ai using a backup and removing those duplicates from beta or production
 #Converts backup CONGRANT csv to array of hashes
 def csv_to_hashes
   congrant_data = CSV.read('data/CONGRANT-tabdel.txt', encoding: "ISO8859-1", col_sep: "\t")
