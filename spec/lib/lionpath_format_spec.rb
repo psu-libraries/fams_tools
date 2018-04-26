@@ -9,10 +9,10 @@ RSpec.describe LionPathFormat do
                   'Current Enrollment', 'Instructor Load Factor', 'Instruction Mode', 'Course Component']}
 
   let(:line1) {['1-Mar-1983', 'Spring 2018', 2018, 'UP', 'Math', 'Lots of math.', 
-                9999, 'N', 'MATH', 1, 1, 3, 25, 100, 'In Person', 'Lecture']}
+                9999, 'N', 'MATH', 1, '01C', 3, 25, 100, 'In Person', 'Lecture']}
 
   let(:line2) {['1-Mar-6783', 'Spring 2018', 2018, 'UP', 'Math', 'Lots of math.', 
-                9999, 'N', 'MATH', '77A', '01C', 3, 25, 100, 'In Person', 'Lecture']}
+                9999, 'N', 'MATH', '77A', 1, 3, 25, 100, 'In Person', 'Lecture']}
 
   let(:line3) {['xyz99', 'Spring 2018', 2018, 'UP', 'Math', 'Lots of math.', 
                 9999, 'N', 'MATH', '202D', '901', 3, 25, 100, 'In Person', 'Lecture']}
@@ -27,7 +27,8 @@ RSpec.describe LionPathFormat do
         should convert "Term" to just season and
         should seperate "Catalog Number" into "Course Number" and "Course Suffix" and
         should add leading zeroes to "Course Number" column and
-        should add leading zeroes to "Class Section Code" column' do
+        should add leading zeroes to "Class Section Code" column and
+        should seperate "Course Suffix" from "Class Section Code"' do
       lionpath_obj.format
       expect(lionpath_obj.csv_hash[0]['Instructor Campus ID']).to eq('mar83')
       expect(lionpath_obj.csv_hash[1]['Instructor Campus ID']).to eq('mar6783')
@@ -41,7 +42,8 @@ RSpec.describe LionPathFormat do
       expect(lionpath_obj.csv_hash[1]['Course Suffix']).to eq('A')
       expect(lionpath_obj.csv_hash[0].length).to eq(17)
       expect(lionpath_obj.csv_hash[0]['Class Section Code']).to eq('001')
-      expect(lionpath_obj.csv_hash[1]['Class Section Code']).to eq('001C')
+      expect(lionpath_obj.csv_hash[0]['Course Suffix']).to eq('C')
+      expect(lionpath_obj.csv_hash[1]['Class Section Code']).to eq('001')
       expect(lionpath_obj.csv_hash[2]['Class Section Code']).to eq('901')
     end
   end
