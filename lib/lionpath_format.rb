@@ -70,13 +70,14 @@ class LionPathFormat
     csv['Course Suffix'] = course_split[1]
   end
 
-  #Adds leading zeroes to 'Class Section Code'
+  #Adds leading zeroes to 'Class Section Code' and splits suffix off
   def format_section_code(csv)
     section_split = csv['Class Section Code'].to_s.split(/(?<=\d)(?=[A-Za-z])/)
     while section_split[0].length < 3
       section_split[0].to_s.prepend('0')
     end
-    csv['Class Section Code'] = section_split.join('')
+    csv['Class Section Code'] = section_split[0]
+    csv['Course Suffix'] = section_split[1] unless csv['Course Suffix']
   end
 
 end
