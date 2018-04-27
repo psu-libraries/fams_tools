@@ -11,6 +11,7 @@ class LionPathFormat
     @csv_hash = convert_to_hash(csv_array)
     @xls_object = xls_object.worksheet 0
     @active_users = find_active_users
+    @flagged = []
   end
 
   def format
@@ -20,6 +21,47 @@ class LionPathFormat
       format_catalog_number(csv)
       format_section_code(csv)
     end
+    csv_hash.each do |csv|
+      add_xfields(csv)
+    end
+  end
+
+  def filter_by_user
+    kept_rows = []
+    csv_hash.each do |csv|
+      if @active_users.include? csv['Instructor Campus ID'].downcase
+        kept_rows << csv
+      end
+    end
+    @csv_hash = kept_rows
+  end
+
+  def write_flagged_to_xl(filename = 'data/flagged_more_than_two.xls')
+    wb = Spreadsheet::Workbook.new filename
+    sheet = wb.create_worksheet
+    @flagged[0].each do |k, v|
+      sheet.row(0).push(k)
+    end
+    @flagged.uniq.each_with_index do |row, index|
+      row.each do |k, v|
+        sheet.row(index+1).push(v)
+      end
+    end
+    wb.write filename
+  end
+
+  def write_results_to_xl(filename = 'data/lionpath_data-formatted.xls')
+    wb = Spreadsheet::Workbook.new filename
+    sheet = wb.create_worksheet
+    csv_hash[0].each do |k, v|
+      sheet.row(0).push(k)
+    end
+    csv_hash.each_with_index do |row, index|
+      row.each do |k, v|
+        sheet.row(index+1).push(v)
+      end
+    end
+    wb.write filename
   end
 
   private
@@ -34,9 +76,10 @@ class LionPathFormat
     active_user_arr = []
     xls_object.drop(3).each do |xls|
       if xls[6].downcase == 'yes' && xls[7].downcase == 'yes'
-        active_user_arr << [xls[0], xls[1], xls[2], xls[4].downcase]
+        active_user_arr << xls[4].downcase
       end
     end
+    return active_user_arr
   end
 
   #Converts dates back into psuIDs
@@ -78,6 +121,42 @@ class LionPathFormat
     end
     csv['Class Section Code'] = section_split[0]
     csv['Course Suffix'] = section_split[1] unless csv['Course Suffix']
+  end
+
+  #Adds data to 'XCourse CoursePre' 'XCourse CourseNum' and 'XCourse CourseNum Suffix'
+  def add_xfields(csv)
+    if csv['Cross Listed Flag'] == 'Y' 
+      counter = 0
+      xfield_arr = []
+      csv_arr = [csv]
+      csv_hash.each do |csv2|
+        if csv['Academic Course ID'] == csv2['Academic Course ID'] && csv['Instructor Campus ID'] == csv2['Instructor Campus ID']
+          unless csv == csv2
+            csv_arr << csv2
+            xfield_arr << [csv2['Subject Code'], csv2['Course Number'], csv2['Course Suffix']]
+            counter += 1
+          end
+        end
+      end
+      if counter > 1
+        csv_arr.each {|flag| @flagged << flag}
+        csv['XCourse CoursePre'] = ' '
+        csv['XCourse CourseNum'] = ' '
+        csv['XCourse CourseNum Suffix'] = ' '
+      elsif counter == 0
+        csv['XCourse CoursePre'] = ' '
+        csv['XCourse CourseNum'] = ' '
+        csv['XCourse CourseNum Suffix'] = ' '
+      else
+        csv['XCourse CoursePre'] = xfield_arr[0][0]
+        csv['XCourse CourseNum'] = xfield_arr[0][1]
+        csv['XCourse CourseNum Suffix'] = xfield_arr[0][2]
+      end
+    else
+      csv['XCourse CoursePre'] = ' '
+      csv['XCourse CourseNum'] = ' '
+      csv['XCourse CourseNum Suffix'] = ' '
+    end
   end
 
 end
