@@ -64,21 +64,17 @@ class OspFormat
   end
 
   #Write the cleaned and filtered array to xl file
-  def write_results_to_xl(filename = 'data/dmresults-formatted.xls')
-    
+  def write_results_to_xl(filename = 'data/dmresults-formatted.xls') 
     wb = Spreadsheet::Workbook.new filename
     sheet = wb.create_worksheet
-
     csv_hash[0].each do |k, v|
       sheet.row(0).push(k)
     end
-
     csv_hash.each_with_index do |row, index|
       row.each do |k, v|
         sheet.row(index+1).push(v)
       end
     end
-
     wb.write filename 
   end
 
