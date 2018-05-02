@@ -4,6 +4,7 @@ class CreateContractFacultyLinks < ActiveRecord::Migration[5.1]
       t.string :role
       t.integer :pct_credit
       t.bigint :contract_id
+      t.bigint :faculty_id
     end
   end
   def down
