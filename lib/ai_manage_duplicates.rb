@@ -58,6 +58,7 @@ end
 #Returns array of arrays of duplicate information
 def grab_duplicates(congrant_hashed)
   duplicates_final = []
+  duplicates_stored = []
   ospkey_hash = {}
   congrant_hashed.each do |congrant|
     if congrant['OSPKEY']
@@ -79,9 +80,16 @@ def grab_duplicates(congrant_hashed)
   congrant_hashed.each do |congrant|
     if congrant['OSPKEY']
       if user_duplicates_hash[congrant['USERNAME']].include? congrant['OSPKEY']
-	duplicates_final << [congrant['USERNAME'], congrant['TITLE'], congrant['OSPKEY'], congrant['ID']]
+	duplicates_stored << [congrant['USERNAME'], congrant['TITLE'], congrant['OSPKEY'], congrant['ID']]
       else
 	#puts 'NO DUPLICATES'
+      end
+    end
+  end
+  Contract.all.each do |contract|
+    duplicates_stored.each do |duplicate|
+      if contract.osp_key.to_s == duplicate[2]
+        duplicates_final << duplicate
       end
     end
   end
