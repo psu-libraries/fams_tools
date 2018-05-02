@@ -10,21 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180319184109) do
+ActiveRecord::Schema.define(version: 2018050212211234) do
 
-  create_table "contract_faculty_links", force: :cascade do |t|
-    t.integer "contract_id"
-    t.integer "faculty_id"
+  create_table "contract_faculty_links", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "role"
     t.integer "pct_credit"
-    t.index ["contract_id"], name: "index_contract_faculty_links_on_contract_id"
-    t.index ["faculty_id"], name: "index_contract_faculty_links_on_faculty_id"
+    t.bigint "contract_id"
+    t.bigint "faculty_id"
+    t.index ["contract_id"], name: "fk_rails_5e66e5d7a9"
+    t.index ["faculty_id"], name: "fk_rails_7f7c136a9d"
   end
 
-  create_table "contracts", force: :cascade do |t|
+  create_table "contracts", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer "osp_key"
     t.string "title"
-    t.integer "sponsor_id"
+    t.bigint "sponsor_id"
     t.string "status"
     t.date "submitted"
     t.date "awarded"
@@ -39,7 +39,7 @@ ActiveRecord::Schema.define(version: 20180319184109) do
     t.index ["sponsor_id"], name: "index_contracts_on_sponsor_id"
   end
 
-  create_table "faculties", force: :cascade do |t|
+  create_table "faculties", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "access_id"
     t.string "f_name"
     t.string "l_name"
@@ -47,10 +47,13 @@ ActiveRecord::Schema.define(version: 20180319184109) do
     t.index ["access_id"], name: "index_faculties_on_access_id", unique: true
   end
 
-  create_table "sponsors", force: :cascade do |t|
+  create_table "sponsors", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "sponsor_name"
     t.string "sponsor_type"
     t.index ["sponsor_name"], name: "index_sponsors_on_sponsor_name", unique: true
   end
 
+  add_foreign_key "contract_faculty_links", "contracts"
+  add_foreign_key "contract_faculty_links", "faculties"
+  add_foreign_key "contracts", "sponsors"
 end
