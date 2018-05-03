@@ -33,7 +33,7 @@ namespace :lionpath_data do
         faculty = Faculty.find_by(access_id: row['Instructor Campus ID'].downcase)
       end
 
-      Section.create(course: course,
+      Section.create(course:                 course,
                      faculty:                faculty,
                      class_campus_code:      row['Class Campus Code'],
                      cross_listed_flag:      row['Cross Listed Flag'],

@@ -30,7 +30,10 @@ This app will pull data from various sources, store the data in a database, and 
 
 ## Usage (Beta Testing)
 
-**Formatting and Populating Database**
+*Note: Make sure the development database is properly rolled back and migrated before populating database*
+
+**Formatting and Populating Database with OSP Data**
+
   1. Download OSP data in csv format: [dmresults.csv](https://service.sims.psu.edu/digitalmeasures/dmresults.csv)
 
   2. Download ai-user (psu-users.xls) information from AI Beta Users and Security Page. 
@@ -43,7 +46,17 @@ This app will pull data from various sources, store the data in a database, and 
 
   5. `rake osp_data:format`
 
-**Removing Duplicates**
+**Formatting and Populating Database with LionPath Data (Mock Dataset)**
+
+  1. Download LionPath Spring 2018 data from box and store in /data/.
+
+  2. Convert 'Instructor Campus ID' column to a date formatted: dd/mm/yyyy
+
+  3. Convert SP18.csv into a tab delimited text file called SP18-tabdel.txt.
+
+  4. `rake lionpath_data:integrate`
+ 
+**Removing Duplicate CONGRANT Data**
 
   1. Duplicate records must be removed from AI before the integration and after populating the database.
 
@@ -55,7 +68,7 @@ This app will pull data from various sources, store the data in a database, and 
 
   5. `rake activity_insight:remove_duplicates`
 
-**Integrating to AI**
+**Integrating OSP Data into AI**
 
   1. `rake osp_data:integrate`
 
