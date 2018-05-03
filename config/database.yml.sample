@@ -14,7 +14,7 @@ development:
   database: db/development.sqlite3
   pool: 5
   timeout: 5000
-
+# GRANT ALL ON db_name.* TO 'user'@'localhost' IDENTIFIED BY 'yourpass';
 mysqldevelopment:
   adapter: mysql2
   encoding: utf8

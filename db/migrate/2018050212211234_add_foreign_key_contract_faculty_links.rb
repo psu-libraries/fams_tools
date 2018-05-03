@@ -7,4 +7,5 @@ class AddForeignKeyContractFacultyLinks < ActiveRecord::Migration[5.1]
 
   def down
     remove_foreign_key contract_faculty_links, :contracts
+    remove_foreign_key contract_faculty_links, :faculties
   end
