@@ -111,7 +111,7 @@ end
     task :config_update do
       on roles(:web) do
         execute "mkdir --parents /opt/heracles/deploy/passenger"
-        execute 'cd ~deploy/#{fetch(:application)}/current && echo -n "PassengerRuby " > ~deploy/passenger/passenger-ruby-version.cap   && rbenv which ruby >> ~deploy/passenger/passenger-ruby-version.cap'
+        execute "cd ~deploy/'#{fetch(:application)}'/current && echo -n 'PassengerRuby ' > ~deploy/passenger/passenger-ruby-version.cap   && rbenv which ruby >> ~deploy/passenger/passenger-ruby-version.cap"
         execute 'v_passenger_ruby=$(cat ~deploy/passenger/passenger-ruby-version.cap) &&    cp --force /etc/httpd/conf.d/phusion-passenger-default-ruby.conf ~deploy/passenger/passenger-ruby-version.tmp &&    sed -i -e "s|.*PassengerRuby.*|${v_passenger_ruby}|" ~deploy/passenger/passenger-ruby-version.tmp'
         execute "sudo /bin/mv ~deploy/passenger/passenger-ruby-version.tmp /etc/httpd/conf.d/phusion-passenger-default-ruby.conf"
         execute "sudo /bin/systemctl restart httpd"
