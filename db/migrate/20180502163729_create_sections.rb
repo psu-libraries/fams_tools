@@ -1,8 +1,6 @@
 class CreateSections < ActiveRecord::Migration[5.1]
   def up
     create_table :sections do |t|
-      t.references :course, foreign_key: true
-      t.references :faculty, foreign_key: true
       t.string :class_campus_code
       t.string :cross_listed_flag
       t.integer :course_number
@@ -17,6 +15,8 @@ class CreateSections < ActiveRecord::Migration[5.1]
       t.string :xcourse_course_pre
       t.integer :xcourse_course_num
       t.string :xcourse_course_suf
+      t.bigint :course_id
+      t.bigint :faculty_id
     end
   end
   def down

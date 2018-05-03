@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180502170618) do
+ActiveRecord::Schema.define(version: 2018050314201234) do
 
   create_table "contract_faculty_links", force: :cascade do |t|
     t.string "role"
@@ -55,8 +55,6 @@ ActiveRecord::Schema.define(version: 20180502170618) do
   end
 
   create_table "sections", force: :cascade do |t|
-    t.integer "course_id"
-    t.integer "faculty_id"
     t.string "class_campus_code"
     t.string "cross_listed_flag"
     t.integer "course_number"
@@ -71,8 +69,8 @@ ActiveRecord::Schema.define(version: 20180502170618) do
     t.string "xcourse_course_pre"
     t.integer "xcourse_course_num"
     t.string "xcourse_course_suf"
-    t.index ["course_id"], name: "index_sections_on_course_id"
-    t.index ["faculty_id"], name: "index_sections_on_faculty_id"
+    t.bigint "course_id"
+    t.bigint "faculty_id"
   end
 
   create_table "sponsors", force: :cascade do |t|
