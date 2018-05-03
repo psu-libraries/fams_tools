@@ -29,8 +29,13 @@ class LionPathFormat
   def filter_by_user
     kept_rows = []
     csv_hash.each do |csv|
-      if @active_users.include? csv['Instructor Campus ID'].downcase
-        kept_rows << csv
+      @active_users.each do |user|
+        if user[3] == csv['Instructor Campus ID'].downcase
+          csv['m_name'] = user[2]
+          csv['l_name'] = user[0]
+          csv['f_name'] = user[1]
+          kept_rows << csv
+        end
       end
     end
     @csv_hash = kept_rows
@@ -76,7 +81,7 @@ class LionPathFormat
     active_user_arr = []
     xls_object.drop(3).each do |xls|
       if xls[6].downcase == 'yes' && xls[7].downcase == 'yes'
-        active_user_arr << xls[4].downcase
+        active_user_arr << [xls[0], xls[1], xls[2], xls[4].downcase]
       end
     end
     return active_user_arr
