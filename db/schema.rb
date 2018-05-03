@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018050212211234) do
+ActiveRecord::Schema.define(version: 20180502170618) do
 
   create_table "contract_faculty_links", force: :cascade do |t|
     t.string "role"
@@ -37,12 +37,42 @@ ActiveRecord::Schema.define(version: 2018050212211234) do
     t.index ["sponsor_id"], name: "index_contracts_on_sponsor_id"
   end
 
+  create_table "courses", force: :cascade do |t|
+    t.integer "academic_course_id"
+    t.string "term"
+    t.integer "calendar_year"
+    t.string "course_short_description"
+    t.text "course_long_description"
+    t.index ["academic_course_id"], name: "index_courses_on_academic_course_id", unique: true
+  end
+
   create_table "faculties", force: :cascade do |t|
     t.string "access_id"
     t.string "f_name"
     t.string "l_name"
     t.string "m_name"
     t.index ["access_id"], name: "index_faculties_on_access_id", unique: true
+  end
+
+  create_table "sections", force: :cascade do |t|
+    t.integer "course_id"
+    t.integer "faculty_id"
+    t.string "class_campus_code"
+    t.string "cross_listed_flag"
+    t.integer "course_number"
+    t.string "course_suffix"
+    t.string "subject_code"
+    t.string "class_section_code"
+    t.string "course_credits"
+    t.integer "current_enrollment"
+    t.integer "instructor_load_factor"
+    t.string "instruction_mode"
+    t.string "course_component"
+    t.string "xcourse_course_pre"
+    t.integer "xcourse_course_num"
+    t.string "xcourse_course_suf"
+    t.index ["course_id"], name: "index_sections_on_course_id"
+    t.index ["faculty_id"], name: "index_sections_on_faculty_id"
   end
 
   create_table "sponsors", force: :cascade do |t|

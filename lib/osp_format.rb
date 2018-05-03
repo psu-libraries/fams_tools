@@ -2,153 +2,90 @@ require 'spreadsheet'
 require 'csv'
 
 class OspFormat
-  attr_reader :csv_object, :xls_object, :csv_hash
+  attr_accessor :csv_object, :xls_object, :csv_hash
+
   #Creates CSV and XLS object.  Imported CSV must be tab delimited text.
   def initialize(csv_array = CSV.read('data/dmresults-tabdel.txt', encoding: "ISO8859-1", col_sep: "\t"), 
                  xls_object = Spreadsheet.open('data/psu-users.xls'))
     @csv_hash = convert_to_hash(csv_array)
-    @csv_object = csv_array
     @xls_object = xls_object.worksheet 0
     @active_users = find_active_users
   end
 
-  def run
-    format_grant_contract
-    format_accessid_field
-  end
-
-  def convert_to_hash(csv_array)
-    keys = csv_array[0]
-    csv_array[1..-1].map {|a| Hash[ keys.zip(a) ] }
-  end
-
-  #Converts 'Co-PI' to 'Co-Principal Investigator'
-  def format_role_field
+  #Run all local formatting methods
+  def format
     csv_hash.each do |csv|
-      if csv['role'] == 'Co-PI'
-        csv['role'] = 'Co-Principal Investigator'
-      end
-      if csv['role'] == 'Faculty'
-        csv['role'] = 'Core Faculty'
-      end
-      if csv['role'] == 'Post Doctoral'
-        csv['role'] = 'Post Doctoral Associate'
-      end
-      if csv['role'] == 'unknown'
-        csv['role'] = 'Unknown'
-      end
-    end
-  end
-
-  #Removes time, '/', and '/ /' from date fields.  Convert mm/dd/yy to Date object 
-  def format_date_fields
-    index_arr = [11, 12, 16, 17]
-    csv_object.each do |csv|
-      index_arr.each do |i|
-        if csv[i] == '/' || csv[i] == '/  /'
-          csv[i] = ''
-        end
-        begin
-          date = Date.strptime(csv[i], "%m/%d/%Y")
-          csv[i] = date.strftime("%Y-%m-%d")
-        rescue ArgumentError => e
-          #puts e
-        end
-      end
-    end
-  end
-
-  #Changes 'Pending Award' and 'Pending Proposal' status to 'Pending'
-  def format_pending
-    csv_object.each do |csv|
-      if csv[10] == 'Pending Proposal' || csv[10] == 'Pending Award'
-        csv[10] = 'Pending'
-      end
-    end
-  end
-
-  #Removes start and end dates for any contract that was not 'Awarded'
-  def format_start_end
-    csv_object.each do |csv|
-      unless csv[10] == 'Awarded'
-        csv[16] = ''
-        csv[17] = ''
-      end
+      format_nils(csv)
+      format_accessid_field(csv)
+      format_role_field(csv)
+      format_date_fields(csv)
+      format_pending(csv)
+      format_start_end(csv)
+      remove_columns(csv)
     end
   end
 
   #Remove rows with 'submitted' dates <= 2011
   def filter_by_date
     kept_rows = []
-    csv_object.each do |csv|
-      if (csv[11].split('-')[0].to_i >= 2011) && (csv[11].split('-')[0].to_i <= 2018) 
+    csv_hash.each do |csv|
+      if (csv['submitted'].split('-')[0].to_i >= 2011) && (csv['submitted'].split('-')[0].to_i <= 2018) 
         kept_rows << csv
       end
     end
-    @csv_object = kept_rows
-  end
-
-  #Remove columns we don't need
-  def remove_columns
-    index_arr = [1, 5, 7, 18, 19, 22, 23]
-    csv_object.each do |csv|
-      index_arr.each do |i|
-        csv[i] = nil
-      end
-      csv.compact!
-    end
+    @csv_hash = kept_rows
   end
 
   #Remove rows that contain non-active users
   def filter_by_user
     kept_rows = []
-    csv_object.each do |csv|
+    csv_hash.each do |csv|
       @active_users.each do |user|
-        if user[3] == csv[4]
-          csv = csv.insert(5, user[2])
-          csv = csv.insert(5, user[0])
-          csv = csv.insert(5, user[1])
+        if user[3] == csv['accessid']
+          csv['m_name'] = user[2]
+          csv['l_name'] = user[0]
+          csv['f_name'] = user[1]
           kept_rows << csv
         end
       end
     end
-    @csv_object = kept_rows
+    @csv_hash = kept_rows
   end
 
   #Remove rows with 'Purged' or 'Withdrawn' status
-  def filter_purged_withdrawn
+  def filter_by_status
     kept_rows = []
-    csv_object.each do |csv|
-      unless (csv[10] == 'Purged') || (csv[10] == 'Withdrawn')
+    csv_hash.each do |csv|
+      unless (csv['status'] == 'Purged') || (csv['status'] == 'Withdrawn')
         kept_rows << csv
       end
-      @csv_object = kept_rows
     end
+    @csv_hash = kept_rows
   end
 
   #Write the cleaned and filtered array to xl file
-  def write_results_to_xl(filename = 'data/dmresults-formatted.xls')
-    
+  def write_results_to_xl(filename = 'data/dmresults-formatted.xls') 
     wb = Spreadsheet::Workbook.new filename
     sheet = wb.create_worksheet
-    head_arr = ['ospkey', 'title', 'sponsor', 'sponsortype', 'accessid', 'f_name', 'l_name',
-                'm_name', 'role', 'pctcredit','status', 'submitted', 'awarded', 'requested',
-                'funded', 'totalanticipated', 'startdate', 'enddate', 'grantcontract', 'baseagreement',]
-
-    head_arr.each do |head|
-      sheet.row(0).push(head)
+    csv_hash[0].each do |k, v|
+      sheet.row(0).push(k)
     end
-
-    @csv_object.each_with_index do |row, index|
-      row.each do |v|
+    csv_hash.each_with_index do |row, index|
+      row.each do |k, v|
         sheet.row(index+1).push(v)
       end
     end
-
     wb.write filename 
   end
 
   private
+
+  #Convert csv array to a hash
+  def convert_to_hash(csv_array)
+    keys = csv_array[0]
+    csv_array[1..-1].map {|a| Hash[ keys.zip(a) ] }
+  end
+
   #Creates a list of 'Enabled' and 'Has Access' AI users
   def find_active_users
     active_user_arr = []
@@ -161,25 +98,81 @@ class OspFormat
   end
 
   #Replace nil with empty space
-  def format_grant_contract
-    csv_hash.each do |csv|
-      if csv['grantcontract'] == nil
-        csv['grantcontract'] = ''
+  def format_nils(csv)
+    csv.each do |k, v|
+      if v  == nil
+        csv[k] = ''
       end
     end
   end
 
   #Converts calendar dates back to accessids
-  def format_accessid_field
-    csv_hash.each do |csv|
-      if csv['accessid'].include? '-'
-        unless csv['accessid'][0..0] =~ /[A-Z]/
-          csv['accessid'] = csv['accessid'].split('-').reverse.join("").downcase
-        else
-          csv['accessid'] = csv['accessid'].split('-').join("").downcase
-        end
+  def format_accessid_field(csv)
+    if csv['accessid'].include? '-'
+      unless csv['accessid'][0..0] =~ /[A-Z]/
+        csv['accessid'] = csv['accessid'].split('-').reverse.join("").downcase
+      else
+        csv['accessid'] = csv['accessid'].split('-').join("").downcase
       end
     end
+  end
+
+  #Converts 'Co-PI' to 'Co-Principal Investigator', 'Faculty' to 'Core Faculty', 
+  #'Post Doctoral' to 'Post Doctoral Associate', and 'unknown' to 'Unknown'
+  def format_role_field(csv)
+    if csv['role'] == 'Co-PI'
+      csv['role'] = 'Co-Principal Investigator'
+    end
+    if csv['role'] == 'Faculty'
+      csv['role'] = 'Core Faculty'
+    end
+    if csv['role'] == 'Post Doctoral'
+      csv['role'] = 'Post Doctoral Associate'
+    end
+    if csv['role'] == 'unknown'
+      csv['role'] = 'Unknown'
+    end
+  end
+
+  #Removes time, '/', and '/ /' from date fields.  Convert mm/dd/yy to Date object 
+  def format_date_fields(csv)
+    key_arr = ['submitted', 'awarded', 'startdate', 'enddate']
+    key_arr.each do |k|
+      if csv[k] == '/' || csv[k] == '/  /'
+        csv[k] = ''
+      end
+      begin
+        date = DateTime.strptime(csv[k], "%m/%d/%y %H:%M")
+        csv[k] = date.strftime("%Y-%m-%d")
+      rescue ArgumentError => e
+        #puts e
+      end
+    end
+  end
+
+  #Changes 'Pending Award' and 'Pending Proposal' status to 'Pending'
+  def format_pending(csv)
+    if csv['status'] == 'Pending Proposal' || csv['status'] == 'Pending Award'
+      csv['status'] = 'Pending'
+    end
+  end
+
+  #Removes start and end dates for any contract that was not 'Awarded'
+  def format_start_end(csv)
+    unless csv['status'] == 'Awarded'
+      csv['startdate'] = ''
+      csv['enddate'] = ''
+    end
+  end
+
+  #Remove columns we don't need
+  def remove_columns(csv)
+    index_arr = ['ordernumber', 'parentsponsor', 'department', 'totalstartdate', 
+                 'totalenddate', 'agreementtype', 'agreement']
+    index_arr.each do |i|
+      csv[i] = nil
+    end
+    csv.compact!
   end
 
 end
