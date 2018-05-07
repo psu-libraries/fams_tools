@@ -4,7 +4,7 @@ This app will pull data from various sources, store the data in a database, and 
 
 ## Database
 
-  -Development/Test: sqlite3
+  -Development/Test/Production: MySQL
 
 ## Data
 
@@ -15,6 +15,8 @@ This app will pull data from various sources, store the data in a database, and 
   -psu-users.xls
 
   -CONGRANT-tabdel.txt
+
+  -SP18-tabdel.txt
 
 ## Dependencies
 
@@ -54,7 +56,7 @@ This app will pull data from various sources, store the data in a database, and 
 
   3. Convert SP18.csv into a tab delimited text file called SP18-tabdel.txt.
 
-  4. `rake lionpath_data:integrate`
+  4. `rake lionpath_data:format`
  
 **Removing Duplicate CONGRANT Data**
 

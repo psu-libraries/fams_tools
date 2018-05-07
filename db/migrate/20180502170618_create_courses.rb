@@ -11,7 +11,6 @@ class CreateCourses < ActiveRecord::Migration[5.1]
     add_index :courses, :academic_course_id, unique: true
   end
   def down
-    remove_column :sections, :course_id
     drop_table :courses 
   end
 end
