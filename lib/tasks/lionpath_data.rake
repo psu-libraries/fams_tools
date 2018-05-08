@@ -2,7 +2,9 @@ require 'lionpath_format'
 
 namespace :lionpath_data do
 
-  desc "Filter and format LionPath data"
+  desc "Filter and format LionPath data.
+        Write to xls.
+        Populate database."
 
   task format: :environment do
     start = Time.now
@@ -50,6 +52,28 @@ namespace :lionpath_data do
                      xcourse_course_num:     row['XCourse CourseNum'],
                      xcourse_course_suf:     row['XCourse CourseNum Suffix'])
     end
+    finish = Time.now
+    puts(((finish - start)/60).to_s + ' mins')
+  end
+
+  desc "Integrate data into AI through WebServices."
+
+  task integrate: :environment do
+    start = Time.now
+    my_lp_xml = LionPathXMLBuilder.new
+    auth = {:username => Rails.application.config_for(:activity_insight)[:username],
+            :password => Rails.application.config_for(:activity_insight)[:password]}
+    url = 'https://beta.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University'
+    counter = 0
+    my_lp_xml.batched_lionpath_xml.each do |xml|
+      #puts xml
+      response = HTTParty.post url, :body => xml, :headers => {'Content-type' => 'text/xml'}, :basic_auth => auth, :timeout => 180
+      puts response
+      if response.include? 'Error'
+        counter += 1
+      end
+    end
+    puts counter
     finish = Time.now
     puts(((finish - start)/60).to_s + ' mins')
   end
