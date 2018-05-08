@@ -4,7 +4,7 @@
 #The top three methods are used to find duplicates in ai using a GET request
 #GETs congrant data from AI by the specified usernames
 def get_congrant_xmls
-  username_arr = ["XUZ14", "JMC56", "GAL4", "DCH12"]
+  username_arr = []
   auth = {:username => Rails.application.config_for(:activity_insight)[:username],
 	  :password => Rails.application.config_for(:activity_insight)[:password]}
   xml_arr = []

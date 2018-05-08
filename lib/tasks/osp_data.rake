@@ -5,8 +5,7 @@ namespace :osp_data do
 
   desc "Clean and filter data from dmresults.csv.
         Write to xls.
-        Populate database with data.
-        Integrate data into AI."
+        Populate database with data."
 
   task format: :environment do
     start = Time.now
@@ -64,6 +63,8 @@ namespace :osp_data do
     puts(((finish - start)/60).to_s + ' mins')
   end
 
+  desc "Integrate data into AI through WebServices."
+
   task integrate: :environment do
     start = Time.now
     my_osp = OspXMLBuilder.new
@@ -83,4 +84,5 @@ namespace :osp_data do
     finish = Time.now
     puts(((finish - start)/60).to_s + ' mins') 
   end
+
 end
