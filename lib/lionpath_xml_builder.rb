@@ -15,7 +15,7 @@ class LionPathXMLBuilder
 
   private
   def build_xml(batch)
-    builder = Nokogiri::XML::Builder.new do |xml|
+    builder = Nokogiri::XML::Builder.new(:encoding => 'UTF-8') do |xml|
       xml.Data {
         batch.each do |faculty|
           xml.Record('username' => faculty.access_id) {
@@ -44,5 +44,7 @@ class LionPathXMLBuilder
         end
       }
     end
+    return builder.to_xml
   end
+
 end
