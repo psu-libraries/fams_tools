@@ -20,6 +20,7 @@ class LionPathFormat
       format_term(csv)
       format_catalog_number(csv)
       format_section_code(csv)
+      format_instruction_mode(csv)
     end
     csv_hash.each do |csv|
       add_xfields(csv)
@@ -126,6 +127,12 @@ class LionPathFormat
     end
     csv['Class Section Code'] = section_split[0]
     csv['Course Suffix'] = section_split[1] unless csv['Course Suffix']
+  end
+
+  def format_instruction_mode(csv)
+    if csv['Instruction Mode'].include? '-'
+      csv['Instruction Mode'].gsub!('-', '–')
+    end
   end
 
   #Adds data to 'XCourse CoursePre' 'XCourse CourseNum' and 'XCourse CourseNum Suffix'

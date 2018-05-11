@@ -1,4 +1,5 @@
 require 'lionpath_format'
+require 'lionpath_xml_builder'
 
 namespace :lionpath_data do
 
@@ -65,7 +66,7 @@ namespace :lionpath_data do
             :password => Rails.application.config_for(:activity_insight)[:password]}
     url = 'https://beta.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University'
     counter = 0
-    my_lp_xml.batched_lionpath_xml.each do |xml|
+    my_lp_xml.batched_lionpath_xml[0..100].each do |xml|
       #puts xml
       response = HTTParty.post url, :body => xml, :headers => {'Content-type' => 'text/xml'}, :basic_auth => auth, :timeout => 180
       puts response
