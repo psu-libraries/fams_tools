@@ -30,9 +30,10 @@ This app will pull data from various sources, store the data in a database, and 
 
   -nokogiri
 
-## Usage (Beta Testing)
+## Usage
 
 *Note: Make sure the development database is properly rolled back and migrated before populating database*
+*Note: Test integrations on beta and/or alpha before production*
 
 **Formatting and Populating Database with OSP Data**
 
@@ -48,7 +49,7 @@ This app will pull data from various sources, store the data in a database, and 
 
   5. `rake osp_data:format`
 
-**Formatting and Populating Database with LionPath Data (Mock Dataset)**
+**Formatting and Populating Database with LionPath Data**
 
   1. Download LionPath Spring 2018 data from box and store in /data/.
 
@@ -73,4 +74,8 @@ This app will pull data from various sources, store the data in a database, and 
 **Integrating OSP Data into AI**
 
   1. `rake osp_data:integrate`
+
+**Integrating LionPath Data into AI**
+
+  1. `rake lionpath_data:integrate`
 
