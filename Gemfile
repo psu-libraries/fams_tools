@@ -5,6 +5,12 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
+gem 'rmagick'
+gem 'rtesseract'
+gem 'docx', '~> 0.2.07', :require => ["docx"]
+gem 'redis'
+gem 'redis-namespace'
+gem 'anystyle-parser'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.1.5'
