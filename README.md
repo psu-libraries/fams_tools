@@ -29,17 +29,25 @@ This app will pull data from various sources, store the data in a database, and 
   -rspec-rails (development and test)
 
   -nokogiri
+## Deploy
+
+  1. `cd` to project root directory.
+
+  2. `cap production deploy BRANCH_NAME=yourbranchname`
+
+  *Note: To deploy master simply do:* `cap production deploy`
 
 ## Usage
 
 *Note: Make sure the development database is properly rolled back and migrated before populating database*
+
 *Note: Test integrations on beta and/or alpha before production*
 
 **Formatting and Populating Database with OSP Data**
 
   1. Download OSP data in csv format: [dmresults.csv](https://service.sims.psu.edu/digitalmeasures/dmresults.csv)
 
-  2. Download ai-user (psu-users.xls) information from AI Beta Users and Security Page. 
+  2. Download ai-user (psu-users.xls) information from AI Users and Security Page. 
 
   3. Store these files in /data/
 
@@ -53,7 +61,7 @@ This app will pull data from various sources, store the data in a database, and 
 
   1. Download LionPath Spring 2018 data from box and store in /data/.
 
-  2. Convert 'Instructor Campus ID' column to a date formatted: dd/mm/yyyy
+  2. Convert 'Instructor Campus ID' column to a date formatted: dd-mmm-yyyy
 
   3. Convert SP18.csv into a tab delimited text file called SP18-tabdel.txt.
 
@@ -67,7 +75,7 @@ This app will pull data from various sources, store the data in a database, and 
 
   3. `cp CONGRANT.csv path/to/ai_integration/data`
 
-  4. Convert CONGRANT.csv as a tab delimited text file called CONGRANT-tabdel.txt and format 'ID' column to a number with 0 decimal places.
+  4. Format 'ID' column to a number with 0 decimal places and convert CONGRANT.csv to a tab delimited text file called CONGRANT-tabdel.txt. 
 
   5. `rake activity_insight:remove_duplicates`
 
