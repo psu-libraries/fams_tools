@@ -11,6 +11,7 @@ gem 'docx', '~> 0.2.07', :require => ["docx"]
 gem 'redis'
 gem 'redis-namespace'
 gem 'anystyle-parser'
+gem 'spreadsheet'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.1.5'
