@@ -6,7 +6,7 @@ class LionPathFormat
   attr_accessor :csv_object, :xls_object, :csv_hash
 
   #Creates CSV and XLS object.  Imported CSV must be tab delimited text.
-  def initialize(csv_array = CSV.read('data/SP18-tabdel.txt', encoding: "ISO8859-1", col_sep: "\t"),
+  def initialize(csv_array = CSV.read('data/SP18-tabdel.txt', encoding: "UTF-8", col_sep: "\t"),
                  xls_object = Spreadsheet.open('data/psu-users.xls'))
     @csv_hash = convert_to_hash(csv_array)
     @xls_object = xls_object.worksheet 0

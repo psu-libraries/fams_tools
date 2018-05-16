@@ -1,11 +1,12 @@
 require 'spreadsheet'
 require 'csv'
+require 'roo'
 
 class OspFormat
   attr_accessor :csv_object, :xls_object, :csv_hash
 
   #Creates CSV and XLS object.  Imported CSV must be tab delimited text.
-  def initialize(csv_array = CSV.read('data/dmresults-tabdel.txt', encoding: "ISO8859-1", col_sep: "\t"), 
+  def initialize(csv_array = Roo::Spreadsheet.open('data/dmresults.xlsx').sheet(0), 
                  xls_object = Spreadsheet.open('data/psu-users.xls'))
     @csv_hash = convert_to_hash(csv_array)
     @xls_object = xls_object.worksheet 0
@@ -82,8 +83,10 @@ class OspFormat
 
   #Convert csv array to a hash
   def convert_to_hash(csv_array)
-    keys = csv_array[0]
-    csv_array[1..-1].map {|a| Hash[ keys.zip(a) ] }
+    csv_hash = []
+    keys = csv_array.row(1)
+    csv_array.each {|a| csv_hash << Hash[ keys.zip(a) ] }
+    csv_hash
   end
 
   #Creates a list of 'Enabled' and 'Has Access' AI users
@@ -108,11 +111,11 @@ class OspFormat
 
   #Converts calendar dates back to accessids
   def format_accessid_field(csv)
-    if csv['accessid'].include? '-'
-      unless csv['accessid'][0..0] =~ /[A-Z]/
-        csv['accessid'] = csv['accessid'].split('-').reverse.join("").downcase
+    if csv['accessid'].to_s.include? ', '
+      unless csv['accessid'].to_s.split(' ')[2][0] =~ /[A-Z]/
+        csv['accessid'] = csv['accessid'].to_s.split(' ')[1..2].reverse.join("").downcase
       else
-        csv['accessid'] = csv['accessid'].split('-').join("").downcase
+        csv['accessid'] = csv['accessid'].to_s.split(' ')[1..2].join("").downcase
       end
     end
   end
@@ -142,8 +145,8 @@ class OspFormat
         csv[k] = ''
       end
       begin
-        date = DateTime.strptime(csv[k], "%m/%d/%y %H:%M")
-        csv[k] = date.strftime("%Y-%m-%d")
+        date = DateTime.parse(csv[k].to_s)
+        csv[k] = date.strftime("%Y-%m-%d").to_s
       rescue ArgumentError => e
         #puts e
       end
