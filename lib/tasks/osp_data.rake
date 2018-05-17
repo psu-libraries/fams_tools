@@ -73,7 +73,7 @@ namespace :osp_data do
     url = 'https://beta.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University'
     counter = 0
     my_osp.batched_osp_xml.each do |xml|
-      #puts xml
+      puts xml
       response = HTTParty.post url, :body => xml, :headers => {'Content-type' => 'text/xml'}, :basic_auth => auth, :timeout => 180
       puts response
       if response.include? 'Error'
