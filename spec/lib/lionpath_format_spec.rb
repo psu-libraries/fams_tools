@@ -71,7 +71,7 @@ RSpec.describe LionPathFormat do
       expect(lionpath_obj.csv_hash[5]['XCourse CoursePre']).to eq('MATH')
       expect(lionpath_obj.csv_hash[5]['XCourse CourseNum']).to eq('001')
       expect(lionpath_obj.csv_hash[5]['XCourse CourseNum Suffix']).to eq('C')
-      expect(lionpath_obj.csv_hash[0]['Instruction Mode']).to eq('Hybrid — Online & In Person')
+      expect(lionpath_obj.csv_hash[0]['Instruction Mode']).to eq('Hybrid – Online & In Person')
     end
   end
 

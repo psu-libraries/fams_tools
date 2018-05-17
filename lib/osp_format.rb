@@ -3,7 +3,7 @@ require 'csv'
 require 'roo'
 
 class OspFormat
-  attr_accessor :csv_object, :xls_object, :csv_hash
+  attr_accessor :csv_object, :xls_object, :csv_hash, :active_users
 
   #Creates CSV and XLS object.  Imported CSV must be tab delimited text.
   def initialize(csv_array = Roo::Spreadsheet.open('data/dmresults.xlsx').sheet(0), 
@@ -41,7 +41,7 @@ class OspFormat
   def filter_by_user
     kept_rows = []
     csv_hash.each do |csv|
-      @active_users.each do |user|
+      active_users.each do |user|
         if user[3] == csv['accessid']
           csv['m_name'] = user[2]
           csv['l_name'] = user[0]
@@ -112,10 +112,10 @@ class OspFormat
   #Converts calendar dates back to accessids
   def format_accessid_field(csv)
     if csv['accessid'].to_s.include? ', '
-      unless csv['accessid'].to_s.split(' ')[2][0] =~ /[A-Z]/
-        csv['accessid'] = csv['accessid'].to_s.split(' ')[1..2].reverse.join("").downcase
+      unless csv['accessid'].to_s.split(' ')[3] == '2018'
+        csv['accessid'] = csv['accessid'].to_s.split(' ')[2].downcase + csv['accessid'].to_s.split(' ')[3][2..3]
       else
-        csv['accessid'] = csv['accessid'].to_s.split(' ')[1..2].join("").downcase
+        csv['accessid'] = csv['accessid'].to_s.split(' ')[2].downcase + csv['accessid'].to_s.split(' ')[1].sub!(/^0+/, "")
       end
     end
   end
