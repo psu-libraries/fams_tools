@@ -12,7 +12,6 @@ namespace :osp_data do
     my_sheet = OspFormat.new
     my_sheet.format
     my_sheet.filter_by_status
-    my_sheet.csv_hash.each {|a| puts a}
     my_sheet.filter_by_date
     my_sheet.filter_by_user
     my_sheet.write_results_to_xl
