@@ -17,7 +17,7 @@ class OspXMLBuilder
   private
   #Generates xml from a batch of faculty objects
   def build_xml(batch)
-    builder = Nokogiri::XML::Builder.new do |xml|
+    builder = Nokogiri::XML::Builder.new(:encoding => 'UTF-8') do |xml|
       xml.Data {
         batch.each do |faculty|
           xml.Record('username' => faculty.access_id) {
