@@ -12,7 +12,7 @@ RSpec.describe LionPathFormat do
                 9999, 'Y', 'MATH', 1, '01C', 3, 25, 100, 'Hybrid - Online & In Person', 'Lecture']}
 
   let(:line2) {['1-Mar-6783', 'Spring 2018', 2018, 'UP', 'Math', 'Lots of math.', 
-                9999, 'Y', 'MATH', '77A', 1, 3, 25, 100, 'In Person', 'Lecture']}
+                2222, 'Y', 'MATH', '77A', 1, 3, 25, 100, 'In Person', 'Lecture']}
 
   let(:line3) {['xxx111', 'Spring 2018', 2018, 'UP', 'Math', 'Lots of math.', 
                 1111, 'N', 'MATH', '202D', '901', 3, 25, 100, 'In Person', 'Lecture']}
@@ -26,6 +26,9 @@ RSpec.describe LionPathFormat do
   let(:line6) {['1-Mar-1983', 'Spring 2018', 2018, 'UP', 'Math', 'Lots of math.', 
                 9999, 'Y', 'MATH', '77A', 1, 3, 25, 100, 'In Person', 'Online']}
 
+  let(:line7) {['xxx111', 'Spring 2018', 2018, 'UP', 'Math', 'Lots of math.',
+                1111, 'N', 'MATH', '202D', '901', 3, 25, 0, 'In Person', 'Lecture']}
+
   let(:book) do
     book = Spreadsheet::Workbook.new
     sheet = book.create_worksheet
@@ -38,7 +41,7 @@ RSpec.describe LionPathFormat do
     book
   end
 
-  let(:lionpath_obj) {LionPathFormat.new([headers, line1, line2, line3, line4, line5, line6], book)}
+  let(:lionpath_obj) {LionPathFormat.new([headers, line1, line2, line3, line4, line5, line6, line7], book)}
 
   describe '#format' do
     it 'should convert dates back into psuIDs and
@@ -81,6 +84,14 @@ RSpec.describe LionPathFormat do
       lionpath_obj.filter_by_user
       expect(lionpath_obj.csv_hash.count).to eq(1)
       expect(lionpath_obj.csv_hash[0]['Instructor Campus ID']).to eq('zzz999')
+    end
+  end
+
+  describe '#remove_duplicates' do
+    it 'should remove records that are the same except for instructor_load_factor' do
+      lionpath_obj.format
+      lionpath_obj.remove_duplicates
+      expect(lionpath_obj.csv_hash.count).to eq(6)
     end
   end
 end
