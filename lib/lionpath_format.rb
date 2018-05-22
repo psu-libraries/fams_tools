@@ -42,6 +42,35 @@ class LionPathFormat
     @csv_hash = kept_rows
   end
 
+  def remove_duplicates
+    csv_hash.uniq!{ |hash| 
+      [
+        hash['Instructor Campus ID'],
+        hash['Term'],
+        hash['Calendar Year'],
+        hash['Class Campus Code'],
+        hash['Course Short Description'],
+        hash['Course Long Description'],
+        hash['Academic Course ID'],
+        hash['Cross Listed Flag'],
+        hash['Subject Code'],
+        hash['Course Number'],
+        hash['Course Suffix'],
+        hash['Class Section Code'],
+        hash['Course Credits/Units'],
+        hash['Current Enrollment'],
+        hash['Instruction Mode'],
+        hash['Course Component'],
+        hash['f_name'],
+        hash['l_name'],
+        hash['m_name'],
+        hash['XCourse CoursePre'],
+        hash['XCourse CourseNum'],
+        hash['XCourse CourseNum Suffix']
+      ]
+    } 
+  end
+
   def write_flagged_to_xl(filename = 'data/flagged_more_than_two.xls')
     wb = Spreadsheet::Workbook.new filename
     sheet = wb.create_worksheet
