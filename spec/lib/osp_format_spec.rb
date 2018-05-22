@@ -67,11 +67,11 @@ RSpec.describe OspFormat do
     arr_of_hashes = []
     keys = headers
     data_arr << [1, 1, 'X', 'X', 'X', 'X', 'X', 'X', 'X', 1,
-                'Purged', 'X', 'X', 1, 1, 1, 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'] 
+                'Purged', 'X', 'X', 1, 1, 1, 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'] 
     data_arr << [1, 1, 'X', 'X', 'X', 'X', 'X', 'X', 'X', 1,
-                'Awarded', 'X', 'X', 1, 1, 1, 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X']
+                'Awarded', 'X', 'X', 1, 1, 1, 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X']
     data_arr << [1, 1, 'X', 'X', 'X', 'X', 'X', 'X', 'X', 1,
-                'Withdrawn', 'X', 'X', 1, 1, 1, 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X']
+                'Withdrawn', 'X', 'X', 1, 1, 1, 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X']
     data_arr.each {|a| arr_of_hashes << Hash[ keys.zip(a) ] }
     arr_of_hashes
   end
