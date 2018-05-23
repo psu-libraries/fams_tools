@@ -46,6 +46,13 @@ GEM
       namae (~> 0.9)
       wapiti (~> 0.1)
     arel (8.0.0)
+    axlsx (2.1.0.pre)
+      htmlentities (~> 4.3.1)
+      nokogiri (>= 1.4.1)
+      rubyzip (~> 1.1.7)
+    axlsx_rails (0.5.2)
+      actionpack (>= 3.1)
+      axlsx (>= 2.0.1)
     bibtex-ruby (4.4.6)
       latex-decode (~> 0.0)
     bindex (0.5.0)
@@ -77,6 +84,7 @@ GEM
     ffi (1.9.23)
     globalid (0.4.1)
       activesupport (>= 4.2.0)
+    htmlentities (4.3.4)
     i18n (1.0.1)
       concurrent-ruby (~> 1.0)
     jbuilder (2.7.0)
@@ -198,6 +206,8 @@ PLATFORMS
 
 DEPENDENCIES
   anystyle-parser
+  axlsx (= 2.1.0.pre)
+  axlsx_rails
   byebug
   capybara (~> 2.13)
   coffee-rails (~> 4.2)
@@ -210,6 +220,7 @@ DEPENDENCIES
   redis-namespace
   rmagick
   rtesseract
+  rubyzip (~> 1.1.0)
   sass-rails (~> 5.0)
   selenium-webdriver
   spreadsheet
