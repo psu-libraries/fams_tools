@@ -15,6 +15,7 @@ class PublicationListingsController < ApplicationController
   end
 
   def index
+    @publication_listings = PublicationListing.all
   end
 
   def show

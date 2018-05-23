@@ -15,6 +15,7 @@ class WorksController < ApplicationController
   end
 
   def index
+    @works = Work.where(publication_listing: params[:publication_listing_id])
   end
 
   def show
