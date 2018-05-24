@@ -68,7 +68,7 @@ namespace :lionpath_data do
     url = 'https://beta.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University'
     counter = 0
     my_lp_xml.batched_lionpath_xml[0..100].each do |xml|
-      puts xml
+      #puts xml
       response = HTTParty.post url, :body => xml, :headers => {'Content-type' => 'text/xml'}, :basic_auth => auth, :timeout => 180
       puts response
       if response.include? 'Error'
