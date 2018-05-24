@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-  RSpec.describe 'osp_data' do
+  RSpec.describe 'lionpath_data' do
 
     headers = ['Instructor Campus ID', 'Term', 'Calendar Year', 'Class Campus Code', 'Course Short Description', 'Course Long Description',
                'Academic Course ID', 'Cross Listed Flag', 'Subject Code', 'Class Section Code', 'Course Credits/Units',
