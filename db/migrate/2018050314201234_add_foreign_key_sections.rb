@@ -6,6 +6,6 @@ class AddForeignKeySections < ActiveRecord::Migration[5.1]
   end
 
   def down
-    remove_foreign_key sections, :courses
-    remove_foreign_key sections, :faculties
+    remove_foreign_key :sections, :courses
+    remove_foreign_key :sections, :faculties
   end

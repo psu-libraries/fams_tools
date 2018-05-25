@@ -78,4 +78,9 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
     t.index ["sponsor_name"], name: "index_sponsors_on_sponsor_name", unique: true
   end
 
+  create_table "user_nums", force: :cascade do |t|
+    t.bigint "faculty_id"
+    t.integer "id_number"
+  end
+
 end
