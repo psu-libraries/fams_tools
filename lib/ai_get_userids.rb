@@ -28,14 +28,19 @@ class ImportUserids
     userid_hash = {}
     arr.each do |xml|
       xml.xpath('//Users//User').each do |user|
-        userid_hash[user.attr('username')] = user.attr('dmu:userId')
+        userid_hash[user.attr('username').downcase] = user.attr('dmu:userId')
       end
     end
     userid_hash
   end
 
   def link_to_faculties(userid_hash)
-    puts userid_hash
+    userid_hash.each do |k,v|
+      faculty = Faculty.find_by(access_id: k)
+
+      UserNum.create(faculty: faculty,
+                     id_number:   v)
+    end
   end
 
 end
