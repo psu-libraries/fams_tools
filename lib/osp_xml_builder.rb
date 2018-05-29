@@ -29,6 +29,14 @@ class OspXMLBuilder
                 xml.TITLE_ link.contract.title, :access => "LOCKED"
                 xml.SPONORG_ link.contract.sponsor.sponsor_name, :access => "LOCKED"
                 xml.AWARDORG_ link.contract.sponsor.sponsor_type, :access => "LOCKED"
+                xml.CONGRANT_INVEST {
+                  xml.FACULTY_NAME_ faculty.user_num.id_number
+                  xml.FNAME_ faculty.f_name
+                  xml.MNAME_ faculty.m_name
+                  xml.LNAME faculty.l_name
+                  xml.ROLE_ link.role
+                  xml.ASSIGN_ link.pct_credit 
+                }
                 xml.AMOUNT_REQUEST_ link.contract.requested, :access => "LOCKED"
                 xml.AMOUNT_ANTICIPATE_ link.contract.total_anticipated, :access => "LOCKED"
                 xml.AMOUNT_ link.contract.funded, :access => "LOCKED"
