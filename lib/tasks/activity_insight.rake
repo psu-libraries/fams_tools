@@ -7,7 +7,7 @@ namespace :activity_insight do
 
   task find_duplicates: :environment do
 
-    put_duplicates(xml_to_hash(get_congrant_xmls))
+    ReturnSystemDups.new([]).call
 
   end
 
