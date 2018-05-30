@@ -7,7 +7,7 @@ namespace :activity_insight do
 
   task find_duplicates: :environment do
 
-    ReturnSystemDups.new([]).call
+    ReturnSystemDups.new.call
 
   end
 
@@ -15,8 +15,7 @@ namespace :activity_insight do
 
   task remove_duplicates: :environment do
 
-    write_to_spreadsheet(grab_duplicates(csv_to_hashes))
-    delete_duplicates(grab_duplicates(csv_to_hashes))
+    RemoveSystemDups.new.call
 
   end
 
@@ -27,4 +26,5 @@ namespace :activity_insight do
     ImportUserids.new.call
 
   end
+
 end
