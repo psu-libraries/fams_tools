@@ -38,7 +38,7 @@ class ImportUserids
     userid_hash.each do |k,v|
       faculty = Faculty.find_by(access_id: k)
 
-      UserNum.create(faculty: faculty,
+      UserNum.create(faculty:     faculty,
                      id_number:   v)
     end
   end
