@@ -1,6 +1,5 @@
 <h1>Upload a list of publications and optional training data file</h1>
 <%= form_with( url: converter_citation_parse_url, :multipart => true ) do |f| %>
-
 <p><%= label(:publication_file, "Publication Data File") %><%= f.file_field :publication_file %></p>
 <p><%= label(:training_file, "Training Data File (Optional)") %><%= f.file_field :training_file %></p>
 <%= f.submit "Create Citation Spreadsheet" %>

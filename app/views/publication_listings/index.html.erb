@@ -1,5 +1,12 @@
 <h1>PublicationListings#index</h1>
-<p>Find me in app/views/publication_listings/index.html.erb</p>
+
+<%= form_with( url: publication_listings_url, :multipart => true ) do |f| %>
+<p><%= label(:publication_file, "Publication Data File") %><%= f.file_field :publication_file %></p>
+<p><%= label(:training_file, "Training Data File (Optional)") %><%= f.file_field :training_file %></p>
+<%= f.submit "Create Citation Spreadsheet" %>
+<% end %>
+
+<br>
 <% @publication_listings.each do |pl| %>
   <%= link_to  pl.path, publication_listing_works_url(pl) %><br>
 <% end %>
