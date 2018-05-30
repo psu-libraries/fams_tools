@@ -1,35 +1,40 @@
 #Finds CONGRANT duplicates directly in the system
 class ReturnSystemDups
-  attr_accessor :username_arr, :xml_arr, :congrant_hash
+  attr_accessor :username_arr, :responses, :xml_arr, :congrant_hash
 
   def initialize(usernames = [])
     @username_arr = usernames
-    @xml_arr = []
-    @congrant_hash = {}
+    @responses = get_congrant_xmls
   end
 
   def call
-    get_congrant_xmls
-    xml_to_hash(xml_arr)
-    put_duplicates(congrant_hash)
+    put_duplicates(xml_to_hash(noko_xml(responses)))
   end
 
   private
 
   def get_congrant_xmls
+    responses = []
     auth = {:username => Rails.application.config_for(:activity_insight)[:username],
             :password => Rails.application.config_for(:activity_insight)[:password]}
     username_arr.each do |username|
       url = 'https://beta.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University/USERNAME:' + username + '/CONGRANT'
       #url = 'https://www.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University/USERNAME:' + username + '/CONGRANT'
-      response = HTTParty.get url, :basic_auth => auth
-      #puts response
-      xml = Nokogiri::XML.parse(response.to_s)
-      xml_arr << xml
+      responses << (HTTParty.get url, :basic_auth => auth)
     end
+    return responses
+  end
+
+  def noko_xml(responses)
+    xml_arr = []
+    responses.each do |response|
+      xml_arr << Nokogiri::XML.parse(response.to_s)
+    end
+    return xml_arr
   end
 
   def xml_to_hash(xml_arr)
+    congrant_hash = {}
     xml_arr.each do |xml|
       xml.xpath('//Data:Record', 'Data' => 'http://www.digitalmeasures.com/schema/data').each do |record|
         congrant_hash[record.attr('username')] = []
@@ -40,6 +45,7 @@ class ReturnSystemDups
         end
       end
     end
+    return congrant_hash
   end
 
   def put_duplicates(congrant_hash)
@@ -57,7 +63,7 @@ end
 
 public
 
-#Uses backup file from DM converted to tab del text to get all CONGRANT data in system.
+#Note: This uses backup file from DM converted to tab del text to get all CONGRANT data in system.  Does NOT use GET request.
 class RemoveSystemDups
   attr_accessor :congrant_data
 
@@ -66,8 +72,11 @@ class RemoveSystemDups
   end
 
   def call
-    write_to_spreadsheet(grab_duplicates(csv_to_hashes(congrant_data)))
     delete_duplicates(grab_duplicates(csv_to_hashes(congrant_data)))
+  end
+
+  def write
+    write_to_spreadsheet(grab_duplicates(csv_to_hashes(congrant_data)))
   end
 
   private

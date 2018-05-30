@@ -16,6 +16,7 @@ namespace :activity_insight do
   task remove_duplicates: :environment do
 
     RemoveSystemDups.new.call
+    RemoveSystemDups.new.write
 
   end
 
