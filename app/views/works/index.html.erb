@@ -1,4 +1,6 @@
-<h1>Works#index</h1>
+<h1>Works (<%= @works.count %> records)</h1>
+<%= link_to "<< Back to Publication Listing", publication_listings_path %>
+| 
 <%= link_to "Download as xlsx", publication_listing_works_path(format: :xlsx) %>
 <table border=1>
   <tr>
