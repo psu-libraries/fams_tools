@@ -1,5 +1,6 @@
 require 'rails_helper'
 require 'ai_manage_duplicates'
+require 'byebug'
 
 RSpec.describe ReturnSystemDups do
 
@@ -204,8 +205,7 @@ RSpec.describe ReturnSystemDups do
   let(:return_dups_obj) {ReturnSystemDups.allocate}
 
   describe "#call" do
-    it "should convert the xml to a hash and
-        should populate database with userid info" do
+    it "should return a list of ospkeys with duplicates" do
       return_dups_obj.responses = xml
       expect { return_dups_obj.call }.to output("bbb444\n987654\nuuu999\n").to_stdout
     end
@@ -213,3 +213,39 @@ RSpec.describe ReturnSystemDups do
 
 end
 
+RSpec.describe RemoveSystemDups do
+  
+  let(:data_book) do
+    [['GROUP', 'USERNAME', 'USER_ID', 'SURVEY_ID', 'ID', 'WEB_APPEAR', 'OSPKEY', 'BASE_AGREE', 'TYPE',
+      'TITLE', 'SPONORG', 'AWARDORG', 'EXTRAMURAL', 'AWARDORG_OTHER', 'CLASSIFICATION', 'IMPROVE_INST', 
+      'AMOUNT_REQUEST', 'AMOUNT_ANTICIPATE', 'AMOUNT', 'ABSTRACT', 'COMMENT', 'STATUS', 'STATUS', 'GRANT_NUM', 
+      'ADD_INFO_URL', 'DTM_SUB', 'DTD_SUB', 'DTY_SUB', 'SUB_START', 'SUB_END', 'DTM_AWARD', 'DTD_AWARD', 
+      'DTY_AWARD', 'AWARD_START', 'AWARD_END', 'DTM_START', 'DTD_START', 'DTY_START', 'START_START', 'START_END', 
+      'DTM_END', 'DTD_END', 'DTY_END', 'END_START', 'END_END', 'USER_REFERENCE_CREATOR'],
+     ['', 'xxx444', '', '', '1234567', '', '54321', '', '', 'The Societal Impact of Mock Datasets'],
+     ['', 'xxx444', '', '', '2345678', '', '54321', '', '', 'The Societal Impact of Fake Datasets'],
+     ['', 'yyy555', '', '', '4523133', '', '54321', '', '', 'The Societal Impact of Mock Datasets'],
+     ['', 'zzz666', '', '', '9876543', '', '65432', '', '', 'Why Mock Datasets are Destroying the Country']]
+  end
+
+  let(:remove_dups_obj) {RemoveSystemDups.allocate}
+
+  describe "#call" do
+    it "should identify duplicates and
+        should make a request to DM to remove duplicates" do
+      sponsor = Sponsor.create(sponsor_name: 'Sponsor')
+      Contract.create(osp_key: 54321, sponsor: sponsor)
+      remove_dups_obj.congrant_data = data_book
+      stub_request(:post, "https://beta.digitalmeasures.com/login/service/v4/SchemaData:delete/INDIVIDUAL-ACTIVITIES-University").
+         with(
+           body: "<?xml version=\"1.0\"?>\n<Data>\n  <CONGRANT>\n    <item id=\"1234567\"/>\n    <item id=\"2345678\"/>\n  </CONGRANT>\n</Data>\n",
+           headers: {
+       	  'Authorization'=>'Basic cHN1L2Fpc3VwcG9ydDpoQWVxeHBBV3VicQ==',
+       	  'Content-Type'=>'text/xml'
+           }).
+         to_return(status: 200, body: "<?xml version=\"1.0\"?>\n<Success>\n  <item/>\n</Success>\n", headers: {})
+      remove_dups_obj.call
+    end
+  end
+
+end
