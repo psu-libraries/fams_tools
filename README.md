@@ -30,6 +30,8 @@ This app will pull data from various sources, store the data in a database, and 
 
   -roo
 
+  -webmock
+
 ## Deploy
 
   1. `cd` to project root directory.
