@@ -1,6 +1,8 @@
 require 'nokogiri'
 
 class OspXMLBuilder
+  attr_accessor :faculties
+
   def initialize
     @faculties = Faculty.joins(:contract_faculty_links).group('access_id')
   end
@@ -8,7 +10,7 @@ class OspXMLBuilder
   #Chunks osp data into batches so we don't overload AI with records
   def batched_osp_xml
     xml_batches = []
-    @faculties.each_slice(20) do |batch|
+    faculties.each_slice(20) do |batch|
       xml_batches << build_xml(batch)
     end
     return xml_batches

@@ -71,5 +71,11 @@ require 'rails_helper'
         expect(Faculty.find_by(:access_id => 'ghi789').sections.first.course.academic_course_id).to eq(2222)
       end
     end
+
+    describe 'integrate to AI' do
+      it 'should send a POST request to DM Webservices with an xml containing SCHTEACH data' do
+
+      end
+    end
   end
 
