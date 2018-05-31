@@ -8,5 +8,5 @@
 
 <br>
 <% @publication_listings.each do |pl| %>
-  <%= link_to  pl.path, publication_listing_works_url(pl) %><br>
+  <%= link_to  pl.path, publication_listing_works_url(pl) %> (<%= pl.works.count %> Records)<br>
 <% end %>
