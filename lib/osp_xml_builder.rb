@@ -1,4 +1,5 @@
 require 'nokogiri'
+require 'byebug'
 
 class OspXMLBuilder
   attr_accessor :faculties
