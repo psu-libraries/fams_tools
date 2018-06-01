@@ -5,7 +5,6 @@ require 'roo'
 class OspFormat
   attr_accessor :csv_object, :xls_object, :csv_hash, :active_users
 
-  #Creates CSV and XLS object.  Imported CSV must be tab delimited text.
   def initialize(csv_array = Roo::Spreadsheet.open('data/dmresults.xlsx').sheet(0), 
                  xls_object = Spreadsheet.open('data/psu-users.xls'))
     @csv_hash = convert_to_hash(csv_array)
