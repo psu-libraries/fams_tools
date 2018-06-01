@@ -1,6 +1,5 @@
 require 'rails_helper'
 require 'osp_xml_builder'
-require 'byebug'
 
 RSpec.describe OspXMLBuilder do
 
