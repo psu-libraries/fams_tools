@@ -12,14 +12,14 @@
 
 ActiveRecord::Schema.define(version: 2018050314201234) do
 
-  create_table "contract_faculty_links", force: :cascade do |t|
+  create_table "contract_faculty_links", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "role"
     t.integer "pct_credit"
     t.bigint "contract_id"
     t.bigint "faculty_id"
   end
 
-  create_table "contracts", force: :cascade do |t|
+  create_table "contracts", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer "osp_key"
     t.string "title"
     t.bigint "sponsor_id"
@@ -36,7 +36,7 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
     t.index ["osp_key"], name: "index_contracts_on_osp_key", unique: true
   end
 
-  create_table "courses", force: :cascade do |t|
+  create_table "courses", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer "academic_course_id"
     t.string "term"
     t.integer "calendar_year"
@@ -45,7 +45,7 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
     t.index ["academic_course_id"], name: "index_courses_on_academic_course_id", unique: true
   end
 
-  create_table "faculties", force: :cascade do |t|
+  create_table "faculties", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "access_id"
     t.string "f_name"
     t.string "l_name"
@@ -53,7 +53,7 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
     t.index ["access_id"], name: "index_faculties_on_access_id", unique: true
   end
 
-  create_table "sections", force: :cascade do |t|
+  create_table "sections", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "class_campus_code"
     t.string "cross_listed_flag"
     t.integer "course_number"
@@ -72,13 +72,13 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
     t.bigint "faculty_id"
   end
 
-  create_table "sponsors", force: :cascade do |t|
+  create_table "sponsors", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "sponsor_name"
     t.string "sponsor_type"
     t.index ["sponsor_name"], name: "index_sponsors_on_sponsor_name", unique: true
   end
 
-  create_table "user_nums", force: :cascade do |t|
+  create_table "user_nums", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.bigint "faculty_id"
     t.integer "id_number"
   end
