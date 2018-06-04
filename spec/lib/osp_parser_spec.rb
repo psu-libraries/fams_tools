@@ -1,9 +1,9 @@
 require 'rails_helper'
 require 'spreadsheet'
-require 'osp_format'
+require 'osp_parser'
 require 'byebug'
 
-RSpec.describe OspFormat do
+RSpec.describe OspParser do
   
   headers =  ['ospkey', 'ordernumber', 'title', 'sponsor', 'sponsortype', 'parentsponsor', 
               'accessid', 'department', 'role', 'pctcredit', 'status', 'submitted', 'awarded', 
@@ -88,7 +88,7 @@ RSpec.describe OspFormat do
     book
   end
 
-  let(:osp_obj) {OspFormat.allocate}
+  let(:osp_parser_obj) {OspParser.allocate}
 
   describe "#format" do
     it "should convert nils to ' ' and 
@@ -99,65 +99,65 @@ RSpec.describe OspFormat do
         should convert dates to be sql friendly
         should change 'Pending Award' and 'Pending Proposal' status to 'Pending'
         should remove start and end dates for any contract that was not 'Awarded'" do
-      osp_obj.csv_hash = data_book1
-      osp_obj.xls_object = fake_book
-      osp_obj.format
-      expect(osp_obj.csv_hash[0]['grantcontract']).to eq('')
-      expect(osp_obj.csv_hash[1]['grantcontract']).to eq('Grant')
-      expect(osp_obj.csv_hash[0]['accessid']).to eq('abc123')
-      expect(osp_obj.csv_hash[1]['accessid']).to eq('mar26')
-      expect(osp_obj.csv_hash[2]['accessid']).to eq('jan2')
-      expect(osp_obj.csv_hash[0]['role']).to eq('Co-Principal Investigator')
-      expect(osp_obj.csv_hash[1]['role']).to eq('Core Faculty')
-      expect(osp_obj.csv_hash[2]['role']).to eq('Post Doctoral Associate')
-      expect(osp_obj.csv_hash[3]['role']).to eq('Unknown')
-      expect(osp_obj.csv_hash[0]['submitted']).to eq('')
-      expect(osp_obj.csv_hash[0]['awarded']).to eq('')
-      expect(osp_obj.csv_hash[0]['startdate']).to eq('2017-01-01')
-      expect(osp_obj.csv_hash[0]['enddate']).to eq('2018-12-12')
-      expect(osp_obj.csv_hash[3]['status']).to eq('Pending')
-      expect(osp_obj.csv_hash[1]['status']).to eq('Pending')
-      expect(osp_obj.csv_hash[2]['startdate']).to eq('2017-01-01')
-      expect(osp_obj.csv_hash[2]['enddate']).to eq('2018-12-12')
-      expect(osp_obj.csv_hash[3]['startdate']).to eq('')
-      expect(osp_obj.csv_hash[3]['enddate']).to eq('')
-      expect(osp_obj.csv_hash[0].length).to eq(17)
-      expect(osp_obj.csv_hash[1].length).to eq(17)
+      osp_parser_obj.xlsx_hash = data_book1
+      osp_parser_obj.xls_sheet = fake_book
+      osp_parser_obj.format
+      expect(osp_parser_obj.xlsx_hash[0]['grantcontract']).to eq('')
+      expect(osp_parser_obj.xlsx_hash[1]['grantcontract']).to eq('Grant')
+      expect(osp_parser_obj.xlsx_hash[0]['accessid']).to eq('abc123')
+      expect(osp_parser_obj.xlsx_hash[1]['accessid']).to eq('mar26')
+      expect(osp_parser_obj.xlsx_hash[2]['accessid']).to eq('jan2')
+      expect(osp_parser_obj.xlsx_hash[0]['role']).to eq('Co-Principal Investigator')
+      expect(osp_parser_obj.xlsx_hash[1]['role']).to eq('Core Faculty')
+      expect(osp_parser_obj.xlsx_hash[2]['role']).to eq('Post Doctoral Associate')
+      expect(osp_parser_obj.xlsx_hash[3]['role']).to eq('Unknown')
+      expect(osp_parser_obj.xlsx_hash[0]['submitted']).to eq('')
+      expect(osp_parser_obj.xlsx_hash[0]['awarded']).to eq('')
+      expect(osp_parser_obj.xlsx_hash[0]['startdate']).to eq('2017-01-01')
+      expect(osp_parser_obj.xlsx_hash[0]['enddate']).to eq('2018-12-12')
+      expect(osp_parser_obj.xlsx_hash[3]['status']).to eq('Pending')
+      expect(osp_parser_obj.xlsx_hash[1]['status']).to eq('Pending')
+      expect(osp_parser_obj.xlsx_hash[2]['startdate']).to eq('2017-01-01')
+      expect(osp_parser_obj.xlsx_hash[2]['enddate']).to eq('2018-12-12')
+      expect(osp_parser_obj.xlsx_hash[3]['startdate']).to eq('')
+      expect(osp_parser_obj.xlsx_hash[3]['enddate']).to eq('')
+      expect(osp_parser_obj.xlsx_hash[0].length).to eq(17)
+      expect(osp_parser_obj.xlsx_hash[1].length).to eq(17)
     end
   end
 
   context "#filter_by_date" do
 
     it "should remove rows with 'submitted' dates <= 2011" do
-      osp_obj.csv_hash = data_book2
-      osp_obj.xls_object = fake_book
-      osp_obj.filter_by_date
-      expect(osp_obj.csv_hash.count).to eq(1)
+      osp_parser_obj.xlsx_hash = data_book2
+      osp_parser_obj.xls_sheet = fake_book
+      osp_parser_obj.filter_by_date
+      expect(osp_parser_obj.xlsx_hash.count).to eq(1)
     end
   end
 
   context "#filter_by_user" do
 
     it "should remove rows that contain non-active users" do
-      osp_obj.csv_hash = data_book3
-      osp_obj.xls_object = fake_book
-      osp_obj.active_users = [['X', 'Bill', 'X', 'zzz999']]
-      osp_obj.filter_by_user
-      expect(osp_obj.csv_hash.count).to eq(1)
-      expect(osp_obj.csv_hash[0]['accessid']).to eq('zzz999')
-      expect(osp_obj.csv_hash[0]['f_name']).to eq('Bill')
-      expect(osp_obj.csv_hash[0].length).to eq(27)
+      osp_parser_obj.xlsx_hash = data_book3
+      osp_parser_obj.xls_sheet = fake_book
+      osp_parser_obj.active_users = [['X', 'Bill', 'X', 'zzz999']]
+      osp_parser_obj.filter_by_user
+      expect(osp_parser_obj.xlsx_hash.count).to eq(1)
+      expect(osp_parser_obj.xlsx_hash[0]['accessid']).to eq('zzz999')
+      expect(osp_parser_obj.xlsx_hash[0]['f_name']).to eq('Bill')
+      expect(osp_parser_obj.xlsx_hash[0].length).to eq(27)
     end
   end
 
   context "#filter_by_status" do
 
     it "should remove rows with 'Purged' or 'Withdrawn' status" do
-      osp_obj.csv_hash = data_book4
-      osp_obj.xls_object = fake_book
-      osp_obj.filter_by_status
-      expect(osp_obj.csv_hash.count).to eq(1)
-      expect(osp_obj.csv_hash[0]['status']).to eq('Awarded')
+      osp_parser_obj.xlsx_hash = data_book4
+      osp_parser_obj.xls_sheet = fake_book
+      osp_parser_obj.filter_by_status
+      expect(osp_parser_obj.xlsx_hash.count).to eq(1)
+      expect(osp_parser_obj.xlsx_hash[0]['status']).to eq('Awarded')
     end
   end
 

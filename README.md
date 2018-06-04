@@ -58,7 +58,11 @@ This app will pull data from various sources, store the data in a database, and 
 
   *Note: Some fields contain commas so comma delimited CSV files cannot be parsed by Ruby's built in CSV parser.  Also CSV encoding is a nightmare*
 
-  5. `rake osp_data:format`
+  5. `rake osp_data:populate_db`
+
+**Importing User ID #s from AI**
+
+  1. `rake activity_insight:import_userids`
 
 **Formatting and Populating Database with LionPath Data**
 
