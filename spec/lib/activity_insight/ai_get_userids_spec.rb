@@ -1,5 +1,5 @@
 require 'rails_helper'
-require 'ai_get_userids'
+require 'activity_insight/ai_get_userids'
 
 RSpec.describe ImportUserids do
 

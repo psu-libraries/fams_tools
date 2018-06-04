@@ -1,6 +1,5 @@
 require 'rails_helper'
-require 'ai_manage_duplicates'
-require 'byebug'
+require 'activity_insight/ai_manage_duplicates'
 
 RSpec.describe ReturnSystemDups do
 

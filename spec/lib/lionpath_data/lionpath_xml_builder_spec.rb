@@ -1,5 +1,5 @@
 require 'rails_helper'
-require 'lionpath_xml_builder'
+require 'lionpath_data/lionpath_xml_builder'
 
 RSpec.describe LionPathXMLBuilder do
 

@@ -1,7 +1,6 @@
 require 'rails_helper'
 require 'spreadsheet'
-require 'osp_parser'
-require 'byebug'
+require 'osp_data/osp_parser'
 
 RSpec.describe OspParser do
   

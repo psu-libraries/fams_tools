@@ -1,5 +1,5 @@
 require 'rails_helper'
-require 'osp_xml_builder'
+require 'osp_data/osp_xml_builder'
 
 RSpec.describe OspXMLBuilder do
 

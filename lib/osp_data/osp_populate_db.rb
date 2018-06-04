@@ -1,4 +1,4 @@
-require 'osp_parser'
+require 'osp_data/osp_parser'
 
 class OspPopulateDB
   attr_accessor :osp_parser
