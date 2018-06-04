@@ -1,18 +1,18 @@
-require 'osp_data'
+require 'osp_populate_db'
+require 'osp_integrate'
 
 namespace :osp_data do
-
-  my_osp_data = OspData.new
 
   desc "Clean and filter data from dmresults.csv.
         Write to xls.
         Populate database with data."
 
-  task populate: :environment do
+  task populate_db: :environment do
     start = Time.now
-    my_osp_data.format_and_filter
-    my_osp_data.write
-    my_osp_data.populate
+    my_populate = OspPopulateDB.new
+    my_populate.format_and_filter
+    my_populate.write
+    my_populate.populate
     finish = Time.now
     puts(((finish - start)/60).to_s + ' mins') 
   end
@@ -21,7 +21,8 @@ namespace :osp_data do
 
   task integrate: :environment do
     start = Time.now
-    my_osp_data.integrate
+    my_integrate = OspIntegrate.new
+    my_integrate.integrate
     finish = Time.now
     puts(((finish - start)/60).to_s + ' mins') 
   end
