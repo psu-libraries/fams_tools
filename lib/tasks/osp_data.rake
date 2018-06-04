@@ -1,5 +1,5 @@
-require 'osp_populate_db'
-require 'osp_integrate'
+require 'osp_data/osp_populate_db'
+require 'osp_data/osp_integrate'
 
 namespace :osp_data do
 
@@ -7,7 +7,7 @@ namespace :osp_data do
         Write to xls.
         Populate database with data."
 
-  task populate_db: :environment do
+  task format_and_populate: :environment do
     start = Time.now
     my_populate = OspPopulateDB.new
     my_populate.format_and_filter

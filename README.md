@@ -58,7 +58,7 @@ This app will pull data from various sources, store the data in a database, and 
 
   *Note: Some fields contain commas so comma delimited CSV files cannot be parsed by Ruby's built in CSV parser.  Also CSV encoding is a nightmare*
 
-  5. `rake osp_data:populate_db`
+  5. `rake osp_data:format_and_populate`
 
 **Importing User ID #s from AI**
 
@@ -72,7 +72,7 @@ This app will pull data from various sources, store the data in a database, and 
 
   3. Convert SP18.csv into a tab delimited text file called SP18-tabdel.txt.
 
-  4. `rake lionpath_data:format`
+  4. `rake lionpath_data:format_and_populate`
  
 **Removing Duplicate CONGRANT Data**
 

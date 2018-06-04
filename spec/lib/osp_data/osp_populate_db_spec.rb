@@ -1,7 +1,7 @@
 require 'rails_helper'
-require 'osp_populate_db'
+require 'osp_data/osp_populate_db'
 
-RSpec.describe 'osp_populate_db' do
+RSpec.describe OspPopulateDB do
 
   headers =  ['ospkey', 'title', 'sponsor', 'sponsortype', 'accessid', 'role', 'pctcredit', 'status',
               'submitted', 'awarded', 'requested', 'funded', 'totalanticipated', 'startdate', 'enddate',
@@ -29,7 +29,7 @@ RSpec.describe 'osp_populate_db' do
 
   let(:osp_populate_db_obj) {OspPopulateDB.allocate}
 
-  describe 'populate database' do
+  describe '#populate' do
     it 'should populate the database with osp data' do
       osp_populate_db_obj.osp_parser = OspParser.allocate
       osp_populate_db_obj.osp_parser.xlsx_hash = fake_sheet

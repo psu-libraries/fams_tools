@@ -1,4 +1,3 @@
-require 'byebug'
 #Finds CONGRANT duplicates directly in the system
 class ReturnSystemDups
   attr_accessor :username_arr, :responses, :xml_arr, :congrant_hash

@@ -1,5 +1,5 @@
 require 'rails_helper'
-require 'osp_integrate'
+require 'osp_data/osp_integrate'
 
 RSpec.describe OspIntegrate do
 
