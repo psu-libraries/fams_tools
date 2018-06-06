@@ -15,7 +15,7 @@ RSpec.describe LionPathParser do
                 2222, 'Y', 'MATH', '77A', 1, 3, 25, 100, 'In Person', 'Lecture']}
 
   let(:line3) {['xxx111', 'Spring 2018', 2018, 'UP', 'Math', 'Lots of math.', 
-                1111, 'N', 'MATH', '202D', '901', 3, 25, 100, 'In Person', 'Lecture']}
+                1111, 'N', 'MATH', '202D', '901D', 3, 25, 100, 'In Person', 'Lecture']}
 
   let(:line4) {['23-Jan-2018', 'Spring 2018', 2018, 'UP', 'Math', 'Lots of math.', 
                 1111, 'N', 'MATH', 20, 1, 3, 25, 100, 'In Person', 'Lecture']}
@@ -27,7 +27,7 @@ RSpec.describe LionPathParser do
                 9999, 'Y', 'MATH', '77A', 1, 3, 25, 100, 'In Person', 'Online']}
 
   let(:line7) {['xxx111', 'Spring 2018', 2018, 'UP', 'Math', 'Lots of math.',
-                1111, 'N', 'MATH', '202D', '901', 3, 25, 0, 'In Person', 'Lecture']}
+                1111, 'N', 'MATH', '202D', '901D', 3, 25, 0, 'In Person', 'Lecture']}
 
   let(:book) do
     book = Spreadsheet::Workbook.new
@@ -64,16 +64,16 @@ RSpec.describe LionPathParser do
       expect(lionpath_parser_obj.csv_hash[3]['Course Number']).to eq('020')
       expect(lionpath_parser_obj.csv_hash[1]['Course Suffix']).to eq('A')
       expect(lionpath_parser_obj.csv_hash[0].length).to eq(20)
-      expect(lionpath_parser_obj.csv_hash[0]['Class Section Code']).to eq('001')
-      expect(lionpath_parser_obj.csv_hash[0]['Course Suffix']).to eq('C')
+      expect(lionpath_parser_obj.csv_hash[0]['Class Section Code']).to eq('001C')
+      expect(lionpath_parser_obj.csv_hash[0]['Course Suffix']).to eq(nil)
       expect(lionpath_parser_obj.csv_hash[1]['Class Section Code']).to eq('001')
-      expect(lionpath_parser_obj.csv_hash[2]['Class Section Code']).to eq('901')
+      expect(lionpath_parser_obj.csv_hash[2]['Class Section Code']).to eq('901D')
       expect(lionpath_parser_obj.csv_hash[0]['XCourse CoursePre']).to eq('MATH')
       expect(lionpath_parser_obj.csv_hash[0]['XCourse CourseNum']).to eq('077')
       expect(lionpath_parser_obj.csv_hash[0]['XCourse CourseNum Suffix']).to eq('A')
       expect(lionpath_parser_obj.csv_hash[5]['XCourse CoursePre']).to eq('MATH')
       expect(lionpath_parser_obj.csv_hash[5]['XCourse CourseNum']).to eq('001')
-      expect(lionpath_parser_obj.csv_hash[5]['XCourse CourseNum Suffix']).to eq('C')
+      expect(lionpath_parser_obj.csv_hash[5]['XCourse CourseNum Suffix']).to eq(nil)
       expect(lionpath_parser_obj.csv_hash[0]['Instruction Mode']).to eq('Hybrid – Online & In Person')
     end
   end

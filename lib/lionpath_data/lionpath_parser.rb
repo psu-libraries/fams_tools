@@ -153,8 +153,7 @@ class LionPathParser
     while section_split[0].length < 3
       section_split[0].to_s.prepend('0')
     end
-    row['Class Section Code'] = section_split[0]
-    row['Course Suffix'] = section_split[1] unless row['Course Suffix']
+    row['Class Section Code'] = section_split.join('')
   end
 
   def format_instruction_mode(row)
@@ -180,22 +179,22 @@ class LionPathParser
       end
       if counter > 1
         csv_arr.each {|flag| @flagged << flag}
-        row['XCourse CoursePre'] = ' '
-        row['XCourse CourseNum'] = ' '
-        row['XCourse CourseNum Suffix'] = ' '
+        row['XCourse CoursePre'] = ''
+        row['XCourse CourseNum'] = ''
+        row['XCourse CourseNum Suffix'] = ''
       elsif counter == 0
-        row['XCourse CoursePre'] = ' '
-        row['XCourse CourseNum'] = ' '
-        row['XCourse CourseNum Suffix'] = ' '
+        row['XCourse CoursePre'] = ''
+        row['XCourse CourseNum'] = ''
+        row['XCourse CourseNum Suffix'] = ''
       else
         row['XCourse CoursePre'] = xfield_arr[0][0]
         row['XCourse CourseNum'] = xfield_arr[0][1]
         row['XCourse CourseNum Suffix'] = xfield_arr[0][2]
       end
     else
-      row['XCourse CoursePre'] = ' '
-      row['XCourse CourseNum'] = ' '
-      row['XCourse CourseNum Suffix'] = ' '
+      row['XCourse CoursePre'] = ''
+      row['XCourse CourseNum'] = ''
+      row['XCourse CourseNum Suffix'] = ''
     end
   end
 
