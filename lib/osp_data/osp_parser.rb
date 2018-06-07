@@ -1,12 +1,12 @@
 require 'spreadsheet'
-require 'roo'
+require 'creek'
 
 class OspParser
   attr_accessor :xls_sheet, :xlsx_hash, :active_users
 
-  def initialize(xlsx_obj = Roo::Spreadsheet.open('data/dmresults.xlsx'), 
+  def initialize(xlsx_obj = Creek::Book.new('data/dmresults.xlsx'), 
                  xls_obj = Spreadsheet.open('data/psu-users.xls'))
-    @xlsx_hash = convert_to_hash(xlsx_obj.sheet(0))
+    @xlsx_hash = convert_to_hash(xlsx_obj.sheets[0])
     @xls_sheet = xls_obj.worksheet(0)
     @active_users = find_active_users
   end
@@ -76,8 +76,22 @@ class OspParser
   private
 
   def convert_to_hash(xlsx)
-    keys = xlsx.row(1)
-    xlsx.each {|a| Hash[ keys.zip(a) ] }
+    counter = 0
+    keys = []
+    data = []
+    data_hashed = []
+    xlsx.rows.each do |row|
+      values = []
+      if counter == 0
+        row.each {|k,v| keys << v}
+      else
+        row.each {|k,v| values << v}
+        data << values
+      end 
+      counter += 1
+    end
+    data.each {|a| data_hashed << Hash[ keys.zip(a) ] }
+    return data_hashed
   end
 
   def find_active_users

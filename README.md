@@ -28,9 +28,9 @@ This app will pull data from various sources, store the data in a database, and 
 
   -nokogiri
 
-  -roo
-
   -webmock
+
+  -creek
 
 ## Deploy
 

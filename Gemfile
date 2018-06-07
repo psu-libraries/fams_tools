@@ -42,8 +42,8 @@ gem 'jbuilder', '~> 2.5'
 gem 'spreadsheet'
 gem 'nokogiri'
 gem 'httparty'
-gem 'roo', '~> 2.7.0'
 gem 'webmock'
+gem 'creek'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
