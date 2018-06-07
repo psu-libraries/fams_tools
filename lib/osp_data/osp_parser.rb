@@ -76,10 +76,8 @@ class OspParser
   private
 
   def convert_to_hash(xlsx)
-    xlsx_hash = []
     keys = xlsx.row(1)
-    xlsx.each {|a| xlsx_hash << Hash[ keys.zip(a) ] }
-    xlsx_hash
+    xlsx.each {|a| Hash[ keys.zip(a) ] }
   end
 
   def find_active_users
