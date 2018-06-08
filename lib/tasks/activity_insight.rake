@@ -28,16 +28,4 @@ namespace :activity_insight do
 
   end
 
-  desc "Import userids from AI into our db"
-
-  task import_userids: :environment do
-    
-    start = Time.now
-    my_import_ids = ImportUserids.new
-    my_import_ids.call
-    finish = Time.now
-    puts(((finish - start)/60).to_s + ' mins')
-
-  end
-
 end

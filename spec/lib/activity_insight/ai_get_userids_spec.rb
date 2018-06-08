@@ -1,3 +1,5 @@
+#ImportUserids is depricated
+=begin
 require 'rails_helper'
 require 'activity_insight/ai_get_userids'
 
@@ -67,3 +69,4 @@ RSpec.describe ImportUserids do
   end
 
 end
+=end

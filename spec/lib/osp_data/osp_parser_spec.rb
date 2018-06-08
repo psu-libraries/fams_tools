@@ -144,7 +144,7 @@ RSpec.describe OspParser do
       expect(osp_parser_obj.xlsx_hash.count).to eq(1)
       expect(osp_parser_obj.xlsx_hash[0]['accessid']).to eq('zzz999')
       expect(osp_parser_obj.xlsx_hash[0]['f_name']).to eq('Bill')
-      expect(osp_parser_obj.xlsx_hash[0].length).to eq(27)
+      expect(osp_parser_obj.xlsx_hash[0].length).to eq(28)
     end
   end
 
