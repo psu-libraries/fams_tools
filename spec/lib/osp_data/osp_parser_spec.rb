@@ -79,11 +79,10 @@ RSpec.describe OspParser do
     book = Spreadsheet::Workbook.new  
     sheet = book.create_worksheet
     sheet.row(1).replace []
-    sheet.row(2).replace []
-    sheet.row(3).replace ['Last Name', 'First Name', 'Middle Name', 'Email', 'Username', 'PSU ID #', 'Enabled?', 'Has Access to Manage Activities?', 
+    sheet.row(2).replace ['Last Name', 'First Name', 'Middle Name', 'Email', 'Username', 'PSU ID #', 'Enabled?', 'Has Access to Manage Activities?', 
                           'Campus', 'Campus Name', 'College', 'College Name', 'Department', 'Division', 'Institute', 'School', 'Security']
-    sheet.row(4).replace ['X', 'Bill', 'X', 'X', 'zzz999', 'X', 'Yes', 'Yes', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X']
-    sheet.row(5).replace ['X', 'Jimmy', 'X', 'X', 'xxx111', 'X', 'No', 'No', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X']
+    sheet.row(3).replace ['X', 'Bill', 'X', 'X', 'zzz999', 'X', 'Yes', 'Yes', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X']
+    sheet.row(4).replace ['X', 'Jimmy', 'X', 'X', 'xxx111', 'X', 'No', 'No', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X']
     book
   end
 
@@ -99,7 +98,7 @@ RSpec.describe OspParser do
         should change 'Pending Award' and 'Pending Proposal' status to 'Pending'
         should remove start and end dates for any contract that was not 'Awarded'" do
       osp_parser_obj.xlsx_hash = data_book1
-      osp_parser_obj.xls_sheet = fake_book
+      osp_parser_obj.xls_hash = fake_book
       osp_parser_obj.format
       expect(osp_parser_obj.xlsx_hash[0]['grantcontract']).to eq('')
       expect(osp_parser_obj.xlsx_hash[1]['grantcontract']).to eq('Grant')
@@ -129,7 +128,7 @@ RSpec.describe OspParser do
 
     it "should remove rows with 'submitted' dates <= 2011" do
       osp_parser_obj.xlsx_hash = data_book2
-      osp_parser_obj.xls_sheet = fake_book
+      osp_parser_obj.xls_hash = fake_book
       osp_parser_obj.filter_by_date
       expect(osp_parser_obj.xlsx_hash.count).to eq(1)
     end
@@ -139,7 +138,7 @@ RSpec.describe OspParser do
 
     it "should remove rows that contain non-active users" do
       osp_parser_obj.xlsx_hash = data_book3
-      osp_parser_obj.xls_sheet = fake_book
+      osp_parser_obj.xls_hash = fake_book
       osp_parser_obj.active_users = [['X', 'Bill', 'X', 'zzz999']]
       osp_parser_obj.filter_by_user
       expect(osp_parser_obj.xlsx_hash.count).to eq(1)
@@ -153,7 +152,7 @@ RSpec.describe OspParser do
 
     it "should remove rows with 'Purged' or 'Withdrawn' status" do
       osp_parser_obj.xlsx_hash = data_book4
-      osp_parser_obj.xls_sheet = fake_book
+      osp_parser_obj.xls_hash = fake_book
       osp_parser_obj.filter_by_status
       expect(osp_parser_obj.xlsx_hash.count).to eq(1)
       expect(osp_parser_obj.xlsx_hash[0]['status']).to eq('Awarded')

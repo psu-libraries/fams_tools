@@ -3,12 +3,12 @@ require 'csv'
 
 class LionPathParser
 
-  attr_accessor :csv_object, :xls_sheet, :csv_hash
+  attr_accessor :xls_hash, :csv_hash, :active_users
 
   def initialize(csv_object = CSV.read('data/SP18-tabdel.txt', encoding: "ISO-8859-1:UTF-8", col_sep: "\t"),
                  xls_object = Spreadsheet.open('data/psu-users.xls'))
-    @csv_hash = convert_to_hash(csv_object)
-    @xls_sheet = xls_object.worksheet(0)
+    @csv_hash = convert_csv_to_hash(csv_object)
+    @xls_hash = convert_xls_to_hash(xls_object.worksheet(0))
     @active_users = find_active_users
     @flagged = []
   end
@@ -29,7 +29,7 @@ class LionPathParser
   def filter_by_user
     kept_rows = []
     csv_hash.each do |row|
-      @active_users.each do |user|
+      active_users.each do |user|
         if user[3] == row['Instructor Campus ID'].downcase
           row['m_name'] = user[2]
           row['l_name'] = user[0]
@@ -100,20 +100,28 @@ class LionPathParser
 
   private
 
-  def convert_to_hash(csv_array)
+  def convert_csv_to_hash(csv_array)
     keys = csv_array[0]
     csv_array[1..-1].map {|a| Hash[ keys.zip(a) ] }
   end
 
-  #Creates a list of 'Enabled' and 'Has Access' AI users
+  def convert_xls_to_hash(xls_sheet)
+    keys = xls_sheet.row(2)
+    data_hashed = []
+    xls_sheet.drop(2).each do |row|
+      data_hashed << Hash[ keys.zip(row) ]
+    end
+    return data_hashed
+  end
+
   def find_active_users
     active_user_arr = []
-    xls_sheet.drop(3).each do |xls|
-      if xls[6].downcase == 'yes' && xls[7].downcase == 'yes'
-        active_user_arr << [xls[0], xls[1], xls[2], xls[4].downcase]
+    xls_hash.each do |row|
+      if row['Enabled?'].downcase == 'yes' && row['Has Access to Manage Activities?'].downcase == 'yes'
+        active_user_arr << [row['Last Name'], row['First Name'], row['Middle Name'], row['Username'].downcase]
       end
     end
-    return active_user_arr
+    active_user_arr
   end
 
   #Converts dates back into psuIDs
