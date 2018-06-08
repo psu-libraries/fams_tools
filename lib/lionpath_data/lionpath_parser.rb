@@ -34,6 +34,7 @@ class LionPathParser
           row['m_name'] = user[2]
           row['l_name'] = user[0]
           row['f_name'] = user[1]
+          row['userid'] = user[4]
           kept_rows << row
         end
       end
@@ -118,7 +119,7 @@ class LionPathParser
     active_user_arr = []
     xls_hash.each do |row|
       if row['Enabled?'].downcase == 'yes' && row['Has Access to Manage Activities?'].downcase == 'yes'
-        active_user_arr << [row['Last Name'], row['First Name'], row['Middle Name'], row['Username'].downcase]
+        active_user_arr << [row['Last Name'], row['First Name'], row['Middle Name'], row['Username'].downcase, row['User ID']]
       end
     end
     active_user_arr

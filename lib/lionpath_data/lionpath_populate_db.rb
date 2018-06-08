@@ -33,6 +33,7 @@ class LionPathPopulateDB
 
       begin
         faculty = Faculty.create(access_id: row['Instructor Campus ID'].downcase,
+                                 user_id:   row['userid'],
                                  f_name:    row['f_name'],
                                  l_name:    row['l_name'],
                                  m_name:    row['m_name'])

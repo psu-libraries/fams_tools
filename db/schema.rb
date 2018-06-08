@@ -50,6 +50,7 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
 
   create_table "faculties", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "access_id"
+    t.bigint "user_id"
     t.string "f_name"
     t.string "l_name"
     t.string "m_name"
