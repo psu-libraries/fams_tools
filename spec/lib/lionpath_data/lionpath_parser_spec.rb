@@ -33,11 +33,11 @@ RSpec.describe LionPathParser do
     book = Spreadsheet::Workbook.new
     sheet = book.create_worksheet
     sheet.row(1).replace []
-    sheet.row(2).replace []
-    sheet.row(3).replace ['Last Name', 'First Name', 'Middle Name', 'Email', 'Username', 'PSU ID #', 'Enabled?', 'Has Access to Manage Activities?',
-			  'Campus', 'Campus Name', 'College', 'College Name', 'Department', 'Division', 'Institute', 'School', 'Security']
-    sheet.row(4).replace ['X', 'Bill', 'X', 'X', 'zzz999', 'X', 'Yes', 'Yes', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X']
-    sheet.row(5).replace ['X', 'Jimmy', 'X', 'X', 'xxx111', 'X', 'No', 'No', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X']
+    sheet.row(2).replace ['Last Name', 'First Name', 'Middle Name', 'Email', 'Username', 'PSU ID #', 'Enabled?', 'Has Access to Manage Activities?',
+			  'Campus', 'Campus Name', 'College', 'College Name', 'Department', 'Division', 'Institute', 'School', 'Security', 'Date Created', 
+                          'User ID']
+    sheet.row(3).replace ['X', 'Bill', 'X', 'X', 'zzz999', 'X', 'Yes', 'Yes', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X']
+    sheet.row(4).replace ['X', 'Jimmy', 'X', 'X', 'xxx111', 'X', 'No', 'No', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X']
     book
   end
 
