@@ -4,10 +4,10 @@ require 'creek'
 class OspParser
   attr_accessor :xls_hash, :xlsx_hash, :active_users
 
-  def initialize(xlsx_obj = Creek::Book.new('data/dmresults.xlsx'), 
-                 xls_obj = Spreadsheet.open('data/psu-users.xls'))
-    @xlsx_hash = convert_xlsx_to_hash(xlsx_obj.sheets[0])
-    @xls_hash = convert_xls_to_hash(xls_obj.worksheet(0))
+  def initialize(xlsx_obj = Creek::Book.new('data/dmresults.xlsx').sheets[0].rows, 
+                 xls_obj = Spreadsheet.open('data/psu-users.xls').worksheet(0))
+    @xlsx_hash = convert_xlsx_to_hash(xlsx_obj)
+    @xls_hash = convert_xls_to_hash(xls_obj)
     @active_users = find_active_users
   end
 
@@ -81,7 +81,7 @@ class OspParser
     keys = []
     data = []
     data_hashed = []
-    xlsx_sheet.rows.each do |row|
+    xlsx_sheet.each do |row|
       values = []
       if counter == 0
         row.each {|k,v| keys << v}

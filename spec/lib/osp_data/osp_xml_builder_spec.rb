@@ -8,12 +8,12 @@ RSpec.describe OspXMLBuilder do
       'awarded' => '', 'requested' => 1000, 'funded' => '', 'totalanticipated' => '', 'startdate' => '',
       'enddate' => '', 'grantcontract' => '', 'baseagreement' => '', 'accessid' => 'aaa111', 'f_name' => 'Bill',
       'l_name' => 'Billy', 'm_name' => 'Billiam', 'sponsor' => 'Sponsor', 'sponsortype' => 'Big Sponsor',
-      'role' => 'Principal Investigator', 'pctcredit' => 100, 'id_number' => 123},
+      'role' => 'Principal Investigator', 'pctcredit' => 100, 'userid' => 123},
       {'ospkey' => 654321, 'title' => 'Title', 'status' => 'Pending', 'submitted' => '2016-01-01',
       'awarded' => '', 'requested' => 1000, 'funded' => '', 'totalanticipated' => '', 'startdate' => '',
       'enddate' => '', 'grantcontract' => '', 'baseagreement' => '', 'accessid' => 'bbb222', 'f_name' => 'Bill',
       'l_name' => 'Billy', 'm_name' => 'Billiam', 'sponsor' => 'Sponsor2', 'sponsortype' => 'Big Sponsor',
-      'role' => 'Principal Investigator', 'pctcredit' => 100, 'id_number' => 321}]
+      'role' => 'Principal Investigator', 'pctcredit' => 100, 'userid' => 321}]
   end
 
   let(:osp_xml_builder_obj) {OspXMLBuilder.new}
@@ -39,6 +39,7 @@ RSpec.describe OspXMLBuilder do
                                    base_agreement:    row['baseagreement'])
 
         faculty = Faculty.create(access_id: row['accessid'],
+                                 user_id:   row['userid'],
                                  f_name:    row['f_name'],
                                  l_name:    row['l_name'],
                                  m_name:    row['m_name'])
@@ -48,8 +49,6 @@ RSpec.describe OspXMLBuilder do
                                    role:       row['role'],
                                    pct_credit: row['pctcredit'])
 
-        UserNum.create(faculty:   faculty,
-                       id_number: row['id_number'])
       end
       expect(osp_xml_builder_obj.batched_osp_xml).to eq([
 '<?xml version="1.0" encoding="UTF-8"?>
