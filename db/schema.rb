@@ -84,16 +84,9 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
     t.index ["sponsor_name"], name: "index_sponsors_on_sponsor_name", unique: true
   end
 
-  create_table "user_nums", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.bigint "faculty_id"
-    t.integer "id_number"
-    t.index ["faculty_id"], name: "fk_rails_aab4c0d497"
-  end
-
   add_foreign_key "contract_faculty_links", "contracts"
   add_foreign_key "contract_faculty_links", "faculties"
   add_foreign_key "contracts", "sponsors"
   add_foreign_key "sections", "courses"
   add_foreign_key "sections", "faculties"
-  add_foreign_key "user_nums", "faculties"
 end

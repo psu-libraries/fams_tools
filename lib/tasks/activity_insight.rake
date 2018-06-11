@@ -1,5 +1,4 @@
 require 'activity_insight/ai_manage_duplicates'
-require 'activity_insight/ai_get_userids'
 
 namespace :activity_insight do
 

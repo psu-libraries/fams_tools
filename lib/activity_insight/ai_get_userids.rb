@@ -1,5 +1,5 @@
-#This class id depricated.  Userids are pulled from the psu-users.xls file now.
-private
+#This class is deprecated.  Userids are pulled from the psu-users.xls file now.
+=begin
 class ImportUserids
   attr_accessor :response
 
@@ -42,3 +42,4 @@ class ImportUserids
   end
 
 end
+=end

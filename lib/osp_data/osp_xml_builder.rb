@@ -32,7 +32,7 @@ class OspXMLBuilder
                 xml.SPONORG_ link.contract.sponsor.sponsor_name, :access => "LOCKED"
                 xml.AWARDORG_ link.contract.sponsor.sponsor_type, :access => "LOCKED"
                 xml.CONGRANT_INVEST {
-                  xml.FACULTY_NAME_ faculty.user_num.id_number
+                  xml.FACULTY_NAME_ faculty.user_id
                   xml.FNAME_ faculty.f_name
                   xml.MNAME_ faculty.m_name
                   xml.LNAME faculty.l_name
