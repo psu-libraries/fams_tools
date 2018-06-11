@@ -5,7 +5,7 @@ RSpec.describe OspPopulateDB do
 
   headers =  ['ospkey', 'title', 'sponsor', 'sponsortype', 'accessid', 'role', 'pctcredit', 'status',
               'submitted', 'awarded', 'requested', 'funded', 'totalanticipated', 'startdate', 'enddate',
-              'grantcontract', 'baseagreement', 'm_name', 'l_name', 'f_name']
+              'grantcontract', 'baseagreement', 'm_name', 'l_name', 'f_name', 'userid']
 
   let(:fake_sheet) do
     data_arr = []
@@ -13,16 +13,16 @@ RSpec.describe OspPopulateDB do
     keys = headers
     data_arr << [1234, 'Cool Title', 'Cool Sponsor', 'Federal Agencies',
                  'abc123', 'Co-PI', 50, 'Pending', '2013-04-05',
-                 '/  /', 1, 1, 1, '', '', '', '', 'Bird', 'Cat', 'Allen']
+                 '/  /', 1, 1, 1, '', '', '', '', 'Bird', 'Cat', 'Allen', '123456']
     data_arr << [4321, 'Cooler Title', 'Cool Sponsor', 'Federal Agencies',
                  'abc123', 'Co-PI', 50, 'Pending', '2013-04-05',
-                 '/  /', 1, 1, 1, '', '', '', '', 'Bird', 'Cat', 'Allen']
+                 '/  /', 1, 1, 1, '', '', '', '', 'Bird', 'Cat', 'Allen', '123456']
     data_arr << [1234, 'Cool Title', 'Cool Sponsor', 'Federal Agencies',
                  'xyz123', 'Co-PI', 50, 'Pending', '2013-04-05',
-                 '/  /', 1, 1, 1, '', '', '', '', 'Yawn', 'Zebra', 'Xylophone']
+                 '/  /', 1, 1, 1, '', '', '', '', 'Yawn', 'Zebra', 'Xylophone', '54321']
     data_arr << [1221, 'Coolest Title', 'Not as Cool Sponsor', 'Universities and Colleges',
                  'xyz123', 'Co-PI', 50, 'Pending', '2013-04-05',
-                 '/  /', 1, 1, 1, '', '', '', '', 'Yawn', 'Zebra', 'Xylophone'] 
+                 '/  /', 1, 1, 1, '', '', '', '', 'Yawn', 'Zebra', 'Xylophone', '54321'] 
     data_arr.each {|a| arr_of_hashes << Hash[ keys.zip(a) ] }
     arr_of_hashes
   end
