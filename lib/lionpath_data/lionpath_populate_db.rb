@@ -3,8 +3,8 @@ require 'lionpath_data/lionpath_parser'
 class LionPathPopulateDB
   attr_accessor :lionpath_parser
 
-  def initialize
-    @lionpath_parser = LionPathParser.new
+  def initialize(lionpath_parser_obj = LionPathParser.new)
+    @lionpath_parser = lionpath_parser_obj
   end
 
   def format_and_filter

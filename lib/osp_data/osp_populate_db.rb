@@ -3,8 +3,8 @@ require 'osp_data/osp_parser'
 class OspPopulateDB
   attr_accessor :osp_parser
 
-  def initialize
-    @osp_parser = OspParser.new
+  def initialize(osp_parser_obj = OspParser.new)
+    @osp_parser = osp_parser_obj
   end
 
   def format_and_filter
