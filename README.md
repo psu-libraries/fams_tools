@@ -60,10 +60,6 @@ This app will pull data from various sources, store the data in a database, and 
 
   5. `rake osp_data:format_and_populate`
 
-**Importing User ID #s from AI**
-
-  1. `rake activity_insight:import_userids`
-
 **Formatting and Populating Database with LionPath Data**
 
   1. Download LionPath Spring 2018 data from box and store in /data/.
