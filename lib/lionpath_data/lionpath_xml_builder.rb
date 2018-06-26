@@ -2,7 +2,7 @@ require 'nokogiri'
 
 class LionPathXMLBuilder
   def initialize
-    @faculties = Faculty.joins(:sections).group('access_id')
+    @faculties = Faculty.joins(:sections).group('id')
   end
 
   def batched_lionpath_xml

@@ -54,44 +54,44 @@ RSpec.describe LionPathXMLBuilder do
 <Data>
   <Record username="abc123">
     <SCHTEACH>
-      <TYT_TERM access="LOCKED">Spring</TYT_TERM>
-      <TYY_TERM access="LOCKED">2018</TYY_TERM>
-      <TITLE access="LOCKED">The Class</TITLE>
-      <DESC access="LOCKED">This is the class that a teacher teaches.</DESC>
-      <COURSEPRE access="LOCKED">MGMT</COURSEPRE>
-      <COURSENUM access="LOCKED">110</COURSENUM>
-      <COURSENUM_SUFFIX access="LOCKED">B</COURSENUM_SUFFIX>
-      <SECTION access="LOCKED">001</SECTION>
-      <CAMPUS access="LOCKED">UP</CAMPUS>
-      <ENROLL access="LOCKED">100</ENROLL>
-      <XCOURSE_COURSEPRE access="LOCKED"/>
-      <XCOURSE_COURSENUM access="LOCKED"/>
-      <XCOURSE_COURSENUM_SUFFIX access="LOCKED"/>
-      <RESPON access="LOCKED">100</RESPON>
-      <CHOURS access="LOCKED">3</CHOURS>
-      <INST_MODE access="LOCKED">In Person</INST_MODE>
-      <COURSE_COMP access="LOCKED">Lecture</COURSE_COMP>
+      <TYT_TERM access="READ_ONLY">Spring</TYT_TERM>
+      <TYY_TERM access="READ_ONLY">2018</TYY_TERM>
+      <TITLE access="READ_ONLY">The Class</TITLE>
+      <DESC access="READ_ONLY">This is the class that a teacher teaches.</DESC>
+      <COURSEPRE access="READ_ONLY">MGMT</COURSEPRE>
+      <COURSENUM access="READ_ONLY">110</COURSENUM>
+      <COURSENUM_SUFFIX access="READ_ONLY">B</COURSENUM_SUFFIX>
+      <SECTION access="READ_ONLY">001</SECTION>
+      <CAMPUS access="READ_ONLY">UP</CAMPUS>
+      <ENROLL access="READ_ONLY">100</ENROLL>
+      <XCOURSE_COURSEPRE access="READ_ONLY"/>
+      <XCOURSE_COURSENUM access="READ_ONLY"/>
+      <XCOURSE_COURSENUM_SUFFIX access="READ_ONLY"/>
+      <RESPON access="READ_ONLY">100</RESPON>
+      <CHOURS access="READ_ONLY">3</CHOURS>
+      <INST_MODE access="READ_ONLY">In Person</INST_MODE>
+      <COURSE_COMP access="READ_ONLY">Lecture</COURSE_COMP>
     </SCHTEACH>
   </Record>
   <Record username="cba321">
     <SCHTEACH>
-      <TYT_TERM access="LOCKED">Spring</TYT_TERM>
-      <TYY_TERM access="LOCKED">2018</TYY_TERM>
-      <TITLE access="LOCKED">The Other Class</TITLE>
-      <DESC access="LOCKED">This is the class that students learn in.</DESC>
-      <COURSEPRE access="LOCKED">HIST</COURSEPRE>
-      <COURSENUM access="LOCKED">100</COURSENUM>
-      <COURSENUM_SUFFIX access="LOCKED">A</COURSENUM_SUFFIX>
-      <SECTION access="LOCKED">002</SECTION>
-      <CAMPUS access="LOCKED">UP</CAMPUS>
-      <ENROLL access="LOCKED">50</ENROLL>
-      <XCOURSE_COURSEPRE access="LOCKED"/>
-      <XCOURSE_COURSENUM access="LOCKED"/>
-      <XCOURSE_COURSENUM_SUFFIX access="LOCKED"/>
-      <RESPON access="LOCKED">100</RESPON>
-      <CHOURS access="LOCKED">3</CHOURS>
-      <INST_MODE access="LOCKED">In Person</INST_MODE>
-      <COURSE_COMP access="LOCKED">Lecture</COURSE_COMP>
+      <TYT_TERM access="READ_ONLY">Spring</TYT_TERM>
+      <TYY_TERM access="READ_ONLY">2018</TYY_TERM>
+      <TITLE access="READ_ONLY">The Other Class</TITLE>
+      <DESC access="READ_ONLY">This is the class that students learn in.</DESC>
+      <COURSEPRE access="READ_ONLY">HIST</COURSEPRE>
+      <COURSENUM access="READ_ONLY">100</COURSENUM>
+      <COURSENUM_SUFFIX access="READ_ONLY">A</COURSENUM_SUFFIX>
+      <SECTION access="READ_ONLY">002</SECTION>
+      <CAMPUS access="READ_ONLY">UP</CAMPUS>
+      <ENROLL access="READ_ONLY">50</ENROLL>
+      <XCOURSE_COURSEPRE access="READ_ONLY"/>
+      <XCOURSE_COURSENUM access="READ_ONLY"/>
+      <XCOURSE_COURSENUM_SUFFIX access="READ_ONLY"/>
+      <RESPON access="READ_ONLY">100</RESPON>
+      <CHOURS access="READ_ONLY">3</CHOURS>
+      <INST_MODE access="READ_ONLY">In Person</INST_MODE>
+      <COURSE_COMP access="READ_ONLY">Lecture</COURSE_COMP>
     </SCHTEACH>
   </Record>
 </Data>

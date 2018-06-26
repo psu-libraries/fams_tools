@@ -55,12 +55,12 @@ RSpec.describe OspXMLBuilder do
 <Data>
   <Record username="aaa111">
     <CONGRANT>
-      <OSPKEY access="LOCKED">123456</OSPKEY>
-      <BASE_AGREE access="LOCKED"/>
-      <TYPE access="LOCKED"/>
-      <TITLE access="LOCKED">Title</TITLE>
-      <SPONORG access="LOCKED">Sponsor</SPONORG>
-      <AWARDORG access="LOCKED">Big Sponsor</AWARDORG>
+      <OSPKEY access="READ_ONLY">123456</OSPKEY>
+      <BASE_AGREE access="READ_ONLY"/>
+      <TYPE access="READ_ONLY"/>
+      <TITLE access="READ_ONLY">Title</TITLE>
+      <SPONORG access="READ_ONLY">Sponsor</SPONORG>
+      <AWARDORG access="READ_ONLY">Big Sponsor</AWARDORG>
       <CONGRANT_INVEST>
         <FACULTY_NAME>123</FACULTY_NAME>
         <FNAME>Bill</FNAME>
@@ -69,13 +69,13 @@ RSpec.describe OspXMLBuilder do
         <ROLE>Principal Investigator</ROLE>
         <ASSIGN>100</ASSIGN>
       </CONGRANT_INVEST>
-      <AMOUNT_REQUEST access="LOCKED">1000</AMOUNT_REQUEST>
-      <AMOUNT_ANTICIPATE access="LOCKED"/>
-      <AMOUNT access="LOCKED"/>
-      <STATUS access="LOCKED">Pending</STATUS>
-      <DTM_SUB access="LOCKED">January</DTM_SUB>
-      <DTD_SUB access="LOCKED">01</DTD_SUB>
-      <DTY_SUB access="LOCKED">2016</DTY_SUB>
+      <AMOUNT_REQUEST access="READ_ONLY">1000</AMOUNT_REQUEST>
+      <AMOUNT_ANTICIPATE access="READ_ONLY"/>
+      <AMOUNT access="READ_ONLY"/>
+      <STATUS access="READ_ONLY">Pending</STATUS>
+      <DTM_SUB access="READ_ONLY">January</DTM_SUB>
+      <DTD_SUB access="READ_ONLY">01</DTD_SUB>
+      <DTY_SUB access="READ_ONLY">2016</DTY_SUB>
       <DTM_AWARD/>
       <DTD_AWARD/>
       <DTY_AWARD/>
@@ -89,12 +89,12 @@ RSpec.describe OspXMLBuilder do
   </Record>
   <Record username="bbb222">
     <CONGRANT>
-      <OSPKEY access="LOCKED">654321</OSPKEY>
-      <BASE_AGREE access="LOCKED"/>
-      <TYPE access="LOCKED"/>
-      <TITLE access="LOCKED">Title</TITLE>
-      <SPONORG access="LOCKED">Sponsor2</SPONORG>
-      <AWARDORG access="LOCKED">Big Sponsor</AWARDORG>
+      <OSPKEY access="READ_ONLY">654321</OSPKEY>
+      <BASE_AGREE access="READ_ONLY"/>
+      <TYPE access="READ_ONLY"/>
+      <TITLE access="READ_ONLY">Title</TITLE>
+      <SPONORG access="READ_ONLY">Sponsor2</SPONORG>
+      <AWARDORG access="READ_ONLY">Big Sponsor</AWARDORG>
       <CONGRANT_INVEST>
         <FACULTY_NAME>321</FACULTY_NAME>
         <FNAME>Bill</FNAME>
@@ -103,13 +103,13 @@ RSpec.describe OspXMLBuilder do
         <ROLE>Principal Investigator</ROLE>
         <ASSIGN>100</ASSIGN>
       </CONGRANT_INVEST>
-      <AMOUNT_REQUEST access="LOCKED">1000</AMOUNT_REQUEST>
-      <AMOUNT_ANTICIPATE access="LOCKED"/>
-      <AMOUNT access="LOCKED"/>
-      <STATUS access="LOCKED">Pending</STATUS>
-      <DTM_SUB access="LOCKED">January</DTM_SUB>
-      <DTD_SUB access="LOCKED">01</DTD_SUB>
-      <DTY_SUB access="LOCKED">2016</DTY_SUB>
+      <AMOUNT_REQUEST access="READ_ONLY">1000</AMOUNT_REQUEST>
+      <AMOUNT_ANTICIPATE access="READ_ONLY"/>
+      <AMOUNT access="READ_ONLY"/>
+      <STATUS access="READ_ONLY">Pending</STATUS>
+      <DTM_SUB access="READ_ONLY">January</DTM_SUB>
+      <DTD_SUB access="READ_ONLY">01</DTD_SUB>
+      <DTY_SUB access="READ_ONLY">2016</DTY_SUB>
       <DTM_AWARD/>
       <DTD_AWARD/>
       <DTY_AWARD/>
