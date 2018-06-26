@@ -4,7 +4,7 @@ class OspXMLBuilder
   attr_accessor :faculties
 
   def initialize
-    @faculties = Faculty.joins(:contract_faculty_links).group('access_id')
+    @faculties = Faculty.joins(:contract_faculty_links).group('id')
   end
 
   #Chunks osp data into batches so we don't overload AI with records
