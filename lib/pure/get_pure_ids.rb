@@ -19,7 +19,7 @@ class GetPureIDs
 
   def get_xml
     increments = [1,2,3,4,5,6]
-    headers = {'Accept' => 'application/xml', 'api-key' => "#{Rails.application.config_for(:pure)[:api_key]}"}
+    headers = {"Accept" => "application/xml", "api-key" => "#{Rails.application.config_for(:pure)[:api_key]}"}
     increments.each do |increment|
       url = "https://pennstate.pure.elsevier.com/ws/api/511/persons?pageSize=1000&page=#{increment}" 
       response = HTTParty.get url, :headers => headers, :timeout => 100
@@ -37,8 +37,8 @@ class GetPureIDs
   end
 
   def match_ai_users(pure_ids)
-    pure_ids.each do |k,v|
-      if ai_access_ids.include? k
+    pure_ids.compact.each do |k,v|
+      if ai_access_ids.include? k.downcase
         ai_pure_hash[k] = v
       end 
     end
@@ -48,7 +48,7 @@ class GetPureIDs
     ai_pure_hash.each do |k,v|
       faculty = Faculty.find_by(:access_id => k.downcase)
 
-      PureId.create(pure_id:    v,
+      PureId.create(pure_id: v,
                     faculty: faculty)
     end
   end
