@@ -25,8 +25,27 @@ RSpec.describe GetPureIDs do
 
   describe '#call' do
     it 'should obtain Pure IDs for AI users' do
-      stub_request(:get, Regexp.new('https://pennstate.pure.elsevier.com/ws/api/511/persons')).to_return(status: 200, body: "Success", headers: {})
+      stub_request(:get, Regexp.new('https://pennstate.pure.elsevier.com/ws/api/511/persons')).
+        to_return(status: 200, body: 
+'<result xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://pennstate.pure.elsevier.com/ws/api/511/xsd/schema1.xsd">
+  <count>2</count>
+  <navigationLink ref="next" href="https://pennstate.pure.elsevier.com/ws/api/511/persons?pageSize=1000&amp;offset=1000"/>
+  <person uuid="" pureId="123" externalId="abc123" externalIdSource="synchronisedPerson" externallyManaged="true">
+    <name>
+      <firstName>Bill</firstName>
+      <lastName>Blart</lastName>
+    </name>
+  </person>
+  <person uuid="" pureId="321" externalId="abc321" externalIdSource="synchronisedPerson" externallyManaged="true">
+    <name>
+      <firstName>Frank</firstName>
+      <lastName>Carl</lastName>
+    </name>
+  </person>
+</result>', headers: {})
       get_pure_ids_obj.call
+      expect(PureId.all.count).to eq(1)
+      expect(PureId.find_by(pure_id: 123).faculty.access_id).to eq('abc123')
     end
   end
 
