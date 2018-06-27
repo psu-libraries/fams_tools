@@ -57,6 +57,14 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
     t.index ["access_id"], name: "index_faculties_on_access_id", unique: true
   end
 
+  create_table "pure_ids", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.bigint "pure_id"
+    t.bigint "faculty_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["faculty_id"], name: "fk_rails_340ab8b4e7"
+  end
+
   create_table "sections", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "class_campus_code"
     t.string "cross_listed_flag"
@@ -87,6 +95,7 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
   add_foreign_key "contract_faculty_links", "contracts"
   add_foreign_key "contract_faculty_links", "faculties"
   add_foreign_key "contracts", "sponsors"
+  add_foreign_key "pure_ids", "faculties"
   add_foreign_key "sections", "courses"
   add_foreign_key "sections", "faculties"
 end
