@@ -29,19 +29,15 @@ RSpec.describe LionPathParser do
   let(:line7) {['xxx111', 'Spring 2018', 2018, 'UP', 'Math', 'Lots of math.',
                 1111, 'N', 'MATH', '202D', '901D', 3, 25, 0, 'In Person', 'Lecture']}
 
-  let(:book) do
-    book = Spreadsheet::Workbook.new
-    sheet = book.create_worksheet
-    sheet.row(1).replace []
-    sheet.row(2).replace ['Last Name', 'First Name', 'Middle Name', 'Email', 'Username', 'PSU ID #', 'Enabled?', 'Has Access to Manage Activities?',
-			  'Campus', 'Campus Name', 'College', 'College Name', 'Department', 'Division', 'Institute', 'School', 'Security', 'Date Created', 
-                          'User ID']
-    sheet.row(3).replace ['X', 'Bill', 'X', 'X', 'zzz999', 'X', 'Yes', 'Yes', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X']
-    sheet.row(4).replace ['X', 'Jimmy', 'X', 'X', 'xxx111', 'X', 'No', 'No', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X']
-    book
-  end
+  let(:lionpath_parser_obj) {LionPathParser.new([headers, line1, line2, line3, line4, line5, line6, line7])}
 
-  let(:lionpath_parser_obj) {LionPathParser.new([headers, line1, line2, line3, line4, line5, line6, line7], book)}
+  before(:each) do
+    Faculty.create(access_id: 'zzz999',
+                   user_id:   '123',
+                   f_name:    'Bill',
+                   l_name:    'Bill',
+                   m_name:    'Bill')
+  end
 
   describe '#format' do
     it 'should convert dates back into psuIDs and

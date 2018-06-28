@@ -13,18 +13,36 @@ RSpec.describe LionPathPopulateDB do
     arr_of_hashes = []
     keys = headers
     data_arr << ['abc123', 'Spring', 2018, 'UP', 'Computer Stuff', 'Fun things that you can do with a computer that are fun.',
-                 9999, 'N', 'CMPSC', 001, 3, 25, 100, 'Hybrid - Online & In Person', 'Lecture', 200, '', '', '', 'Billy', 'Club', 'Arnold']
+                 9999, 'N', 'CMPSC', 001, 3, 25, 100, 'Hybrid - Online & In Person', 'Lecture', 200, '', '', '']
     data_arr << ['def456', 'Spring', 2018, 'UP', 'Computer Stuff', 'Fun things that you can do with a computer that are fun.',
-                 9999, 'N', 'CMPSC', 002, 3, 20, 100, 'In Person', 'Lecture', 200, '', '', '', 'Ernest', 'Frankenstein', 'Delaney']
+                 9999, 'N', 'CMPSC', 002, 3, 20, 100, 'In Person', 'Lecture', 200, '', '', '']
     data_arr << ['abc123', 'Spring', 2018, 'UP', 'Fruit Science', 'The science of fruits and why they are food.',
-                 1111, 'N', 'FDSC', 001, 3, 30, 100, 'In Person', 'Lecture', 100, '', '', '', 'Billy', 'Club', 'Arnold']
+                 1111, 'N', 'FDSC', 001, 3, 30, 100, 'In Person', 'Lecture', 100, '', '', '']
     data_arr << ['ghi789', 'Spring', 2018, 'UP', 'Bioinformatics', 'High Throughput Sequencing of Globulandus microRNAs.',
-                 2222, 'N', 'BIOTC', 001, 3, 12, 100, 'In Person', 'Lecture', 110, '', '', '', 'Harold', 'Ibanez', 'Glob']
+                 2222, 'N', 'BIOTC', 001, 3, 12, 100, 'In Person', 'Lecture', 110, '', '', '']
     data_arr.each {|a| arr_of_hashes << Hash[ keys.zip(a) ] }
     arr_of_hashes
   end
 
   let(:lionpath_populate_db_obj) {LionPathPopulateDB.allocate}
+
+  before(:each) do
+    Faculty.create(access_id: 'abc123',
+                   user_id:   '123456',
+                   f_name:    'Bill',
+                   l_name:    'Bill',
+                   m_name:    'Bill')
+    Faculty.create(access_id: 'def456',
+                   user_id:   '54321',
+                   f_name:    'Will',
+                   l_name:    'Will',
+                   m_name:    'Will')
+    Faculty.create(access_id: 'ghi789',
+                   user_id:   '578343',
+                   f_name:    'Frank',
+                   l_name:    'Frank',
+                   m_name:    'Frank')
+  end
 
   describe '#populate' do
     it 'should populate the database with lionpath data' do
