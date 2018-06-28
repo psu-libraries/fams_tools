@@ -46,19 +46,31 @@ This app will pull data from various sources, store the data in a database, and 
 
 *Note: Test integrations on beta and/or alpha before production*
 
+**Importing AI User Data**
+
+  1. This must be done first to ensure the rest of the steps work
+
+  2. Download ai-user (psu-users.xls) information from AI Users and Security Page. 
+
+  3. Store this in /data/
+
+  4. `rake activity_insight:get_user_data`
+
+**Importing Pure User IDs**
+
+  1. `rake pure:get_user_ids`
+
 **Formatting and Populating Database with OSP Data**
 
   1. Download OSP data in csv format: [dmresults.csv](https://service.sims.psu.edu/digitalmeasures/dmresults.csv)
 
-  2. Download ai-user (psu-users.xls) information from AI Users and Security Page. 
+  2. Store this in /data/
 
-  3. Store these files in /data/
-
-  4. Convert dmresults.csv to an xlsx file called dmresults.xlsx 
+  3. Convert dmresults.csv to an xlsx file called dmresults.xlsx 
 
   *Note: Some fields contain commas so comma delimited CSV files cannot be parsed by Ruby's built in CSV parser.  Also CSV encoding is a nightmare*
 
-  5. `rake osp_data:format_and_populate`
+  4. `rake osp_data:format_and_populate`
 
 **Formatting and Populating Database with LionPath Data**
 
