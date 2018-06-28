@@ -2,13 +2,11 @@ require 'spreadsheet'
 require 'creek'
 
 class OspParser
-  attr_accessor :xls_hash, :xlsx_hash, :active_users
+  attr_accessor :xlsx_hash, :active_users
 
-  def initialize(xlsx_obj = Creek::Book.new('data/dmresults.xlsx').sheets[0].rows, 
-                 xls_obj = Spreadsheet.open('data/psu-users.xls').worksheet(0))
+  def initialize(xlsx_obj = Creek::Book.new('data/dmresults.xlsx').sheets[0].rows)
     @xlsx_hash = convert_xlsx_to_hash(xlsx_obj)
-    @xls_hash = convert_xls_to_hash(xls_obj)
-    @active_users = find_active_users
+    @active_users = Faculty.pluck(:access_id)
   end
 
   #Run all local formatting methods
@@ -37,14 +35,8 @@ class OspParser
   def filter_by_user
     kept_rows = []
     xlsx_hash.each do |row|
-      active_users.each do |user|
-        if user[3] == row['accessid']
-          row['m_name'] = user[2]
-          row['l_name'] = user[0]
-          row['f_name'] = user[1]
-          row['userid'] = user[4]
-          kept_rows << row
-        end
+      if active_users.include? row['accessid']
+        kept_rows << row
       end
     end
     @xlsx_hash = kept_rows
@@ -93,25 +85,6 @@ class OspParser
     end
     data.each {|a| data_hashed << Hash[ keys.zip(a) ] }
     return data_hashed
-  end
-
-  def convert_xls_to_hash(xls_sheet)
-    keys = xls_sheet.row(2)
-    data_hashed = []
-    xls_sheet.drop(2).each do |row|
-      data_hashed << Hash[ keys.zip(row) ]
-    end
-    return data_hashed
-  end
-
-  def find_active_users
-    active_user_arr = []
-    xls_hash.each do |row|
-      if row['Enabled?'].downcase == 'yes' && row['Has Access to Manage Activities?'].downcase == 'yes'
-        active_user_arr << [row['Last Name'], row['First Name'], row['Middle Name'], row['Username'].downcase, row['User ID']]
-      end
-    end
-    active_user_arr
   end
 
   def format_nils(row)
