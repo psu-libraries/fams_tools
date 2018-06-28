@@ -67,21 +67,18 @@ RSpec.describe OspParser do
     data_arr
   end
 
-  let(:fake_book) do
-    book = Spreadsheet::Workbook.new  
-    sheet = book.create_worksheet
-    sheet.row(1).replace []
-    sheet.row(2).replace ['Last Name', 'First Name', 'Middle Name', 'Email', 'Username', 'PSU ID #', 'Enabled?', 'Has Access to Manage Activities?', 
-                          'Campus', 'Campus Name', 'College', 'College Name', 'Department', 'Division', 'Institute', 'School', 'Security']
-    sheet.row(3).replace ['X', 'Bill', 'X', 'X', 'zzz999', 'X', 'Yes', 'Yes', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X']
-    sheet.row(4).replace ['X', 'Jimmy', 'X', 'X', 'xxx111', 'X', 'No', 'No', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X']
-    sheet
+  before(:each) do
+    Faculty.create(access_id: 'zzz999',
+                   user_id:   '123',
+                   f_name:    'Bill',
+                   l_name:    'Bill',
+                   m_name:    'Bill')
   end
 
-  let(:osp_parser_obj1) {OspParser.new(data_book1, fake_book)}
-  let(:osp_parser_obj2) {OspParser.new(data_book2, fake_book)}
-  let(:osp_parser_obj3) {OspParser.new(data_book3, fake_book)}
-  let(:osp_parser_obj4) {OspParser.new(data_book4, fake_book)}
+  let(:osp_parser_obj1) {OspParser.new(data_book1)}
+  let(:osp_parser_obj2) {OspParser.new(data_book2)}
+  let(:osp_parser_obj3) {OspParser.new(data_book3)}
+  let(:osp_parser_obj4) {OspParser.new(data_book4)}
 
   describe "#format" do
     it "should convert nils to ' ' and 
@@ -131,8 +128,7 @@ RSpec.describe OspParser do
       osp_parser_obj3.filter_by_user
       expect(osp_parser_obj3.xlsx_hash.count).to eq(1)
       expect(osp_parser_obj3.xlsx_hash[0]['accessid']).to eq('zzz999')
-      expect(osp_parser_obj3.xlsx_hash[0]['f_name']).to eq('Bill')
-      expect(osp_parser_obj3.xlsx_hash[0].length).to eq(28)
+      expect(osp_parser_obj3.xlsx_hash[0].length).to eq(24)
     end
   end
 

@@ -13,21 +13,34 @@ RSpec.describe OspPopulateDB do
     keys = headers
     data_arr << [1234, 'Cool Title', 'Cool Sponsor', 'Federal Agencies',
                  'abc123', 'Co-PI', 50, 'Pending', '2013-04-05',
-                 '/  /', 1, 1, 1, '', '', '', '', 'Bird', 'Cat', 'Allen', '123456']
+                 '/  /', 1, 1, 1, '', '', '', '']
     data_arr << [4321, 'Cooler Title', 'Cool Sponsor', 'Federal Agencies',
                  'abc123', 'Co-PI', 50, 'Pending', '2013-04-05',
-                 '/  /', 1, 1, 1, '', '', '', '', 'Bird', 'Cat', 'Allen', '123456']
+                 '/  /', 1, 1, 1, '', '', '', '']
     data_arr << [1234, 'Cool Title', 'Cool Sponsor', 'Federal Agencies',
                  'xyz123', 'Co-PI', 50, 'Pending', '2013-04-05',
-                 '/  /', 1, 1, 1, '', '', '', '', 'Yawn', 'Zebra', 'Xylophone', '54321']
+                 '/  /', 1, 1, 1, '', '', '', '']
     data_arr << [1221, 'Coolest Title', 'Not as Cool Sponsor', 'Universities and Colleges',
                  'xyz123', 'Co-PI', 50, 'Pending', '2013-04-05',
-                 '/  /', 1, 1, 1, '', '', '', '', 'Yawn', 'Zebra', 'Xylophone', '54321'] 
+                 '/  /', 1, 1, 1, '', '', '', ''] 
     data_arr.each {|a| arr_of_hashes << Hash[ keys.zip(a) ] }
     arr_of_hashes
   end
 
   let(:osp_populate_db_obj) {OspPopulateDB.allocate}
+
+  before(:each) do
+    Faculty.create(access_id: 'abc123',            
+                   user_id:   '123456',               
+                   f_name:    'Allen',              
+                   l_name:    'Bird',              
+                   m_name:    'Cat')                                                                                                                                                                                                                                           
+    Faculty.create(access_id: 'xyz123',            
+                   user_id:   '54321',               
+                   f_name:    'Xylophone',              
+                   l_name:    'Zebra',              
+                   m_name:    'Yawn')                                                                                                                                                                                                                                           
+  end
 
   describe '#populate' do
     it 'should populate the database with osp data' do
