@@ -4,7 +4,7 @@ namespace :pure do
 
   desc "Import pure IDs to our database"
 
-  task get_pure_ids: :environment do
+  task get_user_ids: :environment do
 
     start = Time.now
     my_get_pure_ids = GetPureIDs.new
