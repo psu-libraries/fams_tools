@@ -48,6 +48,17 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
     t.index ["academic_course_id"], name: "index_courses_on_academic_course_id", unique: true
   end
 
+  create_table "external_authors", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.bigint "publication_id"
+    t.string "f_name"
+    t.string "m_name"
+    t.string "l_name"
+    t.string "role"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["publication_id"], name: "fk_rails_eb03e1acd5"
+  end
+
   create_table "faculties", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "access_id"
     t.bigint "user_id"
@@ -55,6 +66,23 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
     t.string "l_name"
     t.string "m_name"
     t.index ["access_id"], name: "index_faculties_on_access_id", unique: true
+  end
+
+  create_table "publications", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.bigint "faculty_id"
+    t.string "title"
+    t.string "type"
+    t.string "volume"
+    t.integer "dty"
+    t.string "dtm"
+    t.string "dtd"
+    t.string "journal_title"
+    t.string "journal_issn"
+    t.string "journal_num"
+    t.string "pages"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["faculty_id"], name: "fk_rails_8c9222b60f"
   end
 
   create_table "pure_ids", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -95,6 +123,8 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
   add_foreign_key "contract_faculty_links", "contracts"
   add_foreign_key "contract_faculty_links", "faculties"
   add_foreign_key "contracts", "sponsors"
+  add_foreign_key "external_authors", "publications"
+  add_foreign_key "publications", "faculties"
   add_foreign_key "pure_ids", "faculties"
   add_foreign_key "sections", "courses"
   add_foreign_key "sections", "faculties"
