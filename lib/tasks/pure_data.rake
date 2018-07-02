@@ -1,14 +1,14 @@
-require 'pure_data/get_pure_data'
+require 'pure_data/pure_populate_db'
   
 namespace :pure_data do
 
   desc "Import pure data to our database"
 
-  task get_data: :environment do
+  task populate_db: :environment do
 
     start = Time.now
-    my_get_pure_data = GetPureData.new
-    my_get_pure_data.call
+    my_pure_populate_db = PurePopulateDB.new
+    my_pure_populate_db.populate
     finish = Time.now
     puts(((finish - start)/60).to_s + ' mins')
 

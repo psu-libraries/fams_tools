@@ -10,9 +10,6 @@ class GetPureData
   def call
     get_pub_xmls
     xml_to_hash(pure_xmls)
-    pure_hash.each do |x|
-      puts x
-    end
   end
 
   private
