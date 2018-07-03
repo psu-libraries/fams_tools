@@ -81,6 +81,10 @@ This app will pull data from various sources, store the data in a database, and 
   3. Convert SP18.csv into a tab delimited text file called SP18-tabdel.txt.
 
   4. `rake lionpath_data:format_and_populate`
+
+**Population Database with Pure Data**
+
+  1. `rake pure_data:populate_db`
  
 **Removing Duplicate CONGRANT Data**
 
