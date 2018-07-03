@@ -13,26 +13,31 @@ class PurePopulateDB
 
       faculty = Faculty.find_by(access_id: k)
 
-      publication = Publication.create(faculty:       faculty,
-                                       title:         v['title'],
-                                       type:          v['type'],
-                                       volume:        v['volume'],
-                                       dty:           v['dty'],
-                                       dtm:           v['dtm'],
-                                       dtd:           v['dtd'],
-                                       journal_title: v['journalTitle'],
-                                       journal_issn:  v['journalIssn'],
-                                       journal_num:   v['journalNum'],
-                                       pages:         v['pages']
-                                      )
+      v.each do |pub|
 
-      ExternalAuthor.create(publication: publication,
-                            f_name: v['fName'],
-                            m_name: v['mName'],
-                            l_name: v['lName'],
-                            role:   v['role']
-                           )
+        publication = Publication.create(faculty:       faculty,
+                                         title:         pub[:title],
+                                         category:      pub[:type],
+                                         volume:        pub[:volume],
+                                         dty:           pub[:dty],
+                                         dtm:           pub[:dtm],
+                                         dtd:           pub[:dtd],
+                                         journal_title: pub[:journalTitle],
+                                         journal_issn:  pub[:journalIssn],
+                                         journal_num:   pub[:journalNum],
+                                         pages:         pub[:pages]
+                                         )
 
+        pub[:persons].each do |person|
+
+          ExternalAuthor.create(publication: publication,
+                                f_name:      person[:fName],
+                                m_name:      person[:mName],
+                                l_name:      person[:lName],
+                                role:        person[:role]
+                                )
+        end
+      end
     end
   end
 

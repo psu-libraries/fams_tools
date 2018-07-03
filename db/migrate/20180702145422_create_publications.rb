@@ -3,7 +3,7 @@ class CreatePublications < ActiveRecord::Migration[5.1]
     create_table :publications do |t|
       t.bigint :faculty_id
       t.string :title
-      t.string :type
+      t.string :category
       t.string :volume
       t.integer :dty
       t.string :dtm
