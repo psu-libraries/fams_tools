@@ -26,7 +26,7 @@ class PublicationListingsController < ApplicationController
       work = Work.new(
           :author => item[:author], 
           :title => item[:title], 
-          :item => item[:journal], 
+          :journal => item[:journal], 
           :volume => item[:volume], 
           :edition => item[:edition], 
           :pages => item[:pages], 
