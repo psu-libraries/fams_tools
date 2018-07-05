@@ -6,6 +6,7 @@ class CreateExternalAuthors < ActiveRecord::Migration[5.1]
       t.string :m_name
       t.string :l_name
       t.string :role
+      t.string :extOrg
 
       t.timestamps
     end

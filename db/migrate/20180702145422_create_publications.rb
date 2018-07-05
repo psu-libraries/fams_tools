@@ -4,14 +4,17 @@ class CreatePublications < ActiveRecord::Migration[5.1]
       t.bigint :faculty_id
       t.text :title
       t.string :category
-      t.string :volume
+      t.integer :volume
       t.integer :dty
       t.string :dtm
-      t.string :dtd
+      t.integer :dtd
       t.string :journal_title
       t.string :journal_issn
-      t.string :journal_num
+      t.integer :journal_num
       t.string :pages
+      t.integer :articleNumber
+      t.boolean :peerReview
+      t.string :url
 
       t.timestamps
     end

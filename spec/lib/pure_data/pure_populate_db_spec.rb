@@ -14,11 +14,15 @@ RSpec.describe PurePopulateDB do
                     :persons => [{:fName => 'Billy',
                                  :mName => 'Bob',
                                  :lName => 'Jenkins',
-                                 :role => 'Author'}],
+                                 :role => 'Author',
+                                 :extOrg => 'Org'}],
                     :journalTitle => 'Journal Title',
                     :journalIssn => '094-024903295-32',
                     :journalNum => 4,
-                    :pages => '42-43'}],
+                    :pages => '42-43',
+                    :articleNumber => 35,
+                    :peerReview => 'true',
+                    :url => 'www.www.www'}],
       'xyz123' => [{:title => 'Title2',
                     :type => 'Type2',
                     :volume => 12,
@@ -50,7 +54,8 @@ RSpec.describe PurePopulateDB do
                     :journalTitle => 'Journal Title',
                     :journalIssn => '032-42-5432-43',
                     :journalNum => 2,
-                    :pages => '42-65'}]}
+                    :pages => '42-65',
+                    :peerReview => 'false'}]}
 
             return hash
   end
@@ -80,6 +85,7 @@ RSpec.describe PurePopulateDB do
       expect(Publication.first.title).to eq('Title')
       expect(Faculty.find_by(access_id: 'abc123').publications.first.external_authors.first.f_name).to eq('Billy')
       expect(Faculty.find_by(access_id: 'xyz123').publications.first.external_authors.all.count).to eq(2)
+      expect(Faculty.find_by(access_id: 'xyz123').publications.last.peerReview).to eq(false)
     end
   end
 

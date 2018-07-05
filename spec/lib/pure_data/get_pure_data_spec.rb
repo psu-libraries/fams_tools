@@ -124,18 +124,33 @@ RSpec.describe GetPureData do
           <lastName>Frank</lastName>
         </name>
         <personRole pureId="" uri="/dk/atira/pure/researchoutput/roles/contributiontojournal/author">Author</personRole>
+        <externalOrganisations>
+          <externalOrganisation uuid="">
+            <name>University</name>
+          </externalOrganisation>
+        </externalOrganisations>
       </personAssociation>
     </personAssociations>
+    <electronicVersions>
+      <electronicVersion xsi:type="" pureId="">
+        <doi>www.website.org</doi>
+      </electronicVersion>
+    </electronicVersion>
     <journalAssociation pureId="">
       <title>Journal of Stuff</title>
       <issn>5432-5432</issn>
     </journalAssociation>
+    <articleNumber>20</articleNumber>
     <pages>45-60</pages>
     <volume>56</volume>
     <journalNumber>5</journalNumber>
   </contributionToJournal>
 </result>', headers: {})
       get_pure_data_obj.call
+      expect(get_pure_data_obj.pure_hash['abc123'][0][:persons][0][:extOrg]).to eq('University')
+      expect(get_pure_data_obj.pure_hash['abc123'][0][:articleNumber]).to eq('20')
+      expect(get_pure_data_obj.pure_hash['abc123'][0][:peerReview]).to eq('true')
+      expect(get_pure_data_obj.pure_hash['abc123'][0][:url]).to eq('www.website.org')
     end
   end
 
