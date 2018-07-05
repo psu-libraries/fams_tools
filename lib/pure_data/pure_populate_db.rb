@@ -9,6 +9,7 @@ class PurePopulateDB
 
   def populate
     pure_data.call
+    puts pure_data.pure_hash
     pure_data.pure_hash.each do |k,v|
 
       faculty = Faculty.find_by(access_id: k)
