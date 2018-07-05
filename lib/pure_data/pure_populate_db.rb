@@ -9,7 +9,6 @@ class PurePopulateDB
 
   def populate
     pure_data.call
-    puts pure_data.pure_hash
     pure_data.pure_hash.each do |k,v|
 
       faculty = Faculty.find_by(access_id: k)
@@ -26,7 +25,10 @@ class PurePopulateDB
                                          journal_title: pub[:journalTitle],
                                          journal_issn:  pub[:journalIssn],
                                          journal_num:   pub[:journalNum],
-                                         pages:         pub[:pages]
+                                         pages:         pub[:pages],
+                                         articleNumber: pub[:articleNumber],
+                                         peerReview:    pub[:peerReview],
+                                         url:           pub[:url]
                                          )
 
         pub[:persons].each do |person|
@@ -35,7 +37,8 @@ class PurePopulateDB
                                 f_name:      person[:fName],
                                 m_name:      person[:mName],
                                 l_name:      person[:lName],
-                                role:        person[:role]
+                                role:        person[:role],
+                                extOrg:      person[:extOrg]
                                 )
         end
       end

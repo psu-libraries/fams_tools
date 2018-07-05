@@ -54,6 +54,7 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
     t.string "m_name"
     t.string "l_name"
     t.string "role"
+    t.string "extOrg"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["publication_id"], name: "fk_rails_eb03e1acd5"
@@ -72,14 +73,17 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
     t.bigint "faculty_id"
     t.text "title"
     t.string "category"
-    t.string "volume"
+    t.integer "volume"
     t.integer "dty"
     t.string "dtm"
-    t.string "dtd"
+    t.integer "dtd"
     t.string "journal_title"
     t.string "journal_issn"
-    t.string "journal_num"
+    t.integer "journal_num"
     t.string "pages"
+    t.integer "articleNumber"
+    t.boolean "peerReview"
+    t.string "url"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["faculty_id"], name: "fk_rails_8c9222b60f"

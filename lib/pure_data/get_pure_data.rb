@@ -39,7 +39,7 @@ class GetPureData
                                   :mName => x.xpath('name//middleName').text, 
                                   :lName => x.xpath('name//lastName').text,
                                   :role => x.xpath('personRole').text,
-                                  :organization => x.xpath('externalOrganisations//externalOrganisation//name').text}
+                                  :extOrg => x.xpath('externalOrganisations//externalOrganisation//name').text}
                            },
                            :journalTitle => publication.xpath('journalAssociation//title').text,
                            :journalIssn => publication.xpath('journalAssociation//issn').text,
@@ -60,7 +60,7 @@ class GetPureData
                                   :mName => x.xpath('name//middleName').text, 
                                   :lName => x.xpath('name//lastName').text,
                                   :role => x.xpath('personRole').text,
-                                  :organization => x.xpath('externalOrganisations//externalOrganisation//name').text}
+                                  :extOrg => x.xpath('externalOrganisations//externalOrganisation//name').text}
                            },
                            :journalTitle => publication.xpath('journalAssociation//title').text,
                            :journalIssn => publication.xpath('journalAssociation//issn').text,
