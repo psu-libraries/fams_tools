@@ -43,7 +43,8 @@ class OspPopulateDB
                                    start_date:        row['startdate'],
                                    end_date:          row['enddate'],
                                    grant_contract:    row['grantcontract'],
-                                   base_agreement:    row['baseagreement'])
+                                   base_agreement:    row['baseagreement'],
+                                   notfunded:         row['notfunded'])
 
       rescue ActiveRecord::RecordNotUnique
         contract = Contract.find_by(osp_key: row['ospkey'])
@@ -51,11 +52,14 @@ class OspPopulateDB
 
       faculty = Faculty.find_by(access_id: row['accessid'])
 
-      ContractFacultyLink.create(contract:   contract,
-                                 faculty:    faculty,
-                                 role:       row['role'],
-                                 pct_credit: row['pctcredit'])
+      begin
+        ContractFacultyLink.create(contract:   contract,
+                                   faculty:    faculty,
+                                   role:       row['role'],
+                                   pct_credit: row['pctcredit'])
 
+      rescue ActiveRecord::RecordNotUnique
+      end
     end
   end
 

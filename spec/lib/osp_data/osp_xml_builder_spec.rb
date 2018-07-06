@@ -8,12 +8,12 @@ RSpec.describe OspXMLBuilder do
       'awarded' => '', 'requested' => 1000, 'funded' => '', 'totalanticipated' => '', 'startdate' => '',
       'enddate' => '', 'grantcontract' => '', 'baseagreement' => '', 'accessid' => 'aaa111', 'f_name' => 'Bill',
       'l_name' => 'Billy', 'm_name' => 'Billiam', 'sponsor' => 'Sponsor', 'sponsortype' => 'Big Sponsor',
-      'role' => 'Principal Investigator', 'pctcredit' => 100, 'userid' => 123},
+      'role' => 'Principal Investigator', 'pctcredit' => 100, 'userid' => 123, 'notfunded' => '2015-02-01'},
       {'ospkey' => 654321, 'title' => 'Title', 'status' => 'Pending', 'submitted' => '2016-01-01',
       'awarded' => '', 'requested' => 1000, 'funded' => '', 'totalanticipated' => '', 'startdate' => '',
       'enddate' => '', 'grantcontract' => '', 'baseagreement' => '', 'accessid' => 'bbb222', 'f_name' => 'Bill',
       'l_name' => 'Billy', 'm_name' => 'Billiam', 'sponsor' => 'Sponsor2', 'sponsortype' => 'Big Sponsor',
-      'role' => 'Principal Investigator', 'pctcredit' => 100, 'userid' => 321}]
+      'role' => 'Principal Investigator', 'pctcredit' => 100, 'userid' => 321, 'notfunded' => '2015-02-01'}]
   end
 
   let(:osp_xml_builder_obj) {OspXMLBuilder.new}
@@ -36,7 +36,8 @@ RSpec.describe OspXMLBuilder do
                                    start_date:        row['startdate'],
                                    end_date:          row['enddate'],
                                    grant_contract:    row['grantcontract'],
-                                   base_agreement:    row['baseagreement'])
+                                   base_agreement:    row['baseagreement'],
+                                   notfunded:         row['notfunded'])
 
         faculty = Faculty.create(access_id: row['accessid'],
                                  user_id:   row['userid'],
@@ -85,6 +86,9 @@ RSpec.describe OspXMLBuilder do
       <DTM_END/>
       <DTD_END/>
       <DTY_END/>
+      <DTM_DECLINE access="READ_ONLY">February</DTM_DECLINE>
+      <DTD_DECLINE access="READ_ONLY">01</DTD_DECLINE>
+      <DTY_DECLINE access="READ_ONLY">2015</DTY_DECLINE>
     </CONGRANT>
   </Record>
   <Record username="bbb222">
@@ -119,6 +123,9 @@ RSpec.describe OspXMLBuilder do
       <DTM_END/>
       <DTD_END/>
       <DTY_END/>
+      <DTM_DECLINE access="READ_ONLY">February</DTM_DECLINE>
+      <DTD_DECLINE access="READ_ONLY">01</DTD_DECLINE>
+      <DTY_DECLINE access="READ_ONLY">2015</DTY_DECLINE>
     </CONGRANT>
   </Record>
 </Data>
