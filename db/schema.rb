@@ -17,7 +17,7 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
     t.integer "pct_credit"
     t.bigint "contract_id"
     t.bigint "faculty_id"
-    t.index ["contract_id"], name: "fk_rails_5e66e5d7a9"
+    t.index ["contract_id", "faculty_id"], name: "index_contract_faculty_links_on_contract_id_and_faculty_id", unique: true
     t.index ["faculty_id"], name: "fk_rails_7f7c136a9d"
   end
 
@@ -35,6 +35,7 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
     t.date "end_date"
     t.string "grant_contract"
     t.string "base_agreement"
+    t.date "notfunded"
     t.index ["osp_key"], name: "index_contracts_on_osp_key", unique: true
     t.index ["sponsor_id"], name: "fk_rails_918599a14c"
   end

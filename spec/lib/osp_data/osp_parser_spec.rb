@@ -7,7 +7,7 @@ RSpec.describe OspParser do
   headers =  {"A1" => 'ospkey', "B1" => 'ordernumber', "C1" => 'title', "D1" => 'sponsor', "E1" => 'sponsortype', "F1" => 'parentsponsor', 
               "G1" => 'accessid', "H1" => 'department', "I1" => 'role', "J1" => 'pctcredit', "K1" => 'status', "L1" => 'submitted', "M1" => 'awarded', 
               "N1" => 'requested', "O1" => 'funded', "P1" => 'totalanticipated', "Q1" => 'startdate', "R1" => 'enddate', "S1" => 'totalstartdate',
-              "T1" => 'totalenddate', "U1" => 'grantcontract', "V1" => 'baseagreement', "W1" => 'agreementtype', "X1" => 'agreement'}
+              "T1" => 'totalenddate', "U1" => 'grantcontract', "V1" => 'baseagreement', "W1" => 'agreementtype', "X1" => 'agreement', "Y1" => 'notfunded'}
 
   let(:data_book1) do
     data_arr = []
@@ -15,19 +15,19 @@ RSpec.describe OspParser do
     data_arr << {"A2" => 1, "B2" => 1, "C2" => 'X', "D2" => 'X', "E2" => 'X', "F2" => 'X',
                  "G2" => 'abc123', "H2" => 'X', "I2" => 'Co-PI', "J2" => 1, "K2" => 'Awarded', "L2" => '/', "M2" => '/  /',
                  "N2" => 1, "O2" => 1, "P2" => 1, "Q2" => 'Sun, 01 Jan 2017', "R2" => 'Wed, 12 Dec 2018', "S2" => 'X',
-                 "T2" => 'X', "U2" => nil, "V2" => 'X', "W2" => 'X', "X2" => 'X'}
+                 "T2" => 'X', "U2" => nil, "V2" => 'X', "W2" => 'X', "X2" => 'X', "Y2" => 'Sun, 01 Feb 2015'}
     data_arr << {"A3" => 1, "B3" => 1, "C3" => 'X', "D3" => 'X', "E3" => 'X', "F3" => 'X',
                  "G3" => 'Sun, 01 Mar 1926', "H3" => 'X', "I3" => 'Faculty', "J3" => 1, "K3" => 'Pending Proposal', "L3" => 'X', "M3" => 'X',
                  "N3" => 1, "O3" => 1, "P3" => 1, "Q3" => 'X', "R3" => 'X', "S3" => 'X',
-                 "T3" => 'X', "U3" => 'Grant', "V3" => 'X', "W3" => 'X', "X3" => 'X'}
+                 "T3" => 'X', "U3" => 'Grant', "V3" => 'X', "W3" => 'X', "X3" => 'X', "Y3" => '/  /'}
     data_arr << {"A4" => 1, "B4" => 1, "C4" => 'X', "D4" => 'X', "E4" => 'X', "F4" => 'X',
                  "G4" => 'Tue, 02 Jan 2018', "H4" => 'X', "I4" => 'Post Doctoral', "J4" => 1, "K4" => 'Awarded', "L4" => 'X', "M4" => 'X',
                  "N4" => 1, "O4" => 1, "P4" => 1, "Q4" => 'Sun, 01 Jan 2017', "R4" => 'Wed, 12 Dec 2018', "S4" => 'X',
-                 "T4" => 'X', "U4" => 'Grant', "V4" => 'X', "W4" => 'X', "X4" => 'X'}
+                 "T4" => 'X', "U4" => 'Grant', "V4" => 'X', "W4" => 'X', "X4" => 'X', "Y4" => '/  /'}
     data_arr << {"A5" => 1, "B5" => 1, "C5" => 'X', "D5" => 'X', "E5" => 'X', "F5" => 'X',
                  "G5" => 'Tue, 02 Jan 2018', "H5" => 'X', "I5" => 'unknown', "J5" => 1, "K5" => 'Pending Award', "L5" => 'X', "M5" => 'X',
                  "N5" => 1, "O5" => 1, "P5" => 1, "Q1" => 'Sun, 01 Jan 2017', "R5" => 'Wed, 12 Dec 2018', "S5" => 'X',
-                 "T5" => 'X', "U5" => 'Grant', "V5" => 'X', "W5" => 'X', "X5" => 'X'}
+                 "T5" => 'X', "U5" => 'Grant', "V5" => 'X', "W5" => 'X', "X5" => 'X', "Y5" => '/  /'}
     data_arr
   end
 
@@ -109,8 +109,9 @@ RSpec.describe OspParser do
       expect(osp_parser_obj1.xlsx_hash[2]['enddate']).to eq('2018-12-12')
       expect(osp_parser_obj1.xlsx_hash[3]['startdate']).to eq('')
       expect(osp_parser_obj1.xlsx_hash[3]['enddate']).to eq('')
-      expect(osp_parser_obj1.xlsx_hash[0].length).to eq(17)
-      expect(osp_parser_obj1.xlsx_hash[1].length).to eq(17)
+      expect(osp_parser_obj1.xlsx_hash[0].length).to eq(25)
+      expect(osp_parser_obj1.xlsx_hash[1].length).to eq(25)
+      expect(osp_parser_obj1.xlsx_hash[0]['notfunded']).to eq('2015-02-01')
     end
   end
 
@@ -128,7 +129,7 @@ RSpec.describe OspParser do
       osp_parser_obj3.filter_by_user
       expect(osp_parser_obj3.xlsx_hash.count).to eq(1)
       expect(osp_parser_obj3.xlsx_hash[0]['accessid']).to eq('zzz999')
-      expect(osp_parser_obj3.xlsx_hash[0].length).to eq(24)
+      expect(osp_parser_obj3.xlsx_hash[0].length).to eq(25)
     end
   end
 

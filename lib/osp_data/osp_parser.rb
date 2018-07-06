@@ -18,7 +18,6 @@ class OspParser
       format_date_fields(row)
       format_pending(row)
       format_start_end(row)
-      remove_columns(row)
     end
   end
 
@@ -121,7 +120,7 @@ class OspParser
   end
 
   def format_date_fields(row)
-    key_arr = ['submitted', 'awarded', 'startdate', 'enddate']
+    key_arr = ['submitted', 'awarded', 'startdate', 'enddate', 'notfunded']
     key_arr.each do |k|
       if row[k] == '/' || row[k] == '/  /'
         row[k] = ''
@@ -146,15 +145,6 @@ class OspParser
       row['startdate'] = ''
       row['enddate'] = ''
     end
-  end
-
-  def remove_columns(row)
-    index_arr = ['ordernumber', 'parentsponsor', 'department', 'totalstartdate', 
-                 'totalenddate', 'agreementtype', 'agreement']
-    index_arr.each do |i|
-      row[i] = nil
-    end
-    row.compact!
   end
 
 end

@@ -1,11 +1,12 @@
 require 'rails_helper'
 require 'osp_data/osp_populate_db'
+require 'byebug'
 
 RSpec.describe OspPopulateDB do
 
   headers =  ['ospkey', 'title', 'sponsor', 'sponsortype', 'accessid', 'role', 'pctcredit', 'status',
               'submitted', 'awarded', 'requested', 'funded', 'totalanticipated', 'startdate', 'enddate',
-              'grantcontract', 'baseagreement', 'm_name', 'l_name', 'f_name', 'userid']
+              'grantcontract', 'baseagreement', 'm_name', 'l_name', 'f_name', 'userid', 'notfunded']
 
   let(:fake_sheet) do
     data_arr = []
@@ -13,16 +14,16 @@ RSpec.describe OspPopulateDB do
     keys = headers
     data_arr << [1234, 'Cool Title', 'Cool Sponsor', 'Federal Agencies',
                  'abc123', 'Co-PI', 50, 'Pending', '2013-04-05',
-                 '/  /', 1, 1, 1, '', '', '', '']
+                 '/  /', 1, 1, 1, '', '', '', '', '', '', '', '', '2015-02-01']
     data_arr << [4321, 'Cooler Title', 'Cool Sponsor', 'Federal Agencies',
                  'abc123', 'Co-PI', 50, 'Pending', '2013-04-05',
-                 '/  /', 1, 1, 1, '', '', '', '']
+                 '/  /', 1, 1, 1, '', '', '', '', '', '', '', '', '']
     data_arr << [1234, 'Cool Title', 'Cool Sponsor', 'Federal Agencies',
                  'xyz123', 'Co-PI', 50, 'Pending', '2013-04-05',
-                 '/  /', 1, 1, 1, '', '', '', '']
+                 '/  /', 1, 1, 1, '', '', '', '', '', '', '', '', '2015-02-01']
     data_arr << [1221, 'Coolest Title', 'Not as Cool Sponsor', 'Universities and Colleges',
                  'xyz123', 'Co-PI', 50, 'Pending', '2013-04-05',
-                 '/  /', 1, 1, 1, '', '', '', ''] 
+                 '/  /', 1, 1, 1, '', '', '', '', '', '', '', '', ''] 
     data_arr.each {|a| arr_of_hashes << Hash[ keys.zip(a) ] }
     arr_of_hashes
   end
@@ -53,6 +54,7 @@ RSpec.describe OspPopulateDB do
       expect(ContractFacultyLink.all.count).to eq(4)
       expect(Faculty.find_by(:access_id => 'abc123').contract_faculty_links.all.count).to eq(2)
       expect(Faculty.find_by(:access_id => 'abc123').contract_faculty_links.first.contract.sponsor.sponsor_name).to eq('Cool Sponsor')
+      expect(Contract.find_by(:osp_key => 1234).notfunded).to eq(Date.parse('Sun, 01 Feb 2015'))
     end
   end
 

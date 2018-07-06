@@ -73,6 +73,15 @@ class OspXMLBuilder
                   xml.DTD_END_
                   xml.DTY_END_
                 end
+                begin
+                  xml.DTM_DECLINE_ Date.strptime(link.contract.notfunded.to_s, '%Y-%m-%d').strftime('%B'), :access => "READ_ONLY"
+                  xml.DTD_DECLINE_ Date.strptime(link.contract.notfunded.to_s, '%Y-%m-%d').strftime('%d'), :access => "READ_ONLY"
+                  xml.DTY_DECLINE_ Date.strptime(link.contract.notfunded.to_s, '%Y-%m-%d').strftime('%Y'), :access => "READ_ONLY"
+                rescue ArgumentError
+                  xml.DTM_DECLINE_
+                  xml.DTD_DECLINE_
+                  xml.DTY_DECLINE_
+                end
               }
             end
           }
