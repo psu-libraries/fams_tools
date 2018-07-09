@@ -10,6 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+<<<<<<< HEAD
 ActiveRecord::Schema.define(version: 2018050314201234) do
 
   create_table "contract_faculty_links", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -133,4 +134,44 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
   add_foreign_key "pure_ids", "faculties"
   add_foreign_key "sections", "courses"
   add_foreign_key "sections", "faculties"
+=======
+ActiveRecord::Schema.define(version: 20180523194425) do
+
+  create_table "publication_listings", force: :cascade do |t|
+    t.string "path"
+    t.string "type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "works", force: :cascade do |t|
+    t.integer "publication_listing_id"
+    t.string "author"
+    t.string "title"
+    t.string "journal"
+    t.string "volume"
+    t.string "edition"
+    t.string "pages"
+    t.string "date"
+    t.string "item"
+    t.string "booktitle"
+    t.string "container"
+    t.string "doi"
+    t.string "editor"
+    t.string "institution"
+    t.string "isbn"
+    t.string "location"
+    t.string "note"
+    t.string "publisher"
+    t.string "retrieved"
+    t.string "tech"
+    t.string "translator"
+    t.string "unknown"
+    t.string "url"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["publication_listing_id"], name: "index_works_on_publication_listing_id"
+  end
+
+>>>>>>> master-holder
 end

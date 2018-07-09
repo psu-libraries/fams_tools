@@ -1,0 +1,53 @@
+<h1>Works (<%= @works.count %> records)</h1>
+<%= link_to "<< Back to Publication Listing", publication_listings_path %>
+| 
+<%= link_to "Download as xlsx", publication_listing_works_path(format: :xlsx) %>
+<table border=1>
+  <tr>
+    <th>author</th>
+    <th>title</th>
+    <th>journal</th>
+    <th>volume</th>
+    <th>edition</th>
+    <th>pages</th>
+    <th>date</th>
+    <th>booktitle</th>
+    <th>container</th>
+    <th>doi</th>
+    <th>editor</th>
+    <th>institution</th>
+    <th>isbn</th>
+    <th>location</th>
+    <th>note</th>
+    <th>publisher</th>
+    <th>retrievedtech</th>
+    <th>translator</th>
+    <th>unknown</th>
+    <th>url</th>
+  </tr>
+  <% @works.each do |w| %>
+    <tr>
+      <td><%= w.author %></td>
+      <td><%= w.title %></td>
+      <td><%= w.journal %></td>
+      <td><%= w.volume %></td>
+      <td><%= w.edition %></td>
+      <td><%= w.pages %></td>
+      <td><%= w.date %></td>
+      <td><%= w.booktitle %></td>
+      <td><%= w.container %></td>
+      <td><%= w.doi %></td>
+      <td><%= w.editor %></td>
+      <td><%= w.institution %></td>
+      <td><%= w.isbn %></td>
+      <td><%= w.location %></td>
+      <td><%= w.note %></td>
+      <td><%= w.publisher %></td>
+      <td><%= w.retrieved %></td>
+      <td><%= w.tech %></td>
+      <td><%= w.translator %></td>
+      <td><%= w.unknown %></td>
+      <td><%= w.url %></td>
+    </tr>
+  <% end %>
+</table>
