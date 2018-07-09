@@ -10,7 +10,6 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-<<<<<<< HEAD
 ActiveRecord::Schema.define(version: 2018050314201234) do
 
   create_table "contract_faculty_links", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -71,6 +70,13 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
     t.index ["access_id"], name: "index_faculties_on_access_id", unique: true
   end
 
+  create_table "publication_listings", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string "path"
+    t.string "type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "publications", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.bigint "faculty_id"
     t.text "title"
@@ -126,26 +132,8 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
     t.index ["sponsor_name"], name: "index_sponsors_on_sponsor_name", unique: true
   end
 
-  add_foreign_key "contract_faculty_links", "contracts"
-  add_foreign_key "contract_faculty_links", "faculties"
-  add_foreign_key "contracts", "sponsors"
-  add_foreign_key "external_authors", "publications"
-  add_foreign_key "publications", "faculties"
-  add_foreign_key "pure_ids", "faculties"
-  add_foreign_key "sections", "courses"
-  add_foreign_key "sections", "faculties"
-=======
-ActiveRecord::Schema.define(version: 20180523194425) do
-
-  create_table "publication_listings", force: :cascade do |t|
-    t.string "path"
-    t.string "type"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "works", force: :cascade do |t|
-    t.integer "publication_listing_id"
+  create_table "works", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.bigint "publication_listing_id"
     t.string "author"
     t.string "title"
     t.string "journal"
@@ -173,5 +161,13 @@ ActiveRecord::Schema.define(version: 20180523194425) do
     t.index ["publication_listing_id"], name: "index_works_on_publication_listing_id"
   end
 
->>>>>>> master-holder
+  add_foreign_key "contract_faculty_links", "contracts"
+  add_foreign_key "contract_faculty_links", "faculties"
+  add_foreign_key "contracts", "sponsors"
+  add_foreign_key "external_authors", "publications"
+  add_foreign_key "publications", "faculties"
+  add_foreign_key "pure_ids", "faculties"
+  add_foreign_key "sections", "courses"
+  add_foreign_key "sections", "faculties"
+  add_foreign_key "works", "publication_listings"
 end
