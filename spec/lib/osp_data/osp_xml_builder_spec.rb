@@ -129,8 +129,7 @@ RSpec.describe OspXMLBuilder do
     </CONGRANT>
   </Record>
 </Data>
-'
-      ])
+'])
         end
       end
     end

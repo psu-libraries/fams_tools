@@ -82,6 +82,7 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
     t.text "title"
     t.string "category"
     t.integer "volume"
+    t.string "status"
     t.integer "dty"
     t.string "dtm"
     t.integer "dtd"
