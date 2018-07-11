@@ -1,7 +1,8 @@
 require 'rails_helper'
-require 'osp_data/osp_integrate'
+require 'activity_insight/ai_integrate_data'
+require 'osp_data/osp_xml_builder'
 
-RSpec.describe OspIntegrate do
+RSpec.describe IntegrateData do
 
   let(:xml_arr) do
     return [
@@ -152,16 +153,16 @@ RSpec.describe OspIntegrate do
       ]
   end
 
-  let(:osp_integrate_obj) {OspIntegrate.allocate}
-
   before do
     allow(STDOUT).to receive(:puts)
   end
 
   describe '#integrate' do
     it 'should send a POST request to DM Webservices' do
-      osp_integrate_obj.osp_batches = xml_arr
-      osp_integrate_obj.url = 'https://beta.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University'
+      osp_xml_builder_obj = double()
+      allow(osp_xml_builder_obj).to receive(:batched_xmls).and_return(xml_arr)
+
+      osp_integrate_obj = IntegrateData.new(osp_xml_builder_obj)
       osp_integrate_obj.auth = {:username => 'Username', :password => 'Password'}
       stub_request(:post, "https://beta.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University").
          with(

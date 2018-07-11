@@ -8,7 +8,7 @@ class OspXMLBuilder
   end
 
   #Chunks osp data into batches so we don't overload AI with records
-  def batched_osp_xml
+  def batched_xmls
     xml_batches = []
     faculties.each_slice(20) do |batch|
       xml_batches << build_xml(batch)

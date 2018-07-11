@@ -49,7 +49,7 @@ RSpec.describe LionPathXMLBuilder do
                        xcourse_course_num:     row['XCourse CourseNum'],
                        xcourse_course_suf:     row['XCourse CourseNum Suffix'])
       end
-      expect(lionpath_xml_builder_obj.batched_lionpath_xml).to eq([
+      expect(lionpath_xml_builder_obj.batched_xmls).to eq([
 '<?xml version="1.0" encoding="UTF-8"?>
 <Data>
   <Record username="abc123">

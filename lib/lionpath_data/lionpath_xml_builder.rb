@@ -5,7 +5,7 @@ class LionPathXMLBuilder
     @faculties = Faculty.joins(:sections).group('id')
   end
 
-  def batched_lionpath_xml
+  def batched_xmls
     xml_batches = []
     @faculties.each_slice(20) do |batch|
       xml_batches << build_xml(batch)
