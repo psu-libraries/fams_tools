@@ -113,7 +113,7 @@ RSpec.describe PureXMLBuilder do
           end
         end
       end
-      expect(pure_xml_builder_obj.batched_pure_xml).to eq([
+      expect(pure_xml_builder_obj.batched_xmls).to eq([
 '<?xml version="1.0" encoding="UTF-8"?>
 <Data>
   <Record username="abc123">

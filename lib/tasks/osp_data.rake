@@ -1,5 +1,6 @@
 require 'osp_data/osp_populate_db'
-require 'osp_data/osp_integrate'
+require 'osp_data/osp_xml_builder'
+require 'activity_insight/ai_integrate_data'
 
 namespace :osp_data do
 
@@ -21,7 +22,7 @@ namespace :osp_data do
 
   task integrate: :environment do
     start = Time.now
-    my_integrate = OspIntegrate.new
+    my_integrate = IntegrateData.new(OspXMLBuilder.new)
     my_integrate.integrate
     finish = Time.now
     puts(((finish - start)/60).to_s + ' mins') 

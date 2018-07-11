@@ -7,7 +7,7 @@ class PureXMLBuilder
     @faculties = Faculty.joins(:publications).group('id')
   end
 
-  def batched_pure_xml
+  def batched_xmls
     xml_batches = []
     faculties.each_slice(20) do |batch|
       xml_batches << build_xml(batch)

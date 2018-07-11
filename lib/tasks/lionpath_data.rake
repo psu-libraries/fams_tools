@@ -1,5 +1,6 @@
 require 'lionpath_data/lionpath_populate_db'
-require 'lionpath_data/lionpath_integrate'
+require 'lionpath_data/lionpath_xml_builder'
+require 'activity_insight/ai_integrate_data'
 
 namespace :lionpath_data do
 
@@ -21,8 +22,8 @@ namespace :lionpath_data do
 
   task integrate: :environment do
     start = Time.now
-    my_lionpath_integrate = LionPathIntegrate.new
-    my_lionpath_integrate.integrate
+    lionpath_integrate = IntegrateData.new(LionPathXMLBuilder.new)
+    lionpath_integrate.integrate
     finish = Time.now
     puts(((finish - start)/60).to_s + ' mins')
   end

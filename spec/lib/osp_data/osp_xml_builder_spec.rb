@@ -51,7 +51,7 @@ RSpec.describe OspXMLBuilder do
                                    pct_credit: row['pctcredit'])
 
       end
-      expect(osp_xml_builder_obj.batched_osp_xml).to eq([
+      expect(osp_xml_builder_obj.batched_xmls).to eq([
 '<?xml version="1.0" encoding="UTF-8"?>
 <Data>
   <Record username="aaa111">
