@@ -5,6 +5,7 @@ class CreatePublications < ActiveRecord::Migration[5.1]
       t.text :title
       t.string :category
       t.integer :volume
+      t.string :status
       t.integer :dty
       t.string :dtm
       t.integer :dtd

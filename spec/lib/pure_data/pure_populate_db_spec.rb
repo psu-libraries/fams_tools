@@ -11,6 +11,7 @@ RSpec.describe PurePopulateDB do
                     :dty => 2017,
                     :dtm => 'May',
                     :dtd => 22,
+                    :status => 'Published',
                     :persons => [{:fName => 'Billy',
                                  :mName => 'Bob',
                                  :lName => 'Jenkins',
@@ -29,6 +30,7 @@ RSpec.describe PurePopulateDB do
                     :dty => 2013,
                     :dtm => 'January',
                     :dtd => 23,
+                    :status => 'Published',
                     :persons => [{:fName => 'George',
                                   :mName => 'Joe',
                                   :lName => 'Gary',
@@ -86,6 +88,7 @@ RSpec.describe PurePopulateDB do
       expect(Faculty.find_by(access_id: 'abc123').publications.first.external_authors.first.f_name).to eq('Billy')
       expect(Faculty.find_by(access_id: 'xyz123').publications.first.external_authors.all.count).to eq(2)
       expect(Faculty.find_by(access_id: 'xyz123').publications.last.peerReview).to eq(false)
+      expect(Publication.first.status).to eq('Published')
     end
   end
 
