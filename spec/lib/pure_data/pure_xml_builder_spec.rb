@@ -118,79 +118,79 @@ RSpec.describe PureXMLBuilder do
 <Data>
   <Record username="abc123">
     <INTELLCONT>
-      <TITLE access="READ ONLY">Title</TITLE>
-      <CONTYPE access="READ ONLY">Type</CONTYPE>
-      <STATUS access="READ ONLY">Published</STATUS>
-      <JOURNAL_NAME access="READ ONLY">Journal Title</JOURNAL_NAME>
-      <ISBNISSN access="READ ONLY">094-024903295-32</ISBNISSN>
-      <VOLUME access="READ ONLY">34</VOLUME>
-      <DTY_PUB access="READ ONLY">2017</DTY_PUB>
-      <DTM_PUB access="READ ONLY">May</DTM_PUB>
-      <DTD_PUB access="READ ONLY">22</DTD_PUB>
-      <ISSUE access="READ ONLY">4</ISSUE>
-      <PAGENUM access="READ ONLY">42-43</PAGENUM>
+      <TITLE access="READ_ONLY">Title</TITLE>
+      <CONTYPE access="READ_ONLY">Type</CONTYPE>
+      <STATUS access="READ_ONLY">Published</STATUS>
+      <JOURNAL_NAME access="READ_ONLY">Journal Title</JOURNAL_NAME>
+      <ISBNISSN access="READ_ONLY">094-024903295-32</ISBNISSN>
+      <VOLUME access="READ_ONLY">34</VOLUME>
+      <DTY_PUB access="READ_ONLY">2017</DTY_PUB>
+      <DTM_PUB access="READ_ONLY">May</DTM_PUB>
+      <DTD_PUB access="READ_ONLY">22</DTD_PUB>
+      <ISSUE access="READ_ONLY">4</ISSUE>
+      <PAGENUM access="READ_ONLY">42-43</PAGENUM>
       <INTELLCONT_AUTH>
-        <FNAME access="READ ONLY">Billy</FNAME>
-        <MNAME access="READ ONLY">Bob</MNAME>
-        <LNAME access="READ ONLY">Jenkins</LNAME>
-        <ROLE access="READ ONLY">Author</ROLE>
-        <INSTITUTION access="READ ONLY">Org</INSTITUTION>
+        <FNAME access="READ_ONLY">Billy</FNAME>
+        <MNAME access="READ_ONLY">Bob</MNAME>
+        <LNAME access="READ_ONLY">Jenkins</LNAME>
+        <ROLE access="READ_ONLY">Author</ROLE>
+        <INSTITUTION access="READ_ONLY">Org</INSTITUTION>
       </INTELLCONT_AUTH>
-      <WEB_ADDRESS access="READ ONLY">www.www.www</WEB_ADDRESS>
-      <REFEREED access="READ ONLY">true</REFEREED>
+      <WEB_ADDRESS access="READ_ONLY">www.www.www</WEB_ADDRESS>
+      <REFEREED access="READ_ONLY">true</REFEREED>
     </INTELLCONT>
   </Record>
   <Record username="xyz123">
     <INTELLCONT>
-      <TITLE access="READ ONLY">Title2</TITLE>
-      <CONTYPE access="READ ONLY">Type2</CONTYPE>
-      <STATUS access="READ ONLY">Published</STATUS>
-      <JOURNAL_NAME access="READ ONLY">Journal Title2</JOURNAL_NAME>
-      <ISBNISSN access="READ ONLY">093-2351-432</ISBNISSN>
-      <VOLUME access="READ ONLY">12</VOLUME>
-      <DTY_PUB access="READ ONLY">2013</DTY_PUB>
-      <DTM_PUB access="READ ONLY">January</DTM_PUB>
-      <DTD_PUB access="READ ONLY">23</DTD_PUB>
-      <ISSUE access="READ ONLY">3</ISSUE>
-      <PAGENUM access="READ ONLY">42-46</PAGENUM>
+      <TITLE access="READ_ONLY">Title2</TITLE>
+      <CONTYPE access="READ_ONLY">Type2</CONTYPE>
+      <STATUS access="READ_ONLY">Published</STATUS>
+      <JOURNAL_NAME access="READ_ONLY">Journal Title2</JOURNAL_NAME>
+      <ISBNISSN access="READ_ONLY">093-2351-432</ISBNISSN>
+      <VOLUME access="READ_ONLY">12</VOLUME>
+      <DTY_PUB access="READ_ONLY">2013</DTY_PUB>
+      <DTM_PUB access="READ_ONLY">January</DTM_PUB>
+      <DTD_PUB access="READ_ONLY">23</DTD_PUB>
+      <ISSUE access="READ_ONLY">3</ISSUE>
+      <PAGENUM access="READ_ONLY">42-46</PAGENUM>
       <INTELLCONT_AUTH>
-        <FNAME access="READ ONLY">George</FNAME>
-        <MNAME access="READ ONLY">Joe</MNAME>
-        <LNAME access="READ ONLY">Gary</LNAME>
-        <ROLE access="READ ONLY">Author</ROLE>
-        <INSTITUTION access="READ ONLY"/>
+        <FNAME access="READ_ONLY">George</FNAME>
+        <MNAME access="READ_ONLY">Joe</MNAME>
+        <LNAME access="READ_ONLY">Gary</LNAME>
+        <ROLE access="READ_ONLY">Author</ROLE>
+        <INSTITUTION access="READ_ONLY"/>
       </INTELLCONT_AUTH>
       <INTELLCONT_AUTH>
-        <FNAME access="READ ONLY">Harry</FNAME>
-        <MNAME access="READ ONLY">Jorge</MNAME>
-        <LNAME access="READ ONLY">Potter</LNAME>
-        <ROLE access="READ ONLY">Author</ROLE>
-        <INSTITUTION access="READ ONLY"/>
+        <FNAME access="READ_ONLY">Harry</FNAME>
+        <MNAME access="READ_ONLY">Jorge</MNAME>
+        <LNAME access="READ_ONLY">Potter</LNAME>
+        <ROLE access="READ_ONLY">Author</ROLE>
+        <INSTITUTION access="READ_ONLY"/>
       </INTELLCONT_AUTH>
-      <WEB_ADDRESS access="READ ONLY"/>
-      <REFEREED access="READ ONLY"/>
+      <WEB_ADDRESS access="READ_ONLY"/>
+      <REFEREED access="READ_ONLY"/>
     </INTELLCONT>
     <INTELLCONT>
-      <TITLE access="READ ONLY">Title3</TITLE>
-      <CONTYPE access="READ ONLY">Type3</CONTYPE>
-      <STATUS access="READ ONLY"/>
-      <JOURNAL_NAME access="READ ONLY">Journal Title</JOURNAL_NAME>
-      <ISBNISSN access="READ ONLY">032-42-5432-43</ISBNISSN>
-      <VOLUME access="READ ONLY">3</VOLUME>
-      <DTY_PUB access="READ ONLY">2010</DTY_PUB>
-      <DTM_PUB access="READ ONLY">January</DTM_PUB>
-      <DTD_PUB access="READ ONLY">3</DTD_PUB>
-      <ISSUE access="READ ONLY">2</ISSUE>
-      <PAGENUM access="READ ONLY">42-65</PAGENUM>
+      <TITLE access="READ_ONLY">Title3</TITLE>
+      <CONTYPE access="READ_ONLY">Type3</CONTYPE>
+      <STATUS access="READ_ONLY"/>
+      <JOURNAL_NAME access="READ_ONLY">Journal Title</JOURNAL_NAME>
+      <ISBNISSN access="READ_ONLY">032-42-5432-43</ISBNISSN>
+      <VOLUME access="READ_ONLY">3</VOLUME>
+      <DTY_PUB access="READ_ONLY">2010</DTY_PUB>
+      <DTM_PUB access="READ_ONLY">January</DTM_PUB>
+      <DTD_PUB access="READ_ONLY">3</DTD_PUB>
+      <ISSUE access="READ_ONLY">2</ISSUE>
+      <PAGENUM access="READ_ONLY">42-65</PAGENUM>
       <INTELLCONT_AUTH>
-        <FNAME access="READ ONLY">George</FNAME>
-        <MNAME access="READ ONLY">Joe</MNAME>
-        <LNAME access="READ ONLY">Gary</LNAME>
-        <ROLE access="READ ONLY">Author</ROLE>
-        <INSTITUTION access="READ ONLY"/>
+        <FNAME access="READ_ONLY">George</FNAME>
+        <MNAME access="READ_ONLY">Joe</MNAME>
+        <LNAME access="READ_ONLY">Gary</LNAME>
+        <ROLE access="READ_ONLY">Author</ROLE>
+        <INSTITUTION access="READ_ONLY"/>
       </INTELLCONT_AUTH>
-      <WEB_ADDRESS access="READ ONLY"/>
-      <REFEREED access="READ ONLY">false</REFEREED>
+      <WEB_ADDRESS access="READ_ONLY"/>
+      <REFEREED access="READ_ONLY">false</REFEREED>
     </INTELLCONT>
   </Record>
 </Data>
