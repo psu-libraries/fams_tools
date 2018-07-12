@@ -17,7 +17,7 @@ class PublicationListingsController < ApplicationController
     p_name = params[:publication_file].original_filename
     p_path = File.join('app', 'parsing_files', p_name)
     File.open(p_path, "wb") { |f| f.write(params[:publication_file].read) }
-  
+
     @citations = Anystyle.parse(p_path, :hash)
     pl = PublicationListing.new(:path => p_path)
     pl.save

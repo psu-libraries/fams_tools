@@ -135,7 +135,7 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
 
   create_table "works", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.bigint "publication_listing_id"
-    t.string "author"
+    t.text "author"
     t.string "title"
     t.string "journal"
     t.string "volume"
