@@ -72,17 +72,7 @@ set :keep_releases, 7
 # Default value for keep_releases is 5, setting to 7
 set :keep_releases, 7
 
-# Apache namespace to control apache
-namespace :apache do
-  [:stop, :start, :restart, :reload].each do |action|
-    desc "#{action.to_s.capitalize} Apache"
-    task action do
-      on roles(:web) do
-        execute "sudo service httpd #{action}"
-      end
-    end
-  end
-end
+
 
 desc "Check that we can access everything"
 task :check_write_permissions do
