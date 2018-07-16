@@ -20,6 +20,7 @@ require 'capistrano/rails' #rails (includes bundler, rails/assets and rails/migr
 require "capistrano/scm/git"
 install_plugin Capistrano::SCM::Git
 require 'capistrano/bundler'
+require 'capistrano/passenger'
 #require './lib/capistrano/submodule_strategy' #custom submodule strategy
 require 'capistrano/rbenv_install' #rbenv install plugin
 
@@ -33,4 +34,3 @@ Dir.glob('lib/capistrano/tasks/*.rake').each { |r| import r }
 # Enable tracing at all times
 Rake.application.options.trace = true
 Rake.application.options.backtrace = true
-
