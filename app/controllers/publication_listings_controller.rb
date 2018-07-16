@@ -18,9 +18,6 @@ class PublicationListingsController < ApplicationController
     p_path = File.join('app', 'parsing_files', p_name)
     File.open(p_path, "wb") { |f| f.write(params[:publication_file].read) }
 
-    logger.error "out: #{File.exist?(p_path)}"
-    logger.error "out: #{File.exist?(t_path)}"
-
     @citations = Anystyle.parse(p_path, :hash)
     pl = PublicationListing.new(:path => p_path)
     pl.save
