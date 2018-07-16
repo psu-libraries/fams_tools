@@ -11,14 +11,16 @@ class PublicationListingsController < ApplicationController
       t_name = params[:training_file].original_filename
       t_path = File.join('app', 'parsing_files', t_name)
       File.open(t_path, "wb") { |f| f.write(params[:training_file].read) }
-      Anystyle.parser.train(t_path, false)
+      anystyle = AnyStyle::Parser.new({training_data: t_path,
+                                       format:        :hash                               
+      })
     end
 
     p_name = params[:publication_file].original_filename
     p_path = File.join('app', 'parsing_files', p_name)
     File.open(p_path, "wb") { |f| f.write(params[:publication_file].read) }
 
-    @citations = Anystyle.parse(p_path, :hash)
+    @citations = anystyle.parse(p_path)
     pl = PublicationListing.new(:path => p_path)
     pl.save
 
