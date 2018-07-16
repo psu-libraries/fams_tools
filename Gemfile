@@ -74,6 +74,7 @@ group :development do
   gem 'capistrano-rails', '~> 1.2', require: false
   gem 'capistrano-rbenv', '~> 2.1', require: false
   gem 'capistrano-rbenv-install'
+  gem 'capistrano-passenger'
   gem 'web-console', '>= 3.3.0'
 end
 
