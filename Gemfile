@@ -10,7 +10,7 @@ gem 'rtesseract'
 gem 'docx', '~> 0.2.07', :require => ["docx"]
 gem 'redis'
 gem 'redis-namespace'
-gem 'anystyle-parser'
+gem 'anystyle'
 gem 'rubyzip', '~>1.1.0'
 gem 'axlsx', '2.1.0.pre'
 gem 'axlsx_rails'
