@@ -32,6 +32,7 @@ RSpec.describe GetPureData do
   <contributionToJournal uuid="" pureId="453" externalId="" externalIdSource="Scopus">
     <title>Cool Title</title>
     <type>Article</type>
+    <category>Research</category>
     <peerReview>true</peerReview>
     <publicationStatuses>
       <publicationStatus current="true">
@@ -63,6 +64,7 @@ RSpec.describe GetPureData do
   <contributionToJournal uuid="" pureId="321" externalId="" externalIdSource="Scopus">
     <title>Cooler Title</title>
     <type>Article</type>
+    <category>Journal</category>
     <peerReview>true</peerReview>
     <publicationStatuses>
       <publicationStatus current="true">
@@ -106,6 +108,7 @@ RSpec.describe GetPureData do
   <contributionToJournal uuid="" pureId="453" externalId="" externalIdSource="Scopus">
     <title>Cool Title</title>
     <type>Article</type>
+    <category>Research</category>
     <peerReview>true</peerReview>
     <publicationStatuses>
       <publicationStatus current="true">
@@ -148,6 +151,7 @@ RSpec.describe GetPureData do
 </result>', headers: {})
       get_pure_data_obj.call
       expect(get_pure_data_obj.pure_hash['abc123'][0][:persons][0][:extOrg]).to eq('University')
+      expect(get_pure_data_obj.pure_hash['abc123'][0][:cattype]).to eq('Research Article')
       expect(get_pure_data_obj.pure_hash['abc123'][0][:status]).to eq('Published')
       expect(get_pure_data_obj.pure_hash['abc123'][0][:articleNumber]).to eq('20')
       expect(get_pure_data_obj.pure_hash['abc123'][0][:peerReview]).to eq('true')
