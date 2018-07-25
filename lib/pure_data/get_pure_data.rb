@@ -10,9 +10,21 @@ class GetPureData
   def call
     get_pub_xmls
     xml_to_hash(pure_xmls)
+    format(pure_hash)
   end
 
   private
+
+  def format(pure_hash)
+    pure_hash.each do |k,v|
+      v.each do |publication|
+        format_type(publication)
+        format_month(publication)
+        format_reviewed(publication)
+        format_status(publication)
+      end
+    end
+  end
 
   def get_pub_xmls
     headers = {"Accept" => "application/xml", "api-key" => "#{Rails.application.config_for(:pure)[:api_key]}"}
@@ -20,6 +32,49 @@ class GetPureData
       url = "https://pennstate.pure.elsevier.com/ws/api/511/persons/#{id.pure_id}/research-outputs"
       response = HTTParty.get url, :headers => headers, :timeout => 100
       pure_xmls[id.faculty.access_id] = response
+    end
+  end
+
+  def format_type(publication)
+    if publication[:type] == 'Article' || publication[:type] == 'Review Article' || publication[:type] == "Review article"
+      publication[:type] = 'Journal Article, Academic Journal'
+    elsif publication[:type] == 'Conference article'
+      publication[:type] = 'Conference Proceeding'
+    elsif publication[:type] == 'Comment/debate' || publication[:type] == 'Letter' || publication[:type] == 'Short survey' || publication[:type] == 'Editorial'
+      publication[:type] = 'Other'
+    end
+  end
+
+  def format_month(publication)
+    publication[:dtm] = Date::MONTHNAMES[publication[:dtm].to_i]
+    case publication[:dtm]
+    when 'January'
+      publication[:dtm] = 'January (1st Quarter/Winter)'
+    when 'April'
+      publication[:dtm] = 'April (2nd Quarter/Spring)'
+    when 'July'
+      publication[:dtm] = 'July (3rd Quarter/Summer)'
+    when 'October'
+      publication[:dtm] = 'October (4th Quarter/Autumn)'
+    end
+  end
+
+  def format_reviewed(publication)
+    case publication[:peerReview]
+    when 'true'
+      publication[:peerReview] = 'Yes'
+    when 'false'
+      publication[:peerReview] = 'No'
+    else
+      publication[:peerReview] = 'Unknown'
+    end
+  end
+
+  def format_status(publication)
+    if publication[:status] =~ /Accepted\/In press.*/
+      publication[:status] = 'Accepted'
+    elsif publication[:status] == 'E-pub ahead of print'
+      publication[:status] = 'Published'
     end
   end
 

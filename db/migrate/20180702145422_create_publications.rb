@@ -14,7 +14,7 @@ class CreatePublications < ActiveRecord::Migration[5.1]
       t.integer :journal_num
       t.string :pages
       t.integer :articleNumber
-      t.boolean :peerReview
+      t.string :peerReview
       t.string :url
 
       t.timestamps
