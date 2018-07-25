@@ -4,7 +4,7 @@ class PureXMLBuilder
   attr_accessor :faculties
 
   def initialize
-    @faculties = Faculty.joins(:publications).group('id')
+    @faculties = Faculty.joins(:publications).group('id').where(college: ['CA','BK','LW','GV','MD','AB'])
   end
 
   def batched_xmls

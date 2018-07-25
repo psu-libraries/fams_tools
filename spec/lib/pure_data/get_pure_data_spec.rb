@@ -8,12 +8,14 @@ RSpec.describe GetPureData do
                              user_id:   '54321',
                              f_name:    'Kyle',
                              l_name:    'Hamburger',
-                             m_name:    'Greasy')
+                             m_name:    'Greasy',
+                             college:   'CA')
     faculty2 = Faculty.create(access_id: 'abc123',
                              user_id:   '4321',
                              f_name:    'George',
                              l_name:    'Foreman',
-                             m_name:    'Grill')
+                             m_name:    'Grill',
+                             college:   'BK')
 
     PureId.create(faculty: faculty1,
                   pure_id: 123)
@@ -111,7 +113,7 @@ RSpec.describe GetPureData do
       <publicationStatus current="true">
         <publicationStatus pureId="" uri="/dk/atira/pure/researchoutput/status/published">Accepted/In pressPublished</publicationStatus>
         <publicationDate>
-          <year>2011</year>
+          <year>20172017</year>
           <month>11</month>
           <day>11</day>
         </publicationDate>
@@ -152,6 +154,7 @@ RSpec.describe GetPureData do
       expect(get_pure_data_obj.pure_hash['xyz321'][0][:status]).to eq('Published')
       expect(get_pure_data_obj.pure_hash['abc123'][0][:dtm]).to eq('November')
       expect(get_pure_data_obj.pure_hash['xyz321'][1][:dtm]).to eq('October (4th Quarter/Autumn)')
+      expect(get_pure_data_obj.pure_hash['abc123'][0][:dty]).to eq('2017')
       expect(get_pure_data_obj.pure_hash['xyz321'][0][:type]).to eq('Conference Proceeding')
       expect(get_pure_data_obj.pure_hash['xyz321'][1][:type]).to eq('Journal Article, Academic Journal')
       expect(get_pure_data_obj.pure_hash['abc123'][0][:type]).to eq('Other')
