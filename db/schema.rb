@@ -67,6 +67,7 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
     t.string "f_name"
     t.string "l_name"
     t.string "m_name"
+    t.string "college"
     t.index ["access_id"], name: "index_faculties_on_access_id", unique: true
   end
 
