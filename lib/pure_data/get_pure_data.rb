@@ -101,7 +101,7 @@ class GetPureData
       noko_obj.xpath('result//contributionToJournal').each do |publication|
         if pure_hash[k]
           pure_hash[k] << {:title => publication.xpath('title').text,
-                           :type => publication.xpath('type').text,
+                           :cattype => publication.xpath('category').text + ' ' + publication.xpath('type').text,
                            :volume => publication.xpath('volume').text,
                            :status => publication.xpath('publicationStatuses//publicationStatus//publicationStatus').text,
                            :dty => publication.xpath('publicationStatuses//publicationDate//year').text,
@@ -123,7 +123,7 @@ class GetPureData
                            :url => publication.xpath('electronicVersions//electronicVersion//doi').text}
         else
           pure_hash[k] =  [{:title => publication.xpath('title').text,
-                           :type => publication.xpath('type').text,
+                           :cattype => publication.xpath('category').text + ' ' + publication.xpath('type').text,
                            :volume => publication.xpath('volume').text,
                            :status => publication.xpath('publicationStatuses//publicationStatus//publicationStatus').text,
                            :dty => publication.xpath('publicationStatuses//publicationDate//year').text,

@@ -65,6 +65,7 @@ RSpec.describe GetPureData do
   <contributionToJournal uuid="" pureId="321" externalId="" externalIdSource="Scopus">
     <title>Cooler Title</title>
     <type>Article</type>
+    <category>Journal</category>
     <peerReview>true</peerReview>
     <publicationStatuses>
       <publicationStatus current="true">
