@@ -87,7 +87,7 @@ RSpec.describe PurePopulateDB do
       expect(Publication.first.title).to eq('Title')
       expect(Faculty.find_by(access_id: 'abc123').publications.first.external_authors.first.f_name).to eq('Billy')
       expect(Faculty.find_by(access_id: 'xyz123').publications.first.external_authors.all.count).to eq(2)
-      expect(Faculty.find_by(access_id: 'xyz123').publications.last.peerReview).to eq(false)
+      expect(Faculty.find_by(access_id: 'xyz123').publications.last.peerReview).to eq("false")
       expect(Publication.first.status).to eq('Published')
     end
   end

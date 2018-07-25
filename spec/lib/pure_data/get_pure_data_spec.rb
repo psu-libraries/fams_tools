@@ -31,11 +31,11 @@ RSpec.describe GetPureData do
 <result xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://pennstate.pure.elsevier.com/ws/api/511/xsd/schema1.xsd">
   <contributionToJournal uuid="" pureId="453" externalId="" externalIdSource="Scopus">
     <title>Cool Title</title>
-    <type>Article</type>
+    <type>Conference article</type>
     <peerReview>true</peerReview>
     <publicationStatuses>
       <publicationStatus current="true">
-        <publicationStatus pureId="" uri="/dk/atira/pure/researchoutput/status/published">Published</publicationStatus>
+        <publicationStatus pureId="" uri="/dk/atira/pure/researchoutput/status/published">E-pub ahead of print</publicationStatus>
         <publicationDate>
           <year>2011</year>
           <month>11</month>
@@ -46,8 +46,8 @@ RSpec.describe GetPureData do
     <personAssociations>
       <personAssociation pureId="">
         <name>
-          <firstName>Bill</firstName>
-          <lastName>Frank</lastName>
+          <firstName>Kyle</firstName>
+          <lastName>Hamburger</lastName>
         </name>
         <personRole pureId="" uri="/dk/atira/pure/researchoutput/roles/contributiontojournal/author">Author</personRole>
       </personAssociation>
@@ -66,7 +66,7 @@ RSpec.describe GetPureData do
     <peerReview>true</peerReview>
     <publicationStatuses>
       <publicationStatus current="true">
-        <publicationStatus pureId="" uri="/dk/atira/pure/researchoutput/status/published">Published</publicationStatus>
+        <publicationStatus pureId="" uri="/dk/atira/pure/researchoutput/status/published">Accepted/In pressPublished</publicationStatus>
         <publicationDate>
           <year>2010</year>
           <month>10</month>
@@ -84,9 +84,9 @@ RSpec.describe GetPureData do
       </personAssociation>
       <personAssociation pureId="">
         <name>
-          <firstName>Terry</firstName>
-          <middleName>Jerry</middleName>
-          <lastName>Smith</lastName>
+          <firstName>George</firstName>
+          <middleName>Foreman</middleName>
+          <lastName>Grill</lastName>
         </name>
         <personRole pureId="" uri="/dk/atira/pure/researchoutput/roles/contributiontojournal/author">Author</personRole>
       </personAssociation>
@@ -105,11 +105,11 @@ RSpec.describe GetPureData do
 <result xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://pennstate.pure.elsevier.com/ws/api/511/xsd/schema1.xsd">
   <contributionToJournal uuid="" pureId="453" externalId="" externalIdSource="Scopus">
     <title>Cool Title</title>
-    <type>Article</type>
+    <type>Comment/debate</type>
     <peerReview>true</peerReview>
     <publicationStatuses>
       <publicationStatus current="true">
-        <publicationStatus pureId="" uri="/dk/atira/pure/researchoutput/status/published">Published</publicationStatus>
+        <publicationStatus pureId="" uri="/dk/atira/pure/researchoutput/status/published">Accepted/In pressPublished</publicationStatus>
         <publicationDate>
           <year>2011</year>
           <month>11</month>
@@ -148,9 +148,15 @@ RSpec.describe GetPureData do
 </result>', headers: {})
       get_pure_data_obj.call
       expect(get_pure_data_obj.pure_hash['abc123'][0][:persons][0][:extOrg]).to eq('University')
-      expect(get_pure_data_obj.pure_hash['abc123'][0][:status]).to eq('Published')
+      expect(get_pure_data_obj.pure_hash['abc123'][0][:status]).to eq('Accepted')
+      expect(get_pure_data_obj.pure_hash['xyz321'][0][:status]).to eq('Published')
+      expect(get_pure_data_obj.pure_hash['abc123'][0][:dtm]).to eq('November')
+      expect(get_pure_data_obj.pure_hash['xyz321'][1][:dtm]).to eq('October (4th Quarter/Autumn)')
+      expect(get_pure_data_obj.pure_hash['xyz321'][0][:type]).to eq('Conference Proceeding')
+      expect(get_pure_data_obj.pure_hash['xyz321'][1][:type]).to eq('Journal Article, Academic Journal')
+      expect(get_pure_data_obj.pure_hash['abc123'][0][:type]).to eq('Other')
       expect(get_pure_data_obj.pure_hash['abc123'][0][:articleNumber]).to eq('20')
-      expect(get_pure_data_obj.pure_hash['abc123'][0][:peerReview]).to eq('true')
+      expect(get_pure_data_obj.pure_hash['abc123'][0][:peerReview]).to eq('Yes')
       expect(get_pure_data_obj.pure_hash['abc123'][0][:url]).to eq('www.website.org')
     end
   end

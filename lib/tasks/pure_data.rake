@@ -16,7 +16,7 @@ namespace :pure_data do
 
   end
 
-   desc "Integrate data into AI through WebServices."
+  desc "Integrate data into AI through WebServices."
 
   task integrate: :environment do
     start = Time.now

@@ -91,7 +91,7 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
     t.integer "journal_num"
     t.string "pages"
     t.integer "articleNumber"
-    t.boolean "peerReview"
+    t.string "peerReview"
     t.string "url"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
