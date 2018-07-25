@@ -67,12 +67,14 @@ RSpec.describe PureXMLBuilder do
                    user_id:   '123456',
                    f_name:    'Allen',
                    l_name:    'Bird',
-                   m_name:    'Cat')
+                   m_name:    'Cat',
+                   college:   'CA')
     Faculty.create(access_id: 'xyz123',
                    user_id:   '54321',
                    f_name:    'Xylophone',
                    l_name:    'Zebra',
-                   m_name:    'Yawn')
+                   m_name:    'Yawn',
+                   college:   'CA')
   end
 
   let(:pure_xml_builder_obj) {PureXMLBuilder.new}

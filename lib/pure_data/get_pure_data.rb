@@ -17,11 +17,13 @@ class GetPureData
 
   def format(pure_hash)
     pure_hash.each do |k,v|
+      college = Faculty.find_by(access_id: k).college
       v.each do |publication|
-        format_type(publication)
-        format_month(publication)
+        format_type(publication, college)
+        format_month(publication, college)
+        format_status(publication, college)
         format_reviewed(publication)
-        format_status(publication)
+        format_year(publication)
       end
     end
   end
@@ -35,27 +37,33 @@ class GetPureData
     end
   end
 
-  def format_type(publication)
-    if publication[:type] == 'Article' || publication[:type] == 'Review Article' || publication[:type] == "Review article"
-      publication[:type] = 'Journal Article, Academic Journal'
-    elsif publication[:type] == 'Conference article'
-      publication[:type] = 'Conference Proceeding'
-    elsif publication[:type] == 'Comment/debate' || publication[:type] == 'Letter' || publication[:type] == 'Short survey' || publication[:type] == 'Editorial'
-      publication[:type] = 'Other'
+  def format_type(publication, college)
+    case college
+    when 'CA', 'BK', 'LW', 'GV', 'MD', 'AB'
+      if publication[:type] == 'Article' || publication[:type] == 'Review Article' || publication[:type] == "Review article"
+        publication[:type] = 'Journal Article, Academic Journal'
+      elsif publication[:type] == 'Conference article'
+        publication[:type] = 'Conference Proceeding'
+      elsif publication[:type] == 'Comment/debate' || publication[:type] == 'Letter' || publication[:type] == 'Short survey' || publication[:type] == 'Editorial'
+        publication[:type] = 'Other'
+      end
     end
   end
 
-  def format_month(publication)
+  def format_month(publication, college)
     publication[:dtm] = Date::MONTHNAMES[publication[:dtm].to_i]
-    case publication[:dtm]
-    when 'January'
-      publication[:dtm] = 'January (1st Quarter/Winter)'
-    when 'April'
-      publication[:dtm] = 'April (2nd Quarter/Spring)'
-    when 'July'
-      publication[:dtm] = 'July (3rd Quarter/Summer)'
-    when 'October'
-      publication[:dtm] = 'October (4th Quarter/Autumn)'
+    case college
+    when 'CA', 'BK', 'LW', 'GV', 'MD', 'AB'
+      case publication[:dtm]
+      when 'January'
+        publication[:dtm] = 'January (1st Quarter/Winter)'
+      when 'April'
+        publication[:dtm] = 'April (2nd Quarter/Spring)'
+      when 'July'
+        publication[:dtm] = 'July (3rd Quarter/Summer)'
+      when 'October'
+        publication[:dtm] = 'October (4th Quarter/Autumn)'
+      end
     end
   end
 
@@ -70,11 +78,20 @@ class GetPureData
     end
   end
 
-  def format_status(publication)
-    if publication[:status] =~ /Accepted\/In press.*/
-      publication[:status] = 'Accepted'
-    elsif publication[:status] == 'E-pub ahead of print'
-      publication[:status] = 'Published'
+  def format_status(publication, college)
+    case college
+    when 'CA', 'BK', 'LW', 'GV', 'MD', 'AB'
+      if publication[:status] =~ /Accepted\/In press.*/
+        publication[:status] = 'Accepted'
+      elsif publication[:status] == 'E-pub ahead of print'
+        publication[:status] = 'Published'
+      end
+    end
+  end
+
+  def format_year(publication)
+    if publication[:dty].length > 4
+      publication[:dty] = publication[:dty][0..3]
     end
   end
 
