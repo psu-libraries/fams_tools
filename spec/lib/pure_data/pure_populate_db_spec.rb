@@ -6,7 +6,7 @@ RSpec.describe PurePopulateDB do
   let(:fake_data) do
     hash = {
       'abc123' => [{:title => 'Title',
-                    :type => 'Type',
+                    :cattype => 'Research Article',
                     :volume => 34,
                     :dty => 2017,
                     :dtm => 'May',
@@ -25,7 +25,7 @@ RSpec.describe PurePopulateDB do
                     :peerReview => 'true',
                     :url => 'www.www.www'}],
       'xyz123' => [{:title => 'Title2',
-                    :type => 'Type2',
+                    :cattype => 'Research Article',
                     :volume => 12,
                     :dty => 2013,
                     :dtm => 'January',
@@ -89,6 +89,7 @@ RSpec.describe PurePopulateDB do
       expect(Faculty.find_by(access_id: 'xyz123').publications.first.external_authors.all.count).to eq(2)
       expect(Faculty.find_by(access_id: 'xyz123').publications.last.peerReview).to eq("false")
       expect(Publication.first.status).to eq('Published')
+      expect(Publication.first.cattype).to eq('Research Article')
     end
   end
 
