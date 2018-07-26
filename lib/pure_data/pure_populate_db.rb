@@ -18,7 +18,7 @@ class PurePopulateDB
         publication = Publication.create(faculty:       faculty,
                                          title:         pub[:title],
                                          status:        pub[:status],
-                                         cattype:       pub[:cattype],
+                                         category:      pub[:category],
                                          volume:        pub[:volume],
                                          dty:           pub[:dty],
                                          dtm:           pub[:dtm],

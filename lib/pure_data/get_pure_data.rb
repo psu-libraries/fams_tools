@@ -40,13 +40,17 @@ class GetPureData
 
   def format_type(publication, college)
     case college
-    when 'CA', 'BK', 'LW', 'GV', 'MD', 'AB'
-      if publication[:type] == 'Article' || publication[:type] == 'Review Article' || publication[:type] == "Review article"
-        publication[:type] = 'Journal Article, Academic Journal'
-      elsif publication[:type] == 'Conference article'
-        publication[:type] = 'Conference Proceeding'
-      elsif publication[:type] == 'Comment/debate' || publication[:type] == 'Letter' || publication[:type] == 'Short survey' || publication[:type] == 'Editorial'
-        publication[:type] = 'Other'
+    when 'CA', 'BK', 'LW', 'GV', 'MD', 'AB', 'AA', 'AG', 'EN'
+      if publication[:category] == 'Article' || publication[:type] == 'Review Article' || publication[:type] == "Review article"
+        publication[:category] = 'Journal Article, Academic Journal'
+      elsif publication[:category] == 'Conference article'
+        publication[:category] = 'Conference Proceeding'
+      elsif publication[:category] == 'Comment/debate' || publication[:type] == 'Letter' || publication[:type] == 'Short survey' || publication[:type] == 'Editorial'
+        publication[:category] = 'Other'
+      end
+    when 'EM'
+      if publication[:category] == 'Article' || publication[:type] == 'Review Article' || publication[:type] == "Review article"
+        publication[:category] = 'Journal Article'
       end
     end
   end
@@ -54,7 +58,7 @@ class GetPureData
   def format_month(publication, college)
     publication[:dtm] = Date::MONTHNAMES[publication[:dtm].to_i]
     case college
-    when 'CA', 'BK', 'LW', 'GV', 'MD', 'AB'
+    when 'AG', 'ED', 'CA', 'BK', 'SC', 'AA', 'BA', 'LW', 'EM', 'EN', 'GV', 'HH', 'MD', 'UC', 'AB', 'AL'
       case publication[:dtm]
       when 'January'
         publication[:dtm] = 'January (1st Quarter/Winter)'
@@ -81,7 +85,7 @@ class GetPureData
 
   def format_status(publication, college)
     case college
-    when 'CA', 'BK', 'LW', 'GV', 'MD', 'AB'
+    when 'AG', 'CA', 'LA', 'BK', 'SC', 'AA', 'BC', 'LW', 'EM', 'EN', 'GV', 'IST', 'MD', 'NR', 'UC', 'AB', 'AL'
       if publication[:status] =~ /Accepted\/In press.*/
         publication[:status] = 'Accepted'
       elsif publication[:status] == 'E-pub ahead of print'
@@ -108,7 +112,7 @@ class GetPureData
       noko_obj.xpath('result//contributionToJournal').each do |publication|
         if pure_hash[k]
           pure_hash[k] << {:title => publication.xpath('title').text,
-                           :type => publication.xpath('type').text,
+                           :category => publication.xpath('type').text,
                            :volume => publication.xpath('volume').text,
                            :status => publication.xpath('publicationStatuses//publicationStatus//publicationStatus').text,
                            :dty => publication.xpath('publicationStatuses//publicationDate//year').text,
@@ -130,7 +134,7 @@ class GetPureData
                            :url => publication.xpath('electronicVersions//electronicVersion//doi').text}
         else
           pure_hash[k] =  [{:title => publication.xpath('title').text,
-                           :type => publication.xpath('type').text,
+                           :category => publication.xpath('type').text,
                            :volume => publication.xpath('volume').text,
                            :status => publication.xpath('publicationStatuses//publicationStatus//publicationStatus').text,
                            :dty => publication.xpath('publicationStatuses//publicationDate//year').text,

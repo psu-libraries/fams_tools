@@ -4,7 +4,7 @@ class PureXMLBuilder
   attr_accessor :faculties
 
   def initialize
-    @faculties = Faculty.joins(:publications).group('id').where(college: ['CA','BK','LW','GV','MD','AB'])
+    @faculties = Faculty.joins(:publications).group('id').where(college: ['CA'])
   end
 
   def batched_xmls
@@ -25,7 +25,7 @@ class PureXMLBuilder
             faculty.publications.each do |publication|
               xml.INTELLCONT {
                 xml.TITLE_ publication.title, :access => "READ_ONLY"
-                xml.CONTYPE_ publication.cattype, :access => "READ_ONLY"
+                xml.CONTYPE_ publication.category, :access => "READ_ONLY"
                 xml.STATUS_ publication.status, :access => "READ_ONLY"
                 xml.JOURNAL_NAME_ publication.journal_title, :access => "READ_ONLY"
                 xml.ISBNISSN_ publication.journal_issn, :access => "READ_ONLY"
