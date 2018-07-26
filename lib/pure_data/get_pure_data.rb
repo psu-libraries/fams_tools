@@ -24,6 +24,7 @@ class GetPureData
         format_status(publication, college)
         format_reviewed(publication)
         format_year(publication)
+        format_day(publication)
       end
     end
   end
@@ -92,6 +93,12 @@ class GetPureData
   def format_year(publication)
     if publication[:dty].length > 4
       publication[:dty] = publication[:dty][0..3]
+    end
+  end
+
+  def format_day(publication)
+    if publication[:dtd].to_i > 31 || publication[:dtd].to_i < 1
+      publication[:dtd] = nil
     end
   end
 

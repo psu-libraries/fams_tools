@@ -115,7 +115,7 @@ RSpec.describe GetPureData do
         <publicationDate>
           <year>20172017</year>
           <month>11</month>
-          <day>11</day>
+          <day>32</day>
         </publicationDate>
       </publicationStatus>
     </publicationStatuses>
@@ -155,6 +155,7 @@ RSpec.describe GetPureData do
       expect(get_pure_data_obj.pure_hash['abc123'][0][:dtm]).to eq('November')
       expect(get_pure_data_obj.pure_hash['xyz321'][1][:dtm]).to eq('October (4th Quarter/Autumn)')
       expect(get_pure_data_obj.pure_hash['abc123'][0][:dty]).to eq('2017')
+      expect(get_pure_data_obj.pure_hash['abc123'][0][:dtd]).to eq(nil)
       expect(get_pure_data_obj.pure_hash['xyz321'][0][:type]).to eq('Conference Proceeding')
       expect(get_pure_data_obj.pure_hash['xyz321'][1][:type]).to eq('Journal Article, Academic Journal')
       expect(get_pure_data_obj.pure_hash['abc123'][0][:type]).to eq('Other')
