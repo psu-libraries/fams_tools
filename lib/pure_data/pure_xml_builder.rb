@@ -25,7 +25,7 @@ class PureXMLBuilder
             faculty.publications.each do |publication|
               xml.INTELLCONT {
                 xml.TITLE_ publication.title, :access => "READ_ONLY"
-                xml.CONTYPE_ publication.category, :access => "READ_ONLY"
+                xml.CONTYPE_ publication.cattype, :access => "READ_ONLY"
                 xml.STATUS_ publication.status, :access => "READ_ONLY"
                 xml.JOURNAL_NAME_ publication.journal_title, :access => "READ_ONLY"
                 xml.ISBNISSN_ publication.journal_issn, :access => "READ_ONLY"
