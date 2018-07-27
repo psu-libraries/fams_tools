@@ -40,17 +40,21 @@ class GetPureData
 
   def format_type(publication, college)
     case college
-    when 'CA', 'BK', 'LW', 'GV', 'MD', 'AB', 'AA', 'AG', 'EN'
-      if publication[:category] == 'Article' || publication[:type] == 'Review Article' || publication[:type] == "Review article"
+    when 'CA', 'BK', 'LW', 'GV', 'MD', 'AB', 'AA'
+      if publication[:category] == 'Article' || publication[:category] == 'Review Article' || publication[:category] == "Review article"
         publication[:category] = 'Journal Article, Academic Journal'
       elsif publication[:category] == 'Conference article'
         publication[:category] = 'Conference Proceeding'
-      elsif publication[:category] == 'Comment/debate' || publication[:type] == 'Letter' || publication[:type] == 'Short survey' || publication[:type] == 'Editorial'
+      elsif publication[:category] == 'Comment/debate' || publication[:category] == 'Letter' || publication[:category] == 'Short survey' || publication[:category] == 'Editorial'
         publication[:category] = 'Other'
       end
-    when 'EM'
-      if publication[:category] == 'Article' || publication[:type] == 'Review Article' || publication[:type] == "Review article"
+    when 'EM', 'AG', 'EN', 'HH'
+      if publication[:category] == 'Article' || publication[:category] == 'Review Article' || publication[:category] == "Review article"
         publication[:category] = 'Journal Article'
+      elsif publication[:category] == 'Conference article'
+        publication[:category] = 'Conference Proceeding'
+      elsif publication[:category] == 'Comment/debate' || publication[:category] == 'Letter' || publication[:category] == 'Short survey' || publication[:category] == 'Editorial'
+        publication[:category] = 'Other'
       end
     end
   end
@@ -85,7 +89,7 @@ class GetPureData
 
   def format_status(publication, college)
     case college
-    when 'AG', 'CA', 'LA', 'BK', 'SC', 'AA', 'BC', 'LW', 'EM', 'EN', 'GV', 'IST', 'MD', 'NR', 'UC', 'AB', 'AL'
+    when 'AG', 'CA', 'LA', 'BK', 'SC', 'AA', 'BC', 'LW', 'EM', 'EN', 'GV', 'IST', 'MD', 'NR', 'UC', 'AB', 'AL', 'HH'
       if publication[:status] =~ /Accepted\/In press.*/
         publication[:status] = 'Accepted'
       elsif publication[:status] == 'E-pub ahead of print'
