@@ -40,7 +40,7 @@ class GetPureData
 
   def format_type(publication, college)
     case college
-    when 'CA', 'BK', 'LW', 'GV', 'MD', 'AB', 'AA'
+    when 'CA', 'BK', 'LW', 'GV', 'MD', 'AB', 'AA', 'BA', 'BC', 'UC', 'AL'
       if publication[:category] == 'Article' || publication[:category] == 'Review Article' || publication[:category] == "Review article"
         publication[:category] = 'Journal Article, Academic Journal'
       elsif publication[:category] == 'Conference article'
@@ -48,7 +48,7 @@ class GetPureData
       elsif publication[:category] == 'Comment/debate' || publication[:category] == 'Letter' || publication[:category] == 'Short survey' || publication[:category] == 'Editorial'
         publication[:category] = 'Other'
       end
-    when 'EM', 'AG', 'EN', 'HH'
+    when 'EM', 'AG', 'EN', 'HH', 'ED', 'UL', 'CM', 'UE'
       if publication[:category] == 'Article' || publication[:category] == 'Review Article' || publication[:category] == "Review article"
         publication[:category] = 'Journal Article'
       elsif publication[:category] == 'Conference article'
@@ -62,7 +62,7 @@ class GetPureData
   def format_month(publication, college)
     publication[:dtm] = Date::MONTHNAMES[publication[:dtm].to_i]
     case college
-    when 'AG', 'ED', 'CA', 'BK', 'SC', 'AA', 'BA', 'LW', 'EM', 'EN', 'GV', 'HH', 'MD', 'UC', 'AB', 'AL'
+    when 'AG', 'ED', 'CA', 'BK', 'SC', 'AA', 'BA', 'LW', 'EM', 'EN', 'GV', 'HH', 'MD', 'UC', 'AB', 'AL', 'BC'
       case publication[:dtm]
       when 'January'
         publication[:dtm] = 'January (1st Quarter/Winter)'
@@ -89,7 +89,7 @@ class GetPureData
 
   def format_status(publication, college)
     case college
-    when 'AG', 'CA', 'LA', 'BK', 'SC', 'AA', 'BC', 'LW', 'EM', 'EN', 'GV', 'IST', 'MD', 'NR', 'UC', 'AB', 'AL', 'HH'
+    when 'AG', 'CA', 'LA', 'BK', 'SC', 'AA', 'BC', 'LW', 'EM', 'EN', 'GV', 'IST', 'MD', 'NR', 'UC', 'AB', 'AL', 'HH', 'BA', 'ED', 'UL', 'CM', 'UE'
       if publication[:status] =~ /Accepted\/In press.*/
         publication[:status] = 'Accepted'
       elsif publication[:status] == 'E-pub ahead of print'
@@ -102,10 +102,16 @@ class GetPureData
     if publication[:dty].length > 4
       publication[:dty] = publication[:dty][0..3]
     end
+    unless (publication[:dty].to_i >= 1950) && (publication[:dty].to_i <= Date.current.year + 5)
+      publication[:dty] = nil
+    end
   end
 
   def format_day(publication)
     if publication[:dtd].to_i > 31 || publication[:dtd].to_i < 1
+      publication[:dtd] = nil
+    end
+    if college = 'CM'
       publication[:dtd] = nil
     end
   end
