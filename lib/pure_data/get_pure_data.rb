@@ -40,7 +40,7 @@ class GetPureData
 
   def format_type(publication, college)
     case college
-    when 'CA', 'BK', 'LW', 'GV', 'MD', 'AB', 'AA', 'BA', 'BC', 'UC', 'AL'
+    when 'CA', 'BK', 'LW', 'GV', 'MD', 'AB', 'AA', 'BA', 'BC', 'UC', 'AL', 'LA', 'NR', 'IST'
       if publication[:category] == 'Article' || publication[:category] == 'Review Article' || publication[:category] == "Review article"
         publication[:category] = 'Journal Article, Academic Journal'
       elsif publication[:category] == 'Conference article'
@@ -48,13 +48,15 @@ class GetPureData
       elsif publication[:category] == 'Comment/debate' || publication[:category] == 'Letter' || publication[:category] == 'Short survey' || publication[:category] == 'Editorial'
         publication[:category] = 'Other'
       end
-    when 'EM', 'AG', 'EN', 'HH', 'ED', 'UL', 'CM', 'UE'
+    when 'EM', 'AG', 'EN', 'HH', 'ED', 'UL', 'CM', 'UE', 'SC'
       if publication[:category] == 'Article' || publication[:category] == 'Review Article' || publication[:category] == "Review article"
         publication[:category] = 'Journal Article'
       elsif publication[:category] == 'Conference article'
         publication[:category] = 'Conference Proceeding'
       elsif publication[:category] == 'Comment/debate' || publication[:category] == 'Letter' || publication[:category] == 'Short survey' || publication[:category] == 'Editorial'
         publication[:category] = 'Other'
+      elsif publication[:category] == 'Book/Film/Article review'
+        publication[:category] = 'Reviews, Book'
       end
     end
   end
@@ -109,9 +111,6 @@ class GetPureData
 
   def format_day(publication)
     if publication[:dtd].to_i > 31 || publication[:dtd].to_i < 1
-      publication[:dtd] = nil
-    end
-    if college = 'CM'
       publication[:dtd] = nil
     end
   end
