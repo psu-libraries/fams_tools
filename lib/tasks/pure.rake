@@ -1,10 +1,10 @@
 require 'pure/get_pure_ids'
-  
+
 namespace :pure do
 
   desc "Import pure IDs to our database"
 
-  task get_user_ids: :environment do
+  task get_pure_init: :environment do
 
     start = Time.now
     my_get_pure_ids = GetPureIDs.new

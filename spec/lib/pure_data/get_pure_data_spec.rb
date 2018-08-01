@@ -55,8 +55,10 @@ RSpec.describe GetPureData do
       </personAssociation>
     </personAssociations>
     <journalAssociation pureId="">
-      <title>Journal of Stuff</title>
-      <issn>5432-5432</issn>
+      <journal uuid="yo">
+        <title>Journal of Stuff</title>
+        <issn>5432-5432</issn>
+      </journal>
     </journalAssociation>
     <pages>45-60</pages>
     <volume>56</volume>
@@ -95,8 +97,10 @@ RSpec.describe GetPureData do
       </personAssociation>
     </personAssociations>
     <journalAssociation pureId="">
-      <title>Journal of Stuff</title>
-      <issn>431-4321</issn>
+      <journal uuid="dawg">
+        <title>Journal of Stuff</title>
+        <issn>431-4321</issn>
+      </journal>
     </journalAssociation>
     <pages>100-150</pages>
     <volume>3</volume>
@@ -140,8 +144,10 @@ RSpec.describe GetPureData do
       </electronicVersion>
     </electronicVersion>
     <journalAssociation pureId="">
-      <title>Journal of Stuff</title>
-      <issn>5432-5432</issn>
+      <journal uuid="ued83773-sj67884">
+        <title>Journal of Stuff</title>
+        <issn>5432-5432</issn>
+      </journal>
     </journalAssociation>
     <articleNumber>20</articleNumber>
     <pages>45-60</pages>
@@ -161,6 +167,7 @@ RSpec.describe GetPureData do
       expect(get_pure_data_obj.pure_hash['xyz321'][1][:category]).to eq('Journal Article, Academic Journal')
       expect(get_pure_data_obj.pure_hash['abc123'][0][:category]).to eq('Other')
       expect(get_pure_data_obj.pure_hash['abc123'][0][:articleNumber]).to eq('20')
+      expect(get_pure_data_obj.pure_hash['abc123'][0][:journaluuid]).to eq('ued83773-sj67884')
       expect(get_pure_data_obj.pure_hash['abc123'][0][:peerReview]).to eq('Yes')
       expect(get_pure_data_obj.pure_hash['abc123'][0][:url]).to eq('www.website.org')
     end

@@ -19,6 +19,7 @@ RSpec.describe PurePopulateDB do
                                  :extOrg => 'Org'}],
                     :journalTitle => 'Journal Title',
                     :journalIssn => '094-024903295-32',
+                    :journaluuid => 'abc123-098xyz',
                     :journalNum => 4,
                     :pages => '42-43',
                     :articleNumber => 35,
@@ -41,6 +42,7 @@ RSpec.describe PurePopulateDB do
                                   :role => 'Author'}],
                     :journalTitle => 'Journal Title2',
                     :journalIssn => '093-2351-432',
+                    :journaluuid => 'abc123-098xyz',
                     :journalNum => 3,
                     :pages => '42-46'},
                     {:title => 'Title3',
@@ -55,6 +57,7 @@ RSpec.describe PurePopulateDB do
                                   :role => 'Author'}],
                     :journalTitle => 'Journal Title',
                     :journalIssn => '032-42-5432-43',
+                    :journaluuid => 'abc123-098xyz',
                     :journalNum => 2,
                     :pages => '42-65',
                     :peerReview => 'false'}]}
@@ -73,6 +76,7 @@ RSpec.describe PurePopulateDB do
                    f_name:    'Xylophone',
                    l_name:    'Zebra',
                    m_name:    'Yawn')
+
   end
 
   describe '#populate' do
