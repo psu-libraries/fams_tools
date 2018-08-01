@@ -4,7 +4,7 @@ class PureXMLBuilder
   attr_accessor :faculties
 
   def initialize
-    @faculties = Faculty.joins(:publications).group('id').where(college: ['LA'])
+    @faculties = Faculty.joins(:publications).group('id').where(college: ['CA'])
   end
 
   def batched_xmls
@@ -18,13 +18,11 @@ class PureXMLBuilder
   private
 
   def build_xml(batch)
-    counter = 0
     builder = Nokogiri::XML::Builder.new(:encoding => 'UTF-8') do |xml|
       xml.Data {
         batch.each do |faculty|
           xml.Record('username' => faculty.access_id) {
             faculty.publications.each do |publication|
-              counter += 1
               xml.INTELLCONT {
                 xml.TITLE_ publication.title, :access => "READ_ONLY"
                 xml.CONTYPE_ publication.category, :access => "READ_ONLY"

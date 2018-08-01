@@ -26,10 +26,12 @@ class PurePopulateDB
                                          journal_title: pub[:journalTitle],
                                          journal_issn:  pub[:journalIssn],
                                          journal_num:   pub[:journalNum],
+                                         journal_uuid:  pub[:journaluuid],
                                          pages:         pub[:pages],
                                          articleNumber: pub[:articleNumber],
                                          peerReview:    pub[:peerReview],
-                                         url:           pub[:url]
+                                         url:           pub[:url],
+                                         publisher:     nil
                                          )
 
         pub[:persons].each do |person|

@@ -19,6 +19,7 @@ RSpec.describe PureXMLBuilder do
                                  :extOrg => 'Org'}],
                     :journalTitle => 'Journal Title',
                     :journalIssn => '094-024903295-32',
+                    :journaluuid => '123abc',
                     :journalNum => 4,
                     :pages => '42-43',
                     :articleNumber => 35,
@@ -41,6 +42,7 @@ RSpec.describe PureXMLBuilder do
                                   :role => 'Author'}],
                     :journalTitle => 'Journal Title2',
                     :journalIssn => '093-2351-432',
+                    :journaluuid => '123abc',
                     :journalNum => 3,
                     :pages => '42-46'},
                     {:title => 'Title3',
@@ -55,6 +57,7 @@ RSpec.describe PureXMLBuilder do
                                   :role => 'Author'}],
                     :journalTitle => 'Journal Title',
                     :journalIssn => '032-42-5432-43',
+                    :journaluuid => '123abc',
                     :journalNum => 2,
                     :pages => '42-65',
                     :peerReview => 'false'}]}
@@ -85,23 +88,24 @@ RSpec.describe PureXMLBuilder do
         faculty = Faculty.find_by(access_id: k)
 
         v.each do |pub|
-
           publication = Publication.create(faculty:       faculty,
-                                          title:         pub[:title],
-                                          status:        pub[:status],
-                                          category:      pub[:category],
-                                          volume:        pub[:volume],
-                                          dty:           pub[:dty],
-                                          dtm:           pub[:dtm],
-                                          dtd:           pub[:dtd],
-                                          journal_title: pub[:journalTitle],
-                                          journal_issn:  pub[:journalIssn],
-                                          journal_num:   pub[:journalNum],
-                                          pages:         pub[:pages],
-                                          articleNumber: pub[:articleNumber],
-                                          peerReview:    pub[:peerReview],
-                                          url:           pub[:url]
-                                          )
+                                           title:         pub[:title],
+                                           status:        pub[:status],
+                                           category:      pub[:category],
+                                           volume:        pub[:volume],
+                                           dty:           pub[:dty],
+                                           dtm:           pub[:dtm],
+                                           dtd:           pub[:dtd],
+                                           journal_title: pub[:journalTitle],
+                                           journal_issn:  pub[:journalIssn],
+                                           journal_num:   pub[:journalNum],
+                                           journal_uuid:  pub[:journaluuid],
+                                           pages:         pub[:pages],
+                                           articleNumber: pub[:articleNumber],
+                                           peerReview:    pub[:peerReview],
+                                           url:           pub[:url],
+                                           publisher:     nil
+                                           )
 
           pub[:persons].each do |person|
 

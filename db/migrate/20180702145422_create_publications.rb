@@ -2,6 +2,7 @@ class CreatePublications < ActiveRecord::Migration[5.1]
   def change
     create_table :publications do |t|
       t.bigint :faculty_id
+      t.bigint :journal_id
       t.text :title
       t.string :category
       t.integer :volume
@@ -12,10 +13,12 @@ class CreatePublications < ActiveRecord::Migration[5.1]
       t.string :journal_title
       t.string :journal_issn
       t.integer :journal_num
+      t.string :journal_uuid
       t.string :pages
       t.integer :articleNumber
       t.string :peerReview
       t.string :url
+      t.string :publisher
 
       t.timestamps
     end
