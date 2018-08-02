@@ -4,7 +4,7 @@ class PureXMLBuilder
   attr_accessor :faculties
 
   def initialize
-    @faculties = Faculty.joins(:publications).group('id').where(college: ['CA'])
+    @faculties = Faculty.joins(:publications).group('id').where.not(college: ['LA'])
   end
 
   def batched_xmls
@@ -46,6 +46,7 @@ class PureXMLBuilder
                     xml.INSTITUTION_ author.extOrg, :access => "READ_ONLY"
                   }
                 end
+                xml.PUBLISHER_ publication.publisher, :access => "READ_ONLY"
                 xml.WEB_ADDRESS_ publication.url, :access => "READ_ONLY"
                 xml.REFEREED_ publication.peerReview, :access => "READ_ONLY"
               }
