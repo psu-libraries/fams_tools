@@ -21,6 +21,7 @@ RSpec.describe PureXMLBuilder do
                     :journalIssn => '094-024903295-32',
                     :journaluuid => '123abc',
                     :journalNum => 4,
+                    :publisher => 'Publisher',
                     :pages => '42-43',
                     :articleNumber => 35,
                     :peerReview => 'true',
@@ -44,6 +45,7 @@ RSpec.describe PureXMLBuilder do
                     :journalIssn => '093-2351-432',
                     :journaluuid => '123abc',
                     :journalNum => 3,
+                    :publisher => 'Publisher',
                     :pages => '42-46'},
                     {:title => 'Title3',
                     :category => 'Type3',
@@ -59,6 +61,7 @@ RSpec.describe PureXMLBuilder do
                     :journalIssn => '032-42-5432-43',
                     :journaluuid => '123abc',
                     :journalNum => 2,
+                    :publisher => 'Publisher',
                     :pages => '42-65',
                     :peerReview => 'false'}]}
 
@@ -104,7 +107,7 @@ RSpec.describe PureXMLBuilder do
                                            articleNumber: pub[:articleNumber],
                                            peerReview:    pub[:peerReview],
                                            url:           pub[:url],
-                                           publisher:     nil
+                                           publisher:     pub[:publisher]
                                            )
 
           pub[:persons].each do |person|
@@ -142,6 +145,7 @@ RSpec.describe PureXMLBuilder do
         <ROLE access="READ_ONLY">Author</ROLE>
         <INSTITUTION access="READ_ONLY">Org</INSTITUTION>
       </INTELLCONT_AUTH>
+      <PUBLISHER access="READ_ONLY">Publisher</PUBLISHER>
       <WEB_ADDRESS access="READ_ONLY">www.www.www</WEB_ADDRESS>
       <REFEREED access="READ_ONLY">true</REFEREED>
     </INTELLCONT>
@@ -173,6 +177,7 @@ RSpec.describe PureXMLBuilder do
         <ROLE access="READ_ONLY">Author</ROLE>
         <INSTITUTION access="READ_ONLY"/>
       </INTELLCONT_AUTH>
+      <PUBLISHER access="READ_ONLY">Publisher</PUBLISHER>
       <WEB_ADDRESS access="READ_ONLY"/>
       <REFEREED access="READ_ONLY"/>
     </INTELLCONT>
@@ -195,6 +200,7 @@ RSpec.describe PureXMLBuilder do
         <ROLE access="READ_ONLY">Author</ROLE>
         <INSTITUTION access="READ_ONLY"/>
       </INTELLCONT_AUTH>
+      <PUBLISHER access="READ_ONLY">Publisher</PUBLISHER>
       <WEB_ADDRESS access="READ_ONLY"/>
       <REFEREED access="READ_ONLY">false</REFEREED>
     </INTELLCONT>

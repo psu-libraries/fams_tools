@@ -1,3 +1,4 @@
+require 'pure_data/get_pure_ids'
 require 'pure_data/pure_populate_db'
 require 'pure_data/get_pure_publishers'
 require 'pure_data/pure_xml_builder'
