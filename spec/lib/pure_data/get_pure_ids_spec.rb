@@ -1,5 +1,5 @@
 require 'rails_helper'
-require 'pure/get_pure_ids'
+require 'pure_data/get_pure_ids'
 
 RSpec.describe GetPureIDs do
   
