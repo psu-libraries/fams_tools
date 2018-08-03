@@ -80,7 +80,6 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
 
   create_table "publications", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.bigint "faculty_id"
-    t.bigint "journal_id"
     t.text "title"
     t.string "category"
     t.integer "volume"
