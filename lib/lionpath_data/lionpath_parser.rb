@@ -3,9 +3,10 @@ require 'csv'
 
 class LionPathParser
 
-  attr_accessor :csv_hash, :active_users
+  attr_accessor :csv_hash, :active_users, :csv_object
 
-  def initialize(csv_object = CSV.read('data/SP18-tabdel.txt', encoding: "ISO-8859-1:UTF-8", col_sep: "\t"))
+  def initialize(filepath = 'data/SP18-tabdel.txt')
+    @csv_object = CSV.read(filepath, encoding: "ISO-8859-1:UTF-8", col_sep: "\t") 
     @csv_hash = convert_csv_to_hash(csv_object)
     @active_users = Faculty.pluck(:access_id)
     @flagged = []
