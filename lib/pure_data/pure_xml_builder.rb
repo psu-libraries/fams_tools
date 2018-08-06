@@ -9,7 +9,7 @@ class PureXMLBuilder
 
   def batched_xmls
     xml_batches = []
-    faculties.each_slice(2) do |batch|
+    faculties.each_slice(20) do |batch|
       xml_batches << build_xml(batch)
     end
     return xml_batches
