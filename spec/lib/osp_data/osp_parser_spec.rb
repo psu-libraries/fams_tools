@@ -75,10 +75,8 @@ RSpec.describe OspParser do
                    m_name:    'Bill')
   end
 
-  let(:osp_parser_obj1) {OspParser.new(data_book1)}
-  let(:osp_parser_obj2) {OspParser.new(data_book2)}
-  let(:osp_parser_obj3) {OspParser.new(data_book3)}
-  let(:osp_parser_obj4) {OspParser.new(data_book4)}
+
+  let(:osp_parser_obj) {OspParser.new}
 
   describe "#format" do
     it "should convert nils to ' ' and 
@@ -89,56 +87,60 @@ RSpec.describe OspParser do
         should convert dates to be sql friendly
         should change 'Pending Award' and 'Pending Proposal' status to 'Pending'
         should remove start and end dates for any contract that was not 'Awarded'" do
-      osp_parser_obj1.format
-      expect(osp_parser_obj1.xlsx_hash[0]['grantcontract']).to eq('')
-      expect(osp_parser_obj1.xlsx_hash[1]['grantcontract']).to eq('Grant')
-      expect(osp_parser_obj1.xlsx_hash[0]['accessid']).to eq('abc123')
-      expect(osp_parser_obj1.xlsx_hash[1]['accessid']).to eq('mar26')
-      expect(osp_parser_obj1.xlsx_hash[2]['accessid']).to eq('jan2')
-      expect(osp_parser_obj1.xlsx_hash[0]['role']).to eq('Co-Principal Investigator')
-      expect(osp_parser_obj1.xlsx_hash[1]['role']).to eq('Core Faculty')
-      expect(osp_parser_obj1.xlsx_hash[2]['role']).to eq('Post Doctoral Associate')
-      expect(osp_parser_obj1.xlsx_hash[3]['role']).to eq('Unknown')
-      expect(osp_parser_obj1.xlsx_hash[0]['submitted']).to eq('')
-      expect(osp_parser_obj1.xlsx_hash[0]['awarded']).to eq('')
-      expect(osp_parser_obj1.xlsx_hash[0]['startdate']).to eq('2017-01-01')
-      expect(osp_parser_obj1.xlsx_hash[0]['enddate']).to eq('2018-12-12')
-      expect(osp_parser_obj1.xlsx_hash[3]['status']).to eq('Pending')
-      expect(osp_parser_obj1.xlsx_hash[1]['status']).to eq('Pending')
-      expect(osp_parser_obj1.xlsx_hash[2]['startdate']).to eq('2017-01-01')
-      expect(osp_parser_obj1.xlsx_hash[2]['enddate']).to eq('2018-12-12')
-      expect(osp_parser_obj1.xlsx_hash[3]['startdate']).to eq('')
-      expect(osp_parser_obj1.xlsx_hash[3]['enddate']).to eq('')
-      expect(osp_parser_obj1.xlsx_hash[0].length).to eq(25)
-      expect(osp_parser_obj1.xlsx_hash[1].length).to eq(25)
-      expect(osp_parser_obj1.xlsx_hash[0]['notfunded']).to eq('2015-02-01')
+      allow(Creek::Book).to receive_message_chain(:new, :sheets, :[], :rows).and_return(data_book1)
+      osp_parser_obj.format
+      expect(osp_parser_obj.xlsx_hash[0]['grantcontract']).to eq('')
+      expect(osp_parser_obj.xlsx_hash[1]['grantcontract']).to eq('Grant')
+      expect(osp_parser_obj.xlsx_hash[0]['accessid']).to eq('abc123')
+      expect(osp_parser_obj.xlsx_hash[1]['accessid']).to eq('mar26')
+      expect(osp_parser_obj.xlsx_hash[2]['accessid']).to eq('jan2')
+      expect(osp_parser_obj.xlsx_hash[0]['role']).to eq('Co-Principal Investigator')
+      expect(osp_parser_obj.xlsx_hash[1]['role']).to eq('Core Faculty')
+      expect(osp_parser_obj.xlsx_hash[2]['role']).to eq('Post Doctoral Associate')
+      expect(osp_parser_obj.xlsx_hash[3]['role']).to eq('Unknown')
+      expect(osp_parser_obj.xlsx_hash[0]['submitted']).to eq('')
+      expect(osp_parser_obj.xlsx_hash[0]['awarded']).to eq('')
+      expect(osp_parser_obj.xlsx_hash[0]['startdate']).to eq('2017-01-01')
+      expect(osp_parser_obj.xlsx_hash[0]['enddate']).to eq('2018-12-12')
+      expect(osp_parser_obj.xlsx_hash[3]['status']).to eq('Pending')
+      expect(osp_parser_obj.xlsx_hash[1]['status']).to eq('Pending')
+      expect(osp_parser_obj.xlsx_hash[2]['startdate']).to eq('2017-01-01')
+      expect(osp_parser_obj.xlsx_hash[2]['enddate']).to eq('2018-12-12')
+      expect(osp_parser_obj.xlsx_hash[3]['startdate']).to eq('')
+      expect(osp_parser_obj.xlsx_hash[3]['enddate']).to eq('')
+      expect(osp_parser_obj.xlsx_hash[0].length).to eq(25)
+      expect(osp_parser_obj.xlsx_hash[1].length).to eq(25)
+      expect(osp_parser_obj.xlsx_hash[0]['notfunded']).to eq('2015-02-01')
     end
   end
 
   context "#filter_by_date" do
 
     it "should remove rows with 'submitted' dates <= 2011" do
-      osp_parser_obj2.filter_by_date
-      expect(osp_parser_obj2.xlsx_hash.count).to eq(1)
+      allow(Creek::Book).to receive_message_chain(:new, :sheets, :[], :rows).and_return(data_book2)
+      osp_parser_obj.filter_by_date
+      expect(osp_parser_obj.xlsx_hash.count).to eq(1)
     end
   end
 
   context "#filter_by_user" do
 
     it "should remove rows that contain non-active users" do
-      osp_parser_obj3.filter_by_user
-      expect(osp_parser_obj3.xlsx_hash.count).to eq(1)
-      expect(osp_parser_obj3.xlsx_hash[0]['accessid']).to eq('zzz999')
-      expect(osp_parser_obj3.xlsx_hash[0].length).to eq(25)
+      allow(Creek::Book).to receive_message_chain(:new, :sheets, :[], :rows).and_return(data_book3)
+      osp_parser_obj.filter_by_user
+      expect(osp_parser_obj.xlsx_hash.count).to eq(1)
+      expect(osp_parser_obj.xlsx_hash[0]['accessid']).to eq('zzz999')
+      expect(osp_parser_obj.xlsx_hash[0].length).to eq(25)
     end
   end
 
   context "#filter_by_status" do
 
     it "should remove rows with 'Purged' or 'Withdrawn' status" do
-      osp_parser_obj4.filter_by_status
-      expect(osp_parser_obj4.xlsx_hash.count).to eq(1)
-      expect(osp_parser_obj4.xlsx_hash[0]['status']).to eq('Awarded')
+      allow(Creek::Book).to receive_message_chain(:new, :sheets, :[], :rows).and_return(data_book4)
+      osp_parser_obj.filter_by_status
+      expect(osp_parser_obj.xlsx_hash.count).to eq(1)
+      expect(osp_parser_obj.xlsx_hash[0]['status']).to eq('Awarded')
     end
   end
 

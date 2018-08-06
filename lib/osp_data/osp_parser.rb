@@ -2,9 +2,10 @@ require 'spreadsheet'
 require 'creek'
 
 class OspParser
-  attr_accessor :xlsx_hash, :active_users
+  attr_accessor :xlsx_hash, :active_users, :xlsx_obj
 
-  def initialize(xlsx_obj = Creek::Book.new('data/dmresults.xlsx').sheets[0].rows)
+  def initialize(filepath = 'data/dmresults.xlsx')
+    @xlsx_obj = Creek::Book.new(filepath).sheets[0].rows
     @xlsx_hash = convert_xlsx_to_hash(xlsx_obj)
     @active_users = Faculty.pluck(:access_id)
   end

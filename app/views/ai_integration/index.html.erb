@@ -1,0 +1,9 @@
+<%= link_to "<<Back", root_path %>
+<h1>AI-Integration</h1>
+<p>Contract/Grant Integration</p>
+<%= form_with :url => { :action => "integrate" } do |form| %>
+  <p> <%= label(:congrant_file, text = "OSP Data File") %><%= form.file_field :congrant_file %> </p>
+  <p> <%= form.submit "Run Integration" %> </p>
+<% end %>
+<p>Courses Taught Integration</p>
+<p>Publications Integration</p>
