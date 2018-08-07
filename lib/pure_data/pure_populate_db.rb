@@ -18,7 +18,7 @@ class PurePopulateDB
         publication = Publication.create(faculty:       faculty,
                                          title:         pub[:title],
                                          status:        pub[:status],
-                                         category:      pub[:type],
+                                         category:      pub[:category],
                                          volume:        pub[:volume],
                                          dty:           pub[:dty],
                                          dtm:           pub[:dtm],
@@ -26,10 +26,12 @@ class PurePopulateDB
                                          journal_title: pub[:journalTitle],
                                          journal_issn:  pub[:journalIssn],
                                          journal_num:   pub[:journalNum],
+                                         journal_uuid:  pub[:journaluuid],
                                          pages:         pub[:pages],
                                          articleNumber: pub[:articleNumber],
                                          peerReview:    pub[:peerReview],
-                                         url:           pub[:url]
+                                         url:           pub[:url],
+                                         publisher:     nil
                                          )
 
         pub[:persons].each do |person|

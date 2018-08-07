@@ -67,6 +67,7 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
     t.string "f_name"
     t.string "l_name"
     t.string "m_name"
+    t.string "college"
     t.index ["access_id"], name: "index_faculties_on_access_id", unique: true
   end
 
@@ -89,10 +90,12 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
     t.string "journal_title"
     t.string "journal_issn"
     t.integer "journal_num"
+    t.string "journal_uuid"
     t.string "pages"
     t.integer "articleNumber"
-    t.boolean "peerReview"
+    t.string "peerReview"
     t.string "url"
+    t.string "publisher"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["faculty_id"], name: "fk_rails_8c9222b60f"

@@ -6,7 +6,7 @@ RSpec.describe PureXMLBuilder do
   let(:data_sets) do
     hash = {
       'abc123' => [{:title => 'Title',
-                    :type => 'Type',
+                    :category => 'Type',
                     :volume => 34,
                     :dty => 2017,
                     :dtm => 'May',
@@ -19,13 +19,15 @@ RSpec.describe PureXMLBuilder do
                                  :extOrg => 'Org'}],
                     :journalTitle => 'Journal Title',
                     :journalIssn => '094-024903295-32',
+                    :journaluuid => '123abc',
                     :journalNum => 4,
+                    :publisher => 'Publisher',
                     :pages => '42-43',
                     :articleNumber => 35,
                     :peerReview => 'true',
                     :url => 'www.www.www'}],
       'xyz123' => [{:title => 'Title2',
-                    :type => 'Type2',
+                    :category => 'Type2',
                     :volume => 12,
                     :dty => 2013,
                     :dtm => 'January',
@@ -41,10 +43,12 @@ RSpec.describe PureXMLBuilder do
                                   :role => 'Author'}],
                     :journalTitle => 'Journal Title2',
                     :journalIssn => '093-2351-432',
+                    :journaluuid => '123abc',
                     :journalNum => 3,
+                    :publisher => 'Publisher',
                     :pages => '42-46'},
                     {:title => 'Title3',
-                    :type => 'Type3',
+                    :category => 'Type3',
                     :volume => 3,
                     :dty => 2010,
                     :dtm => 'January',
@@ -55,7 +59,9 @@ RSpec.describe PureXMLBuilder do
                                   :role => 'Author'}],
                     :journalTitle => 'Journal Title',
                     :journalIssn => '032-42-5432-43',
+                    :journaluuid => '123abc',
                     :journalNum => 2,
+                    :publisher => 'Publisher',
                     :pages => '42-65',
                     :peerReview => 'false'}]}
 
@@ -67,12 +73,14 @@ RSpec.describe PureXMLBuilder do
                    user_id:   '123456',
                    f_name:    'Allen',
                    l_name:    'Bird',
-                   m_name:    'Cat')
+                   m_name:    'Cat',
+                   college:   'CA')
     Faculty.create(access_id: 'xyz123',
                    user_id:   '54321',
                    f_name:    'Xylophone',
                    l_name:    'Zebra',
-                   m_name:    'Yawn')
+                   m_name:    'Yawn',
+                   college:   'CA')
   end
 
   let(:pure_xml_builder_obj) {PureXMLBuilder.new}
@@ -83,23 +91,24 @@ RSpec.describe PureXMLBuilder do
         faculty = Faculty.find_by(access_id: k)
 
         v.each do |pub|
-
           publication = Publication.create(faculty:       faculty,
-                                          title:         pub[:title],
-                                          status:        pub[:status],
-                                          category:      pub[:type],
-                                          volume:        pub[:volume],
-                                          dty:           pub[:dty],
-                                          dtm:           pub[:dtm],
-                                          dtd:           pub[:dtd],
-                                          journal_title: pub[:journalTitle],
-                                          journal_issn:  pub[:journalIssn],
-                                          journal_num:   pub[:journalNum],
-                                          pages:         pub[:pages],
-                                          articleNumber: pub[:articleNumber],
-                                          peerReview:    pub[:peerReview],
-                                          url:           pub[:url]
-                                          )
+                                           title:         pub[:title],
+                                           status:        pub[:status],
+                                           category:      pub[:category],
+                                           volume:        pub[:volume],
+                                           dty:           pub[:dty],
+                                           dtm:           pub[:dtm],
+                                           dtd:           pub[:dtd],
+                                           journal_title: pub[:journalTitle],
+                                           journal_issn:  pub[:journalIssn],
+                                           journal_num:   pub[:journalNum],
+                                           journal_uuid:  pub[:journaluuid],
+                                           pages:         pub[:pages],
+                                           articleNumber: pub[:articleNumber],
+                                           peerReview:    pub[:peerReview],
+                                           url:           pub[:url],
+                                           publisher:     pub[:publisher]
+                                           )
 
           pub[:persons].each do |person|
 
@@ -136,6 +145,7 @@ RSpec.describe PureXMLBuilder do
         <ROLE access="READ_ONLY">Author</ROLE>
         <INSTITUTION access="READ_ONLY">Org</INSTITUTION>
       </INTELLCONT_AUTH>
+      <PUBLISHER access="READ_ONLY">Publisher</PUBLISHER>
       <WEB_ADDRESS access="READ_ONLY">www.www.www</WEB_ADDRESS>
       <REFEREED access="READ_ONLY">true</REFEREED>
     </INTELLCONT>
@@ -167,6 +177,7 @@ RSpec.describe PureXMLBuilder do
         <ROLE access="READ_ONLY">Author</ROLE>
         <INSTITUTION access="READ_ONLY"/>
       </INTELLCONT_AUTH>
+      <PUBLISHER access="READ_ONLY">Publisher</PUBLISHER>
       <WEB_ADDRESS access="READ_ONLY"/>
       <REFEREED access="READ_ONLY"/>
     </INTELLCONT>
@@ -189,6 +200,7 @@ RSpec.describe PureXMLBuilder do
         <ROLE access="READ_ONLY">Author</ROLE>
         <INSTITUTION access="READ_ONLY"/>
       </INTELLCONT_AUTH>
+      <PUBLISHER access="READ_ONLY">Publisher</PUBLISHER>
       <WEB_ADDRESS access="READ_ONLY"/>
       <REFEREED access="READ_ONLY">false</REFEREED>
     </INTELLCONT>

@@ -56,10 +56,6 @@ This app will pull data from various sources, store the data in a database, and 
 
   4. `rake activity_insight:get_user_data`
 
-**Importing Pure User IDs**
-
-  1. `rake pure:get_user_ids`
-
 **Formatting and Populating Database with OSP Data**
 
   1. Download OSP data in csv format: [dmresults.csv](https://service.sims.psu.edu/digitalmeasures/dmresults.csv)
@@ -74,7 +70,7 @@ This app will pull data from various sources, store the data in a database, and 
 
 **Formatting and Populating Database with LionPath Data**
 
-  1. Download LionPath Spring 2018 data from box and store in /data/.
+  1. Download LionPath Spring 2018 (or whatever quarter and year) data from box and store in /data/.
 
   2. Convert 'Instructor Campus ID' column to a date formatted: dd-mmm-yyyy
 
@@ -82,9 +78,9 @@ This app will pull data from various sources, store the data in a database, and 
 
   4. `rake lionpath_data:format_and_populate`
 
-**Population Database with Pure Data**
+**Formatting and Populating Database with Pure Data**
 
-  1. `rake pure_data:populate_db`
+  1. `rake pure_data:format_and_populate`
  
 **Removing Duplicate CONGRANT Data**
 
@@ -106,3 +102,6 @@ This app will pull data from various sources, store the data in a database, and 
 
   1. `rake lionpath_data:integrate`
 
+**Integrating Pure Data into AI**
+
+  1. `rake pure_data:integrate`

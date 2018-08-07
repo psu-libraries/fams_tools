@@ -6,7 +6,7 @@ RSpec.describe PurePopulateDB do
   let(:fake_data) do
     hash = {
       'abc123' => [{:title => 'Title',
-                    :type => 'Type',
+                    :category => 'Research Article',
                     :volume => 34,
                     :dty => 2017,
                     :dtm => 'May',
@@ -19,13 +19,14 @@ RSpec.describe PurePopulateDB do
                                  :extOrg => 'Org'}],
                     :journalTitle => 'Journal Title',
                     :journalIssn => '094-024903295-32',
+                    :journaluuid => 'abc123-098xyz',
                     :journalNum => 4,
                     :pages => '42-43',
                     :articleNumber => 35,
                     :peerReview => 'true',
                     :url => 'www.www.www'}],
       'xyz123' => [{:title => 'Title2',
-                    :type => 'Type2',
+                    :category => 'Research Article',
                     :volume => 12,
                     :dty => 2013,
                     :dtm => 'January',
@@ -41,10 +42,11 @@ RSpec.describe PurePopulateDB do
                                   :role => 'Author'}],
                     :journalTitle => 'Journal Title2',
                     :journalIssn => '093-2351-432',
+                    :journaluuid => 'abc123-098xyz',
                     :journalNum => 3,
                     :pages => '42-46'},
                     {:title => 'Title3',
-                    :type => 'Type3',
+                    :category => 'Type3',
                     :volume => 3,
                     :dty => 2010,
                     :dtm => 'January',
@@ -55,6 +57,7 @@ RSpec.describe PurePopulateDB do
                                   :role => 'Author'}],
                     :journalTitle => 'Journal Title',
                     :journalIssn => '032-42-5432-43',
+                    :journaluuid => 'abc123-098xyz',
                     :journalNum => 2,
                     :pages => '42-65',
                     :peerReview => 'false'}]}
@@ -73,6 +76,7 @@ RSpec.describe PurePopulateDB do
                    f_name:    'Xylophone',
                    l_name:    'Zebra',
                    m_name:    'Yawn')
+
   end
 
   describe '#populate' do
@@ -87,8 +91,9 @@ RSpec.describe PurePopulateDB do
       expect(Publication.first.title).to eq('Title')
       expect(Faculty.find_by(access_id: 'abc123').publications.first.external_authors.first.f_name).to eq('Billy')
       expect(Faculty.find_by(access_id: 'xyz123').publications.first.external_authors.all.count).to eq(2)
-      expect(Faculty.find_by(access_id: 'xyz123').publications.last.peerReview).to eq(false)
+      expect(Faculty.find_by(access_id: 'xyz123').publications.last.peerReview).to eq("false")
       expect(Publication.first.status).to eq('Published')
+      expect(Publication.first.category).to eq('Research Article')
     end
   end
 
