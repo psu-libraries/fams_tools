@@ -8,13 +8,13 @@ class PublicationListingsController < ApplicationController
 
     if not params[:training_file].blank?
       puts "train"
-      t_name = params[:training_file].original_filename
+      t_name = 'tmp_file.txt'
       t_path = File.join('app', 'parsing_files', t_name)
       File.open(t_path, "wb") { |f| f.write(params[:training_file].read) }
       #AnyStyle.parser.train(t_path)
     end
 
-    p_name = params[:publication_file].original_filename
+    p_name = 'tmp_file.txt'
     p_path = File.join('app', 'parsing_files', p_name)
     File.open(p_path, "wb") { |f| f.write(params[:publication_file].read) }
 
