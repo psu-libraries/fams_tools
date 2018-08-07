@@ -29,7 +29,7 @@ RSpec.describe LionPathParser do
   let(:line7) {['xxx111', 'Spring 2018', 2018, 'UP', 'Math', 'Lots of math.',
                 1111, 'N', 'MATH', '202D', '901D', 3, 25, 0, 'In Person', 'Lecture']}
 
-  let(:lionpath_parser_obj) {LionPathParser.new([headers, line1, line2, line3, line4, line5, line6, line7])}
+  let(:lionpath_parser_obj) {LionPathParser.new}
 
   before(:each) do
     Faculty.create(access_id: 'zzz999',
@@ -48,6 +48,7 @@ RSpec.describe LionPathParser do
         should seperate "Course Suffix" from "Class Section Code" and
         should add data to "XCourse CoursePre" "XCourse CourseNum" "XCourse CourseNum Suffix"
         should convert "-" in Instruction Mode to "—"' do
+      allow(CSV).to receive_message_chain(:read).and_return([headers, line1, line2, line3, line4, line5, line6, line7])
       lionpath_parser_obj.format
       expect(lionpath_parser_obj.csv_hash[0]['Instructor Campus ID']).to eq('mar83')
       expect(lionpath_parser_obj.csv_hash[1]['Instructor Campus ID']).to eq('mar6783')
@@ -76,6 +77,7 @@ RSpec.describe LionPathParser do
 
   describe '#filter_by_user' do
     it 'should filter lionpath data by AI user' do
+      allow(CSV).to receive_message_chain(:read).and_return([headers, line1, line2, line3, line4, line5, line6, line7])
       lionpath_parser_obj.format
       lionpath_parser_obj.filter_by_user
       expect(lionpath_parser_obj.csv_hash.count).to eq(1)
@@ -85,6 +87,7 @@ RSpec.describe LionPathParser do
 
   describe '#remove_duplicates' do
     it 'should remove records that are the same except for instructor_load_factor' do
+      allow(CSV).to receive_message_chain(:read).and_return([headers, line1, line2, line3, line4, line5, line6, line7])
       lionpath_parser_obj.format
       lionpath_parser_obj.remove_duplicates
       expect(lionpath_parser_obj.csv_hash.count).to eq(6)
