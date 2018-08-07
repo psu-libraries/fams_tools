@@ -1,4 +1,4 @@
-<h1>Works (<%= @works.count %> records)</h1>
+<h1>Works: <%= @publication_listing.name %> (<%= @works.count %> records)</h1>
 <%= link_to "<< Back to Publication Listing", publication_listings_path %>
 | 
 <%= link_to "Download as xlsx", publication_listing_works_path(format: :xlsx) %>
@@ -13,6 +13,7 @@
     <th>date</th>
     <th>booktitle</th>
     <th>container</th>
+    <th>type</th>
     <th>doi</th>
     <th>editor</th>
     <th>institution</th>
@@ -20,7 +21,8 @@
     <th>location</th>
     <th>note</th>
     <th>publisher</th>
-    <th>retrievedtech</th>
+    <th>retrieved</th>
+    <th>tech</th>
     <th>translator</th>
     <th>unknown</th>
     <th>url</th>
@@ -36,6 +38,7 @@
       <td><%= w.date %></td>
       <td><%= w.booktitle %></td>
       <td><%= w.container %></td>
+      <td><%= w.genre %></td>
       <td><%= w.doi %></td>
       <td><%= w.editor %></td>
       <td><%= w.institution %></td>

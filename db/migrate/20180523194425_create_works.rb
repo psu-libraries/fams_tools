@@ -12,6 +12,7 @@ class CreateWorks < ActiveRecord::Migration[5.1]
       t.string :item
       t.string :booktitle
       t.string :container
+      t.string :genre
       t.string :doi
       t.string :editor
       t.string :institution

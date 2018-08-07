@@ -19,32 +19,35 @@ class PublicationListingsController < ApplicationController
     File.open(p_path, "wb") { |f| f.write(params[:publication_file].read) }
 
     @citations = AnyStyle.parse(p_path)
-    pl = PublicationListing.new(:path => p_path)
+    pl = PublicationListing.new(:name => params[:publication_file].original_filename)
     pl.save
+
+    puts @citations
 
     @citations.each_with_index do |item, index|
       work = Work.new(
-          :author => item[:author], 
-          :title => item[:title], 
-          :journal => item[:journal], 
-          :volume => item[:volume], 
-          :edition => item[:edition], 
-          :pages => item[:pages], 
-          :date => item[:date], 
-          :booktitle => item[:booktitle], 
-          :container => item[:container], 
-          :doi => item[:doi],
-          :editor => item[:editor], 
-          :institution => item[:institution], 
-          :isbn => item[:isbn], 
-          :location => item[:location], 
-          :note => item[:note], 
-          :publisher => item[:publisher], 
-          :retrieved => item[:retrieved], 
-          :tech => item[:tech], 
-          :translator => item[:translator], 
-          :unknown => item[:unknown], 
-          :url => item[:url],
+          :author => item[:author]&.collect {|e| "#{e[:given]} #{e[:family]}"}, 
+          :title => item.dig(:title, 0), 
+          :journal => item.dig(:journal, 0),
+          :volume => item.dig(:volume, 0),
+          :edition => item.dig(:edition, 0),
+          :pages => item.dig(:pages, 0),
+          :date => item.dig(:date, 0),
+          :booktitle => item.dig(:booktitle, 0),
+          :container => item.dig(:"container-title", 0),
+          :genre => item[:type],
+          :doi => item.dig(:doi, 0),
+          :editor => item[:editor]&.collect {|e| "#{e[:given]} #{e[:family]}"},
+          :institution => item.dig(:institution, 0),
+          :isbn => item.dig(:isbn, 0), 
+          :location => item.dig(:location, 0),
+          :note => item.dig(:note, 0),
+          :publisher => item.dig(:publisher, 0),
+          :retrieved => item.dig(:retrieved, 0),
+          :tech => item.dig(:tech, 0),
+          :translator => item.dig(:translator, 0),
+          :unknown => item.dig(:unknown, 0),
+          :url => item.dig(:url, 0),
           :publication_listing => pl
       )
       work.save

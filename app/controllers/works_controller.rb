@@ -17,7 +17,7 @@ class WorksController < ApplicationController
   def index
     @works = Work.where(publication_listing: params[:publication_listing_id])
     @publication_listing = PublicationListing.find_by_id(params[:publication_listing_id])
-    f = @publication_listing.path
+    f = @publication_listing.name
     xlsx_name = File.basename(f, File.extname(f)) + '.xlsx'
     respond_to do |format|
       format.html
