@@ -1,7 +1,7 @@
 class CreatePublicationListings < ActiveRecord::Migration[5.1]
   def change
     create_table :publication_listings do |t|
-      t.string :path
+      t.string :name
       t.string :type
 
       t.timestamps

@@ -11,5 +11,5 @@
 <hr>
 <h3> Listing of publication listings</h3> 
 <% @publication_listings.each do |pl| %>
-  <%= link_to  pl.path, publication_listing_works_url(pl) %> (<%= pl.works.count %> Records)<br>
+  <%= link_to  pl.name, publication_listing_works_url(pl) %> (<%= pl.works.count %> Records)<br>
 <% end %>

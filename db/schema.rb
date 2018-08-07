@@ -72,7 +72,7 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
   end
 
   create_table "publication_listings", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.string "path"
+    t.string "name"
     t.string "type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -148,6 +148,7 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
     t.string "item"
     t.string "booktitle"
     t.string "container"
+    t.string "genre"
     t.string "doi"
     t.string "editor"
     t.string "institution"
