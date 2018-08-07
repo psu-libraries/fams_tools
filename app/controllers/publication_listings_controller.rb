@@ -18,12 +18,6 @@ class PublicationListingsController < ApplicationController
     p_path = File.join('app', 'parsing_files', p_name)
     File.open(p_path, "wb") { |f| f.write(params[:publication_file].read) }
 
-    puts params[:publication_file].original_filename == 'watson-utf8.txt'
-    puts 'watson-utf8.txt'
-    puts params[:publication_file].original_filename
-    puts p_name
-    puts p_path
-
     @citations = AnyStyle.parse(p_path)
     pl = PublicationListing.new(:path => p_path)
     pl.save
