@@ -4,12 +4,12 @@ class PureXMLBuilder
   attr_accessor :faculties
 
   def initialize
-    @faculties = Faculty.joins(:publications).group('id')
+    @faculties = Faculty.joins(:publications).group('id').where.not(college: ['LA'])
   end
 
   def batched_xmls
     xml_batches = []
-    faculties.each_slice(20) do |batch|
+    faculties.each_slice(2) do |batch|
       xml_batches << build_xml(batch)
     end
     return xml_batches
@@ -32,7 +32,9 @@ class PureXMLBuilder
                 xml.VOLUME_ publication.volume, :access => "READ_ONLY"
                 xml.DTY_PUB_ publication.dty, :access => "READ_ONLY"
                 xml.DTM_PUB_ publication.dtm, :access => "READ_ONLY"
-                xml.DTD_PUB_ publication.dtd, :access => "READ_ONLY"
+                unless faculty.college == 'CM'
+                  xml.DTD_PUB_ publication.dtd, :access => "READ_ONLY"
+                end
                 xml.ISSUE_ publication.journal_num, :access => "READ_ONLY"
                 xml.PAGENUM_ publication.pages, :access => "READ_ONLY"
                 publication.external_authors.each do |author|
@@ -44,6 +46,7 @@ class PureXMLBuilder
                     xml.INSTITUTION_ author.extOrg, :access => "READ_ONLY"
                   }
                 end
+                xml.PUBLISHER_ publication.publisher, :access => "READ_ONLY"
                 xml.WEB_ADDRESS_ publication.url, :access => "READ_ONLY"
                 xml.REFEREED_ publication.peerReview, :access => "READ_ONLY"
               }

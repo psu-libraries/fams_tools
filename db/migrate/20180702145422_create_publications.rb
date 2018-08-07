@@ -12,10 +12,12 @@ class CreatePublications < ActiveRecord::Migration[5.1]
       t.string :journal_title
       t.string :journal_issn
       t.integer :journal_num
+      t.string :journal_uuid
       t.string :pages
       t.integer :articleNumber
-      t.boolean :peerReview
+      t.string :peerReview
       t.string :url
+      t.string :publisher
 
       t.timestamps
     end
