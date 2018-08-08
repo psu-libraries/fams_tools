@@ -21,12 +21,12 @@
   <body>
     <header class="navbar navbar-fixed-top navbar-inverse">
       <div class="container">
-        <%= link_to "Faculty Activity Management Services Tools", '/', id: "logo" %>
+        <%= link_to "Faculty Activity Management Services Tools", root_path, id: "logo" %>
         <nav>
           <ul class="nav navbar-nav navbar-right">
-            <li><%= link_to "Home",   '/' %></li>
-            <li><%= link_to "CV Parser",   '/publication_listings' %></li>
-            <li><%= link_to "AI-Integration", '/ai_integration' %></li>
+            <li><%= link_to "Home",   root_path %></li>
+            <li><%= link_to "CV Parser",   publication_listings_path %></li>
+            <li><%= link_to "AI-Integration", ai_integration_path %></li>
           </ul>
         </nav>
       </div>
