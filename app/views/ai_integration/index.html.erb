@@ -1,16 +1,26 @@
-<%= link_to "<<Back", root_path %>
-<h1>AI-Integration</h1>
-<h3>Contract/Grant Integration</h3>
-<%= form_with :url => { :action => "osp_integrate" } do |form| %>
-  <p> <%= label(:congrant_file, text = "OSP Data File") %><%= form.file_field :congrant_file %> </p>
-  <p> <%= form.submit "Run Integration" %> </p>
-<% end %>
+<div class="center jumbotron">
+  <h1>AI-Integration</h1>
+</div>
+
+<div class="container">
+  <h3>Contract/Grant Integration</h3>
+  <%= form_with :url => { :action => "osp_integrate" } do |form| %>
+    <p> <%= label(:congrant_file, text = "OSP Data File") %><%= form.file_field :congrant_file %> </p>
+    <p> <%= form.submit "Run Integration" %> </p>
+  <% end %>
+</div>
 <hr>
-<h3>Courses Taught Integration</h3>
-<%= form_with :url => { :action => "lionpath_integrate" } do |form| %>
-  <p> <%= label(:courses_file, text = "Courses Taught Data File") %><%= form.file_field :courses_file %> </p>
-  <p> <%= form.submit "Run Integration" %> </p>
-<% end %>
+
+<div class="container">
+  <h3>Courses Taught Integration</h3>
+  <%= form_with :url => { :action => "lionpath_integrate" } do |form| %>
+    <p> <%= label(:courses_file, text = "Courses Taught Data File") %><%= form.file_field :courses_file %> </p>
+    <p> <%= form.submit "Run Integration" %> </p>
+  <% end %>
+</div>
 <hr>
-<h3>Publications Integration</h3>
+
+<div class="container">
+  <h3>Publications Integration</h3>
+</div>
 <hr>
