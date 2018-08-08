@@ -1,14 +1,46 @@
 wb = xlsx_package.workbook
 wb.add_worksheet(:name => "citations") do |sheet|
-  sheet.add_row ['author', 'title', 'journal', 'volume', 'edition', 'pages', 'date', 'booktitle', 'container', 'type', 'doi', 'editor', 'institution', 'isbn', 
+
+  longest = 0
+  @works.each do |item|
+    unless item[:author] == nil
+      if longest < item[:author].length + 21
+        longest = item[:author].length + 21
+      end
+    end
+  end
+
+  headers = ['title', 'journal', 'volume', 'edition', 'pages', 'date', 'booktitle', 'container', 'type', 'doi', 'editor', 'institution', 'isbn', 
   'location', 'note', 'publisher', 'retrieved', 'tech', 'translator', 'unknown', 'url'
  ]
+  counter = longest - 21
+  while headers.length < longest
+    headers.insert(0, "author#{counter}")
+    counter -= 1
+  end
+
+  sheet.add_row headers
+
   @works.each do |item, index|
-    sheet.add_row [ 
-      item[:author], item[:title], item[:journal], item[:volume], item[:edition], item[:pages], item[:date], item[:booktitle], item[:container], item[:genre], item[:doi],
+    row = [ 
+      item[:title], item[:journal], item[:volume], item[:edition], item[:pages], item[:date], item[:booktitle], item[:container], item[:genre], item[:doi],
       item[:editor], item[:institution], item[:isbn], item[:location], item[:note], item[:publisher], item[:retrieved], item[:tech], item[:translator], 
       item[:unknown], item[:url]
     ]
+    item[:author]&.reverse&.each {|author| row.insert(0, author)}
+    if row.length < longest
+      unless item[:author] == nil
+        while row.length < longest
+          row.insert(item[:author].length, "")
+        end
+      else
+        while row.length < longest
+          row.insert(0, "")
+        end 
+      end
+    end
+    
+    sheet.add_row row
   end
 end 
 
