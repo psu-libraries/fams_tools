@@ -2,7 +2,7 @@ class GetPurePublishers
   attr_accessor :uuids, :journals_xmls
 
   def initialize
-    @uuids = Publication.pluck(:journal_uuid)
+    @uuids = Publication.pluck(:journal_uuid).uniq
     @journals_xmls = {}
   end
 

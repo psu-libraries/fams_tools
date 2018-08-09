@@ -22,5 +22,8 @@
 
 <div class="container">
   <h3>Publications Integration</h3>
+  <%= form_with :url => { :action => "pure_integrate" } do |form| %>
+    <p> <%= form.submit "Run Integration" %> </p>
+  <% end %>
 </div>
 <hr>

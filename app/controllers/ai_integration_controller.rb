@@ -1,3 +1,7 @@
+require 'pure_data/get_pure_ids'
+require 'pure_data/pure_populate_db'
+require 'pure_data/get_pure_publishers'
+require 'pure_data/pure_xml_builder'
 require 'osp_data/osp_parser'
 require 'osp_data/osp_populate_db'
 require 'osp_data/osp_xml_builder'
@@ -37,6 +41,21 @@ class AiIntegrationController < ApplicationController
     finish = Time.now
     @time = (((finish - start)/60).to_s + ' mins')
     File.delete(f_path) if File.exist?(f_path)
+    redirect_to ai_integration_path
+  end
+
+  def pure_integrate
+    start = Time.now
+    my_get_pure_ids = GetPureIDs.new
+    my_get_pure_ids.call
+    my_pure_populate_db = PurePopulateDB.new
+    my_pure_populate_db.populate
+    my_get_pure_publishers = GetPurePublishers.new
+    my_get_pure_publishers.call
+    my_integrate = IntegrateData.new(PureXMLBuilder.new)
+    my_integrate.integrate
+    finish = Time.now
+    @time = (((finish - start)/60).to_s + ' mins')
     redirect_to ai_integration_path
   end
 

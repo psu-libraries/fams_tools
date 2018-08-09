@@ -16,6 +16,7 @@ class PurePopulateDB
       v.each do |pub|
 
         publication = Publication.create(faculty:       faculty,
+                                         pure_id:       pub[:pure_id],
                                          title:         pub[:title],
                                          status:        pub[:status],
                                          category:      pub[:category],

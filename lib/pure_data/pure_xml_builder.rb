@@ -49,6 +49,7 @@ class PureXMLBuilder
                 xml.PUBLISHER_ publication.publisher, :access => "READ_ONLY"
                 xml.WEB_ADDRESS_ publication.url, :access => "READ_ONLY"
                 xml.REFEREED_ publication.peerReview, :access => "READ_ONLY"
+                xml.PURE_ID_ publication.pure_id
               }
             end
           }
