@@ -80,6 +80,7 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
 
   create_table "publications", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.bigint "faculty_id"
+    t.integer "pure_id"
     t.text "title"
     t.string "category"
     t.integer "volume"
@@ -99,6 +100,7 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["faculty_id"], name: "fk_rails_8c9222b60f"
+    t.index ["pure_id"], name: "index_publications_on_pure_id", unique: true
   end
 
   create_table "pure_ids", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
