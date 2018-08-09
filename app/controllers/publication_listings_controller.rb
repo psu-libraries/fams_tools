@@ -22,8 +22,6 @@ class PublicationListingsController < ApplicationController
     pl = PublicationListing.new(:name => params[:publication_file].original_filename)
     pl.save
 
-    puts @citations
-
     @citations.each_with_index do |item, index|
       work = Work.new(
           :author => item[:author]&.collect {|e| "#{e[:given]} #{e[:family]}"}, 
