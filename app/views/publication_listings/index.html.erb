@@ -1,12 +1,12 @@
-<div class="center jumbotron">
-  <h1>PublicationListings</h1>
+<div class="center jumbotron text-center">
+  <h1>CV Parser</h1>
 </div>
 
 <div class="container">
   <h3>Create a new publication listing</h3>
   <%= form_with( url: publication_listings_url, :multipart => true ) do |f| %>
     <p><%= label(:publication_file, "Publication Data File") %><%= f.file_field :publication_file %></p>
-    <p><%= label(:training_file, "Training Data File (Optional)") %><%= f.file_field :training_file %></p>
+    <!--<p><%= label(:training_file, "Training Data File (Optional)") %><%= f.file_field :training_file %></p>-->
     <%= f.submit "Create Citation Spreadsheet" %>
   <% end %>
 </div>

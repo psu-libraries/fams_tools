@@ -19,22 +19,38 @@
     <![endif]-->
   </head>
   <body>
-    <header class="navbar navbar-fixed-top navbar-inverse">
-      <div class="container">
-        <%= link_to "Faculty Activity Management Services Tools", root_path, id: "logo" %>
-        <nav>
-          <ul class="nav navbar-nav navbar-right">
-            <li><%= link_to "Home",   root_path %></li>
-            <li><%= link_to "CV Parser",   publication_listings_path %></li>
-            <li><%= link_to "AI-Integration", ai_integration_path %></li>
-          </ul>
-        </nav>
-      </div>
-    </header>
+
+  <div class="jumbotron jumbotron-fluid text-center bg-primary text-white" style="margin-bottom:0">
     <div class="container">
-      <%= yield %>
+      <div class="row" style="position:absolute;top:0px;left:350px;"><%= image_tag("psu_mark_no_image.png", :size => '260x180') %></div>
     </div>
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <h1>Faculty Activity Management Services Tools</h1>
+  </div>
+
+  <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+    <div class="container">
+      <a class="navbar-brand" href="/">FAMS Tools</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="collapsibleNavbar">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="/publication_listings">CV Parser</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/ai_integration">Integration</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <%= yield %>
+  </div>
+
+  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
   </body>
 </html>
