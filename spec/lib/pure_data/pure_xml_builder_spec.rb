@@ -6,6 +6,7 @@ RSpec.describe PureXMLBuilder do
   let(:data_sets) do
     hash = {
       'abc123' => [{:title => 'Title',
+                    :pure_id => 579,
                     :category => 'Type',
                     :volume => 34,
                     :dty => 2017,
@@ -27,6 +28,7 @@ RSpec.describe PureXMLBuilder do
                     :peerReview => 'true',
                     :url => 'www.www.www'}],
       'xyz123' => [{:title => 'Title2',
+                    :pure_id => 468,
                     :category => 'Type2',
                     :volume => 12,
                     :dty => 2013,
@@ -48,6 +50,7 @@ RSpec.describe PureXMLBuilder do
                     :publisher => 'Publisher',
                     :pages => '42-46'},
                     {:title => 'Title3',
+                     :pure_id => 246,
                     :category => 'Type3',
                     :volume => 3,
                     :dty => 2010,
@@ -91,7 +94,7 @@ RSpec.describe PureXMLBuilder do
         faculty = Faculty.find_by(access_id: k)
 
         v.each do |pub|
-          publication = Publication.create(faculty:       faculty,
+          publication = Publication.create(pure_id:       pub[:pure_id],
                                            title:         pub[:title],
                                            status:        pub[:status],
                                            category:      pub[:category],
@@ -120,6 +123,9 @@ RSpec.describe PureXMLBuilder do
                                   extOrg:      person[:extOrg]
                                   )
           end
+
+          PublicationFacultyLink.create(publication: publication,
+                                        faculty: faculty)
         end
       end
       expect(pure_xml_builder_obj.batched_xmls).to eq([
@@ -148,6 +154,7 @@ RSpec.describe PureXMLBuilder do
       <PUBLISHER access="READ_ONLY">Publisher</PUBLISHER>
       <WEB_ADDRESS access="READ_ONLY">www.www.www</WEB_ADDRESS>
       <REFEREED access="READ_ONLY">true</REFEREED>
+      <PURE_ID>579</PURE_ID>
     </INTELLCONT>
   </Record>
   <Record username="xyz123">
@@ -180,6 +187,7 @@ RSpec.describe PureXMLBuilder do
       <PUBLISHER access="READ_ONLY">Publisher</PUBLISHER>
       <WEB_ADDRESS access="READ_ONLY"/>
       <REFEREED access="READ_ONLY"/>
+      <PURE_ID>468</PURE_ID>
     </INTELLCONT>
     <INTELLCONT>
       <TITLE access="READ_ONLY">Title3</TITLE>
@@ -203,6 +211,7 @@ RSpec.describe PureXMLBuilder do
       <PUBLISHER access="READ_ONLY">Publisher</PUBLISHER>
       <WEB_ADDRESS access="READ_ONLY"/>
       <REFEREED access="READ_ONLY">false</REFEREED>
+      <PURE_ID>246</PURE_ID>
     </INTELLCONT>
   </Record>
 </Data>

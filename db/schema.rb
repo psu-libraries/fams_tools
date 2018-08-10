@@ -71,6 +71,15 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
     t.index ["access_id"], name: "index_faculties_on_access_id", unique: true
   end
 
+  create_table "publication_faculty_links", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.bigint "faculty_id"
+    t.bigint "publication_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["faculty_id"], name: "fk_rails_6b4e572ec8"
+    t.index ["publication_id"], name: "fk_rails_7abcf28acb"
+  end
+
   create_table "publication_listings", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "name"
     t.string "type"
@@ -79,7 +88,6 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
   end
 
   create_table "publications", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.bigint "faculty_id"
     t.integer "pure_id"
     t.text "title"
     t.string "category"
@@ -99,7 +107,6 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
     t.string "publisher"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["faculty_id"], name: "fk_rails_8c9222b60f"
     t.index ["pure_id"], name: "index_publications_on_pure_id", unique: true
   end
 
@@ -172,7 +179,8 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
   add_foreign_key "contract_faculty_links", "faculties"
   add_foreign_key "contracts", "sponsors"
   add_foreign_key "external_authors", "publications"
-  add_foreign_key "publications", "faculties"
+  add_foreign_key "publication_faculty_links", "faculties"
+  add_foreign_key "publication_faculty_links", "publications"
   add_foreign_key "pure_ids", "faculties"
   add_foreign_key "sections", "courses"
   add_foreign_key "sections", "faculties"
