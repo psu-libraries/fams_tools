@@ -1,7 +1,6 @@
 class CreatePublications < ActiveRecord::Migration[5.1]
   def change
     create_table :publications do |t|
-      t.bigint :faculty_id
       t.integer :pure_id
       t.text :title
       t.string :category
