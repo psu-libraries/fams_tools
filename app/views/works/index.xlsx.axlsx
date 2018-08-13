@@ -24,7 +24,7 @@ wb.add_worksheet(:name => "citations") do |sheet|
   @works.each do |item, index|
     row = [ 
       item[:title], item[:journal], item[:volume], item[:edition], item[:pages], item[:date], item[:booktitle], item[:container], item[:genre], item[:doi],
-      item[:editor], item[:institution], item[:isbn], item[:location], item[:note], item[:publisher], item[:retrieved], item[:tech], item[:translator], 
+      item[:editor]&.join(", "), item[:institution], item[:isbn], item[:location], item[:note], item[:publisher], item[:retrieved], item[:tech], item[:translator], 
       item[:unknown], item[:url]
     ]
     item[:author]&.reverse&.each {|author| row.insert(0, author)}

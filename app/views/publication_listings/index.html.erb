@@ -5,8 +5,8 @@
 <div class="container">
   <h3>Create a new publication listing</h3>
   <%= form_with( url: publication_listings_url, :multipart => true ) do |f| %>
-    <p><%= label(:publication_file, "Publication Data File") %><%= f.file_field :publication_file %></p>
-    <!--<p><%= label(:training_file, "Training Data File (Optional)") %><%= f.file_field :training_file %></p>-->
+    <p><%= label(:citations_title, "Citations title:") %><%= f.text_field :citations_title%></p>
+    <p><%= label(:citations, "Copy and paste citations here:") %><%= f.text_area :citations, size: "90x15"%></p>
     <%= f.submit "Create Citation Spreadsheet" %>
   <% end %>
 </div>
