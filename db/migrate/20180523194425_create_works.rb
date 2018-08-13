@@ -3,7 +3,7 @@ class CreateWorks < ActiveRecord::Migration[5.1]
     create_table :works do |t|
       t.references :publication_listing, foreign_key: true
       t.text :author
-      t.string :title
+      t.text :title
       t.string :journal
       t.string :volume
       t.string :edition
@@ -14,7 +14,7 @@ class CreateWorks < ActiveRecord::Migration[5.1]
       t.string :container
       t.string :genre
       t.string :doi
-      t.string :editor
+      t.text :editor
       t.string :institution
       t.string :isbn
       t.string :location
