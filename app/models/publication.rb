@@ -1,4 +1,5 @@
 class Publication < ApplicationRecord
   has_many :external_authors
-  belongs_to :faculty
+  has_many :publication_faculty_links
+  has_many :faculties, through: :publication_faculty_links
 end

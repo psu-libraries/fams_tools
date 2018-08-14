@@ -120,7 +120,8 @@ class GetPureData
       noko_obj = Nokogiri::XML.parse(xml.to_s)
       noko_obj.xpath('result//contributionToJournal').each do |publication|
         if pure_hash[k]
-          pure_hash[k] << {:title => publication.xpath('title').text,
+          pure_hash[k] << {:pure_id => publication.attr('pureId'),
+                           :title => publication.xpath('title').text,
                            :category => publication.xpath('type').text,
                            :volume => publication.xpath('volume').text,
                            :status => publication.xpath('publicationStatuses//publicationStatus//publicationStatus').text,
@@ -143,7 +144,8 @@ class GetPureData
                            :peerReview => publication.xpath('peerReview').text,
                            :url => publication.xpath('electronicVersions//electronicVersion//doi').text}
         else
-          pure_hash[k] =  [{:title => publication.xpath('title').text,
+          pure_hash[k] =  [{:pure_id => publication.attr('pureId'),
+                           :title => publication.xpath('title').text,
                            :category => publication.xpath('type').text,
                            :volume => publication.xpath('volume').text,
                            :status => publication.xpath('publicationStatuses//publicationStatus//publicationStatus').text,

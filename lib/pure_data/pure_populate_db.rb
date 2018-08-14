@@ -15,24 +15,26 @@ class PurePopulateDB
 
       v.each do |pub|
 
-        publication = Publication.create(faculty:       faculty,
-                                         title:         pub[:title],
-                                         status:        pub[:status],
-                                         category:      pub[:category],
-                                         volume:        pub[:volume],
-                                         dty:           pub[:dty],
-                                         dtm:           pub[:dtm],
-                                         dtd:           pub[:dtd],
-                                         journal_title: pub[:journalTitle],
-                                         journal_issn:  pub[:journalIssn],
-                                         journal_num:   pub[:journalNum],
-                                         journal_uuid:  pub[:journaluuid],
-                                         pages:         pub[:pages],
-                                         articleNumber: pub[:articleNumber],
-                                         peerReview:    pub[:peerReview],
-                                         url:           pub[:url],
-                                         publisher:     nil
-                                         )
+        begin
+          publication = Publication.create(pure_id:       pub[:pure_id],
+                                          title:         pub[:title],
+                                          volume:        pub[:volume],
+                                          dty:           pub[:dty],
+                                          dtd:           pub[:dtd],
+                                          journal_title: pub[:journalTitle],
+                                          journal_issn:  pub[:journalIssn],
+                                          journal_num:   pub[:journalNum],
+                                          journal_uuid:  pub[:journaluuid],
+                                          pages:         pub[:pages],
+                                          articleNumber: pub[:articleNumber],
+                                          peerReview:    pub[:peerReview],
+                                          url:           pub[:url],
+                                          publisher:     nil
+                                          )
+
+        rescue ActiveRecord::RecordNotUnique
+          publication = Publication.find_by(pure_id: pub[:pure_id])
+        end
 
         pub[:persons].each do |person|
 
@@ -44,6 +46,12 @@ class PurePopulateDB
                                 extOrg:      person[:extOrg]
                                 )
         end
+
+        PublicationFacultyLink.create(faculty:     faculty,
+                                      publication: publication,
+                                      status:      pub[:status],
+                                      category:    pub[:category],
+                                      dtm:         pub[:dtm])
       end
     end
   end
