@@ -3,11 +3,8 @@ class CreatePublications < ActiveRecord::Migration[5.1]
     create_table :publications do |t|
       t.integer :pure_id
       t.text :title
-      t.string :category
       t.integer :volume
-      t.string :status
       t.integer :dty
-      t.string :dtm
       t.integer :dtd
       t.string :journal_title
       t.string :journal_issn

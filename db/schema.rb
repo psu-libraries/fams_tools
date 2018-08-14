@@ -74,6 +74,9 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
   create_table "publication_faculty_links", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.bigint "faculty_id"
     t.bigint "publication_id"
+    t.string "category"
+    t.string "dtm"
+    t.string "status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["faculty_id"], name: "fk_rails_6b4e572ec8"
@@ -90,11 +93,8 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
   create_table "publications", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer "pure_id"
     t.text "title"
-    t.string "category"
     t.integer "volume"
-    t.string "status"
     t.integer "dty"
-    t.string "dtm"
     t.integer "dtd"
     t.string "journal_title"
     t.string "journal_issn"

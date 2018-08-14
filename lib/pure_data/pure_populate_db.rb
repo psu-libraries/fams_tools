@@ -18,11 +18,8 @@ class PurePopulateDB
         begin
           publication = Publication.create(pure_id:       pub[:pure_id],
                                           title:         pub[:title],
-                                          status:        pub[:status],
-                                          category:      pub[:category],
                                           volume:        pub[:volume],
                                           dty:           pub[:dty],
-                                          dtm:           pub[:dtm],
                                           dtd:           pub[:dtd],
                                           journal_title: pub[:journalTitle],
                                           journal_issn:  pub[:journalIssn],
@@ -51,7 +48,10 @@ class PurePopulateDB
         end
 
         PublicationFacultyLink.create(faculty:     faculty,
-                                      publication: publication)
+                                      publication: publication,
+                                      status:      pub[:status],
+                                      category:    pub[:category],
+                                      dtm:         pub[:dtm])
       end
     end
   end
