@@ -4,7 +4,7 @@ class PureXMLBuilder
   attr_accessor :faculties
 
   def initialize
-    @faculties = Faculty.joins(:publication_faculty_links).group('id').where(college: 'CA')
+    @faculties = Faculty.joins(:publication_faculty_links).group('id').where.not(college: 'LA')
   end
 
   def batched_xmls
@@ -25,13 +25,13 @@ class PureXMLBuilder
             faculty.publication_faculty_links.each do |link|
               xml.INTELLCONT {
                 xml.TITLE_ link.publication.title, :access => "READ_ONLY"
-                xml.CONTYPE_ link.publication.category, :access => "READ_ONLY"
-                xml.STATUS_ link.publication.status, :access => "READ_ONLY"
+                xml.CONTYPE_ link.category, :access => "READ_ONLY"
+                xml.STATUS_ link.status, :access => "READ_ONLY"
                 xml.JOURNAL_NAME_ link.publication.journal_title, :access => "READ_ONLY"
                 xml.ISBNISSN_ link.publication.journal_issn, :access => "READ_ONLY"
                 xml.VOLUME_ link.publication.volume, :access => "READ_ONLY"
                 xml.DTY_PUB_ link.publication.dty, :access => "READ_ONLY"
-                xml.DTM_PUB_ link.publication.dtm, :access => "READ_ONLY"
+                xml.DTM_PUB_ link.dtm, :access => "READ_ONLY"
                 unless faculty.college == 'CM'
                   xml.DTD_PUB_ link.publication.dtd, :access => "READ_ONLY"
                 end
@@ -49,7 +49,7 @@ class PureXMLBuilder
                 xml.PUBLISHER_ link.publication.publisher, :access => "READ_ONLY"
                 xml.WEB_ADDRESS_ link.publication.url, :access => "READ_ONLY"
                 xml.REFEREED_ link.publication.peerReview, :access => "READ_ONLY"
-                #xml.PURE_ID_ link.publication.pure_id
+                xml.PURE_ID_ link.publication.pure_id
               }
             end
           }
