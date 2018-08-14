@@ -8,14 +8,19 @@ RSpec.describe GetPurePublishers do
   before(:each) do
     faculty = Faculty.create(access_id: 'dfg345')
 
-    Publication.create(faculty: faculty,
-                       title: 'Cool',
-                       journal_uuid: 'abc123',
-                       publisher: nil)
-    Publication.create(faculty: faculty,
-                       title: 'Cooler',
-                       journal_uuid: 'cba123',
-                       publisher: nil)
+    publication1 = Publication.create(title: 'Cool',
+                                      journal_uuid: 'abc123',
+                                      publisher: nil)
+
+    publication2 = Publication.create(title: 'Cooler',
+                                      journal_uuid: 'cba123',
+                                      publisher: nil)
+
+    PublicationFacultyLink.create(publication: publication1,
+                                  faculty: faculty)
+
+    PublicationFacultyLink.create(publication: publication2,
+                                  faculty: faculty)
   end
 
   describe '#call' do
