@@ -27,6 +27,7 @@ spec/examples.txt
 
 # Ignore other files
 /data/*
+/app/parsing_files/*
 *.swp
 /config/activity_insight.yml
 /config/pure.yml
