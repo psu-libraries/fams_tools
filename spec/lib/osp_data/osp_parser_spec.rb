@@ -1,5 +1,4 @@
 require 'rails_helper'
-require 'spreadsheet'
 require 'osp_data/osp_parser'
 
 RSpec.describe OspParser do
@@ -64,7 +63,16 @@ RSpec.describe OspParser do
                 "K3" => 'Awarded', "L3" => 'X', "M3" => 'X', "N3" => 1, "O3" => 1, "P3" => 1, "Q3" => 'X', "R3" => 'X', "S3" => 'X', "T3" => 'X', "U3" => 'X', "V3" => 'X', "W3" => 'X', "X3" => 'X'}
     data_arr << {"A4" => 1, "B4" => 1, "C4" => 'X', "D4" => 'X', "E4" => 'X', "F4" => 'X', "G4" => 'X', "H4" => 'X', "I4" => 'X', "J4" => 1,
                 "K4" => 'Withdrawn', "L4" => 'X', "M4" => 'X', "N4" => 1, "O4" => 1, "P4" => 1, "Q4" => 'X', "R4" => 'X', "S4" => 'X', "T4" => 'X', "U4" => 'X', "V4" => 'X', "W4" => 'X', "X4" => 'X'}
+    data_arr << {"A4" => 123456, "B4" => 1, "C4" => 'X', "D4" => 'X', "E4" => 'X', "F4" => 'X', "G4" => 'X', "H4" => 'X', "I4" => 'X', "J4" => 1,
+                "K4" => 'Purged', "L4" => 'X', "M4" => 'X', "N4" => 1, "O4" => 1, "P4" => 1, "Q4" => 'X', "R4" => 'X', "S4" => 'X', "T4" => 'X', "U4" => 'X', "V4" => 'X', "W4" => 'X', "X4" => 'X'}
     data_arr
+  end
+
+  let(:fake_backup) do
+    data_arr = []
+    data_arr << ['OSPKEY', 'STATUS']
+    data_arr << [123456, 'Pending']
+    data_arr << [193848, 'Pending']
   end
 
   before(:each) do
@@ -88,6 +96,7 @@ RSpec.describe OspParser do
         should change 'Pending Award' and 'Pending Proposal' status to 'Pending'
         should remove start and end dates for any contract that was not 'Awarded'" do
       allow(Creek::Book).to receive_message_chain(:new, :sheets, :[], :rows).and_return(data_book1)
+      CSV.stub(:read) { fake_backup }
       osp_parser_obj.format
       expect(osp_parser_obj.xlsx_hash[0]['grantcontract']).to eq('')
       expect(osp_parser_obj.xlsx_hash[1]['grantcontract']).to eq('Grant')
@@ -118,6 +127,7 @@ RSpec.describe OspParser do
 
     it "should remove rows with 'submitted' dates <= 2011" do
       allow(Creek::Book).to receive_message_chain(:new, :sheets, :[], :rows).and_return(data_book2)
+      CSV.stub(:read) { fake_backup }
       osp_parser_obj.filter_by_date
       expect(osp_parser_obj.xlsx_hash.count).to eq(1)
     end
@@ -127,6 +137,7 @@ RSpec.describe OspParser do
 
     it "should remove rows that contain non-active users" do
       allow(Creek::Book).to receive_message_chain(:new, :sheets, :[], :rows).and_return(data_book3)
+      CSV.stub(:read) { fake_backup }
       osp_parser_obj.filter_by_user
       expect(osp_parser_obj.xlsx_hash.count).to eq(1)
       expect(osp_parser_obj.xlsx_hash[0]['accessid']).to eq('zzz999')
@@ -138,9 +149,11 @@ RSpec.describe OspParser do
 
     it "should remove rows with 'Purged' or 'Withdrawn' status" do
       allow(Creek::Book).to receive_message_chain(:new, :sheets, :[], :rows).and_return(data_book4)
+      CSV.stub(:read) { fake_backup }
       osp_parser_obj.filter_by_status
-      expect(osp_parser_obj.xlsx_hash.count).to eq(1)
+      expect(osp_parser_obj.xlsx_hash.count).to eq(2)
       expect(osp_parser_obj.xlsx_hash[0]['status']).to eq('Awarded')
+      expect(osp_parser_obj.xlsx_hash[1]['status']).to eq('Purged')
     end
   end
 

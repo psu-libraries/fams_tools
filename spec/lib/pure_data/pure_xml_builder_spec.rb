@@ -96,11 +96,8 @@ RSpec.describe PureXMLBuilder do
         v.each do |pub|
           publication = Publication.create(pure_id:       pub[:pure_id],
                                            title:         pub[:title],
-                                           status:        pub[:status],
-                                           category:      pub[:category],
                                            volume:        pub[:volume],
                                            dty:           pub[:dty],
-                                           dtm:           pub[:dtm],
                                            dtd:           pub[:dtd],
                                            journal_title: pub[:journalTitle],
                                            journal_issn:  pub[:journalIssn],
@@ -125,7 +122,10 @@ RSpec.describe PureXMLBuilder do
           end
 
           PublicationFacultyLink.create(publication: publication,
-                                        faculty: faculty)
+                                        faculty:     faculty,
+                                        status:      pub[:status],
+                                        category:    pub[:category],
+                                        dtm:         pub[:dtm] )
         end
       end
       expect(pure_xml_builder_obj.batched_xmls).to eq([

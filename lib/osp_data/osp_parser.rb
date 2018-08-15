@@ -1,13 +1,15 @@
-require 'spreadsheet'
+require 'byebug'
 require 'creek'
 
 class OspParser
-  attr_accessor :xlsx_hash, :active_users, :xlsx_obj
+  attr_accessor :xlsx_hash, :active_users, :xlsx_obj, :congrant_backup, :congrant_backup_hashes
 
-  def initialize(filepath = 'data/dmresults.xlsx')
-    @xlsx_obj = Creek::Book.new(filepath).sheets[0].rows
+  def initialize(osp_path = 'data/dmresults.xlsx', backup_path = 'data/CONGRANT-tabdel.txt')
+    @xlsx_obj = Creek::Book.new(osp_path).sheets[0].rows
     @xlsx_hash = convert_xlsx_to_hash(xlsx_obj)
     @active_users = Faculty.pluck(:access_id)
+    @congrant_backup = CSV.read(backup_path, encoding: "ISO8859-1", col_sep: "\t")
+    @congrant_backup_hashes = csv_to_hashes(congrant_backup)
   end
 
   #Run all local formatting methods
@@ -45,7 +47,13 @@ class OspParser
   def filter_by_status
     kept_rows = []
     xlsx_hash.each do |row|
-      unless (row['status'] == 'Purged') || (row['status'] == 'Withdrawn')
+      if row['status'] == 'Purged' || row['status'] == 'Withdrawn'
+        congrant_backup_hashes.each do |congrant|
+          if congrant['OSPKEY'].to_i == row['ospkey'].to_i && congrant['STATUS'] == 'Pending'
+            kept_rows << row
+          end
+        end
+      else
         kept_rows << row
       end
     end
@@ -67,6 +75,11 @@ class OspParser
   end
 
   private
+
+  def csv_to_hashes(congrant_data)
+    keys = congrant_data[0]
+    congrant_data[1..-1].map {|a| Hash[ keys.zip(a) ] }
+  end
 
   def convert_xlsx_to_hash(xlsx_sheet)
     counter = 0
