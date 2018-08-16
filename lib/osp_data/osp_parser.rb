@@ -51,6 +51,8 @@ class OspParser
         congrant_backup_hashes.each do |congrant|
           if congrant['OSPKEY'].to_i == row['ospkey'].to_i && congrant['STATUS'] == 'Pending'
             kept_rows << row
+          elsif congrant['OSPKEY'].to_i == row['ospkey'].to_i && congrant['STATUS'] == 'Not Funded'
+            kept_rows << row
           end
         end
       else
