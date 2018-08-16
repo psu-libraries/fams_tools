@@ -63,8 +63,10 @@ RSpec.describe OspParser do
                 "K3" => 'Awarded', "L3" => 'X', "M3" => 'X', "N3" => 1, "O3" => 1, "P3" => 1, "Q3" => 'X', "R3" => 'X', "S3" => 'X', "T3" => 'X', "U3" => 'X', "V3" => 'X', "W3" => 'X', "X3" => 'X'}
     data_arr << {"A4" => 1, "B4" => 1, "C4" => 'X', "D4" => 'X', "E4" => 'X', "F4" => 'X', "G4" => 'X', "H4" => 'X', "I4" => 'X', "J4" => 1,
                 "K4" => 'Withdrawn', "L4" => 'X', "M4" => 'X', "N4" => 1, "O4" => 1, "P4" => 1, "Q4" => 'X', "R4" => 'X', "S4" => 'X', "T4" => 'X', "U4" => 'X', "V4" => 'X', "W4" => 'X', "X4" => 'X'}
-    data_arr << {"A4" => 123456, "B4" => 1, "C4" => 'X', "D4" => 'X', "E4" => 'X', "F4" => 'X', "G4" => 'X', "H4" => 'X', "I4" => 'X', "J4" => 1,
-                "K4" => 'Purged', "L4" => 'X', "M4" => 'X', "N4" => 1, "O4" => 1, "P4" => 1, "Q4" => 'X', "R4" => 'X', "S4" => 'X', "T4" => 'X', "U4" => 'X', "V4" => 'X', "W4" => 'X', "X4" => 'X'}
+    data_arr << {"A5" => 123456, "B5" => 1, "C5" => 'X', "D5" => 'X', "E5" => 'X', "F5" => 'X', "G5" => 'X', "H5" => 'X', "I5" => 'X', "J5" => 1,
+                "K5" => 'Withdrawn', "L5" => 'X', "M5" => 'X', "N5" => 1, "O5" => 1, "P5" => 1, "Q5" => 'X', "R5" => 'X', "S5" => 'X', "T5" => 'X', "U5" => 'X', "V5" => 'X', "W5" => 'X', "X5" => 'X'}
+    data_arr << {"A6" => 123456, "B6" => 1, "C6" => 'X', "D6" => 'X', "E6" => 'X', "F6" => 'X', "G6" => 'X', "H6" => 'X', "I6" => 'X', "J6" => 1,
+                "K6" => 'Purged', "L6" => 'X', "M6" => 'X', "N6" => 1, "O6" => 1, "P6" => 1, "Q6" => 'X', "R6" => 'X', "S6" => 'X', "T6" => 'X', "U6" => 'X', "V6" => 'X', "W6" => 'X', "X6" => 'X'}
     data_arr
   end
 
@@ -72,7 +74,7 @@ RSpec.describe OspParser do
     data_arr = []
     data_arr << ['OSPKEY', 'STATUS']
     data_arr << [123456, 'Pending']
-    data_arr << [193848, 'Pending']
+    data_arr << [193848, 'Not Funded']
   end
 
   before(:each) do
@@ -151,9 +153,10 @@ RSpec.describe OspParser do
       allow(Creek::Book).to receive_message_chain(:new, :sheets, :[], :rows).and_return(data_book4)
       CSV.stub(:read) { fake_backup }
       osp_parser_obj.filter_by_status
-      expect(osp_parser_obj.xlsx_hash.count).to eq(2)
+      expect(osp_parser_obj.xlsx_hash.count).to eq(3)
       expect(osp_parser_obj.xlsx_hash[0]['status']).to eq('Awarded')
-      expect(osp_parser_obj.xlsx_hash[1]['status']).to eq('Purged')
+      expect(osp_parser_obj.xlsx_hash[1]['status']).to eq('Withdrawn')
+      expect(osp_parser_obj.xlsx_hash[2]['status']).to eq('Purged')
     end
   end
 
