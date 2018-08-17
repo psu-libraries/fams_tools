@@ -11,6 +11,7 @@ class CreateSections < ActiveRecord::Migration[5.1]
       t.integer :current_enrollment
       t.integer :instructor_load_factor
       t.string :instruction_mode
+      t.string :instructor_role
       t.string :course_component
       t.string :xcourse_course_pre
       t.integer :xcourse_course_num
