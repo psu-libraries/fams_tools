@@ -5,7 +5,7 @@ class LionPathParser
 
   attr_accessor :csv_hash, :active_users, :csv_object
 
-  def initialize(filepath = 'data/SP18-tabdel.txt')
+  def initialize(filepath = 'data/Summer18.txt')
     @csv_object = CSV.read(filepath, encoding: "ISO-8859-1:UTF-8", col_sep: "\t") 
     @csv_hash = convert_csv_to_hash(csv_object)
     @active_users = Faculty.pluck(:access_id)
@@ -113,6 +113,9 @@ class LionPathParser
   #Converts 'Term' from season and year to just season
   def format_term(row)
     row['Term'] = row['Term'].split(' ')[0]
+    if row['Term'] == 'Summer'
+      row['Term'] = 'Summer 1'
+    end
   end
 
   #Adds leading zeroes to 'Catalog Number' and converts to string

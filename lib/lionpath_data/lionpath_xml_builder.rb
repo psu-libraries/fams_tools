@@ -38,6 +38,7 @@ class LionPathXMLBuilder
                 xml.CHOURS_ section.course_credits, :access => "READ_ONLY"
                 xml.INST_MODE_ section.instruction_mode, :access => "READ_ONLY"
                 xml.COURSE_COMP_ section.course_component, :access => "READ_ONLY"
+                xml.ROLE_ section.instructor_role, :access => "READ_ONLY"
               }
             end
           }

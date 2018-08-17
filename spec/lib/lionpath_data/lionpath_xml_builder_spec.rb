@@ -7,12 +7,12 @@ RSpec.describe LionPathXMLBuilder do
     [{'Term' => 'Spring', 'Calendar Year' => 2018, 'Course Short Description' => 'The Class', 'Course Long Description' => 'This is the class that a teacher teaches.',
       'Acedemic Course ID' => 12345, 'Instructor Campus ID' => 'abc123', 'f_name' => 'Allen', 'l_name' => 'Carter', 'm_name' => 'Bob',
       'Class Campus Code' => 'UP', 'Cross Listed Flag' => 'N', 'Subject Code' => 'MGMT', 'Course Number' => 110, 'Course Suffix' => 'B',
-      'Class Section Code' => '001', 'Course Credits/Units' => 3, 'Current Enrollment' => 100, 'Instruction Mode' => 'In Person',
+      'Class Section Code' => '001', 'Course Credits/Units' => 3, 'Current Enrollment' => 100, 'Instruction Mode' => 'In Person', 'Instructor Role' => 'Primary Instructor',
       'Course Component' => 'Lecture', 'XCourse CoursePre' => '', 'XCourse CourseNum' => '', 'XCourse CourseNum Suffix' => '', 'Instructor Load Factor' => 100},
      {'Term' => 'Spring', 'Calendar Year' => 2018, 'Course Short Description' => 'The Other Class', 'Course Long Description' => 'This is the class that students learn in.',
       'Acedemic Course ID' => 54321, 'Instructor Campus ID' => 'cba321', 'f_name' => 'Carl', 'l_name' => 'Abraham', 'm_name' => 'Brett',
       'Class Campus Code' => 'UP', 'Cross Listed Flag' => 'N', 'Subject Code' => 'HIST', 'Course Number' => 100, 'Course Suffix' => 'A',
-      'Class Section Code' => '002', 'Course Credits/Units' => 3, 'Current Enrollment' => 50, 'Instruction Mode' => 'In Person',
+      'Class Section Code' => '002', 'Course Credits/Units' => 3, 'Current Enrollment' => 50, 'Instruction Mode' => 'In Person', 'Instructor Role' => 'Primary Instructor',
       'Course Component' => 'Lecture', 'XCourse CoursePre' => '', 'XCourse CourseNum' => '', 'XCourse CourseNum Suffix' => '', 'Instructor Load Factor' => 100}]
   end
 
@@ -44,6 +44,7 @@ RSpec.describe LionPathXMLBuilder do
                        current_enrollment:     row['Current Enrollment'],
                        instructor_load_factor: row['Instructor Load Factor'],
                        instruction_mode:       row['Instruction Mode'],
+                       instructor_role:        row['Instructor Role'],
                        course_component:       row['Course Component'],
                        xcourse_course_pre:     row['XCourse CoursePre'],
                        xcourse_course_num:     row['XCourse CourseNum'],
@@ -71,6 +72,7 @@ RSpec.describe LionPathXMLBuilder do
       <CHOURS access="READ_ONLY">3</CHOURS>
       <INST_MODE access="READ_ONLY">In Person</INST_MODE>
       <COURSE_COMP access="READ_ONLY">Lecture</COURSE_COMP>
+      <ROLE access="READ_ONLY">Primary Instructor</ROLE>
     </SCHTEACH>
   </Record>
   <Record username="cba321">
@@ -92,6 +94,7 @@ RSpec.describe LionPathXMLBuilder do
       <CHOURS access="READ_ONLY">3</CHOURS>
       <INST_MODE access="READ_ONLY">In Person</INST_MODE>
       <COURSE_COMP access="READ_ONLY">Lecture</COURSE_COMP>
+      <ROLE access="READ_ONLY">Primary Instructor</ROLE>
     </SCHTEACH>
   </Record>
 </Data>
