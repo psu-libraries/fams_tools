@@ -26,7 +26,7 @@ RSpec.describe LionPathParser do
   let(:line6) {['1-Mar-1983', 'Spring 2018', 2018, 'UP', 'Math', 'Lots of math.', 
                 9999, 'Y', 'MATH', '77A', 1, 3, 25, 100, 'In Person', 'Online', 'Secondary Instructor']}
 
-  let(:line7) {['xxx111', 'Spring 2018', 2018, 'UP', 'Math', 'Lots of math.',
+  let(:line7) {['xxx111', 'Summer 2018', 2018, 'UP', 'Math', 'Lots of math.',
                 1111, 'N', 'MATH', '202D', '901D', 3, 25, 0, 'In Person', 'Lecture', 'Primary Instructor']}
 
   let(:lionpath_parser_obj) {LionPathParser.new}
@@ -55,6 +55,7 @@ RSpec.describe LionPathParser do
       expect(lionpath_parser_obj.csv_hash[2]['Instructor Campus ID']).to eq('xxx111')
       expect(lionpath_parser_obj.csv_hash[3]['Instructor Campus ID']).to eq('jan23')
       expect(lionpath_parser_obj.csv_hash[0]['Term']).to eq('Spring')
+      expect(lionpath_parser_obj.csv_hash[6]['Term']).to eq('Summer 1')
       expect(lionpath_parser_obj.csv_hash[0]['Course Number']).to eq('001')
       expect(lionpath_parser_obj.csv_hash[1]['Course Number']).to eq('077')
       expect(lionpath_parser_obj.csv_hash[2]['Course Number']).to eq('202')
@@ -91,7 +92,7 @@ RSpec.describe LionPathParser do
       allow(CSV).to receive_message_chain(:read).and_return([headers, line1, line2, line3, line4, line5, line6, line7])
       lionpath_parser_obj.format
       lionpath_parser_obj.remove_duplicates
-      expect(lionpath_parser_obj.csv_hash.count).to eq(6)
+      expect(lionpath_parser_obj.csv_hash.count).to eq(7)
     end
   end
 end
