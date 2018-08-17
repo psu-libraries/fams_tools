@@ -9,9 +9,9 @@ class OspPopulateDB
 
   def format_and_filter
     osp_parser.format
-    osp_parser.filter_by_status
     osp_parser.filter_by_date
     osp_parser.filter_by_user
+    osp_parser.filter_by_status
   end
 
   #You'll want to make sure you run #write and #populate
