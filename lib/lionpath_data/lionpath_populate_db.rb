@@ -45,6 +45,7 @@ class LionPathPopulateDB
                      current_enrollment:     row['Current Enrollment'],
                      instructor_load_factor: row['Instructor Load Factor'],
                      instruction_mode:       row['Instruction Mode'],
+                     instructor_role:        row['Instructor Role'],
                      course_component:       row['Course Component'],
                      xcourse_course_pre:     row['XCourse CoursePre'],
                      xcourse_course_num:     row['XCourse CourseNum'],
