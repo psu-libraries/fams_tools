@@ -3,8 +3,8 @@ require 'spreadsheet'
 class GetUserData
   attr_accessor :users_sheet, :users_hashed
 
-  def initialize(users_sheet = Spreadsheet.open('data/psu-users.xls').worksheet(0))
-    @users_sheet = users_sheet
+  def initialize(file_path = 'data/psu-users.xls')
+    @users_sheet = Spreadsheet.open(file_path).worksheet(0)
     @users_hashed = []
   end
 
