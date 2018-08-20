@@ -14,10 +14,11 @@ RSpec.describe GetUserData do
     sheet
   end
 
-  let(:get_user_data_obj) {GetUserData.new(fake_book)}
+  let(:get_user_data_obj) {GetUserData.new}
 
   describe '#call' do
     it 'should get user data' do
+      allow(Spreadsheet).to receive_message_chain(:open, :worksheet) {fake_book}
       get_user_data_obj.call
       expect(Faculty.all.count).to eq(1)
       expect(Faculty.find_by(access_id: 'zzz999').f_name).to eq('Bill')
