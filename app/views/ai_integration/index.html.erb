@@ -2,11 +2,16 @@
   <h1>AI-Integration</h1>
 </div>
 
+<% if flash[:notice]%>
+  <div class="alert alert-success"><%= flash[:notice] %></div>
+<% end %>
 <div class="container">
   <h3>Contract/Grant Integration</h3>
   <%= form_with :url => { :action => "osp_integrate" } do |form| %>
     <p> <%= label(:congrant_file, text = "OSP Data File") %><%= form.file_field :congrant_file %> </p>
-    <p> <%= form.submit "Run Integration" %> </p>
+    <p> <%= label(:ai_backup_file, text = "CONGRANT backup File") %><%= form.file_field :ai_backup_file %> </p>
+    <p> <%= label(:psu_users_file, text = "psu-users.xls File") %><%= form.file_field :psu_users_file %> </p>
+    <p> <%= form.button "Run Integration".html_safe, class:"btn btn-primary", type: :submit, :data => { disable_with: "<i class='fa fa-spinner fa-spin'></i> Integrating..." } %> </p>
   <% end %>
 </div>
 <hr>
@@ -15,7 +20,8 @@
   <h3>Courses Taught Integration</h3>
   <%= form_with :url => { :action => "lionpath_integrate" } do |form| %>
     <p> <%= label(:courses_file, text = "Courses Taught Data File") %><%= form.file_field :courses_file %> </p>
-    <p> <%= form.submit "Run Integration" %> </p>
+    <p> <%= label(:psu_users_file, text = "psu-users.xls File") %><%= form.file_field :psu_users_file %> </p>
+    <p> <%= form.button "Run Integration".html_safe, class:"btn btn-primary", type: :submit, :data => { disable_with: "<i class='fa fa-spinner fa-spin'></i> Integrating..." } %> </p>
   <% end %>
 </div>
 <hr>
@@ -23,7 +29,7 @@
 <div class="container">
   <h3>Publications Integration</h3>
   <%= form_with :url => { :action => "pure_integrate" } do |form| %>
-    <p> <%= form.submit "Run Integration" %> </p>
+    <p> <%= label(:psu_users_file, text = "psu-users.xls File") %><%= form.file_field :psu_users_file %> </p>
+    <p> <%= form.button "Run Integration".html_safe, class:"btn btn-primary", type: :submit, :data => { disable_with: "<i class='fa fa-spinner fa-spin'></i> Integrating..." } %> </p>
   <% end %>
 </div>
-<hr>
