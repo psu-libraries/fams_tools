@@ -227,14 +227,14 @@ RSpec.describe RemoveSystemDups do
      ['', 'zzz666', '', '', '9876543', '', '65432', '', '', 'Why Mock Datasets are Destroying the Country']]
   end
 
-  let(:remove_dups_obj) {RemoveSystemDups.allocate}
+  let(:remove_dups_obj) {RemoveSystemDups.new}
 
   describe "#call" do
     it "should identify duplicates and
         should make a request to DM to remove duplicates" do
       sponsor = Sponsor.create(sponsor_name: 'Sponsor')
       Contract.create(osp_key: 54321, sponsor: sponsor)
-      remove_dups_obj.congrant_data = data_book
+      allow(CSV).to receive(:foreach).and_yield(data_book[0]).and_yield(data_book[1]).and_yield(data_book[2]).and_yield(data_book[3]).and_yield(data_book[4])
       stub_request(:post, "https://beta.digitalmeasures.com/login/service/v4/SchemaData:delete/INDIVIDUAL-ACTIVITIES-University").
          with(
            body: "<?xml version=\"1.0\"?>\n<Data>\n  <CONGRANT>\n    <item id=\"1234567\"/>\n    <item id=\"2345678\"/>\n  </CONGRANT>\n</Data>\n",

@@ -65,40 +65,52 @@ public
 
 #Note: This uses backup file from DM converted to tab del text to get all CONGRANT data in system.  Does NOT use GET request.
 class RemoveSystemDups
-  attr_accessor :congrant_data
+  attr_accessor :filepath, :ospkey_hash, :congrant_data, :duplicates_stored, :duplicates_final
 
   def initialize(filepath = 'data/CONGRANT-tabdel.txt')
-    @congrant_data = CSV.read(filepath, encoding: "ISO8859-1", col_sep: "\t")
+    @filepath = filepath
+    @ospkey_hash = {}
+    @duplicates_stored = []
+    @duplicates_final = []
   end
 
   def call
-    delete_duplicates(grab_duplicates(csv_to_hashes(congrant_data)))
+    grab_duplicates(csv_to_hashes(filepath))
+    delete_duplicates(check_local_db(duplicates_stored))
   end
 
   def write
-    write_to_spreadsheet(grab_duplicates(csv_to_hashes(congrant_data)))
+    grab_duplicates(csv_to_hashes(congrant_data))
+    write_to_spreadsheet(check_local_db(duplicates_stored))
   end
 
   private
 
-  def csv_to_hashes(congrant_data)
-    keys = congrant_data[0]
-    return congrant_data[1..-1].map {|a| Hash[ keys.zip(a) ] }
+  def csv_to_hashes(filepath)
+    index = 0
+    keys = []
+    CSV.foreach(filepath, encoding: "ISO8859-1", col_sep: "\t") do |row|
+      if index == 0
+        keys = row
+      else
+        hashed = Hash[ keys.zip(row) ]
+        if hashed['OSPKEY']
+          if ospkey_hash[hashed['USERNAME']]
+            ospkey_hash[hashed['USERNAME']] << hashed['OSPKEY']
+          else
+            ospkey_hash[hashed['USERNAME']] = [hashed['OSPKEY']]
+          end
+        end
+      end
+      index += 1
+    end
+    #keys = congrant_data[0]
+    #return congrant_data[1..-1].map {|a| Hash[ keys.zip(a) ] }
   end
 
   def grab_duplicates(congrant_hashed)
-    duplicates_final = []
-    duplicates_stored = []
-    ospkey_hash = {}
-    congrant_hashed.each do |congrant|
-      if congrant['OSPKEY']
-        if ospkey_hash[congrant['USERNAME']]
-          ospkey_hash[congrant['USERNAME']] << congrant['OSPKEY']
-        else
-          ospkey_hash[congrant['USERNAME']] = [congrant['OSPKEY']]
-        end
-      end
-    end
+    index = 0
+    keys = []
     user_duplicates_hash = {}
     ospkey_hash.each do |k,v|
       if user_duplicates_hash[k]
@@ -107,15 +119,24 @@ class RemoveSystemDups
         user_duplicates_hash[k] = v.select {|e| v.count(e) > 1}.uniq
       end
     end
-    congrant_hashed.each do |congrant|
-      if congrant['OSPKEY']
-        if user_duplicates_hash[congrant['USERNAME']].include? congrant['OSPKEY']
-          duplicates_stored << [congrant['USERNAME'], congrant['TITLE'], congrant['OSPKEY'], congrant['ID']]
-        else
-          #puts 'NO DUPLICATES'
+    CSV.foreach(filepath, encoding: "ISO8859-1", col_sep: "\t") do |row|
+      if index == 0
+        keys = row
+      else
+        hashed = Hash[ keys.zip(row) ]
+        if hashed['OSPKEY']
+          if user_duplicates_hash[hashed['USERNAME']].include? hashed['OSPKEY']
+            duplicates_stored << [hashed['USERNAME'], hashed['TITLE'], hashed['OSPKEY'], hashed['ID']]
+          else
+            #puts 'NO DUPLICATES'
+          end
         end
       end
+      index += 1
     end
+  end
+
+  def check_local_db(duplicates_stored)
     Contract.all.each do |contract|
       duplicates_stored.each do |duplicate|
         if contract.osp_key.to_s == duplicate[2]

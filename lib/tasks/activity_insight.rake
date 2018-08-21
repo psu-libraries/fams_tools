@@ -22,7 +22,7 @@ namespace :activity_insight do
     start = Time.now
     my_remove_dups = RemoveSystemDups.new
     my_remove_dups.call
-    my_remove_dups.write
+    #my_remove_dups.write
     finish = Time.now
     puts(((finish - start)/60).to_s + ' mins')
 
