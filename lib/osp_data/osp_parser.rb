@@ -1,14 +1,13 @@
 require 'creek'
 
 class OspParser
-  attr_accessor :xlsx_hash, :active_users, :xlsx_obj, :congrant_backup, :congrant_backup_hashes
+  attr_accessor :xlsx_hash, :active_users, :xlsx_obj, :pendnotfund
 
   def initialize(osp_path = 'data/dmresults.xlsx', backup_path = 'data/CONGRANT-tabdel.txt')
     @xlsx_obj = Creek::Book.new(osp_path).sheets[0].rows
     @xlsx_hash = convert_xlsx_to_hash(xlsx_obj)
     @active_users = Faculty.pluck(:access_id)
-    @congrant_backup = CSV.read(backup_path, encoding: "ISO8859-1", col_sep: "\t")
-    @congrant_backup_hashes = csv_to_hashes(congrant_backup)
+    @pendnotfund = find_converts(backup_path)
   end
 
   #Run all local formatting methods
@@ -44,15 +43,13 @@ class OspParser
   end
 
   def filter_by_status
+    index = 0
+    keys = []
     kept_rows = []
     xlsx_hash.each do |row|
       if row['status'] == 'Purged' || row['status'] == 'Withdrawn'
-        congrant_backup_hashes.each do |congrant|
-          if congrant['OSPKEY'].to_i == row['ospkey'].to_i && congrant['STATUS'] == 'Pending'
-            kept_rows << row
-          elsif congrant['OSPKEY'].to_i == row['ospkey'].to_i && congrant['STATUS'] == 'Not Funded'
-            kept_rows << row
-          end
+        if pendnotfund.include? row['ospkey']
+          kept_rows << row
         end
       else
         kept_rows << row
@@ -160,6 +157,24 @@ class OspParser
       row['startdate'] = ''
       row['enddate'] = ''
     end
+  end
+
+  def find_converts(backup_path)
+    index = 0
+    keys = []
+    pendnotfund = []
+    CSV.foreach(backup_path, encoding: "ISO8859-1", col_sep: "\t") do |backup_row|
+      if index == 0
+        keys = backup_row
+      else
+        hashed = Hash[ keys.zip(backup_row) ]
+        if hashed['STATUS'] == 'Pending' || hashed['STATUS'] == 'Not Funded'
+          pendnotfund << hashed['OSPKEY']
+        end
+      end
+      index += 1
+    end
+    pendnotfund
   end
 
 end
