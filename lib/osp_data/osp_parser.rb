@@ -1,4 +1,3 @@
-require 'byebug'
 require 'creek'
 
 class OspParser
