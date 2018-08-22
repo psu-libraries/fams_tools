@@ -30,6 +30,8 @@ class AiIntegrationController < ApplicationController
     my_remove_system_dups.call
     my_integrate = IntegrateData.new(OspXMLBuilder.new)
     my_integrate.integrate
+    @responses = my_integrate.responses
+    puts @responses
     finish = Time.now
     @time = (((finish - start)/60).to_i.to_s + ' minutes')
     File.delete(backup_path) if File.exist?(backup_path)
