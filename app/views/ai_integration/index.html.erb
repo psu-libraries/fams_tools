@@ -24,7 +24,11 @@
     <p> <%= label(:psu_users_file, text = "psu-users.xls File") %><%= form.file_field :psu_users_file %> </p>
     <p> <%= form.button "Run Integration".html_safe, class:"btn btn-primary", type: :submit, :data => { disable_with: "<i class='fa fa-spinner fa-spin'></i> Integrating..." } %> </p>
   <% end %>
-  <p> <%= @responses %> </p>
+  <% if flash[:errors] %>
+    <% flash[:errors].each do |error| %>
+      <p> <%= error %> </p>
+    <% end %>
+  <% end %>
 </div>
 <hr>
 
