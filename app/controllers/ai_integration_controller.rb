@@ -29,9 +29,6 @@ class AiIntegrationController < ApplicationController
     my_remove_system_dups = RemoveSystemDups.new(filepath = backup_path)
     my_remove_system_dups.call
     my_integrate = IntegrateData.new(OspXMLBuilder.new)
-    my_integrate.integrate
-    @responses = my_integrate.responses
-    puts @responses
     finish = Time.now
     @time = (((finish - start)/60).to_i.to_s + ' minutes')
     File.delete(backup_path) if File.exist?(backup_path)
@@ -48,11 +45,12 @@ class AiIntegrationController < ApplicationController
     my_lionpath_populate.format_and_filter
     my_lionpath_populate.populate
     lionpath_integrate = IntegrateData.new(LionPathXMLBuilder.new)
-    lionpath_integrate.integrate
+    @errors = lionpath_integrate.integrate
     finish = Time.now
     @time = (((finish - start)/60).to_i.to_s + ' minutes')
     File.delete(f_path) if File.exist?(f_path)
     flash[:notice] = "Integration completed in #{@time}."
+    flash[:errors] = @errors
     redirect_to ai_integration_path 
   end
 
