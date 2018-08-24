@@ -17,6 +17,10 @@ class AiIntegrationController < ApplicationController
 
   rescue_from StandardError do |error|
     redirect_to ai_integration_path, alert: error
+    Dir.foreach('app/parsing_files') do |f|
+      fn = File.join('app/parsing_files', f)
+      File.delete(fn) if File.exist?(fn) && f != '.' && f != '..'
+    end
   end
 
   def osp_integrate
