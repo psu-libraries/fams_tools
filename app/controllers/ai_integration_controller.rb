@@ -38,6 +38,10 @@ class AiIntegrationController < ApplicationController
     my_remove_system_dups.call
     my_integrate = IntegrateData.new(OspXMLBuilder.new)
     @errors = my_integrate.integrate
+    ContractFacultyLink.delete_all
+    Contract.delete_all
+    Sponsor.delete_all
+    Faculty.delete_all
     finish = Time.now
     @time = (((finish - start)/60).to_i.to_s + ' minutes')
     File.delete(backup_path) if File.exist?(backup_path)
@@ -57,6 +61,9 @@ class AiIntegrationController < ApplicationController
     my_lionpath_populate.populate
     lionpath_integrate = IntegrateData.new(LionPathXMLBuilder.new)
     @errors = lionpath_integrate.integrate
+    Section.delete_all
+    Course.delete_all
+    Faculty.delete_all
     finish = Time.now
     @time = (((finish - start)/60).to_i.to_s + ' minutes')
     File.delete(f_path) if File.exist?(f_path)
@@ -75,6 +82,11 @@ class AiIntegrationController < ApplicationController
     my_get_pure_publishers.call
     my_integrate = IntegrateData.new(PureXMLBuilder.new)
     @errors = my_integrate.integrate
+    PublicationFacultyLink.delete_all
+    ExternalAuthor.delete_all
+    Publication.delete_all
+    PureId.delete_all
+    Faculty.delete_all
     finish = Time.now
     @time = (((finish - start)/60).to_i.to_s + ' minutes')
     flash[:notice] = "Integration completed in #{@time}."
