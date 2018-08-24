@@ -7,7 +7,7 @@
   <%= form_with( url: publication_listings_url, :multipart => true ) do |f| %>
     <p><%= label(:citations_title, "Citations title:") %><%= f.text_field :citations_title, required: true%></p>
     <p><%= label(:citations, "Copy and paste citations here:") %><%= f.text_area :citations, size: "90x15"%></p>
-    <p> <%= f.button "Create Citation Spreadsheet".html_safe, class:"btn btn-primary", type: :submit, :data => { disable_with: "<i class='fa fa-spinner fa-spin'></i> Parsing..." } %> </p>
+    <p> <%= f.button "Create Citation Spreadsheet".html_safe, class:"btn btn-primary", type: :submit, :data => { disable_with: "<i class='fa fa-spinner fa-pulse'></i> Parsing..." } %> </p>
   <% end %>
 </div>
 <div class="container">
