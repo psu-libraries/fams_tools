@@ -15,6 +15,10 @@ require 'activity_insight/ai_manage_duplicates'
 class AiIntegrationController < ApplicationController
   before_action :load_psu_users, only: [:osp_integrate, :lionpath_integrate, :pure_integrate]
 
+  rescue_from StandardError do |error|
+    redirect_to ai_integration_path, alert: error
+  end
+
   def osp_integrate
     start = Time.now
     f_name = params[:congrant_file].original_filename
@@ -29,10 +33,13 @@ class AiIntegrationController < ApplicationController
     my_remove_system_dups = RemoveSystemDups.new(filepath = backup_path)
     my_remove_system_dups.call
     my_integrate = IntegrateData.new(OspXMLBuilder.new)
+    @errors = my_integrate.integrate
     finish = Time.now
     @time = (((finish - start)/60).to_i.to_s + ' minutes')
     File.delete(backup_path) if File.exist?(backup_path)
+    File.delete(f_path) if File.exist?(f_path)
     flash[:notice] = "Integration completed in #{@time}."
+    flash[:congrant_errors] = @errors
     redirect_to ai_integration_path
   end
   
@@ -50,7 +57,7 @@ class AiIntegrationController < ApplicationController
     @time = (((finish - start)/60).to_i.to_s + ' minutes')
     File.delete(f_path) if File.exist?(f_path)
     flash[:notice] = "Integration completed in #{@time}."
-    flash[:errors] = @errors
+    flash[:courses_errors] = @errors
     redirect_to ai_integration_path 
   end
 
@@ -63,10 +70,11 @@ class AiIntegrationController < ApplicationController
     my_get_pure_publishers = GetPurePublishers.new
     my_get_pure_publishers.call
     my_integrate = IntegrateData.new(PureXMLBuilder.new)
-    my_integrate.integrate
+    @errors = my_integrate.integrate
     finish = Time.now
     @time = (((finish - start)/60).to_i.to_s + ' minutes')
     flash[:notice] = "Integration completed in #{@time}."
+    flash[:pubs_errors] = @errors
     redirect_to ai_integration_path
   end
 

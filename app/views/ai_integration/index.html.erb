@@ -4,9 +4,12 @@
 
 <% if flash[:notice]%>
   <div class="alert alert-success"><%= flash[:notice] %></div>
+<% elsif flash[:alert]%>
+  <div class="alert alert-warning"><%= flash[:alert] %></div>
 <% end %>
 
-<div class="container">
+<div class="row">
+  <div class="col-sm">
   <h3>Contract/Grant Integration</h3>
   <%= form_with :url => { :action => "osp_integrate" } do |form| %>
     <p> <%= label(:congrant_file, text = "OSP Data File") %><%= form.file_field :congrant_file %> </p>
@@ -14,28 +17,49 @@
     <p> <%= label(:psu_users_file, text = "psu-users.xls File") %><%= form.file_field :psu_users_file %> </p>
     <p> <%= form.button "Run Integration".html_safe, class:"btn btn-primary", type: :submit, :data => { disable_with: "<i class='fa fa-spinner fa-spin'></i> Integrating..." } %> </p>
   <% end %>
+  </div>
+  <div class="col-sm" style="font-size: 12px; overflow: auto; width:300px; height:200px; border-style: inset;">
+  <% if flash[:congrant_errors] %>
+    <% flash[:congrant_errors].each do |error| %>
+      <p> <%= error %> </p>
+    <% end %>
+  <% end %>
+  </div>
 </div>
 <hr>
 
-<div class="container">
+<div class="row">
+  <div class="col-sm">
   <h3>Courses Taught Integration</h3>
   <%= form_with :url => { :action => "lionpath_integrate" } do |form| %>
     <p> <%= label(:courses_file, text = "Courses Taught Data File") %><%= form.file_field :courses_file %> </p>
     <p> <%= label(:psu_users_file, text = "psu-users.xls File") %><%= form.file_field :psu_users_file %> </p>
     <p> <%= form.button "Run Integration".html_safe, class:"btn btn-primary", type: :submit, :data => { disable_with: "<i class='fa fa-spinner fa-spin'></i> Integrating..." } %> </p>
   <% end %>
-  <% if flash[:errors] %>
-    <% flash[:errors].each do |error| %>
+  </div>
+  <div class="col-sm" style="font-size: 12px; overflow: auto; width:300px; height:200px; border-style: inset;">
+  <% if flash[:courses_errors] %>
+    <% flash[:courses_errors].each do |error| %>
       <p> <%= error %> </p>
     <% end %>
   <% end %>
+  </div>
 </div>
 <hr>
 
-<div class="container">
+<div class="row">
+  <div class="col-sm">
   <h3>Publications Integration</h3>
   <%= form_with :url => { :action => "pure_integrate" } do |form| %>
     <p> <%= label(:psu_users_file, text = "psu-users.xls File") %><%= form.file_field :psu_users_file %> </p>
     <p> <%= form.button "Run Integration".html_safe, class:"btn btn-primary", type: :submit, :data => { disable_with: "<i class='fa fa-spinner fa-spin'></i> Integrating..." } %> </p>
   <% end %>
+  </div>
+  <div class="col-sm" style="font-size: 12px; overflow: auto; width:300px; height:200px; border-style: inset;">
+  <% if flash[:pubs_errors] %>
+    <% flash[:pubs_errors].each do |error| %>
+      <p> <%= error %> </p>
+    <% end %>
+  <% end %>
+  </div>
 </div>
