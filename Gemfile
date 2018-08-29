@@ -47,7 +47,6 @@ gem 'jbuilder', '~> 2.5'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
-gem 'rails-controller-testing'
 gem 'spreadsheet'
 gem 'nokogiri'
 gem 'httparty'
