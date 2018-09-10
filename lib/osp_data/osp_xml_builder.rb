@@ -42,7 +42,9 @@ class OspXMLBuilder
                 xml.AMOUNT_REQUEST_ link.contract.requested, :access => "READ_ONLY"
                 xml.AMOUNT_ANTICIPATE_ link.contract.total_anticipated, :access => "READ_ONLY"
                 xml.AMOUNT_ link.contract.funded, :access => "READ_ONLY"
-                xml.STATUS_ link.contract.status, :access => "READ_ONLY"
+                if college_list.include? faculty.college
+                  xml.STATUS_ link.contract.status, :access => "READ_ONLY"
+                end
                 xml.DTM_SUB_ Date.strptime(link.contract.submitted.to_s, '%Y-%m-%d').strftime('%B'), :access => "READ_ONLY"
                 xml.DTD_SUB_ Date.strptime(link.contract.submitted.to_s, '%Y-%m-%d').strftime('%d'), :access => "READ_ONLY"
                 xml.DTY_SUB_ Date.strptime(link.contract.submitted.to_s, '%Y-%m-%d').strftime('%Y'), :access => "READ_ONLY"
@@ -90,4 +92,9 @@ class OspXMLBuilder
     end
     return builder.to_xml
   end
+
+  def college_list
+    ['AG', 'ED', 'CA', 'LA', 'BK', 'SC', 'AA', 'UL', 'BA', 'BC', 'CM', 'LW', 'EM', 'GV', 'HH', 'IST', 'MD', 'NR', 'UC', 'AB', 'AL', 'UE', 'EN']
+  end
+
 end
