@@ -65,13 +65,15 @@ public
 
 #Note: This uses backup file from DM converted to tab del text to get all CONGRANT data in system.  Does NOT use GET request.
 class RemoveSystemDups
-  attr_accessor :filepath, :ospkey_hash, :congrant_data, :duplicates_stored, :duplicates_final
+  attr_accessor :filepath, :ospkey_hash, :congrant_data, :duplicates_stored, :duplicates_final, :target, :url
 
-  def initialize(filepath = 'data/CONGRANT-tabdel.txt')
+  def initialize(filepath = 'data/CONGRANT-tabdel.txt', target)
     @filepath = filepath
     @ospkey_hash = {}
     @duplicates_stored = []
     @duplicates_final = []
+    @target = target.to_sym
+    @url = get_url(target)
   end
 
   def call
@@ -85,6 +87,17 @@ class RemoveSystemDups
   end
 
   private
+
+  def get_url(target)
+    case target
+    when :beta
+      'https://beta.digitalmeasures.com/login/service/v4/SchemaData:delete/INDIVIDUAL-ACTIVITIES-University'
+    when :alpha
+      'https://alpha.digitalmeasures.com/login/service/v4/SchemaData:delete/INDIVIDUAL-ACTIVITIES-University'
+    when :production
+      #'https://www.digitalmeasures.com/login/service/v4/SchemaData:delete/INDIVIDUAL-ACTIVITIES-University'
+    end
+  end
 
   def csv_to_hashes(filepath)
     index = 0
