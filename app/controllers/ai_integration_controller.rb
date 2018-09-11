@@ -59,7 +59,8 @@ class AiIntegrationController < ApplicationController
     my_lionpath_populate = LionPathPopulateDB.new(LionPathParser.new(filepath = f_path))
     my_lionpath_populate.format_and_filter
     my_lionpath_populate.populate
-    lionpath_integrate = IntegrateData.new(LionPathXMLBuilder.new)
+    puts params[:target]
+    lionpath_integrate = IntegrateData.new(LionPathXMLBuilder.new, params[:target])
     @errors = lionpath_integrate.integrate
     Section.delete_all
     Course.delete_all
