@@ -10,16 +10,17 @@ wb.add_worksheet(:name => "citations") do |sheet|
     end
   end
 
-  headers = ['title', 'journal', 'volume', 'edition', 'pages', 'date', 'booktitle', 'container', 'type', 'doi', 'editor', 'institution', 'isbn', 
-  'location', 'note', 'publisher', 'retrieved', 'tech', 'translator', 'unknown', 'url'
+  headers = ['TITLE', 'journal', 'VOLUME', 'EDITION', 'PAGENUM', 'DTY_PUB', 'booktitle', 'JOURNAL_NAME', 'CONTYPE', 'WEB_ADDRESS', 'EDITORS', 'INSTITUTION', 'ISBNISSN', 
+  'PUBCTYST', 'note', 'PUBLISHER', 'retrieved', 'tech', 'translator', 'unknown', 'url'
  ]
+
   counter = longest - 21
   while headers.length < longest
-    headers.insert(0, "author#{counter}")
+    headers.insert(0, ["INTELLCONT_AUTH_#{counter}_FNAME", "INTELLCONT_AUTH_#{counter}_MNAME", "INTELLCONT_AUTH_#{counter}_LNAME"])
     counter -= 1
   end
 
-  sheet.add_row headers
+  sheet.add_row headers.flatten
 
   @works.each do |item, index|
     row = [ 
@@ -27,20 +28,20 @@ wb.add_worksheet(:name => "citations") do |sheet|
       item[:editor]&.join(", "), item[:institution], item[:isbn], item[:location], item[:note], item[:publisher], item[:retrieved], item[:tech], item[:translator], 
       item[:unknown], item[:url]
     ]
-    item[:author]&.reverse&.each {|author| row.insert(0, author)}
+    item[:author]&.reverse&.each {|author| row.insert(0, [author[0], author[1], author[2]])}
     if row.length < longest
       unless item[:author] == nil
         while row.length < longest
-          row.insert(item[:author].length, "")
+          row.insert(item[:author].length, ["", "", ""])
         end
       else
         while row.length < longest
-          row.insert(0, "")
+          row.insert(0, ["", "", ""])
         end 
       end
     end
     
-    sheet.add_row row
+    sheet.add_row row.flatten
   end
 end 
 
