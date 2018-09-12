@@ -13,7 +13,7 @@ class PublicationListingsController < ApplicationController
 
     @citations.each_with_index do |item, index|
       work = Work.new(
-          :author => item[:author]&.collect {|e| "#{e[:given]} #{e[:family]}"}, 
+          :author => item[:author]&.collect { |e| [split_name(e[:given]), e[:family]].flatten }, 
           :title => item.dig(:title, 0), 
           :journal => item.dig(:journal, 0),
           :volume => item.dig(:volume, 0),
@@ -59,5 +59,15 @@ class PublicationListingsController < ApplicationController
   end
 
   def show
+  end
+
+  private
+
+  def split_name(name)
+    if name&.split('.')&.length == 2
+      [name&.split(/?<=[a-zA-Z][. ]/)[0].strip, name&.split(/?<=[a-zA-Z][. ]/)[1].strip]
+    else
+      [name, ""]
+    end
   end
 end
