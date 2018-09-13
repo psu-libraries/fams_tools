@@ -8,9 +8,6 @@ class PublicationListingsController < ApplicationController
     pl = PublicationListing.new(:name => params[:citations_title])
     pl.save
 
-    puts params[:citations].to_s
-    puts @citations
-
     @citations.each_with_index do |item, index|
       work = Work.new(
           :author => item[:author]&.collect { |e| [split_name(e[:given]), e[:family]].flatten }, 
@@ -22,6 +19,7 @@ class PublicationListingsController < ApplicationController
           :date => item.dig(:date, 0),
           :booktitle => item.dig(:booktitle, 0),
           :container => item.dig(:"container-title", 0),
+          :contype => params[:contype],
           :genre => item[:type],
           :doi => item.dig(:doi, 0),
           :editor => item[:editor]&.collect {|e| "#{e[:given]} #{e[:family]}"},
