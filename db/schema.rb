@@ -158,6 +158,7 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
     t.string "item"
     t.string "booktitle"
     t.string "container"
+    t.string "contype"
     t.string "genre"
     t.string "doi"
     t.text "editor"

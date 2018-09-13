@@ -4,17 +4,17 @@ wb.add_worksheet(:name => "citations") do |sheet|
   longest = 0
   @works.each do |item|
     unless item[:author] == nil
-      if longest < item[:author].length + 21
-        longest = item[:author].length + 21
+      if longest < item[:author].length + 22
+        longest = item[:author].length + 22
       end
     end
   end
 
-  headers = ['TITLE', 'journal', 'VOLUME', 'EDITION', 'PAGENUM', 'DTY_PUB', 'booktitle', 'JOURNAL_NAME', 'CONTYPE', 'WEB_ADDRESS', 'EDITORS', 'INSTITUTION', 'ISBNISSN', 
+  headers = ['TITLE', 'journal', 'VOLUME', 'EDITION', 'PAGENUM', 'DTY_PUB', 'booktitle', 'JOURNAL_NAME', 'type', 'CONTYPE', 'WEB_ADDRESS', 'EDITORS', 'INSTITUTION', 'ISBNISSN', 
   'PUBCTYST', 'note', 'PUBLISHER', 'retrieved', 'tech', 'translator', 'unknown', 'url'
  ]
 
-  counter = longest - 21
+  counter = longest - 22
   while headers.length < longest
     headers.insert(0, ["INTELLCONT_AUTH_#{counter}_FNAME", "INTELLCONT_AUTH_#{counter}_MNAME", "INTELLCONT_AUTH_#{counter}_LNAME"])
     counter -= 1
@@ -24,7 +24,7 @@ wb.add_worksheet(:name => "citations") do |sheet|
 
   @works.each do |item, index|
     row = [ 
-      item[:title], item[:journal], item[:volume], item[:edition], item[:pages], item[:date], item[:booktitle], item[:container], item[:genre], item[:doi],
+      item[:title], item[:journal], item[:volume], item[:edition], item[:pages], item[:date], item[:booktitle], item[:container], item[:genre], item[:contype], item[:doi],
       item[:editor]&.join(", "), item[:institution], item[:isbn], item[:location], item[:note], item[:publisher], item[:retrieved], item[:tech], item[:translator], 
       item[:unknown], item[:url]
     ]
