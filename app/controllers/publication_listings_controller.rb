@@ -64,8 +64,8 @@ class PublicationListingsController < ApplicationController
   private
 
   def split_name(name)
-    if name&.split('.')&.length == 2
-      [name&.split(/?<=[a-zA-Z][. ]/)[0].strip, name&.split(/?<=[a-zA-Z][. ]/)[1].strip]
+    if name&.split(/(?<=[. ])/)&.length == 2
+      [name&.split(/(?<=[. ])/)[0].strip, name&.split(/(?<=[. ])/)[1].strip]
     else
       [name, ""]
     end
