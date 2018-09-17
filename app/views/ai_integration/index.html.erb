@@ -11,11 +11,21 @@
 <div class="row">
   <div class="col-sm">
   <h3>Contract/Grant Integration</h3>
-  <%= form_with :url => { :action => "osp_integrate" } do |form| %>
+  <%= form_with :url => { :action => "osp_integrate" }, id: "congrant" do |form| %>
     <p> <%= label(:congrant_file, text = "OSP Data File") %><%= form.file_field :congrant_file %> </p>
     <p> <%= label(:ai_backup_file, text = "CONGRANT backup File") %><%= form.file_field :ai_backup_file %> </p>
     <p> <%= label(:psu_users_file, text = "psu-users.xls File") %><%= form.file_field :psu_users_file %> </p>
-    <p> <%= form.button "Run Integration".html_safe, class:"btn btn-primary", type: :submit, :data => { disable_with: "<i class='fa fa-spinner fa-pulse'></i> Integrating..." } %> </p>
+    <div class="row">
+      <div class="col-xs-1", style="padding:5px 5px;">
+        <p> <%= form.button "Beta".html_safe, class:"btn btn-primary", type: :submit, name: "target", value: :beta, :data => { disable_with: "<i class='fa fa-spinner fa-pulse'></i> Integrating..." } %> </p>
+      </div>
+      <div class="col-xs-1", style="padding:5px 5px;">
+        <p> <%= form.button "Alpha".html_safe, class:"btn btn-primary", type: :submit, name: "target", value: :alpha, :data => { disable_with: "<i class='fa fa-spinner fa-pulse'></i> Integrating..." } %> </p>
+      </div>
+      <div class="col-xs-1", style="padding:5px 5px;">
+        <p> <%= form.button "Production".html_safe, class:"btn btn-primary", type: :submit, name: "target", value: :production, :data => { disable_with: "<i class='fa fa-spinner fa-pulse'></i> Integrating..." } %> </p>
+      </div>
+    </div>
   <% end %>
   </div>
   <div class="col-sm" style="font-size: 12px; overflow: auto; width:300px; height:200px; border-style: inset;">
@@ -31,10 +41,20 @@
 <div class="row">
   <div class="col-sm">
   <h3>Courses Taught Integration</h3>
-  <%= form_with :url => { :action => "lionpath_integrate" } do |form| %>
+  <%= form_with :url => { :action => "lionpath_integrate" }, id: "courses" do |form| %>
     <p> <%= label(:courses_file, text = "Courses Taught Data File") %><%= form.file_field :courses_file %> </p>
     <p> <%= label(:psu_users_file, text = "psu-users.xls File") %><%= form.file_field :psu_users_file %> </p>
-    <p> <%= form.button "Run Integration".html_safe, class:"btn btn-primary", type: :submit, :data => { disable_with: "<i class='fa fa-spinner fa-pulse'></i> Integrating..." } %> </p>
+    <div class="row">
+      <div class="col-xs-1", style="padding:5px 5px;">
+        <p> <%= form.button "Beta".html_safe, class:"btn btn-primary", type: :submit, name: "target", value: :beta, :data => { disable_with: "<i class='fa fa-spinner fa-pulse'></i> Integrating..." } %> </p>
+      </div>
+      <div class="col-xs-1", style="padding:5px 5px;">
+        <p> <%= form.button "Alpha".html_safe, class:"btn btn-primary", type: :submit, name: "target", value: :alpha, :data => { disable_with: "<i class='fa fa-spinner fa-pulse'></i> Integrating..." } %> </p>
+      </div>
+      <div class="col-xs-1", style="padding:5px 5px;">
+        <p> <%= form.button "Production".html_safe, class:"btn btn-primary", type: :submit, name: "target", value: :production, :data => { disable_with: "<i class='fa fa-spinner fa-pulse'></i> Integrating..." } %> </p>
+      </div>
+    </div>
   <% end %>
   </div>
   <div class="col-sm" style="font-size: 12px; overflow: auto; width:300px; height:200px; border-style: inset;">
@@ -50,9 +70,19 @@
 <div class="row">
   <div class="col-sm">
   <h3>Publications Integration</h3>
-  <%= form_with :url => { :action => "pure_integrate" } do |form| %>
+  <%= form_with :url => { :action => "pure_integrate" }, id: "publications" do |form| %>
     <p> <%= label(:psu_users_file, text = "psu-users.xls File") %><%= form.file_field :psu_users_file %> </p>
-    <p> <%= form.button "Run Integration".html_safe, class:"btn btn-primary", type: :submit, :data => { disable_with: "<i class='fa fa-spinner fa-pulse'></i> Integrating..." } %> </p>
+    <div class="row">
+      <div class="col-xs-1", style="padding:5px 5px;">
+        <p> <%= form.button "Beta".html_safe, class:"btn btn-primary", type: :submit, name: "target", value: :beta, :data => { disable_with: "<i class='fa fa-spinner fa-pulse'></i> Integrating..." } %> </p>
+      </div>
+      <div class="col-xs-1", style="padding:5px 5px;">
+        <p> <%= form.button "Alpha".html_safe, class:"btn btn-primary", type: :submit, name: "target", value: :alpha, :data => { disable_with: "<i class='fa fa-spinner fa-pulse'></i> Integrating..." } %> </p>
+      </div>
+      <div class="col-xs-1", style="padding:5px 5px;">
+        <p> <%= form.button "Production".html_safe, class:"btn btn-primary", type: :submit, name: "target", value: :production, :data => { disable_with: "<i class='fa fa-spinner fa-pulse'></i> Integrating..." } %> </p>
+      </div>
+    </div>
   <% end %>
   </div>
   <div class="col-sm" style="font-size: 12px; overflow: auto; width:300px; height:200px; border-style: inset;">
@@ -63,3 +93,21 @@
   <% end %>
   </div>
 </div>
+
+<script>
+  $(document).on('click', '#courses :submit', function () {
+    var buttons = $('#courses :submit').not($(this));
+    buttons.removeAttr('data-disable-with');
+    buttons.attr('disabled', true);
+  });
+  $(document).on('click', '#congrant :submit', function () {
+    var buttons = $('#congrant :submit').not($(this));
+    buttons.removeAttr('data-disable-with');
+    buttons.attr('disabled', true);
+  });
+  $(document).on('click', '#publications :submit', function () {
+    var buttons = $('#publications :submit').not($(this));
+    buttons.removeAttr('data-disable-with');
+    buttons.attr('disabled', true);
+  });
+</script>

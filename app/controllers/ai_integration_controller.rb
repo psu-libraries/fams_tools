@@ -34,9 +34,9 @@ class AiIntegrationController < ApplicationController
     my_populate = OspPopulateDB.new(OspParser.new(osp_path = f_path, backup_path = backup_path))
     my_populate.format_and_filter
     my_populate.populate
-    my_remove_system_dups = RemoveSystemDups.new(filepath = backup_path)
+    my_remove_system_dups = RemoveSystemDups.new(filepath = backup_path, params[:target])
     my_remove_system_dups.call
-    my_integrate = IntegrateData.new(OspXMLBuilder.new)
+    my_integrate = IntegrateData.new(OspXMLBuilder.new, params[:target])
     @errors = my_integrate.integrate
     ContractFacultyLink.delete_all
     Contract.delete_all
@@ -59,7 +59,8 @@ class AiIntegrationController < ApplicationController
     my_lionpath_populate = LionPathPopulateDB.new(LionPathParser.new(filepath = f_path))
     my_lionpath_populate.format_and_filter
     my_lionpath_populate.populate
-    lionpath_integrate = IntegrateData.new(LionPathXMLBuilder.new)
+    puts params[:target]
+    lionpath_integrate = IntegrateData.new(LionPathXMLBuilder.new, params[:target])
     @errors = lionpath_integrate.integrate
     Section.delete_all
     Course.delete_all
@@ -80,7 +81,7 @@ class AiIntegrationController < ApplicationController
     my_pure_populate_db.populate
     my_get_pure_publishers = GetPurePublishers.new
     my_get_pure_publishers.call
-    my_integrate = IntegrateData.new(PureXMLBuilder.new)
+    my_integrate = IntegrateData.new(PureXMLBuilder.new, params[:target])
     @errors = my_integrate.integrate
     PublicationFacultyLink.delete_all
     ExternalAuthor.delete_all

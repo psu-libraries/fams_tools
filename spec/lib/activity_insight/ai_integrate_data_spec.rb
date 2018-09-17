@@ -162,7 +162,7 @@ RSpec.describe IntegrateData do
       osp_xml_builder_obj = double()
       allow(osp_xml_builder_obj).to receive(:batched_xmls).and_return(xml_arr)
 
-      osp_integrate_obj = IntegrateData.new(osp_xml_builder_obj)
+      osp_integrate_obj = IntegrateData.new(osp_xml_builder_obj, :beta)
       osp_integrate_obj.auth = {:username => 'Username', :password => 'Password'}
       stub_request(:post, "https://beta.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University").
          with(

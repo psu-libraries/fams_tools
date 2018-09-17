@@ -8,12 +8,10 @@ class PublicationListingsController < ApplicationController
     pl = PublicationListing.new(:name => params[:citations_title])
     pl.save
 
-    puts params[:citations].to_s
-    puts @citations
-
     @citations.each_with_index do |item, index|
       work = Work.new(
-          :author => item[:author]&.collect {|e| "#{e[:given]} #{e[:family]}"}, 
+          :username => params[:username],
+          :author => item[:author]&.collect { |e| [split_name(e[:given]), e[:family]].flatten }, 
           :title => item.dig(:title, 0), 
           :journal => item.dig(:journal, 0),
           :volume => item.dig(:volume, 0),
@@ -22,6 +20,7 @@ class PublicationListingsController < ApplicationController
           :date => item.dig(:date, 0),
           :booktitle => item.dig(:booktitle, 0),
           :container => item.dig(:"container-title", 0),
+          :contype => params[:contype],
           :genre => item[:type],
           :doi => item.dig(:doi, 0),
           :editor => item[:editor]&.collect {|e| "#{e[:given]} #{e[:family]}"},
@@ -59,5 +58,15 @@ class PublicationListingsController < ApplicationController
   end
 
   def show
+  end
+
+  private
+
+  def split_name(name)
+    if name&.split(/(?<=[. ])/)&.length == 2
+      [name&.split(/(?<=[. ])/)[0].strip, name&.split(/(?<=[. ])/)[1].strip]
+    else
+      [name, ""]
+    end
   end
 end
