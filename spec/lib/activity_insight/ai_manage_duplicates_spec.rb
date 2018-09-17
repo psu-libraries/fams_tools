@@ -227,7 +227,7 @@ RSpec.describe RemoveSystemDups do
      ['', 'zzz666', '', '', '9876543', '', '65432', '', '', 'Why Mock Datasets are Destroying the Country']]
   end
 
-  let(:remove_dups_obj) {RemoveSystemDups.new}
+  let(:remove_dups_obj) {RemoveSystemDups.new(:beta)}
 
   describe "#call" do
     it "should identify duplicates and

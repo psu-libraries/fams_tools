@@ -20,6 +20,20 @@ RSpec.describe OspXMLBuilder do
 
   describe '#batched_osp_xml' do
     it 'should return an xml of CONGRANT records' do
+
+      Faculty.create(access_id:   'aaa111',
+                       user_id:   123,
+                        f_name:   'Bill',
+                        l_name:   'Billy',
+                        m_name:   'Billiam',
+                       college:   'EN')
+      Faculty.create(access_id:   'bbb222',
+                       user_id:   321,
+                        f_name:   'Bill',
+                        l_name:   'Billy',
+                        m_name:   'Billiam',
+                       college:   'EM')
+
       data_sets.each do |row|
         sponsor = Sponsor.create(sponsor_name: row['sponsor'],
                                  sponsor_type: row['sponsortype'])
@@ -39,11 +53,7 @@ RSpec.describe OspXMLBuilder do
                                    base_agreement:    row['baseagreement'],
                                    notfunded:         row['notfunded'])
 
-        faculty = Faculty.create(access_id: row['accessid'],
-                                 user_id:   row['userid'],
-                                 f_name:    row['f_name'],
-                                 l_name:    row['l_name'],
-                                 m_name:    row['m_name'])
+        faculty = Faculty.find_by(access_id: row['accessid'])
 
         ContractFacultyLink.create(contract:   contract,
                                    faculty:    faculty,
