@@ -174,6 +174,7 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
     t.string "url"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "username"
     t.index ["publication_listing_id"], name: "index_works_on_publication_listing_id"
   end
 
