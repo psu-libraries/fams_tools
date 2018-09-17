@@ -10,6 +10,7 @@ class PublicationListingsController < ApplicationController
 
     @citations.each_with_index do |item, index|
       work = Work.new(
+          :username => params[:username],
           :author => item[:author]&.collect { |e| [split_name(e[:given]), e[:family]].flatten }, 
           :title => item.dig(:title, 0), 
           :journal => item.dig(:journal, 0),

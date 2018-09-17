@@ -6,6 +6,7 @@
   <h3>Create a new publication listing</h3>
   <%= form_with( url: publication_listings_url, :multipart => true ) do |f| %>
     <p><%= label(:citations_title, "Citations title:") %><%= f.text_field :citations_title, required: true%></p>
+    <p><%= label(:username, "Username:") %><%= f.text_field :username, required: true%></p>
     <p><%= f.select :contype, options_for_select(["Journal Article", "Conference Proceeeding", "Abstract", 
                                                   "Book", "Book Review", "Book, Chapter", "Cited Research", 
                                                   "Encyclopedia Entry", "Exhibition Catalog", "Extension Publication", 
