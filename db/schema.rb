@@ -46,7 +46,7 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
     t.integer "calendar_year"
     t.string "course_short_description"
     t.text "course_long_description"
-    t.index ["academic_course_id"], name: "index_courses_on_academic_course_id", unique: true
+    t.index ["academic_course_id", "term", "calendar_year"], name: "index_courses_on_academic_course_id_and_term_and_calendar_year", unique: true
   end
 
   create_table "external_authors", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -137,7 +137,7 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
     t.bigint "course_id"
     t.bigint "faculty_id"
     t.index ["course_id"], name: "fk_rails_20b1e5de46"
-    t.index ["faculty_id"], name: "fk_rails_756b5a76ef"
+    t.index ["faculty_id", "course_id", "class_campus_code", "subject_code", "course_number", "course_suffix", "class_section_code", "course_component"], name: "pkey", unique: true, length: { class_campus_code: 50, subject_code: 50, course_suffix: 50, class_section_code: 50, course_component: 50 }
   end
 
   create_table "sponsors", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
