@@ -22,7 +22,7 @@ namespace :lionpath_data do
 
   task integrate: :environment do
     start = Time.now
-    lionpath_integrate = IntegrateData.new(LionPathXMLBuilder.new, :beta)
+    lionpath_integrate = IntegrateData.new(LionPathXMLBuilder.new, :production)
     lionpath_integrate.integrate
     finish = Time.now
     puts(((finish - start)/60).to_s + ' mins')
