@@ -1,15 +1,15 @@
-require 'pure_data/get_pure_data'
+require 'pub_data/get_pub_data'
 
-class PurePopulateDB
-  attr_accessor :pure_data
+class PubPopulateDB
+  attr_accessor :pub_data
 
-  def initialize(pure_data_obj = GetPureData.new)
-    @pure_data = pure_data_obj
+  def initialize(pub_data_obj = GetPubData.new)
+    @pub_data = pub_data_obj
   end
 
   def populate
-    pure_data.call
-    pure_data.pure_hash.each do |k,v|
+    pub_data.call
+    pub_data.pub_hash.each do |k,v|
 
       faculty = Faculty.find_by(access_id: k)
 

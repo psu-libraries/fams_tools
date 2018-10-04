@@ -1,7 +1,7 @@
 require 'rails_helper'
-require 'pure_data/get_pure_data'
+require 'pub_data/get_pub_data'
 
-RSpec.describe GetPureData do
+RSpec.describe GetPubData do
 
   before(:each) do
     faculty1 = Faculty.create(access_id: 'xyz321',
@@ -18,7 +18,7 @@ RSpec.describe GetPureData do
                              college:   'BK')
   end
 
-  let(:get_pure_data_obj) {GetPureData.new}
+  let(:get_pub_data_obj) {GetPubData.new}
 
   describe '#call' do
     it 'should obtain publication data from Pure' do
@@ -32,16 +32,16 @@ RSpec.describe GetPureData do
            }).
          to_return(status: 200, body: response, headers: {})
 
-      get_pure_data_obj.call
-      expect(get_pure_data_obj.pub_hash['abc123']['data'][0]["attributes"]["status"]).to eq('Published')
-      expect(get_pure_data_obj.pub_hash['xyz321']['data'][0]["attributes"]["status"]).to eq('Published')
-      expect(get_pure_data_obj.pub_hash['abc123']['data'][0]["attributes"]["dtm"]).to eq('January (1st Quarter/Winter)')
-      expect(get_pure_data_obj.pub_hash['xyz321']['data'][0]["attributes"]["dtm"]).to eq('March')
-      expect(get_pure_data_obj.pub_hash['abc123']['data'][0]["attributes"]["dty"]).to eq('2008')
-      expect(get_pure_data_obj.pub_hash['abc123']['data'][0]["attributes"]["dtd"]).to eq("1")
-      expect(get_pure_data_obj.pub_hash['xyz321']['data'][0]["attributes"]["publication_type"]).to eq('Academic Journal Article')
-      expect(get_pure_data_obj.pub_hash['abc123']['data'][1]["attributes"]["publication_type"]).to eq('Academic Journal Article')
-      expect(get_pure_data_obj.pub_hash['abc123']['data'][0]["attributes"]["page_range"]).to eq('1-2')
+      get_pub_data_obj.call
+      expect(get_pub_data_obj.pub_hash['abc123']['data'][0]["attributes"]["status"]).to eq('Published')
+      expect(get_pub_data_obj.pub_hash['xyz321']['data'][0]["attributes"]["status"]).to eq('Published')
+      expect(get_pub_data_obj.pub_hash['abc123']['data'][0]["attributes"]["dtm"]).to eq('January (1st Quarter/Winter)')
+      expect(get_pub_data_obj.pub_hash['xyz321']['data'][0]["attributes"]["dtm"]).to eq('March')
+      expect(get_pub_data_obj.pub_hash['abc123']['data'][0]["attributes"]["dty"]).to eq('2008')
+      expect(get_pub_data_obj.pub_hash['abc123']['data'][0]["attributes"]["dtd"]).to eq("1")
+      expect(get_pub_data_obj.pub_hash['xyz321']['data'][0]["attributes"]["publication_type"]).to eq('Academic Journal Article')
+      expect(get_pub_data_obj.pub_hash['abc123']['data'][1]["attributes"]["publication_type"]).to eq('Academic Journal Article')
+      expect(get_pub_data_obj.pub_hash['abc123']['data'][0]["attributes"]["page_range"]).to eq('1-2')
     end
   end
 

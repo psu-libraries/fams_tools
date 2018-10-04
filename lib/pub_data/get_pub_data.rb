@@ -1,4 +1,4 @@
-class GetPureData
+class GetPubData
   attr_accessor :user_ids, :pub_json, :pub_hash
 
   def initialize

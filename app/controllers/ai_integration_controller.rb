@@ -1,7 +1,5 @@
-require 'pure_data/get_pure_ids'
-require 'pure_data/pure_populate_db'
-require 'pure_data/get_pure_publishers'
-require 'pure_data/pure_xml_builder'
+require 'pub_data/pub_populate_db'
+require 'pub_data/pub_xml_builder'
 require 'osp_data/osp_parser'
 require 'osp_data/osp_populate_db'
 require 'osp_data/osp_xml_builder'
@@ -13,7 +11,7 @@ require 'activity_insight/ai_get_user_data'
 require 'activity_insight/ai_manage_duplicates'
 
 class AiIntegrationController < ApplicationController
-  before_action :load_psu_users, only: [:osp_integrate, :lionpath_integrate, :pure_integrate]
+  before_action :load_psu_users, only: [:osp_integrate, :lionpath_integrate, :pub_integrate]
 
   rescue_from StandardError do |error|
     redirect_to ai_integration_path, alert: error
@@ -73,20 +71,20 @@ class AiIntegrationController < ApplicationController
     redirect_to ai_integration_path 
   end
 
-  def pure_integrate
+  def pub_integrate
     start = Time.now
-    my_get_pure_ids = GetPureIDs.new
-    my_get_pure_ids.call
-    my_pure_populate_db = PurePopulateDB.new
-    my_pure_populate_db.populate
-    my_get_pure_publishers = GetPurePublishers.new
-    my_get_pure_publishers.call
-    my_integrate = IntegrateData.new(PureXMLBuilder.new, params[:target])
+    my_get_pub_ids = GetPubIDs.new
+    my_get_pub_ids.call
+    my_pub_populate_db = PubPopulateDB.new
+    my_pub_populate_db.populate
+    my_get_pub_publishers = GetPubPublishers.new
+    my_get_pub_publishers.call
+    my_integrate = IntegrateData.new(PubXMLBuilder.new, params[:target])
     @errors = my_integrate.integrate
     PublicationFacultyLink.delete_all
     ExternalAuthor.delete_all
     Publication.delete_all
-    PureId.delete_all
+    PubId.delete_all
     Faculty.delete_all
     finish = Time.now
     @time = (((finish - start)/60).to_i.to_s + ' minutes')
