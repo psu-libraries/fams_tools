@@ -1,6 +1,6 @@
 require 'nokogiri'
   
-class PureXMLBuilder
+class PubXMLBuilder
   attr_accessor :faculties
 
   def initialize

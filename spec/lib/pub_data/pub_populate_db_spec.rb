@@ -1,7 +1,7 @@
 require 'rails_helper'
-require 'pure_data/pure_populate_db'
+require 'pub_data/pub_populate_db'
 
-RSpec.describe PurePopulateDB do
+RSpec.describe PubPopulateDB do
 
   let(:fake_data) do
     hash = {
@@ -80,13 +80,13 @@ RSpec.describe PurePopulateDB do
   end
 
   describe '#populate' do
-    it 'should populate the database with pure data' do
-      pure_data_obj = double()
-      allow(pure_data_obj).to receive(:call)
-      allow(pure_data_obj).to receive(:pure_hash).and_return(fake_data)
-      pure_populate_db_obj = PurePopulateDB.new(pure_data_obj)
+    it 'should populate the database with pub data' do
+      pub_data_obj = double()
+      allow(pub_data_obj).to receive(:call)
+      allow(pub_data_obj).to receive(:pure_hash).and_return(fake_data)
+      pub_populate_db_obj = PubPopulateDB.new(pub_data_obj)
 
-      pure_populate_db_obj.populate
+      pub_populate_db_obj.populate
       expect(Publication.all.count).to eq(3)
       expect(Publication.first.title).to eq('Title')
       expect(Faculty.find_by(access_id: 'abc123').publication_faculty_links.first.publication.external_authors.first.f_name).to eq('Billy')

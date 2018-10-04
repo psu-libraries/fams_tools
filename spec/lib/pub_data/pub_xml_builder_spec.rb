@@ -1,7 +1,7 @@
 require 'rails_helper'
-require 'pure_data/pure_xml_builder'
+require 'pub_data/pub_xml_builder'
 
-RSpec.describe PureXMLBuilder do
+RSpec.describe PubXMLBuilder do
 
   let(:data_sets) do
     hash = {
@@ -86,9 +86,9 @@ RSpec.describe PureXMLBuilder do
                    college:   'CA')
   end
 
-  let(:pure_xml_builder_obj) {PureXMLBuilder.new}
+  let(:pub_xml_builder_obj) {PubXMLBuilder.new}
 
-  describe '#batched_pure_xml' do
+  describe '#batched_pub_xml' do
     it 'should return an xml of INTELLCONT records' do
       data_sets.each do |k,v|
         faculty = Faculty.find_by(access_id: k)
@@ -128,7 +128,7 @@ RSpec.describe PureXMLBuilder do
                                         dtm:         pub[:dtm] )
         end
       end
-      expect(pure_xml_builder_obj.batched_xmls).to eq([
+      expect(pub_xml_builder_obj.batched_xmls).to eq([
 '<?xml version="1.0" encoding="UTF-8"?>
 <Data>
   <Record username="abc123">
