@@ -16,161 +16,148 @@ RSpec.describe GetPureData do
                              l_name:    'Foreman',
                              m_name:    'Grill',
                              college:   'BK')
-
-    PureId.create(faculty: faculty1,
-                  pure_id: 123)
-
-    PureId.create(faculty: faculty2,
-                  pure_id: 321)
   end
 
   let(:get_pure_data_obj) {GetPureData.new}
 
   describe '#call' do
     it 'should obtain publication data from Pure' do
-      stub_request(:get, Regexp.new("https://pennstate.pure.elsevier.com/ws/api/511/persons/123")).
-         to_return(status: 200, body: '
-<result xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://pennstate.pure.elsevier.com/ws/api/511/xsd/schema1.xsd">
-  <contributionToJournal uuid="" pureId="453" externalId="" externalIdSource="Scopus">
-    <title>Cool Title</title>
-    <type>Conference article</type>
-    <peerReview>true</peerReview>
-    <publicationStatuses>
-      <publicationStatus current="true">
-        <publicationStatus pureId="" uri="/dk/atira/pure/researchoutput/status/published">E-pub ahead of print</publicationStatus>
-        <publicationDate>
-          <year>2011</year>
-          <month>11</month>
-          <day>11</day>
-        </publicationDate>
-      </publicationStatus>
-    </publicationStatuses>
-    <personAssociations>
-      <personAssociation pureId="">
-        <name>
-          <firstName>Kyle</firstName>
-          <lastName>Hamburger</lastName>
-        </name>
-        <personRole pureId="" uri="/dk/atira/pure/researchoutput/roles/contributiontojournal/author">Author</personRole>
-      </personAssociation>
-    </personAssociations>
-    <journalAssociation pureId="">
-      <journal uuid="yo">
-        <title>Journal of Stuff</title>
-        <issn>5432-5432</issn>
-      </journal>
-    </journalAssociation>
-    <pages>45-60</pages>
-    <volume>56</volume>
-    <journalNumber>5</journalNumber>
-  </contributionToJournal>
-  <contributionToJournal uuid="" pureId="321" externalId="" externalIdSource="Scopus">
-    <title>Cooler Title</title>
-    <type>Article</type>
-    <category>Journal</category>
-    <peerReview>true</peerReview>
-    <publicationStatuses>
-      <publicationStatus current="true">
-        <publicationStatus pureId="" uri="/dk/atira/pure/researchoutput/status/published">Accepted/In pressPublished</publicationStatus>
-        <publicationDate>
-          <year>2010</year>
-          <month>10</month>
-          <day>10</day>
-        </publicationDate>
-      </publicationStatus>
-    </publicationStatuses>
-    <personAssociations>
-      <personAssociation pureId="">
-        <name>
-          <firstName>Will</firstName>
-          <lastName>Craig</lastName>
-        </name>
-        <personRole pureId="" uri="/dk/atira/pure/researchoutput/roles/contributiontojournal/author">Author</personRole>
-      </personAssociation>
-      <personAssociation pureId="">
-        <name>
-          <firstName>George</firstName>
-          <middleName>Foreman</middleName>
-          <lastName>Grill</lastName>
-        </name>
-        <personRole pureId="" uri="/dk/atira/pure/researchoutput/roles/contributiontojournal/author">Author</personRole>
-      </personAssociation>
-    </personAssociations>
-    <journalAssociation pureId="">
-      <journal uuid="dawg">
-        <title>Journal of Stuff</title>
-        <issn>431-4321</issn>
-      </journal>
-    </journalAssociation>
-    <pages>100-150</pages>
-    <volume>3</volume>
-    <journalNumber>7</journalNumber>
-  </contributionToJournal>
-</result>', headers: {})
-      stub_request(:get, Regexp.new("https://pennstate.pure.elsevier.com/ws/api/511/persons/321")).
-         to_return(status: 200, body: '
-<result xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://pennstate.pure.elsevier.com/ws/api/511/xsd/schema1.xsd">
-  <contributionToJournal uuid="" pureId="453" externalId="" externalIdSource="Scopus">
-    <title>Cool Title</title>
-    <type>Comment/debate</type>
-    <peerReview>true</peerReview>
-    <publicationStatuses>
-      <publicationStatus current="true">
-        <publicationStatus pureId="" uri="/dk/atira/pure/researchoutput/status/published">Accepted/In pressPublished</publicationStatus>
-        <publicationDate>
-          <year>20172017</year>
-          <month>11</month>
-          <day>32</day>
-        </publicationDate>
-      </publicationStatus>
-    </publicationStatuses>
-    <personAssociations>
-      <personAssociation pureId="">
-        <name>
-          <firstName>Bill</firstName>
-          <lastName>Frank</lastName>
-        </name>
-        <personRole pureId="" uri="/dk/atira/pure/researchoutput/roles/contributiontojournal/author">Author</personRole>
-        <externalOrganisations>
-          <externalOrganisation uuid="">
-            <name>University</name>
-          </externalOrganisation>
-        </externalOrganisations>
-      </personAssociation>
-    </personAssociations>
-    <electronicVersions>
-      <electronicVersion xsi:type="" pureId="">
-        <doi>www.website.org</doi>
-      </electronicVersion>
-    </electronicVersion>
-    <journalAssociation pureId="">
-      <journal uuid="ued83773-sj67884">
-        <title>Journal of Stuff</title>
-        <issn>5432-5432</issn>
-      </journal>
-    </journalAssociation>
-    <articleNumber>20</articleNumber>
-    <pages>45-60</pages>
-    <volume>56</volume>
-    <journalNumber>5</journalNumber>
-  </contributionToJournal>
-</result>', headers: {})
+
+      stub_request(:post, "https://stage.metadata.libraries.psu.edu/v1/users/publications").
+         with(
+           body: ["abc123", "xyz321"],
+           headers: {
+       	  'Accept'=>'application/xml',
+       	  'Api-Key'=>'bf5beedf-55a2-4260-9708-b3b7466defef'
+           }).
+         to_return(status: 200, body: response, headers: {})
+
       get_pure_data_obj.call
-      expect(get_pure_data_obj.pure_hash['abc123'][0][:persons][0][:extOrg]).to eq('University')
-      expect(get_pure_data_obj.pure_hash['abc123'][0][:status]).to eq('Accepted')
-      expect(get_pure_data_obj.pure_hash['xyz321'][0][:status]).to eq('Published')
-      expect(get_pure_data_obj.pure_hash['abc123'][0][:dtm]).to eq('November')
-      expect(get_pure_data_obj.pure_hash['xyz321'][1][:dtm]).to eq('October (4th Quarter/Autumn)')
-      expect(get_pure_data_obj.pure_hash['abc123'][0][:dty]).to eq('2017')
-      expect(get_pure_data_obj.pure_hash['abc123'][0][:dtd]).to eq(nil)
-      expect(get_pure_data_obj.pure_hash['xyz321'][0][:category]).to eq('Conference Proceeding')
-      expect(get_pure_data_obj.pure_hash['xyz321'][1][:category]).to eq('Journal Article, Academic Journal')
-      expect(get_pure_data_obj.pure_hash['abc123'][0][:category]).to eq('Other')
-      expect(get_pure_data_obj.pure_hash['abc123'][0][:articleNumber]).to eq('20')
-      expect(get_pure_data_obj.pure_hash['abc123'][0][:journaluuid]).to eq('ued83773-sj67884')
-      expect(get_pure_data_obj.pure_hash['abc123'][0][:peerReview]).to eq('Yes')
-      expect(get_pure_data_obj.pure_hash['abc123'][0][:url]).to eq('www.website.org')
+      expect(get_pure_data_obj.pub_hash['abc123']['data'][0]["attributes"]["status"]).to eq('Published')
+      expect(get_pure_data_obj.pub_hash['xyz321']['data'][0]["attributes"]["status"]).to eq('Published')
+      expect(get_pure_data_obj.pub_hash['abc123']['data'][0]["attributes"]["dtm"]).to eq('January (1st Quarter/Winter)')
+      expect(get_pure_data_obj.pub_hash['xyz321']['data'][0]["attributes"]["dtm"]).to eq('March')
+      expect(get_pure_data_obj.pub_hash['abc123']['data'][0]["attributes"]["dty"]).to eq('2008')
+      expect(get_pure_data_obj.pub_hash['abc123']['data'][0]["attributes"]["dtd"]).to eq("1")
+      expect(get_pure_data_obj.pub_hash['xyz321']['data'][0]["attributes"]["publication_type"]).to eq('Academic Journal Article')
+      expect(get_pure_data_obj.pub_hash['abc123']['data'][1]["attributes"]["publication_type"]).to eq('Academic Journal Article')
+      expect(get_pure_data_obj.pub_hash['abc123']['data'][0]["attributes"]["page_range"]).to eq('1-2')
     end
+  end
+
+  private
+
+  def response
+'{
+  "abc123": {
+    "data": [
+      {
+        "id": "123456",
+        "type": "publication",
+        "attributes": {
+          "title": "Test 1",
+          "secondary_title": null,
+          "journal_title": "Test Journal",
+          "publication_type": "Academic Journal Article",
+          "publisher": null,
+          "status": "Published",
+          "volume": "1",
+          "issue": "1",
+          "edition": null,
+          "page_range": "1-2",
+          "authors_et_al": null,
+          "abstract": null,
+          "citation_count": 3,
+          "published_on": "2008-01-01",
+          "contributors": [
+            {
+              "first_name": "Alex",
+              "middle_name": null,
+              "last_name": "Cornmeal"
+            }
+          ],
+          "tags": [
+            {
+              "name": "Tests",
+              "rank": 1
+            }
+          ]
+        }
+      },
+      {
+        "id": "654321",
+        "type": "publication",
+        "attributes": {
+          "title": "Test 2",
+          "secondary_title": null,
+          "journal_title": "Another Test Journal",
+          "publication_type": "Academic Journal Article",
+          "publisher": null,
+          "status": "Published",
+          "volume": "2",
+          "issue": "2",
+          "edition": null,
+          "page_range": "2-3",
+          "authors_et_al": null,
+          "abstract": "<p>Test abstract.</p>",
+          "citation_count": 0,
+          "published_on": "2017-04-01",
+          "contributors": [
+            {
+              "first_name": "Alex",
+              "middle_name": null,
+              "last_name": "Cornmeal"
+            }
+          ],
+          "tags": [
+            {
+              "name": "Tests",
+              "rank": 1
+            }
+          ]
+        }
+      }
+    ]
+  },
+
+  "xyz321": {
+    "data": [
+      {
+        "id": "678901",
+        "type": "publication",
+        "attributes": {
+          "title": "Test 3",
+          "secondary_title": null,
+          "journal_title": "Yet Another Test Journal",
+          "publication_type": "Academic Journal Article",
+          "publisher": null,
+          "status": "Published",
+          "volume": "3",
+          "issue": "3",
+          "edition": null,
+          "page_range": "3-4",
+          "authors_et_al": null,
+          "abstract": "<p>Test abstract 2.</p>",
+          "citation_count": 6,
+          "published_on": "2014-03-12",
+          "contributors": [
+            {
+              "first_name": "Xavier",
+              "middle_name": null,
+              "last_name": "Zimmerman"
+            }
+          ],
+          "tags": [
+            {
+              "name": "Tests",
+              "rank": 1
+            }
+          ]
+        }
+      }
+    ]
+  }
+}'
   end
 
 end
