@@ -16,42 +16,34 @@ class PubPopulateDB
       v.each do |pub|
 
         begin
-          publication = Publication.create(pure_id:       pub[:pure_id],
-                                          title:         pub[:title],
-                                          volume:        pub[:volume],
-                                          dty:           pub[:dty],
-                                          dtd:           pub[:dtd],
-                                          journal_title: pub[:journalTitle],
-                                          journal_issn:  pub[:journalIssn],
-                                          journal_num:   pub[:journalNum],
-                                          journal_uuid:  pub[:journaluuid],
-                                          pages:         pub[:pages],
-                                          articleNumber: pub[:articleNumber],
-                                          peerReview:    pub[:peerReview],
-                                          url:           pub[:url],
+          publication = Publication.create(pure_id:      pub["attributes"]["pure_ids"],
+                                          title:         pub["attributes"]["title"],
+                                          volume:        pub["attributes"]["volume"],
+                                          dty:           pub["attributes"]["dty"],
+                                          dtd:           pub["attributes"]["dtd"],
+                                          journal_title: pub["attributes"]["journal_title"],
+                                          pages:         pub["attributes"]["page_range"],
                                           publisher:     nil
                                           )
 
         rescue ActiveRecord::RecordNotUnique
-          publication = Publication.find_by(pure_id: pub[:pure_id])
+          publication = Publication.find_by(pure_id: pub["pure_ids"])
         end
 
-        pub[:persons].each do |person|
+        pub["attributes"]["contributors"].each do |person|
 
           ExternalAuthor.create(publication: publication,
-                                f_name:      person[:fName],
-                                m_name:      person[:mName],
-                                l_name:      person[:lName],
-                                role:        person[:role],
-                                extOrg:      person[:extOrg]
+                                f_name:      person["first_name"],
+                                m_name:      person["middle_name"],
+                                l_name:      person["last_name"]
                                 )
         end
 
         PublicationFacultyLink.create(faculty:     faculty,
                                       publication: publication,
-                                      status:      pub[:status],
-                                      category:    pub[:category],
-                                      dtm:         pub[:dtm])
+                                      status:      pub["attributes"]["status"],
+                                      category:    pub["attributes"]["publication_type"],
+                                      dtm:         pub["attributes"]["dtm"])
       end
     end
   end
