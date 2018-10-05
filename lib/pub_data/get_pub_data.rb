@@ -95,19 +95,19 @@ class GetPubData
   def format_year(publication)
     pub_year = Date.parse(publication["attributes"]["published_on"]).strftime("%Y")
     if pub_year.length > 4
-      publication["attributes"]["dty"] = pub_year[0..3]
+      publication["attributes"]["dty"] = pub_year[0..3].to_i
       pub_year = pub_year[0..3]
     end
     unless (pub_year.to_i >= 1950) && (pub_year.to_i <= Date.current.year + 5)
       publication["attributes"]["dty"] = nil
     else
-      publication["attributes"]["dty"] = pub_year
+      publication["attributes"]["dty"] = pub_year.to_i
     end
   end
 
   def format_day(publication)
     pub_day = Date.parse(publication["attributes"]["published_on"]).strftime("%-d")
-    publication["attributes"]["dtd"] = pub_day
+    publication["attributes"]["dtd"] = pub_day.to_i
   end
 
 end

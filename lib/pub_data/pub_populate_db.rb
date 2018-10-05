@@ -9,22 +9,27 @@ class PubPopulateDB
 
   def populate
     pub_data.call
-    pub_data.pub_hash.each do |k,v|
+    pub_data.pub_hash.each do |k, user_pubs|
 
       faculty = Faculty.find_by(access_id: k)
 
-      v.each do |pub|
+      user_pubs["data"].each do |pub|
 
         begin
-          publication = Publication.create(pure_id:      pub["attributes"]["pure_ids"],
-                                          title:         pub["attributes"]["title"],
-                                          volume:        pub["attributes"]["volume"],
-                                          dty:           pub["attributes"]["dty"],
-                                          dtd:           pub["attributes"]["dtd"],
-                                          journal_title: pub["attributes"]["journal_title"],
-                                          pages:         pub["attributes"]["page_range"],
-                                          publisher:     nil
-                                          )
+          publication = Publication.create(pure_ids:        pub["pure_ids"],
+                                           ai_ids:          pub["activity_insight_ids"], 
+                                           title:           pub["attributes"]["title"],
+                                           volume:          pub["attributes"]["volume"],
+                                           dty:             pub["attributes"]["dty"],
+                                           dtd:             pub["attributes"]["dtd"],
+                                           journal_title:   pub["attributes"]["journal_title"],
+                                           page_range:      pub["attributes"]["page_range"],
+                                           edition:         pub["attributes"]["edition"],
+                                           abstract:        pub["attributes"]["abstract"],
+                                           secondary_title: pub["attributes"]["secondary_title"],
+                                           citation_count:  pub["attributes"]["citation_count"],
+                                           authors_et_al:   pub["attributes"]["authors_et_al"]
+                                           )
 
         rescue ActiveRecord::RecordNotUnique
           publication = Publication.find_by(pure_id: pub["pure_ids"])
