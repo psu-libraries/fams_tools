@@ -1,72 +1,81 @@
 require 'rails_helper'
+require 'pub_data/pub_populate_db'
 require 'pub_data/pub_xml_builder'
 
 RSpec.describe PubXMLBuilder do
 
   let(:data_sets) do
     hash = {
-      'abc123' => [{:title => 'Title',
-                    :pure_id => 579,
-                    :category => 'Type',
-                    :volume => 34,
-                    :dty => 2017,
-                    :dtm => 'May',
-                    :dtd => 22,
-                    :status => 'Published',
-                    :persons => [{:fName => 'Billy',
-                                 :mName => 'Bob',
-                                 :lName => 'Jenkins',
-                                 :role => 'Author',
-                                 :extOrg => 'Org'}],
-                    :journalTitle => 'Journal Title',
-                    :journalIssn => '094-024903295-32',
-                    :journaluuid => '123abc',
-                    :journalNum => 4,
-                    :publisher => 'Publisher',
-                    :pages => '42-43',
-                    :articleNumber => 35,
-                    :peerReview => 'true',
-                    :url => 'www.www.www'}],
-      'xyz123' => [{:title => 'Title2',
-                    :pure_id => 468,
-                    :category => 'Type2',
-                    :volume => 12,
-                    :dty => 2013,
-                    :dtm => 'January',
-                    :dtd => 23,
-                    :status => 'Published',
-                    :persons => [{:fName => 'George',
-                                  :mName => 'Joe',
-                                  :lName => 'Gary',
-                                  :role => 'Author'},
-                                  {:fName => 'Harry',
-                                  :mName => 'Jorge',
-                                  :lName => 'Potter',
-                                  :role => 'Author'}],
-                    :journalTitle => 'Journal Title2',
-                    :journalIssn => '093-2351-432',
-                    :journaluuid => '123abc',
-                    :journalNum => 3,
-                    :publisher => 'Publisher',
-                    :pages => '42-46'},
-                    {:title => 'Title3',
-                     :pure_id => 246,
-                    :category => 'Type3',
-                    :volume => 3,
-                    :dty => 2010,
-                    :dtm => 'January',
-                    :dtd => 03,
-                    :persons => [{:fName => 'George',
-                                  :mName => 'Joe',
-                                  :lName => 'Gary',
-                                  :role => 'Author'}],
-                    :journalTitle => 'Journal Title',
-                    :journalIssn => '032-42-5432-43',
-                    :journaluuid => '123abc',
-                    :journalNum => 2,
-                    :publisher => 'Publisher',
-                    :pages => '42-65',
-                    :peerReview => 'false'}]}
+      'abc123' => 
+        { "data" => [{"pure_ids" => [ 'f89qu-fne8q-j98' ],
+                    "ai_ids" => [],
+                    "attributes" => {
+                    "title" => 'Title',
+                    "secondary_title" => "Second Title",
+                    "publication_type" => 'Type',
+                    "volume" => 34,
+                    "dty" => 2017,
+                    "dtm" => 'May',
+                    "dtd" => 22,
+                    "status" => 'Published',
+                    "contributors" => [{"first_name" => 'Billy',
+                                        "middle_name" => 'Bob',
+                                        "last_name" => 'Jenkins'}],
+                    "journal_title" => 'Journal Title',
+                    "page_range" => '42-43',
+                    "issue" => 35,
+                    "edition" => 2,
+                    "authors_et_al" => nil,
+                    "abstract" => "<p>Some abstract</p>",
+                    "citation_count" => 3}}]
+        },
+
+      'xyz123' => 
+        { "data" => [{"pure_ids" => [ 'f89qu-fne8q-j97' ],
+                    "ai_ids" => [],
+                    "attributes" => {
+                    "title" => 'Title 2',
+                    "secondary_title" => "Second Title 2",
+                    "publication_type" => 'Type 2',
+                    "volume" => 34,
+                    "dty" => 2018,
+                    "dtm" => 'June',
+                    "dtd" => 20,
+                    "status" => 'Published',
+                    "contributors" => [{"first_name" => 'Franck',
+                                        "middle_name" => 'Bob',
+                                        "last_name" => 'Frank'}],
+                    "journal_title" => 'Journal Title 2',
+                    "page_range" => '43-44',
+                    "issue" => 34,
+                    "edition" => 3,
+                    "authors_et_al" => nil,
+                    "abstract" => "<p>Some abstract</p>",
+                    "citation_count" => 4}},
+
+                   {"pure_ids" => [ 'f89qu-fne8q-j95' ],
+                    "ai_ids" => [],
+                    "attributes" => {
+                    "title" => 'Title 3',
+                    "secondary_title" => "Second Title 3",
+                    "publication_type" => 'Type 3',
+                    "volume" => 33,
+                    "dty" => 2012,
+                    "dtm" => 'June',
+                    "dtd" => 21,
+                    "status" => 'Published',
+                    "contributors" => [{"first_name" => 'Franck',
+                                        "middle_name" => 'Franc',
+                                        "last_name" => 'Frank'}],
+                    "journal_title" => 'Journal Title 3',
+                    "page_range" => '43-47',
+                    "issue" => 31,
+                    "edition" => 2,
+                    "authors_et_al" => nil,
+                    "abstract" => "<p>Some abstract</p>",
+                    "citation_count" => 5}}]
+        }
+    }
 
     return hash
   end
@@ -90,132 +99,91 @@ RSpec.describe PubXMLBuilder do
 
   describe '#batched_pub_xml' do
     it 'should return an xml of INTELLCONT records' do
-      data_sets.each do |k,v|
-        faculty = Faculty.find_by(access_id: k)
+      pub_data_obj = double()
+      allow(pub_data_obj).to receive(:call)
+      allow(pub_data_obj).to receive(:pub_hash).and_return(data_sets)
+      pub_populate_db_obj = PubPopulateDB.new(pub_data_obj)
+      pub_populate_db_obj.populate
 
-        v.each do |pub|
-          publication = Publication.create(pure_id:       pub[:pure_id],
-                                           title:         pub[:title],
-                                           volume:        pub[:volume],
-                                           dty:           pub[:dty],
-                                           dtd:           pub[:dtd],
-                                           journal_title: pub[:journalTitle],
-                                           journal_issn:  pub[:journalIssn],
-                                           journal_num:   pub[:journalNum],
-                                           journal_uuid:  pub[:journaluuid],
-                                           pages:         pub[:pages],
-                                           articleNumber: pub[:articleNumber],
-                                           peerReview:    pub[:peerReview],
-                                           url:           pub[:url],
-                                           publisher:     pub[:publisher]
-                                           )
-
-          pub[:persons].each do |person|
-
-            ExternalAuthor.create(publication: publication,
-                                  f_name:      person[:fName],
-                                  m_name:      person[:mName],
-                                  l_name:      person[:lName],
-                                  role:        person[:role],
-                                  extOrg:      person[:extOrg]
-                                  )
-          end
-
-          PublicationFacultyLink.create(publication: publication,
-                                        faculty:     faculty,
-                                        status:      pub[:status],
-                                        category:    pub[:category],
-                                        dtm:         pub[:dtm] )
-        end
-      end
       expect(pub_xml_builder_obj.batched_xmls).to eq([
-'<?xml version="1.0" encoding="UTF-8"?>
+        '<?xml version="1.0" encoding="UTF-8"?>
 <Data>
   <Record username="abc123">
     <INTELLCONT>
       <TITLE access="READ_ONLY">Title</TITLE>
+      <TITLE access="READ_ONLY">Second Title</TITLE>
       <CONTYPE access="READ_ONLY">Type</CONTYPE>
       <STATUS access="READ_ONLY">Published</STATUS>
       <JOURNAL_NAME access="READ_ONLY">Journal Title</JOURNAL_NAME>
-      <ISBNISSN access="READ_ONLY">094-024903295-32</ISBNISSN>
       <VOLUME access="READ_ONLY">34</VOLUME>
       <DTY_PUB access="READ_ONLY">2017</DTY_PUB>
       <DTM_PUB access="READ_ONLY">May</DTM_PUB>
       <DTD_PUB access="READ_ONLY">22</DTD_PUB>
-      <ISSUE access="READ_ONLY">4</ISSUE>
+      <ISSUE access="READ_ONLY"/>
+      <EDITION access="READ_ONLY">2</EDITION>
+      <ABSTRACT access="READ_ONLY">&lt;p&gt;Some abstract&lt;/p&gt;</ABSTRACT>
       <PAGENUM access="READ_ONLY">42-43</PAGENUM>
+      <CITATION_COUNT access="READ_ONLY">3</CITATION_COUNT>
+      <AUTHORS_ETAL access="READ_ONLY"/>
       <INTELLCONT_AUTH>
         <FNAME access="READ_ONLY">Billy</FNAME>
         <MNAME access="READ_ONLY">Bob</MNAME>
         <LNAME access="READ_ONLY">Jenkins</LNAME>
-        <ROLE access="READ_ONLY">Author</ROLE>
-        <INSTITUTION access="READ_ONLY">Org</INSTITUTION>
       </INTELLCONT_AUTH>
-      <PUBLISHER access="READ_ONLY">Publisher</PUBLISHER>
-      <WEB_ADDRESS access="READ_ONLY">www.www.www</WEB_ADDRESS>
-      <REFEREED access="READ_ONLY">true</REFEREED>
-      <PURE_ID>579</PURE_ID>
+      <PURE_ID>["f89qu-fne8q-j98"]</PURE_ID>
     </INTELLCONT>
   </Record>
   <Record username="xyz123">
     <INTELLCONT>
-      <TITLE access="READ_ONLY">Title2</TITLE>
-      <CONTYPE access="READ_ONLY">Type2</CONTYPE>
+      <TITLE access="READ_ONLY">Title 2</TITLE>
+      <TITLE access="READ_ONLY">Second Title 2</TITLE>
+      <CONTYPE access="READ_ONLY">Type 2</CONTYPE>
       <STATUS access="READ_ONLY">Published</STATUS>
-      <JOURNAL_NAME access="READ_ONLY">Journal Title2</JOURNAL_NAME>
-      <ISBNISSN access="READ_ONLY">093-2351-432</ISBNISSN>
-      <VOLUME access="READ_ONLY">12</VOLUME>
-      <DTY_PUB access="READ_ONLY">2013</DTY_PUB>
-      <DTM_PUB access="READ_ONLY">January</DTM_PUB>
-      <DTD_PUB access="READ_ONLY">23</DTD_PUB>
-      <ISSUE access="READ_ONLY">3</ISSUE>
-      <PAGENUM access="READ_ONLY">42-46</PAGENUM>
+      <JOURNAL_NAME access="READ_ONLY">Journal Title 2</JOURNAL_NAME>
+      <VOLUME access="READ_ONLY">34</VOLUME>
+      <DTY_PUB access="READ_ONLY">2018</DTY_PUB>
+      <DTM_PUB access="READ_ONLY">June</DTM_PUB>
+      <DTD_PUB access="READ_ONLY">20</DTD_PUB>
+      <ISSUE access="READ_ONLY"/>
+      <EDITION access="READ_ONLY">3</EDITION>
+      <ABSTRACT access="READ_ONLY">&lt;p&gt;Some abstract&lt;/p&gt;</ABSTRACT>
+      <PAGENUM access="READ_ONLY">43-44</PAGENUM>
+      <CITATION_COUNT access="READ_ONLY">4</CITATION_COUNT>
+      <AUTHORS_ETAL access="READ_ONLY"/>
       <INTELLCONT_AUTH>
-        <FNAME access="READ_ONLY">George</FNAME>
-        <MNAME access="READ_ONLY">Joe</MNAME>
-        <LNAME access="READ_ONLY">Gary</LNAME>
-        <ROLE access="READ_ONLY">Author</ROLE>
-        <INSTITUTION access="READ_ONLY"/>
+        <FNAME access="READ_ONLY">Franck</FNAME>
+        <MNAME access="READ_ONLY">Bob</MNAME>
+        <LNAME access="READ_ONLY">Frank</LNAME>
       </INTELLCONT_AUTH>
-      <INTELLCONT_AUTH>
-        <FNAME access="READ_ONLY">Harry</FNAME>
-        <MNAME access="READ_ONLY">Jorge</MNAME>
-        <LNAME access="READ_ONLY">Potter</LNAME>
-        <ROLE access="READ_ONLY">Author</ROLE>
-        <INSTITUTION access="READ_ONLY"/>
-      </INTELLCONT_AUTH>
-      <PUBLISHER access="READ_ONLY">Publisher</PUBLISHER>
-      <WEB_ADDRESS access="READ_ONLY"/>
-      <REFEREED access="READ_ONLY"/>
-      <PURE_ID>468</PURE_ID>
+      <PURE_ID>["f89qu-fne8q-j97"]</PURE_ID>
     </INTELLCONT>
     <INTELLCONT>
-      <TITLE access="READ_ONLY">Title3</TITLE>
-      <CONTYPE access="READ_ONLY">Type3</CONTYPE>
-      <STATUS access="READ_ONLY"/>
-      <JOURNAL_NAME access="READ_ONLY">Journal Title</JOURNAL_NAME>
-      <ISBNISSN access="READ_ONLY">032-42-5432-43</ISBNISSN>
-      <VOLUME access="READ_ONLY">3</VOLUME>
-      <DTY_PUB access="READ_ONLY">2010</DTY_PUB>
-      <DTM_PUB access="READ_ONLY">January</DTM_PUB>
-      <DTD_PUB access="READ_ONLY">3</DTD_PUB>
-      <ISSUE access="READ_ONLY">2</ISSUE>
-      <PAGENUM access="READ_ONLY">42-65</PAGENUM>
+      <TITLE access="READ_ONLY">Title 3</TITLE>
+      <TITLE access="READ_ONLY">Second Title 3</TITLE>
+      <CONTYPE access="READ_ONLY">Type 3</CONTYPE>
+      <STATUS access="READ_ONLY">Published</STATUS>
+      <JOURNAL_NAME access="READ_ONLY">Journal Title 3</JOURNAL_NAME>
+      <VOLUME access="READ_ONLY">33</VOLUME>
+      <DTY_PUB access="READ_ONLY">2012</DTY_PUB>
+      <DTM_PUB access="READ_ONLY">June</DTM_PUB>
+      <DTD_PUB access="READ_ONLY">21</DTD_PUB>
+      <ISSUE access="READ_ONLY"/>
+      <EDITION access="READ_ONLY">2</EDITION>
+      <ABSTRACT access="READ_ONLY">&lt;p&gt;Some abstract&lt;/p&gt;</ABSTRACT>
+      <PAGENUM access="READ_ONLY">43-47</PAGENUM>
+      <CITATION_COUNT access="READ_ONLY">5</CITATION_COUNT>
+      <AUTHORS_ETAL access="READ_ONLY"/>
       <INTELLCONT_AUTH>
-        <FNAME access="READ_ONLY">George</FNAME>
-        <MNAME access="READ_ONLY">Joe</MNAME>
-        <LNAME access="READ_ONLY">Gary</LNAME>
-        <ROLE access="READ_ONLY">Author</ROLE>
-        <INSTITUTION access="READ_ONLY"/>
+        <FNAME access="READ_ONLY">Franck</FNAME>
+        <MNAME access="READ_ONLY">Franc</MNAME>
+        <LNAME access="READ_ONLY">Frank</LNAME>
       </INTELLCONT_AUTH>
-      <PUBLISHER access="READ_ONLY">Publisher</PUBLISHER>
-      <WEB_ADDRESS access="READ_ONLY"/>
-      <REFEREED access="READ_ONLY">false</REFEREED>
-      <PURE_ID>246</PURE_ID>
+      <PURE_ID>["f89qu-fne8q-j95"]</PURE_ID>
     </INTELLCONT>
   </Record>
 </Data>
-'])
+'
+      ])
     end
   end
 end
