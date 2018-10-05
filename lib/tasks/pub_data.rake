@@ -1,6 +1,4 @@
-require 'pub_data/get_pub_ids'
 require 'pub_data/pub_populate_db'
-require 'pub_data/get_pub_publishers'
 require 'pub_data/pub_xml_builder'
 require 'activity_insight/ai_integrate_data'
   
