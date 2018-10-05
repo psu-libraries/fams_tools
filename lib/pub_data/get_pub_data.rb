@@ -1,3 +1,4 @@
+require 'byebug'
 class GetPubData
   attr_accessor :user_ids, :pub_json, :pub_hash
 
@@ -29,13 +30,14 @@ class GetPubData
   end
 
   def get_pub_json
-    headers = {"Accept" => "application/xml", "api-key" => "#{Rails.application.config_for(:pure)[:api_key]}"}
+    headers = {"Accept" => "application/json", "Content-Type" => "application/json"}
     url = "https://stage.metadata.libraries.psu.edu/v1/users/publications"
-    @pub_json = HTTParty.post url, :body => user_ids, :headers => headers, :timeout => 100
+    @pub_json = HTTParty.post url, :body => "#{user_ids}", :headers => headers, :timeout => 100
   end
 
   def json_to_hash(pub_json)
-    @pub_hash = JSON.parse(pub_json)
+    byebug
+    @pub_hash = JSON.parse(pub_json.body)
   end
 
   def format_type(publication, college)
