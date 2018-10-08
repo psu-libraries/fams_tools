@@ -3,7 +3,7 @@ class GetPubData
   attr_accessor :user_ids, :pub_json, :pub_hash
 
   def initialize
-    @user_ids = Faculty.pluck(:access_id)
+    @user_ids = Faculty.pluck(:access_id)[0..15]
     @pub_json = {}
     @pub_hash = {}
   end
