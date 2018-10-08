@@ -25,10 +25,10 @@ RSpec.describe GetPubData do
 
       stub_request(:post, "https://stage.metadata.libraries.psu.edu/v1/users/publications").
          with(
-           body: ["abc123", "xyz321"],
+           body: "[\"abc123\", \"xyz321\"]",
            headers: {
-       	  'Accept'=>'application/xml',
-       	  'Api-Key'=>'bf5beedf-55a2-4260-9708-b3b7466defef'
+       	  'Accept'=>'application/json',
+       	  'Content-Type'=>'application/json'
            }).
          to_return(status: 200, body: response, headers: {})
 
