@@ -9,7 +9,7 @@ class PubPopulateDB
 
   def populate
     pub_data.call
-    pub_data.pub_hash.each do |k, user_pubs|
+    pub_data.pub_hashes.each do |k, user_pubs|
 
       faculty = Faculty.find_by(access_id: k)
 
