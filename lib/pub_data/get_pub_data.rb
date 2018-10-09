@@ -1,23 +1,25 @@
-require 'byebug'
 class GetPubData
-  attr_accessor :user_ids, :pub_json, :pub_hash
+  attr_accessor :user_ids, :pub_jsons, :pub_hashes
 
   def initialize
-    @user_ids = Faculty.pluck(:access_id)[0..15]
-    @pub_json = {}
-    @pub_hash = {}
+    @user_ids = Faculty.pluck(:access_id)
+    @pub_jsons = []
+    @pub_hashes = []
   end
 
   def call
     get_pub_json
-    json_to_hash(pub_json)
-    format(pub_hash)
+    pub_jsons.each do |pub_json|
+      json_to_hash(pub_json)
+    end
+    @pub_hashes = pub_hashes.reduce(&:merge)
+    format(pub_hashes)
   end
 
   private
 
-  def format(pub_hash)
-    pub_hash.each do |k,v|
+  def format(pub_hashes)
+    pub_hashes.each do |k,v|
       college = Faculty.find_by(access_id: k).college
       v["data"].each do |publication|
         format_type(publication, college)
@@ -30,14 +32,15 @@ class GetPubData
   end
 
   def get_pub_json
-    headers = {"Accept" => "application/json", "Content-Type" => "application/json"}
-    url = "https://stage.metadata.libraries.psu.edu/v1/users/publications"
-    @pub_json = HTTParty.post url, :body => "#{user_ids}", :headers => headers, :timeout => 100
+    user_ids.each_slice(100) do |batch|
+      headers = {"Accept" => "application/json", "Content-Type" => "application/json"}
+      url = "https://stage.metadata.libraries.psu.edu/v1/users/publications"
+      @pub_jsons << HTTParty.post(url, :body => "#{batch}", :headers => headers, :timeout => 100)
+    end
   end
 
   def json_to_hash(pub_json)
-    byebug
-    @pub_hash = JSON.parse(pub_json.body)
+    @pub_hashes << JSON.parse(pub_json.body)
   end
 
   def format_type(publication, college)

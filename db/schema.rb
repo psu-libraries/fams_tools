@@ -105,7 +105,7 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
     t.datetime "updated_at", null: false
     t.integer "edition"
     t.text "abstract"
-    t.string "secondary_title"
+    t.text "secondary_title"
     t.integer "citation_count"
     t.boolean "authors_et_al"
     t.string "ai_ids"
