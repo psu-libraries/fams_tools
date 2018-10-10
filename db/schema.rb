@@ -91,31 +91,25 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
   end
 
   create_table "publications", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.integer "pure_id"
+    t.string "pure_ids"
     t.text "title"
     t.integer "volume"
     t.integer "dty"
     t.integer "dtd"
     t.string "journal_title"
-    t.string "journal_issn"
-    t.integer "journal_num"
-    t.string "journal_uuid"
-    t.string "pages"
+    t.integer "issue"
+    t.string "page_range"
     t.integer "articleNumber"
-    t.string "peerReview"
-    t.string "url"
     t.string "publisher"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["pure_id"], name: "index_publications_on_pure_id", unique: true
-  end
-
-  create_table "pure_ids", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.bigint "pure_id"
-    t.bigint "faculty_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["faculty_id"], name: "fk_rails_340ab8b4e7"
+    t.integer "edition"
+    t.text "abstract"
+    t.text "secondary_title"
+    t.integer "citation_count"
+    t.boolean "authors_et_al"
+    t.string "ai_ids"
+    t.index ["pure_ids", "ai_ids"], name: "index_publications_on_pure_ids_and_ai_ids", unique: true
   end
 
   create_table "sections", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -184,7 +178,6 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
   add_foreign_key "external_authors", "publications"
   add_foreign_key "publication_faculty_links", "faculties"
   add_foreign_key "publication_faculty_links", "publications"
-  add_foreign_key "pure_ids", "faculties"
   add_foreign_key "sections", "courses"
   add_foreign_key "sections", "faculties"
   add_foreign_key "works", "publication_listings"
