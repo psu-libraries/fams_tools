@@ -99,11 +99,8 @@ RSpec.describe PubXMLBuilder do
 
   describe '#batched_pub_xml' do
     it 'should return an xml of INTELLCONT records' do
-      pub_data_obj = double()
-      allow(pub_data_obj).to receive(:call)
-      allow(pub_data_obj).to receive(:pub_hash).and_return(data_sets)
-      pub_populate_db_obj = PubPopulateDB.new(pub_data_obj)
-      pub_populate_db_obj.populate
+      pub_populate_db_obj = PubPopulateDB.new
+      pub_populate_db_obj.populate(data_sets)
 
       expect(pub_xml_builder_obj.batched_xmls).to eq([
         '<?xml version="1.0" encoding="UTF-8"?>

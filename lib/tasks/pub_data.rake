@@ -9,8 +9,8 @@ namespace :pub_data do
   task format_and_populate: :environment do
 
     start = Time.now
-    my_pub_populate_db = PubPopulateDB.new
-    my_pub_populate_db.populate
+    import_pubs = GetPubData.new
+    import_pubs.call(PubPopulateDB.new)
     finish = Time.now
     puts(((finish - start)/60).to_s + ' mins')
 
