@@ -21,14 +21,22 @@ RSpec.describe PubPopulateDB do
 
   end
 
+  let(:pub_populate) {PubPopulateDB.new}
+
   describe '#populate' do
     it 'should populate the database with pub data' do
-      pub_data_obj = double()
-      allow(pub_data_obj).to receive(:call)
-      allow(pub_data_obj).to receive(:pub_hash).and_return(fake_data)
-      pub_populate_db_obj = PubPopulateDB.new(pub_data_obj)
 
-      pub_populate_db_obj.populate
+      stub_request(:post, "https://stage.metadata.libraries.psu.edu/v1/users/publications").
+         with(
+           body: "[\"abc123\", \"xyz321\"]",
+           headers: {
+          'Accept'=>'application/json',
+          'Content-Type'=>'application/json'
+           }).
+         to_return(status: 200, body: "", headers: {})
+
+      pub_populate.populate(fake_data)
+
       expect(Publication.all.count).to eq(3)
       expect(Publication.first.title).to eq('Test 1')
       expect(Publication.first.pure_ids).to eq(["1fj9184-j1ir-148"])

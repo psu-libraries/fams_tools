@@ -1,15 +1,9 @@
 require 'pub_data/get_pub_data'
 
 class PubPopulateDB
-  attr_accessor :pub_data
 
-  def initialize(pub_data_obj = GetPubData.new)
-    @pub_data = pub_data_obj
-  end
-
-  def populate
-    pub_data.call
-    pub_data.pub_hashes.each do |k, user_pubs|
+  def populate(pub_hash)
+    pub_hash.each do |k, user_pubs|
 
       faculty = Faculty.find_by(access_id: k)
 
