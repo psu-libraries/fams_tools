@@ -1,5 +1,6 @@
 require 'activity_insight/ai_manage_duplicates'
 require 'activity_insight/ai_get_user_data'
+require 'activity_insight/delete_records'
 
 namespace :activity_insight do
 
@@ -39,4 +40,14 @@ namespace :activity_insight do
     puts(((finish - start)/60).to_s + ' mins')
 
   end
+
+  task :delete_records, [:xlsx_path, :entity] do |task, args|
+
+    start = Time.now
+    DeleteRecords.new.delete(args[:xlsx_path], args[:entity])
+    finish = Time.now
+    puts(((finish - start)/60).to_s + ' mins')
+
+  end
+
 end
