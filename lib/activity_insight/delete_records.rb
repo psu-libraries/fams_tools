@@ -4,7 +4,7 @@ class DeleteRecords
     builder = Nokogiri::XML::Builder.new do |xml|
       xml.Data {
         xml.SCHTEACH {
-          Creek::Book.new(xlsx_path).sheets[0].rows.each_with_index do |row, index|
+          Creek::Book.new('data/delete.xlsx').sheets[0].rows.each_with_index do |row, index|
             unless row.empty?
               row.each do |k,v|
                 xml.item( 'id' => v ) if index != 0
