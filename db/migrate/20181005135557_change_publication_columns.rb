@@ -1,6 +1,6 @@
 class ChangePublicationColumns < ActiveRecord::Migration[5.1]
   def change
-    change_column :publications, :pure_ids, :string
+    change_column :publications, :pure_id, :string
     remove_column :publications, :peerReview, :string
     remove_column :publications, :url, :string
     rename_column :publications, :journal_num, :issue
