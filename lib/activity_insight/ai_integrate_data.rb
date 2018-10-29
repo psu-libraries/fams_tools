@@ -15,7 +15,7 @@ class IntegrateData
     batched_xmls.each do |xml|
       puts xml
       response = HTTParty.post url(target), :body => xml, :headers => {'Content-type' => 'text/xml'}, :basic_auth => auth, :timeout => 180
-      if response.include? 'Error'
+      if response.to_s.include? 'Error'
         counter += 1
         errors << response.parsed_response
       end

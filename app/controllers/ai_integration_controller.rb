@@ -13,15 +13,7 @@ require 'activity_insight/ai_get_user_data'
 require 'activity_insight/ai_manage_duplicates'
 
 class AiIntegrationController < ApplicationController
-  before_action :load_psu_users, only: [:osp_integrate, :lionpath_integrate, :pure_integrate]
-
-  rescue_from StandardError do |error|
-    redirect_to ai_integration_path, alert: error
-    Dir.foreach('app/parsing_files') do |f|
-      fn = File.join('app/parsing_files', f)
-      File.delete(fn) if File.exist?(fn) && f != '.' && f != '..'
-    end
-  end
+  before_action :load_psu_users, :clear_temp_files, :delete_all_data, only: [:osp_integrate, :lionpath_integrate, :pure_integrate]
 
   def osp_integrate
     start = Time.now
@@ -38,10 +30,6 @@ class AiIntegrationController < ApplicationController
     my_remove_system_dups.call
     my_integrate = IntegrateData.new(OspXMLBuilder.new, params[:target])
     @errors = my_integrate.integrate
-    ContractFacultyLink.delete_all
-    Contract.delete_all
-    Sponsor.delete_all
-    Faculty.delete_all
     finish = Time.now
     @time = (((finish - start)/60).to_i.to_s + ' minutes')
     File.delete(backup_path) if File.exist?(backup_path)
@@ -59,12 +47,8 @@ class AiIntegrationController < ApplicationController
     my_lionpath_populate = LionPathPopulateDB.new(LionPathParser.new(filepath = f_path))
     my_lionpath_populate.format_and_filter
     my_lionpath_populate.populate
-    puts params[:target]
     lionpath_integrate = IntegrateData.new(LionPathXMLBuilder.new, params[:target])
     @errors = lionpath_integrate.integrate
-    Section.delete_all
-    Course.delete_all
-    Faculty.delete_all
     finish = Time.now
     @time = (((finish - start)/60).to_i.to_s + ' minutes')
     File.delete(f_path) if File.exist?(f_path)
@@ -83,11 +67,6 @@ class AiIntegrationController < ApplicationController
     my_get_pure_publishers.call
     my_integrate = IntegrateData.new(PureXMLBuilder.new, params[:target])
     @errors = my_integrate.integrate
-    PublicationFacultyLink.delete_all
-    ExternalAuthor.delete_all
-    Publication.delete_all
-    PureId.delete_all
-    Faculty.delete_all
     finish = Time.now
     @time = (((finish - start)/60).to_i.to_s + ' minutes')
     flash[:notice] = "Integration completed in #{@time}."
@@ -108,4 +87,25 @@ class AiIntegrationController < ApplicationController
     my_get_user_data.call
     File.delete(psu_users_path) if File.exist?(psu_users_path)
   end
+
+  def clear_temp_files
+    Dir.foreach('app/parsing_files') do |f|
+      fn = File.join('app/parsing_files', f)
+      File.delete(fn) if File.exist?(fn) && f != '.' && f != '..'
+    end
+  end
+
+  def delete_all_data
+    ContractFacultyLink.delete_all
+    Contract.delete_all
+    Sponsor.delete_all
+    Section.delete_all
+    Course.delete_all
+    PublicationFacultyLink.delete_all
+    ExternalAuthor.delete_all
+    Publication.delete_all
+    PureId.delete_all
+    Faculty.delete_all
+  end
+
 end
