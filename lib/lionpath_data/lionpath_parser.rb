@@ -5,7 +5,7 @@ class LionPathParser
 
   attr_accessor :csv_hash, :active_users, :csv_object
 
-  def initialize(filepath = 'data/Summer18.txt')
+  def initialize(filepath = 'data/creditcoursestaught.txt')
     @csv_object = CSV.read(filepath, encoding: "ISO-8859-1:UTF-8", col_sep: "\t") 
     @csv_hash = convert_csv_to_hash(csv_object)
     @active_users = Faculty.pluck(:access_id)
@@ -23,6 +23,14 @@ class LionPathParser
     csv_hash.each do |row|
       add_xfields(row)
     end
+  end
+
+  def filter_campus
+    kept_rows = []
+    csv_hash.each do |row|
+      kept_rows.push(row) unless row['Class Campus Code'] == 'XS'
+    end
+    @csv_hash = kept_rows
   end
 
   def filter_by_user
