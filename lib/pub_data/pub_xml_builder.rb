@@ -1,6 +1,6 @@
 require 'nokogiri'
   
-class PureXMLBuilder
+class PubXMLBuilder
   attr_accessor :faculties
 
   def initialize
@@ -25,31 +25,30 @@ class PureXMLBuilder
             faculty.publication_faculty_links.each do |link|
               xml.INTELLCONT {
                 xml.TITLE_ link.publication.title, :access => "READ_ONLY"
+                xml.TITLE_ link.publication.secondary_title, :access => "READ_ONLY"
                 xml.CONTYPE_ link.category, :access => "READ_ONLY"
                 xml.STATUS_ link.status, :access => "READ_ONLY"
                 xml.JOURNAL_NAME_ link.publication.journal_title, :access => "READ_ONLY"
-                xml.ISBNISSN_ link.publication.journal_issn, :access => "READ_ONLY"
                 xml.VOLUME_ link.publication.volume, :access => "READ_ONLY"
                 xml.DTY_PUB_ link.publication.dty, :access => "READ_ONLY"
                 xml.DTM_PUB_ link.dtm, :access => "READ_ONLY"
                 unless faculty.college == 'CM'
                   xml.DTD_PUB_ link.publication.dtd, :access => "READ_ONLY"
                 end
-                xml.ISSUE_ link.publication.journal_num, :access => "READ_ONLY"
-                xml.PAGENUM_ link.publication.pages, :access => "READ_ONLY"
+                xml.ISSUE_ link.publication.issue, :access => "READ_ONLY"
+                xml.EDITION_ link.publication.edition, :access => "READ_ONLY"
+                xml.ABSTRACT_ link.publication.abstract, :access => "READ_ONLY"
+                xml.PAGENUM_ link.publication.page_range, :access => "READ_ONLY"
+                xml.CITATION_COUNT_ link.publication.citation_count, :access => "READ_ONLY"
+                xml.AUTHORS_ETAL_ link.publication.authors_et_al, :access => "READ_ONLY"
                 link.publication.external_authors.each do |author|
                   xml.INTELLCONT_AUTH {
                     xml.FNAME_ author.f_name, :access => "READ_ONLY"
                     xml.MNAME_ author.m_name, :access => "READ_ONLY"
                     xml.LNAME_ author.l_name, :access => "READ_ONLY"
-                    xml.ROLE_ author.role, :access => "READ_ONLY"
-                    xml.INSTITUTION_ author.extOrg, :access => "READ_ONLY"
                   }
                 end
-                xml.PUBLISHER_ link.publication.publisher, :access => "READ_ONLY"
-                xml.WEB_ADDRESS_ link.publication.url, :access => "READ_ONLY"
-                xml.REFEREED_ link.publication.peerReview, :access => "READ_ONLY"
-                xml.PURE_ID_ link.publication.pure_id
+                xml.PURE_ID_ link.publication.pure_ids
               }
             end
           }

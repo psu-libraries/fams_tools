@@ -22,7 +22,7 @@ namespace :osp_data do
 
   task integrate: :environment do
     start = Time.now
-    my_integrate = IntegrateData.new(OspXMLBuilder.new)
+    my_integrate = IntegrateData.new(OspXMLBuilder.new, :beta)
     my_integrate.integrate
     finish = Time.now
     puts(((finish - start)/60).to_s + ' mins') 
