@@ -70,7 +70,7 @@
 <div class="row">
   <div class="col-sm">
   <h3>Publications Integration</h3>
-  <%= form_with :url => { :action => "pure_integrate" }, id: "publications" do |form| %>
+  <%= form_with :url => { :action => "pub_integrate" }, id: "publications" do |form| %>
     <p> <%= label(:psu_users_file, text = "psu-users.xls File") %><%= form.file_field :psu_users_file %> </p>
     <div class="row">
       <div class="col-xs-1", style="padding:5px 5px;">
