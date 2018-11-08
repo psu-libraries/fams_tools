@@ -1,9 +1,27 @@
 wb = xlsx_package.workbook
 wb.add_worksheet(:name => "citations") do |sheet|
 
+  header_map = [:username, :title, :journal, :volume, :edition, :pages, :date, :booktitle, :container, :genre, :contype, :doi,
+   :editor, :institution, :isbn, :location, :note, :publisher, :retrieved, :tech, :translator, :unknown, :url]
+
+  empty_col_indices = []
+
+  header_map.each_with_index do |header, index|
+    if @works.pluck(header).compact.empty?
+      puts header,index
+      empty_col_indices << index
+    end
+  end
+
   headers = ['USERNAME', 'TITLE', 'journal', 'VOLUME', 'EDITION', 'PAGENUM', 'DTY_PUB', 'booktitle', 'JOURNAL_NAME', 'type', 'CONTYPE', 'WEB_ADDRESS', 'EDITORS', 'INSTITUTION', 'ISBNISSN', 
   'PUBCTYST', 'note', 'PUBLISHER', 'retrieved', 'tech', 'translator', 'unknown', 'url'
  ]
+
+  empty_col_indices.each do |index|
+    headers[index] = :delete
+  end
+
+  headers -= [:delete]
 
   header_length = headers.length
 
@@ -16,33 +34,33 @@ wb.add_worksheet(:name => "citations") do |sheet|
     end
   end
 
+  puts header_length
   counter = longest - header_length
   while headers.length < longest
-    headers.insert(1, ["INTELLCONT_AUTH_#{counter}_FNAME", "INTELLCONT_AUTH_#{counter}_MNAME", "INTELLCONT_AUTH_#{counter}_LNAME"])
+    headers.insert(0, ["INTELLCONT_AUTH_#{counter}_FNAME", "INTELLCONT_AUTH_#{counter}_MNAME", "INTELLCONT_AUTH_#{counter}_LNAME"])
     counter -= 1
   end
 
   sheet.add_row headers.flatten
 
-  @works.each do |item, index|
+  @works.each do |item|
     row = [ 
       item[:username], item[:title], item[:journal], item[:volume], item[:edition], item[:pages], item[:date], item[:booktitle], item[:container], item[:genre], item[:contype], item[:doi],
       item[:editor]&.join(", "), item[:institution], item[:isbn], item[:location], item[:note], item[:publisher], item[:retrieved], item[:tech], item[:translator], 
       item[:unknown], item[:url]
     ]
 
-    item[:author]&.reverse&.each {|author| row.insert(1, [author[0], author[1], author[2]])}
+    empty_col_indices.each do |index|
+      row[index] = :delete
+    end
 
-    if row.length < longest
-      unless item[:author] == nil
-        while row.length < longest
-          row.insert(item[:author].length + 1, ["", "", ""])
-        end
-      else
-        while row.length < longest
-          row.insert(1, ["", "", ""])
-        end 
-      end
+    row -= [:delete]
+
+    item[:author]&.reverse&.each {|author| row.insert(0, [author[0], author[1], author[2]])}
+
+    puts row.length
+    while row.length < longest
+      row.insert(item[:author].length, ["", "", ""])
     end
     
     sheet.add_row row.flatten
