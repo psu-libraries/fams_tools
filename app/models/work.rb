@@ -39,8 +39,6 @@ class Work < ApplicationRecord
           if longest < item[:author].length + header_length
             longest = item[:author].length + header_length
           end
-        else
-          longest = headers_length
         end
       end
 
