@@ -1,6 +1,24 @@
 <div class="center jumbotron text-center">
   <h1>FAMS Tools</h1>
 </div>
+<div class="container-fluid">
+  <h3>Setup</h3>
+  <ol>
+    <li>First, update the local database with the most recent user data from the psu-users.xls file</li>
+  </ol>
+  <h4>Update User Data</h4>
+  <%= form_with :url => { :action => "update_ai_user_data" }, id: "psu-users" do |form| %>
+    <p> <%= label(:psu_users_file, text = "psu-users.xls File") %><%= form.file_field :psu_users_file %> </p>
+    <div class="row">
+    <div class="col-xs-1", style="padding:5px 5px;">
+      <p> <%= form.button "Update".html_safe, class:"btn btn-primary", type: :submit, :data => { disable_with: "<i class='fa fa-spinner fa-pulse'></i> Updating..." } %> </p>
+    </div>
+    </div>
+  <% end %>
+</div>
+
+<hr>
+
 <div class="container">
   <h3>CV Parser</h3>
     <ol>
@@ -16,8 +34,6 @@
   <ul>
     <li><h5>Contract/Grant Integration</h5></li>
     <ol>
-      <li>Download ai-user (psu-users.xls) information from AI Users and Security Page</li>
-      <li>Upload this file to the "Psu-user.xls" form</li>
       <li>Download OSP data in csv format: dmresults.csv</li>
       <li>Convert dmresults.csv to an xlsx file</li>
       <li>Upload this file to the "Osp data file" form</li>
@@ -25,23 +41,19 @@
       <li>Unzip and open the CONGRANT.csv file</li>
       <li>Format the 'ID' column to a number with 0 decimal places and save the file as a tab-delimited text file</li>
       <li>Upload this file to the "Congrant backup file" form</li>
-      <li>Click the button corresponding to your intended environment target to start the integration</li>
+      <li>Click the button corresponding to the target environment you wish to integrate with</li>
     </ol>
     <li><h5>Courses Taught Integration</h5></li>
     <ol>
-      <li>Download ai-user (psu-users.xls) information from AI Users and Security Page</li>
-      <li>Upload this file to the "Psu-user.xls" form</li>
       <li>Download the latest courses taught information from iTwo</li>
       <li>Open the file and convert the 'Instructor Campus ID' column to a date formatted dd-mmm-yyyy</li>
       <li>Save the file as a tab delimited text file</li>
       <li>Upload this file to the "Courses taught data file" form</li>
-      <li>Click the button corresponding to your intended environment target to start the integration</li>
+      <li>Click the button corresponding to the target environment you wish to integrate with</li>
     </ol>
     <li><h5>Publications Integration</h5></li>
     <ol>
-      <li>Download ai-user (psu-users.xls) information from AI Users and Security Page</li>
-      <li>Upload this file to the "Psu-user.xls" form</li>
-      <li>Click the button corresponding to your intended environment target to start the integration</li>
+      <li>Click the button corresponding to the target environment you wish to integrate with</li>
     </ol>
   </ul>
 
