@@ -30,7 +30,7 @@ wb.add_worksheet(:name => "citations") do |sheet|
 
   longest = 0
   @works.each do |item|
-    unless item[:author].empty?
+    unless item[:author].nil?
       if longest < item[:author].length + header_length
         longest = item[:author].length + header_length
       end
