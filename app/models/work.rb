@@ -35,10 +35,12 @@ class Work < ApplicationRecord
 
       longest = 0
       all.each do |item|
-        unless item[:author] == nil
+        unless item[:author].empty?
           if longest < item[:author].length + header_length
             longest = item[:author].length + header_length
           end
+        else
+          longest = headers_length
         end
       end
 
