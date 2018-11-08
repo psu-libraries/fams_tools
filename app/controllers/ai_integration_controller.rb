@@ -7,11 +7,10 @@ require 'lionpath_data/lionpath_parser'
 require 'lionpath_data/lionpath_populate_db'
 require 'lionpath_data/lionpath_xml_builder'
 require 'activity_insight/ai_integrate_data'
-require 'activity_insight/ai_get_user_data'
 require 'activity_insight/ai_manage_duplicates'
 
 class AiIntegrationController < ApplicationController
-  before_action :delete_all_data, :load_psu_users, :clear_temp_files, only: [:osp_integrate, :lionpath_integrate, :pub_integrate]
+  before_action :delete_all_data, :clear_tmp_files, only: [:osp_integrate, :lionpath_integrate, :pub_integrate]
 
   def osp_integrate
     start = Time.now
@@ -73,16 +72,7 @@ class AiIntegrationController < ApplicationController
 
   private
 
-  def load_psu_users
-    psu_users_name = params[:psu_users_file].original_filename
-    psu_users_path = File.join('app', 'parsing_files', psu_users_name)
-    File.open(psu_users_path, "wb") { |f| f.write(params[:psu_users_file].read) }
-    my_get_user_data = GetUserData.new(psu_users_path)
-    my_get_user_data.call
-    File.delete(psu_users_path) if File.exist?(psu_users_path)
-  end
-
-  def clear_temp_files
+  def clear_tmp_files
     Dir.foreach('app/parsing_files') do |f|
       fn = File.join('app/parsing_files', f)
       File.delete(fn) if File.exist?(fn) && f != '.' && f != '..'
