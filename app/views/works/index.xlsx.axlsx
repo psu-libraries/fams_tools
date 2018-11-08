@@ -35,7 +35,6 @@ wb.add_worksheet(:name => "citations") do |sheet|
     end
   end
 
-  puts header_length
   counter = longest - header_length
   while headers.length < longest
     headers.insert(0, ["INTELLCONT_AUTH_#{counter}_FACULTY_NAME", "INTELLCONT_AUTH_#{counter}_FNAME", "INTELLCONT_AUTH_#{counter}_MNAME", "INTELLCONT_AUTH_#{counter}_LNAME"])
