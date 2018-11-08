@@ -6,6 +6,8 @@ class Work < ApplicationRecord
   def self.to_csv
     CSV.generate({encoding: "utf-8"}) do |csv|
 
+      cv_owner = Faculty.find_by(access_id: all.pluck(:username).uniq.first)
+
       header_map = [:username, "IGNORE", :title, :journal, :volume, :edition, :pages, :date, :booktitle, :container, :genre, :contype, :doi,
         :editor, :institution, :isbn, :location, :note, :publisher, :retrieved, :tech, :translator, :unknown, :url]
 
@@ -61,7 +63,13 @@ class Work < ApplicationRecord
 
         row -= [:delete]
 
-        item[:author]&.reverse&.each {|author| row.insert(0, ["", author[0], author[1], author[2]])}
+        item[:author]&.reverse&.each do |author|
+          if author[2].upcase == cv_owner&.l_name&.upcase && author[0][0].upcase == cv_owner&.f_name[0]&.upcase
+            row.insert(0, [cv_owner&.user_id, author[0], author[1], author[2]])
+          else
+            row.insert(0, ["", author[0], author[1], author[2]])
+          end
+        end 
 
         while row.length < longest
           row.insert(item[:author].length, ["", "", "", ""])
