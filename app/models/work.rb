@@ -64,7 +64,7 @@ class Work < ApplicationRecord
         row -= [:delete]
 
         item[:author]&.reverse&.each do |author|
-          if author[2].upcase == cv_owner&.l_name&.upcase && author[0][0].upcase == cv_owner&.f_name[0]&.upcase
+          if author[2]&.upcase == cv_owner&.l_name&.upcase && author[0][0]&.upcase == cv_owner&.f_name[0]&.upcase
             row.insert(0, [cv_owner&.user_id, author[0], author[1], author[2]])
           else
             row.insert(0, ["", author[0], author[1], author[2]])
