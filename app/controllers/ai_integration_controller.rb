@@ -88,7 +88,6 @@ class AiIntegrationController < ApplicationController
     PublicationFacultyLink.delete_all
     ExternalAuthor.delete_all
     Publication.delete_all
-    Faculty.delete_all
   end
 
 end
