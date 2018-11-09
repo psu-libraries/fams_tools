@@ -10,6 +10,8 @@ require 'activity_insight/ai_integrate_data'
 require 'activity_insight/ai_manage_duplicates'
 
 class AiIntegrationController < ApplicationController
+  http_basic_authenticate_with :name => "name", :password => "password", only: [:osp_integrate, :lionpath_integrate, :pub_integrate]
+
   before_action :delete_all_data, :clear_tmp_files, only: [:osp_integrate, :lionpath_integrate, :pub_integrate]
 
   def osp_integrate
