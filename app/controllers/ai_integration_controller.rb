@@ -10,9 +10,8 @@ require 'activity_insight/ai_integrate_data'
 require 'activity_insight/ai_manage_duplicates'
 
 class AiIntegrationController < ApplicationController
-  http_basic_authenticate_with :name => "name", :password => "password", only: [:osp_integrate, :lionpath_integrate, :pub_integrate]
 
-  before_action :delete_all_data, :clear_tmp_files, only: [:osp_integrate, :lionpath_integrate, :pub_integrate]
+  before_action :delete_all_data, :clear_tmp_files, :confirm_passcode, only: [:osp_integrate, :lionpath_integrate, :pub_integrate]
 
   def osp_integrate
     start = Time.now
@@ -73,6 +72,13 @@ class AiIntegrationController < ApplicationController
   end
 
   private
+
+  def confirm_passcode
+    unless params[:passcode] == Rails.application.config_for(:integration_passcode)[:passcode]
+      flash[:alert] = "Wrong Passcode"
+      redirect_to ai_integration_path
+    end
+  end
 
   def clear_tmp_files
     Dir.foreach('app/parsing_files') do |f|
