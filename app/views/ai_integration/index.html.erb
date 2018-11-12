@@ -16,13 +16,16 @@
     <p> <%= label(:ai_backup_file, text = "CONGRANT backup File") %><%= form.file_field :ai_backup_file %> </p>
     <div class="row">
       <div class="col-xs-1", style="padding:5px 5px;">
-        <p> <%= form.button "Beta".html_safe, class:"btn btn-primary", type: :submit, name: "target", value: :beta, :data => { disable_with: "<i class='fa fa-spinner fa-pulse'></i> Integrating..." } %> </p>
+        <p> <%= form.button "Beta".html_safe, class:"btn btn-primary", type: :submit, name: "target", value: :beta, 
+                  :data => { disable_with: "<i class='fa fa-spinner fa-pulse'></i> Integrating...", :confirm => "Are you sure you want to integrate into beta?"}  %></p>
       </div>
       <div class="col-xs-1", style="padding:5px 5px;">
-        <p> <%= form.button "Alpha".html_safe, class:"btn btn-primary", type: :submit, name: "target", value: :alpha, :data => { disable_with: "<i class='fa fa-spinner fa-pulse'></i> Integrating..." } %> </p>
+        <p> <%= form.button "Alpha".html_safe, class:"btn btn-primary", type: :submit, name: "target", value: :alpha,
+                  :data => { disable_with: "<i class='fa fa-spinner fa-pulse'></i> Integrating...", :confirm => "Are you sure you want to integrate into alpha?" } %> </p>
       </div>
       <div class="col-xs-1", style="padding:5px 5px;">
-        <p> <%= form.button "Production".html_safe, class:"btn btn-primary", type: :submit, name: "target", value: :production, :data => { disable_with: "<i class='fa fa-spinner fa-pulse'></i> Integrating..." } %> </p>
+        <p> <%= form.button "Production".html_safe, class:"btn btn-primary", type: :submit, name: "target", value: :production,
+                  :data => { disable_with: "<i class='fa fa-spinner fa-pulse'></i> Integrating...", :confirm => "Are you sure you want to integrate into production?" } %> </p>
       </div>
       <div class="col-xs-1", style="padding:5px 5px;">
         <p> <%= form.password_field :passcode %> </p>
@@ -47,13 +50,16 @@
     <p> <%= label(:courses_file, text = "Courses Taught Data File") %><%= form.file_field :courses_file %> </p>
     <div class="row">
       <div class="col-xs-1", style="padding:5px 5px;">
-        <p> <%= form.button "Beta".html_safe, class:"btn btn-primary", type: :submit, name: "target", value: :beta, :data => { disable_with: "<i class='fa fa-spinner fa-pulse'></i> Integrating..." } %> </p>
+        <p> <%= form.button "Beta".html_safe, class:"btn btn-primary", type: :submit, name: "target", value: :beta,
+                  :data => { disable_with: "<i class='fa fa-spinner fa-pulse'></i> Integrating...", :confirm => "Are you sure you want to integrate into beta?" } %> </p>
       </div>
       <div class="col-xs-1", style="padding:5px 5px;">
-        <p> <%= form.button "Alpha".html_safe, class:"btn btn-primary", type: :submit, name: "target", value: :alpha, :data => { disable_with: "<i class='fa fa-spinner fa-pulse'></i> Integrating..." } %> </p>
+        <p> <%= form.button "Alpha".html_safe, class:"btn btn-primary", type: :submit, name: "target", value: :alpha,
+                  :data => { disable_with: "<i class='fa fa-spinner fa-pulse'></i> Integrating...", :confirm => "Are you sure you want to integrate into alpha?" } %> </p>
       </div>
       <div class="col-xs-1", style="padding:5px 5px;">
-        <p> <%= form.button "Production".html_safe, class:"btn btn-primary", type: :submit, name: "target", value: :production, :data => { disable_with: "<i class='fa fa-spinner fa-pulse'></i> Integrating..." } %> </p>
+        <p> <%= form.button "Production".html_safe, class:"btn btn-primary", type: :submit, name: "target", value: :production,
+                  :data => { disable_with: "<i class='fa fa-spinner fa-pulse'></i> Integrating...", :confirm => "Are you sure you want to integrate into production?" } %> </p>
       </div>
       <div class="col-xs-1", style="padding:5px 5px;">
         <p> <%= form.password_field :passcode %> </p>
@@ -77,13 +83,16 @@
   <%= form_with :url => { :action => "pub_integrate" }, id: "publications" do |form| %>
     <div class="row">
       <div class="col-xs-1", style="padding:5px 5px;">
-        <p> <%= form.button "Beta".html_safe, class:"btn btn-primary", type: :submit, name: "target", value: :beta, :data => { disable_with: "<i class='fa fa-spinner fa-pulse'></i> Integrating..." } %> </p>
+        <p> <%= form.button "Beta".html_safe, class:"btn btn-primary", type: :submit, name: "target", value: :beta,
+                  :data => { disable_with: "<i class='fa fa-spinner fa-pulse'></i> Integrating...", :confirm => "Are you sure you want to integrate into beta?" } %> </p>
       </div>
       <div class="col-xs-1", style="padding:5px 5px;">
-        <p> <%= form.button "Alpha".html_safe, class:"btn btn-primary", type: :submit, name: "target", value: :alpha, :data => { disable_with: "<i class='fa fa-spinner fa-pulse'></i> Integrating..." } %> </p>
+        <p> <%= form.button "Alpha".html_safe, class:"btn btn-primary", type: :submit, name: "target", value: :alpha,
+                  :data => { disable_with: "<i class='fa fa-spinner fa-pulse'></i> Integrating...", :confirm => "Are you sure you want to integrate into alpha?" } %> </p>
       </div>
       <div class="col-xs-1", style="padding:5px 5px;">
-        <p> <%= form.button "Production".html_safe, class:"btn btn-primary", type: :submit, name: "target", value: :production, :data => { disable_with: "<i class='fa fa-spinner fa-pulse'></i> Integrating..." } %> </p>
+        <p> <%= form.button "Production".html_safe, class:"btn btn-primary", type: :submit, name: "target", value: :production,
+                  :data => { disable_with: "<i class='fa fa-spinner fa-pulse'></i> Integrating...", :confirm => "Are you sure you want to integrate into production?" } %> </p>
       </div>
       <div class="col-xs-1", style="padding:5px 5px;">
         <p> <%= form.password_field :passcode %> </p>
