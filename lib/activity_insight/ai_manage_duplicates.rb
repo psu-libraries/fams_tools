@@ -88,17 +88,6 @@ class RemoveSystemDups
 
   private
 
-  def get_url(target)
-    case target
-    when :beta
-      'https://beta.digitalmeasures.com/login/service/v4/SchemaData:delete/INDIVIDUAL-ACTIVITIES-University'
-    when :alpha
-      'https://alpha.digitalmeasures.com/login/service/v4/SchemaData:delete/INDIVIDUAL-ACTIVITIES-University'
-    when :production
-      #'https://www.digitalmeasures.com/login/service/v4/SchemaData:delete/INDIVIDUAL-ACTIVITIES-University'
-    end
-  end
-
   def csv_to_hashes(filepath)
     index = 0
     keys = []
@@ -190,11 +179,22 @@ class RemoveSystemDups
       puts delete_xml
       auth = {:username => Rails.application.config_for(:activity_insight)[:username],
               :password => Rails.application.config_for(:activity_insight)[:password]}
-      url = 'https://beta.digitalmeasures.com/login/service/v4/SchemaData:delete/INDIVIDUAL-ACTIVITIES-University'
+      url = get_url(target)
       response = HTTParty.post url, :basic_auth => auth, :body => delete_xml, :headers => {'Content-type' => 'text/xml'}, :timeout => 180
       puts response
     else
       #puts 'No Duplicates'
+    end
+  end
+
+  def get_url(target)
+    case target
+    when :beta
+      'https://beta.digitalmeasures.com/login/service/v4/SchemaData:delete/INDIVIDUAL-ACTIVITIES-University'
+    when :alpha
+      'https://alpha.digitalmeasures.com/login/service/v4/SchemaData:delete/INDIVIDUAL-ACTIVITIES-University'
+    when :production
+      #'https://www.digitalmeasures.com/login/service/v4/SchemaData:delete/INDIVIDUAL-ACTIVITIES-University'
     end
   end
 
