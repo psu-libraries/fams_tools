@@ -24,6 +24,10 @@ RSpec.describe AiIntegrationController do
     @pubs = File.read('spec/fixtures/metadata_pub_json.json').to_s
   end
 
+  let(:passcode) do
+    Rails.application.config_for(:integration_passcode)[:passcode]
+  end
+
   before do
     allow(STDOUT).to receive(:puts)
   end
@@ -38,7 +42,7 @@ RSpec.describe AiIntegrationController do
              headers: {
             'Content-Type'=>'text/xml'
              }).
-           to_return(status: 200, body: "", headers: {})
+         to_return(status: 200, body: error_message, headers: {})
 
       stub_request(:post, "https://beta.digitalmeasures.com/login/service/v4/SchemaData:delete/INDIVIDUAL-ACTIVITIES-University").
            with(
@@ -50,7 +54,7 @@ RSpec.describe AiIntegrationController do
     end
 
     it "runs integration of contract/grants" do
-      params = { congrant_file: @contract_grants, ai_backup_file: @congrant_backup, "target" => :beta }
+      params = { congrant_file: @contract_grants, ai_backup_file: @congrant_backup, passcode: passcode, "target" => :beta }
       post ai_integration_osp_integrate_path, params: params
     end
 
@@ -60,9 +64,20 @@ RSpec.describe AiIntegrationController do
       within('#congrant') do 
         page.attach_file 'congrant_file', Rails.root.join('spec/fixtures/contract_grants.xlsx')
         page.attach_file 'ai_backup_file', Rails.root.join('spec/fixtures/congrant_backup.txt')
+        page.fill_in 'passcode', :with => passcode
         click_on 'Beta'
       end
       expect(page).to have_content("Integration completed")
+      expect(page).to have_content("Unexpected EOF")
+    end
+
+    it "redirects when wrong passcode supplied", type: :feature do
+      visit ai_integration_path
+      expect(page).to have_content("AI-Integration")
+      within('#congrant') do 
+        click_on 'Beta'
+      end
+      expect(page).to have_content("Wrong Passcode")
     end
   end
 
@@ -75,13 +90,7 @@ RSpec.describe AiIntegrationController do
            headers: {
        	  'Content-Type'=>'text/xml'
            }).
-         to_return(status: 200, body: '
-<?xml version="1.0" encoding="UTF-8"?>
-
-<Error>The following errors were detected:
-  <Message>Unexpected EOF in prolog at [row,col {unknown-source}]: [1,0] Nested exception: Unexpected EOF in prolog at [row,col {unknown-source}]: [1,0]</Message>
-</Error>', headers: {})
-
+         to_return(status: 200, body: error_message, headers: {})
     end
 
     it "runs integration of courses taught data" do
@@ -94,10 +103,20 @@ RSpec.describe AiIntegrationController do
       expect(page).to have_content("AI-Integration")
       within('#courses') do 
         page.attach_file 'courses_file', Rails.root.join('spec/fixtures/schteach.txt')
+        page.fill_in 'passcode', :with => passcode
         click_on 'Beta'
       end
       expect(page).to have_content("Integration completed")
       expect(page).to have_content("Unexpected EOF")
+    end
+
+    it "redirects when wrong passcode supplied", type: :feature do
+      visit ai_integration_path
+      expect(page).to have_content("AI-Integration")
+      within('#courses') do 
+        click_on 'Beta'
+      end
+      expect(page).to have_content("Wrong Passcode")
     end
   end
 
@@ -120,8 +139,7 @@ RSpec.describe AiIntegrationController do
        	  'Authorization'=>'Basic cHN1L2Fpc3VwcG9ydDpoQWVxeHBBV3VicQ==',
        	  'Content-Type'=>'text/xml'
            }).
-         to_return(status: 200, body: "", headers: {})
-
+         to_return(status: 200, body: error_message, headers: {})
     end
 
     it "runs integration of courses taught data" do
@@ -133,13 +151,32 @@ RSpec.describe AiIntegrationController do
       visit ai_integration_path
       expect(page).to have_content("AI-Integration")
       within('#publications') do 
+        page.fill_in 'passcode', :with => passcode
         click_on 'Beta'
       end
       expect(page).to have_content("Integration completed")
+      expect(page).to have_content("Unexpected EOF")
+    end
+
+    it "redirects when wrong passcode supplied", type: :feature do
+      visit ai_integration_path
+      expect(page).to have_content("AI-Integration")
+      within('#publications') do 
+        click_on 'Beta'
+      end
+      expect(page).to have_content("Wrong Passcode")
     end
   end
 
   private
+
+  def error_message
+    '<?xml version="1.0" encoding="UTF-8"?>
+
+<Error>The following errors were detected:
+  <Message>Unexpected EOF in prolog at [row,col {unknown-source}]: [1,0] Nested exception: Unexpected EOF in prolog at [row,col {unknown-source}]: [1,0]</Message>
+</Error>'
+  end
 
   def congrant_body
     "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Data>\n  <Record username=\"ljs123\">\n    <CONGRANT>\n      <OSPKEY access=\"READ_ONLY\">54321</OSPKEY>\n      <BASE_AGREE access=\"READ_ONLY\"/>\n      <TYPE access=\"READ_ONLY\"/>\n      <TITLE access=\"READ_ONLY\">Title 2</TITLE>\n      <SPONORG access=\"READ_ONLY\">Some Other Sponsor</SPONORG>\n      <AWARDORG access=\"READ_ONLY\">Federal Agencies</AWARDORG>\n      <CONGRANT_INVEST>\n        <FACULTY_NAME>123456</FACULTY_NAME>\n        <FNAME>Larry</FNAME>\n        <MNAME/>\n        <LNAME>Smith</LNAME>\n        <ROLE>Co-Principal Investigator</ROLE>\n        <ASSIGN>50</ASSIGN>\n      </CONGRANT_INVEST>\n      <AMOUNT_REQUEST access=\"READ_ONLY\">25</AMOUNT_REQUEST>\n      <AMOUNT_ANTICIPATE access=\"READ_ONLY\">4</AMOUNT_ANTICIPATE>\n      <AMOUNT access=\"READ_ONLY\">3</AMOUNT>\n      <STATUS access=\"READ_ONLY\">Awarded</STATUS>\n      <DTM_SUB access=\"READ_ONLY\">December</DTM_SUB>\n      <DTD_SUB access=\"READ_ONLY\">14</DTD_SUB>\n      <DTY_SUB access=\"READ_ONLY\">2015</DTY_SUB>\n      <DTM_AWARD/>\n      <DTD_AWARD/>\n      <DTY_AWARD/>\n      <DTM_START access=\"READ_ONLY\">June</DTM_START>\n      <DTD_START access=\"READ_ONLY\">01</DTD_START>\n      <DTY_START access=\"READ_ONLY\">2015</DTY_START>\n      <DTM_END access=\"READ_ONLY\">May</DTM_END>\n      <DTD_END access=\"READ_ONLY\">31</DTD_END>\n      <DTY_END access=\"READ_ONLY\">2015</DTY_END>\n      <DTM_DECLINE/>\n      <DTD_DECLINE/>\n      <DTY_DECLINE/>\n    </CONGRANT>\n  </Record>\n  <Record username=\"ajl123\">\n    <CONGRANT>\n      <OSPKEY access=\"READ_ONLY\">12345</OSPKEY>\n      <BASE_AGREE access=\"READ_ONLY\"/>\n      <TYPE access=\"READ_ONLY\"/>\n      <TITLE access=\"READ_ONLY\">Title 1</TITLE>\n      <SPONORG access=\"READ_ONLY\">Some Sponsor</SPONORG>\n      <AWARDORG access=\"READ_ONLY\">Federal Agencies</AWARDORG>\n      <CONGRANT_INVEST>\n        <FACULTY_NAME>345678</FACULTY_NAME>\n        <FNAME>Abraham</FNAME>\n        <MNAME/>\n        <LNAME>Lincoln</LNAME>\n        <ROLE>Principal Investigator</ROLE>\n        <ASSIGN>100</ASSIGN>\n      </CONGRANT_INVEST>\n      <AMOUNT_REQUEST access=\"READ_ONLY\">10000</AMOUNT_REQUEST>\n      <AMOUNT_ANTICIPATE access=\"READ_ONLY\">10</AMOUNT_ANTICIPATE>\n      <AMOUNT access=\"READ_ONLY\">1</AMOUNT>\n      <STATUS access=\"READ_ONLY\">Awarded</STATUS>\n      <DTM_SUB access=\"READ_ONLY\">November</DTM_SUB>\n      <DTD_SUB access=\"READ_ONLY\">15</DTD_SUB>\n      <DTY_SUB access=\"READ_ONLY\">2015</DTY_SUB>\n      <DTM_AWARD/>\n      <DTD_AWARD/>\n      <DTY_AWARD/>\n      <DTM_START access=\"READ_ONLY\">January</DTM_START>\n      <DTD_START access=\"READ_ONLY\">01</DTD_START>\n      <DTY_START access=\"READ_ONLY\">2015</DTY_START>\n      <DTM_END access=\"READ_ONLY\">December</DTM_END>\n      <DTD_END access=\"READ_ONLY\">31</DTD_END>\n      <DTY_END access=\"READ_ONLY\">2015</DTY_END>\n      <DTM_DECLINE/>\n      <DTD_DECLINE/>\n      <DTY_DECLINE/>\n    </CONGRANT>\n  </Record>\n</Data>\n"
