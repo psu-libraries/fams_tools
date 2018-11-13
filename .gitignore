@@ -31,4 +31,4 @@ spec/examples.txt
 /app/parsing_files/*
 *.swp
 /config/activity_insight.yml
-/config/pure.yml
+/config/integration_passcode.yml
