@@ -1,4 +1,3 @@
-require 'byebug'
 class IntegrateData
   attr_accessor :auth, :batched_xmls, :target
 
