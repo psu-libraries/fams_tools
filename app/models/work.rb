@@ -7,6 +7,7 @@ class Work < ApplicationRecord
     CSV.generate({encoding: "utf-8"}) do |csv|
 
       cv_owner = Faculty.find_by(access_id: all.pluck(:username).uniq.first)
+      workstype = all.pluck(:contype).uniq.first.downcase
 
       header_map = [:username, "IGNORE", :title, :journal, :volume, :edition, :pages, :date, :booktitle, :container, :genre, :contype, :doi,
         :editor, :institution, :isbn, :location, :note, :publisher, :retrieved, :tech, :translator, :unknown, :url]
@@ -21,9 +22,15 @@ class Work < ApplicationRecord
         end
       end
 
-      headers = ['USERNAME', 'USER_ID', 'TITLE', 'journal', 'VOLUME', 'EDITION', 'PAGENUM', 'DTY_PUB', 'booktitle', 'JOURNAL_NAME', 'type', 'CONTYPE', 'WEB_ADDRESS', 'EDITORS', 'INSTITUTION', 'ISBNISSN', 
-      'PUBCTYST', 'note', 'PUBLISHER', 'retrieved', 'tech', 'translator', 'unknown', 'url'
-      ]
+      if workstype == 'presentation'
+        headers = ['USERNAME', 'USER_ID', 'TITLE', 'journal', 'volume', 'edition', 'pages', 'DTY_DATE', 'booktitle', 'NAME', 'type', 'TYPE', 'doi', 'editor', 'ORG', 'isbn', 'LOCATION', 'note', 'publisher',
+                    'retrieved', 'tech', 'translator', 'unknown', 'url'
+                    ]
+      else
+        headers = ['USERNAME', 'USER_ID', 'TITLE', 'journal', 'VOLUME', 'EDITION', 'PAGENUM', 'DTY_PUB', 'booktitle', 'JOURNAL_NAME', 'type', 'CONTYPE', 'WEB_ADDRESS', 'EDITORS', 'INSTITUTION', 'ISBNISSN', 
+                    'PUBCTYST', 'note', 'PUBLISHER', 'retrieved', 'tech', 'translator', 'unknown', 'url'
+                    ]
+      end
 
       empty_col_indices.each do |index|
         headers[index] = :delete
@@ -42,10 +49,18 @@ class Work < ApplicationRecord
         end
       end
 
-      counter = longest - header_length
-      while headers.length < longest
-        headers.insert(0, ["INTELLCONT_AUTH_#{counter}_FACULTY_NAME", "INTELLCONT_AUTH_#{counter}_FNAME", "INTELLCONT_AUTH_#{counter}_MNAME", "INTELLCONT_AUTH_#{counter}_LNAME"])
-        counter -= 1
+      if workstype == 'presentation'
+        counter = longest - header_length
+        while headers.length < longest
+          headers.insert(0, ["PRESENT_AUTH_#{counter}_FACULTY_NAME", "PRESENT_AUTH_#{counter}_FNAME", "PRESENT_AUTH_#{counter}_MNAME", "PRESENT_AUTH_#{counter}_LNAME"])
+          counter -= 1
+        end
+      else
+        counter = longest - header_length
+        while headers.length < longest
+          headers.insert(0, ["INTELLCONT_AUTH_#{counter}_FACULTY_NAME", "INTELLCONT_AUTH_#{counter}_FNAME", "INTELLCONT_AUTH_#{counter}_MNAME", "INTELLCONT_AUTH_#{counter}_LNAME"])
+          counter -= 1
+        end
       end
 
       csv << headers.flatten
