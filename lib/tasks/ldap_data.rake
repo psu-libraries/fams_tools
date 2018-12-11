@@ -1,10 +1,10 @@
-require 'ldap_data/get_ldap_data'
+require 'ldap_data/import_ldap_data'
 
 namespace :ldap_data do
 
-  desc "Get personal contact informanction from ldap"
+  desc "Get personal contact information from ldap"
 
   task get_data: :environment do
-    GetLdapData.new.call
+    ImportLdapData.new.import_ldap_data
   end
 end
