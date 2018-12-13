@@ -77,14 +77,15 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
     t.string "postal_address"
     t.string "department"
     t.string "title"
-    t.string "ps_research"
-    t.string "ps_teaching"
+    t.text "ps_research"
+    t.text "ps_teaching"
     t.string "ps_office_address"
     t.string "facsimile_telephone_number"
     t.string "cn"
     t.string "mail"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "uid", null: false
     t.index ["faculty_id"], name: "index_personal_contacts_on_faculty_id"
   end
 

@@ -6,8 +6,8 @@ class CreatePersonalContacts < ActiveRecord::Migration[5.1]
       t.string :postal_address
       t.string :department
       t.string :title
-      t.string :ps_research
-      t.string :ps_teaching
+      t.text :ps_research
+      t.text :ps_teaching
       t.string :ps_office_address
       t.string :facsimile_telephone_number
       t.string :cn
