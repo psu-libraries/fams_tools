@@ -11,7 +11,7 @@ RSpec.describe ImportLdapData do
     let(:importer) { ImportLdapData.new }
 
     it 'imports faculty data from ldap using faculty in our database' do
-      expect(importer.import_ldap_data).to eq(nil)
+      expect{ importer.import_ldap_data }.to change { PersonalContact.count }.by 1
     end
   end
 
