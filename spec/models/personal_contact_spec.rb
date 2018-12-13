@@ -23,6 +23,7 @@ end
 describe PersonalContact, type: :model do
   describe 'validations' do
     it { is_expected.to validate_presence_of(:faculty_id) }
+    it { is_expected.to validate_presence_of(:uid) }
   end
 
   describe 'associations' do
