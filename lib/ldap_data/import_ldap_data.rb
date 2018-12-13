@@ -23,20 +23,30 @@ class ImportLdapData
   private
 
   def ldap_data_populate_db(entry, faculty)
-    PersonalContact.create!(
-      faculty: faculty,
-      telephone_number: entry['telephonenumber'].first,
-      postal_address: entry['postaladdress'].first,
-      department: entry['department'].first,
-      title: entry['title'].first,
-      ps_research: entry['psresearch'].first,
-      ps_teaching: entry['psteaching'].first,
-      ps_office_address: entry['ps_office_address'].first,
-      facsimile_telephone_number: entry['facsimiletelephonenumber'].first,
-      mail: entry['mail'].first,
-      cn: entry['cn'].first
-    )
+    pc = PersonalContact.find_by(faculty: faculty) ||
+         PersonalContact.new({faculty: faculty}.merge!(personal_contact_attrs(entry)))
+
+    if pc.persisted?
+      pc.update_attributes!(personal_contact_attrs(entry))
+    else
+      pc.save!
+    end
   end
 
+  def personal_contact_attrs(entry)
+    {
+    uid: entry['uid'].first,
+    telephone_number: entry['telephonenumber'].first,
+    postal_address: entry['postaladdress'].first,
+    department: entry['department'].first,
+    title: entry['title'].first,
+    ps_research: entry['psresearch'].first,
+    ps_teaching: entry['psteaching'].first,
+    ps_office_address: entry['ps_office_address'].first,
+    facsimile_telephone_number: entry['facsimiletelephonenumber'].first,
+    mail: entry['mail'].first,
+    cn: entry['cn'].first
+      }
+  end
 end
 
