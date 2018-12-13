@@ -86,7 +86,7 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "uid", null: false
-    t.index ["faculty_id"], name: "index_personal_contacts_on_faculty_id"
+    t.index ["faculty_id"], name: "index_personal_contacts_on_faculty_id", unique: true
   end
 
   create_table "publication_faculty_links", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -194,7 +194,7 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
   add_foreign_key "contract_faculty_links", "faculties"
   add_foreign_key "contracts", "sponsors"
   add_foreign_key "external_authors", "publications"
-  add_foreign_key "personal_contacts", "faculties", on_delete: :cascade
+  add_foreign_key "personal_contacts", "faculties"
   add_foreign_key "publication_faculty_links", "faculties"
   add_foreign_key "publication_faculty_links", "publications"
   add_foreign_key "sections", "courses"

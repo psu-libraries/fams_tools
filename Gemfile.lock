@@ -118,6 +118,8 @@ GEM
       unf (>= 0.0.5, < 1.0.0)
     erubi (1.7.1)
     execjs (2.7.0)
+    factory_bot (4.10.0)
+      activesupport (>= 3.0.0)
     ffi (1.9.25)
     globalid (0.4.1)
       activesupport (>= 4.2.0)
@@ -317,6 +319,7 @@ DEPENDENCIES
   coffee-rails (~> 4.2)
   creek
   docx (~> 0.2.07)
+  factory_bot
   httparty
   jbuilder (~> 2.5)
   jquery-rails

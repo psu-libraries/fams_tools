@@ -17,7 +17,7 @@ describe 'the personal contacts table', type: :model do
   it { is_expected.to have_db_column(:cn).of_type(:string) }
   it { is_expected.to have_db_column(:mail).of_type(:string) }
 
-  it { is_expected.to have_db_index(:faculty_id) }
+  it { is_expected.to have_db_index(:faculty_id).unique(true) }
 end
 
 describe PersonalContact, type: :model do
