@@ -17,6 +17,6 @@ class CreatePersonalContacts < ActiveRecord::Migration[5.1]
 
     add_index :personal_contacts, :faculty_id
 
-    add_foreign_key :personal_contacts, :faculties
+    add_foreign_key :personal_contacts, :faculties, on_delete: :cascade
   end
 end
