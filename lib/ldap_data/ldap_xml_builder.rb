@@ -18,11 +18,11 @@ class LdapXmlBuilder
         batch.each do |faculty|
           xml.Record('username' => faculty.access_id) {
             xml.PCI {
-              xml.OPHONE1_ faculty.personal_contact.telephone_number.split(' ')[1]
-              xml.OPHONE2_ faculty.personal_contact.telephone_number.split(' ')[2]
-              xml.OPHONE3_ faculty.personal_contact.telephone_number.split(' ')[3]
-              xml.BUILDING_ faculty.personal_contact.ps_office_address.split(/(\D+)/)[1]
-              xml.ROOMNUM_ faculty.personal_contact.ps_office_address.split(/(\D+)/)[0]
+              xml.OPHONE1_ (faculty.personal_contact.telephone_number != nil) ? faculty.personal_contact.telephone_number.split(' ')[1] : nil
+              xml.OPHONE2_ (faculty.personal_contact.telephone_number != nil) ? faculty.personal_contact.telephone_number.split(' ')[2] : nil
+              xml.OPHONE3_ (faculty.personal_contact.telephone_number != nil) ? faculty.personal_contact.telephone_number.split(' ')[3] : nil
+              xml.BUILDING_ (faculty.personal_contact.ps_office_address != nil) ? faculty.personal_contact.ps_office_address.split(/(\D+)/)[1] : nil
+              xml.ROOMNUM_ (faculty.personal_contact.ps_office_address != nil) ? faculty.personal_contact.ps_office_address.split(/(\D+)/)[0] : nil
               xml.RESEARCH_INTERESTS_ faculty.personal_contact.ps_research 
               xml.TEACHING_INTERESTS_ faculty.personal_contact.ps_teaching 
               xml.FNAME_ faculty.f_name
