@@ -25,6 +25,9 @@ class LdapXmlBuilder
               xml.ROOMNUM_ faculty.personal_contact.ps_office_address.split(/(\D+)/)[0]
               xml.RESEARCH_INTERESTS_ faculty.personal_contact.ps_research 
               xml.TEACHING_INTERESTS_ faculty.personal_contact.ps_teaching 
+              xml.FNAME_ faculty.f_name
+              xml.MNAME_ faculty.m_name
+              xml.LNAME_ faculty.l_name
               }
           }
         end
