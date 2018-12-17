@@ -19,10 +19,12 @@ RSpec.describe LdapXmlBuilder do
       <OPHONE1>123</OPHONE1>
       <OPHONE2>456</OPHONE2>
       <OPHONE3>7891</OPHONE3>
-      <BUILDING> Test Office Address</BUILDING>
+      <BUILDING>Test Office Address</BUILDING>
       <ROOMNUM>123</ROOMNUM>
       <RESEARCH_INTERESTS>Test research interests.</RESEARCH_INTERESTS>
       <TEACHING_INTERESTS>Test teaching interests.</TEACHING_INTERESTS>
+      <EMAIL>abc123@psu.edu</EMAIL>
+      <WEBSITE>www.personal.website</WEBSITE>
       <FNAME>Test</FNAME>
       <MNAME>Person</MNAME>
       <LNAME>User</LNAME>

@@ -12,5 +12,6 @@ FactoryBot.define do
     facsimile_telephone_number { 'Test FAX' }
     cn { 'Test User Person' }
     mail { 'abc123@psu.edu' }
+    personal_web { 'www.personal.website' }
   end
 end

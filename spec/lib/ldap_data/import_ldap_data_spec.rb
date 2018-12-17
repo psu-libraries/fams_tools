@@ -28,6 +28,7 @@ RSpec.describe ImportLdapData do
       expect(pc1['facsimile_telephone_number']).to eq nil
       expect(pc1['mail']).to eq "ajk5603@psu.edu"
       expect(pc1['cn']).to eq "Alex Kiessling"
+      expect(pc1['personal_web']).to eq nil
 
       expect(pc2['postal_address']).to eq nil
       expect(pc2['telephone_number']).to eq nil
@@ -39,6 +40,7 @@ RSpec.describe ImportLdapData do
       expect(pc2['facsimile_telephone_number']).to eq nil
       expect(pc2['mail']).to eq "tstem31@psu.edu"
       expect(pc2['cn']).to eq nil
+      expect(pc1['personal_web']).to eq nil
     end
   end
 
