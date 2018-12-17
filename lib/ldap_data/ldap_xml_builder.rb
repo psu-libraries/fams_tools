@@ -16,7 +16,6 @@ class LdapXmlBuilder
     builder = Nokogiri::XML::Builder.new(:encoding => 'UTF-8') do |xml|
       xml.Data {
         batch.each do |faculty|
-          puts faculty.personal_contact.ps_office_address
           xml.Record('username' => faculty.access_id) {
             xml.PCI {
               (faculty.personal_contact.telephone_number != nil) ? xml.OPHONE1_(faculty.personal_contact.telephone_number.split(' ')[1]) : nil
