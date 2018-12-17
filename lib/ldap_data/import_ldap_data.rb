@@ -42,7 +42,7 @@ class ImportLdapData
     title: entry['title'].first,
     ps_research: entry['psresearch'].first,
     ps_teaching: entry['psteaching'].first,
-    ps_office_address: entry['ps_office_address'].first,
+    ps_office_address: entry['psofficeaddress'].first,
     facsimile_telephone_number: entry['facsimiletelephonenumber'].first,
     mail: entry['mail'].first,
     cn: entry['cn'].first
