@@ -45,7 +45,8 @@ class ImportLdapData
     ps_office_address: entry['psofficeaddress'].first,
     facsimile_telephone_number: entry['facsimiletelephonenumber'].first,
     mail: entry['mail'].first,
-    cn: entry['cn'].first
+    cn: entry['cn'].first,
+    personal_web: entry['labeleduri'].first
       }
   end
 end

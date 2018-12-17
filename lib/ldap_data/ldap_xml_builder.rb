@@ -26,6 +26,8 @@ class LdapXmlBuilder
               (faculty.personal_contact.ps_office_address != nil) ? xml.ROOMNUM_(faculty.personal_contact.ps_office_address.split(/(\D+)/)[0]&.strip) : nil
               (faculty.personal_contact.ps_research != nil) ? xml.RESEARCH_INTERESTS_(faculty.personal_contact.ps_research&.gsub('$', '; ')) : nil
               (faculty.personal_contact.ps_teaching != nil) ? xml.TEACHING_INTERESTS_(faculty.personal_contact.ps_teaching&.gsub('$', '; ')) : nil
+              (faculty.personal_contact.mail != nil) ? xml.EMAIL_(faculty.personal_contact.mail) : nil
+              (faculty.personal_contact.personal_web != nil) ? xml.WEBSITE_(faculty.personal_contact.personal_web) : nil
               (faculty.f_name != nil) ? xml.FNAME_(faculty.f_name) : nil
               (faculty.m_name != nil) ? xml.MNAME_(faculty.m_name) : nil
               (faculty.l_name != nil) ? xml.LNAME_(faculty.l_name) : nil
