@@ -86,6 +86,7 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "uid", null: false
+    t.string "personal_web"
     t.index ["faculty_id"], name: "index_personal_contacts_on_faculty_id", unique: true
   end
 
