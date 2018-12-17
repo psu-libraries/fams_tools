@@ -68,6 +68,19 @@ class AiIntegrationController < ApplicationController
     redirect_to ai_integration_path
   end
 
+  def ldap_integrate
+    start = Time.now
+    import_ldap = ImportLdapData.new
+    import_ldap.call
+    ldap_integrate = IntegrateData.new(LdapXmlBuilder.new, params[:target])
+    @errors = ldap_integrate.integrate
+    finish = Time.now
+    @time = (((finish - start)/60).to_i.to_s + ' minutes')
+    flash[:notice] = "Integration completed in #{@time}."
+    flash[:pubs_errors] = @errors
+    redirect_to ai_integration_path
+  end
+
   def index
   end
 
