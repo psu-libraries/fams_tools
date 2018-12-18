@@ -6,6 +6,8 @@ require 'osp_data/osp_xml_builder'
 require 'lionpath_data/lionpath_parser'
 require 'lionpath_data/lionpath_populate_db'
 require 'lionpath_data/lionpath_xml_builder'
+require 'ldap_data/import_ldap_data'
+require 'ldap_data/ldap_xml_builder'
 require 'activity_insight/ai_integrate_data'
 require 'activity_insight/ai_manage_duplicates'
 
@@ -109,6 +111,7 @@ class AiIntegrationController < ApplicationController
     PublicationFacultyLink.delete_all
     ExternalAuthor.delete_all
     Publication.delete_all
+    PersonalContact.delete_all
   end
 
 end
