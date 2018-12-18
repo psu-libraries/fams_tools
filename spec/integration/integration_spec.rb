@@ -136,7 +136,6 @@ RSpec.describe AiIntegrationController do
          with(
            body: pubs_body,
            headers: {
-       	  'Authorization'=>'Basic cHN1L2Fpc3VwcG9ydDpoQWVxeHBBV3VicQ==',
        	  'Content-Type'=>'text/xml'
            }).
          to_return(status: 200, body: error_message, headers: {})
