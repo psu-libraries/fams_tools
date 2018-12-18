@@ -11,7 +11,7 @@ require 'activity_insight/ai_manage_duplicates'
 
 class AiIntegrationController < ApplicationController
 
-  before_action :delete_all_data, :clear_tmp_files, :confirm_passcode, only: [:osp_integrate, :lionpath_integrate, :pub_integrate]
+  before_action :delete_all_data, :clear_tmp_files, :confirm_passcode, only: [:osp_integrate, :lionpath_integrate, :pub_integrate, :ldap_integrate]
 
   def osp_integrate
     start = Time.now
@@ -71,7 +71,7 @@ class AiIntegrationController < ApplicationController
   def ldap_integrate
     start = Time.now
     import_ldap = ImportLdapData.new
-    import_ldap.call
+    import_ldap.import_ldap_data
     ldap_integrate = IntegrateData.new(LdapXmlBuilder.new, params[:target])
     @errors = ldap_integrate.integrate
     finish = Time.now
