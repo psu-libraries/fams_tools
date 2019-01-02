@@ -16,5 +16,21 @@ RSpec.describe PublicationListingsController do
       end
       expect(page).to have_content("Title (1 Records)")
     end
+
+    context "when a works record exists" do
+      before do
+        PublicationListing.create!(name: "Test")
+      end
+      
+      it "redirects to works page when link is clicked", type: :feature do
+        visit publication_listings_path
+        expect(page).to have_content("CV Parser")
+        within('#works') do
+          click_on "Test"
+        end
+        expect(current_path).to include('/works')
+        expect(page).to have_content("Works")
+      end
+    end
   end
 end
