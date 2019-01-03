@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   post '/ai_integration/lionpath_integrate', to: 'ai_integration#lionpath_integrate'
   post '/ai_integration/pub_integrate', to: 'ai_integration#pub_integrate'
   post '/ai_integration/ldap_integrate', to: 'ai_integration#ldap_integrate'
+  post '/ai_integration/cv_pub_integrate', to: 'ai_integration#cv_pub_integrate'
   resources :publication_listings do
     resources :works
   end

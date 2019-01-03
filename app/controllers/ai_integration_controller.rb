@@ -83,6 +83,15 @@ class AiIntegrationController < ApplicationController
     redirect_to ai_integration_path
   end
 
+  def cv_pub_integrate
+    start = Time.now
+
+    finish = Time.now
+    @time = (((finish - start)/60).to_i.to_s + ' minutes')
+    flash[:notice] = "Integration completed in #{@time}."
+    redirect_to ai_integration_path
+  end
+
   def index
   end
 

@@ -141,7 +141,7 @@ RSpec.describe AiIntegrationController do
          to_return(status: 200, body: error_message, headers: {})
     end
 
-    it "runs integration of courses taught data" do
+    it "runs integration of publication data" do
       params = { "target" => :beta }
       post ai_integration_pub_integrate_path, params: params
     end
@@ -161,6 +161,44 @@ RSpec.describe AiIntegrationController do
       visit ai_integration_path
       expect(page).to have_content("AI-Integration")
       within('#publications') do 
+        click_on 'Beta'
+      end
+      expect(page).to have_content("Wrong Passcode")
+    end
+  end
+
+  describe "#cv_pub_integrate" do
+    before do
+         stub_request(:post, "https://beta.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University").
+         with(
+           body: nil,
+           headers: {
+       	  'Content-Type'=>'text/xml'
+           }).
+         to_return(status: 200, body: error_message, headers: {})
+    end
+
+    it "runs integration of cv publication data" do
+      params = { "target" => :beta }
+      post ai_integration_cv_pub_integrate_path, params: params
+    end
+
+    it "gets cv publication data sends data to activity insight", type: :feature do
+      visit ai_integration_path
+      expect(page).to have_content("AI-Integration")
+      within('#cv_publications') do 
+        page.attach_file 'cv_pub_file_file', Rails.root.join('spec/fixtures/cv_pub.csv')
+        page.fill_in 'passcode', :with => passcode
+        click_on 'Beta'
+      end
+      expect(page).to have_content("Integration completed")
+      expect(page).to have_content("Unexpected EOF")
+    end
+
+    it "redirects when wrong passcode supplied", type: :feature do
+      visit ai_integration_path
+      expect(page).to have_content("AI-Integration")
+      within('#cv_publications') do 
         click_on 'Beta'
       end
       expect(page).to have_content("Wrong Passcode")
