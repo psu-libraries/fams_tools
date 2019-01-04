@@ -1,5 +1,6 @@
 require 'pub_data/get_pub_data'
 
+#Import designed specifically for data from Metadata database.  
 class PubPopulateDB
 
   def populate(pub_hash)
