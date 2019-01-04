@@ -21,6 +21,7 @@ RSpec.describe AiIntegrationController do
     @contract_grants = fixture_file_upload('spec/fixtures/contract_grants.xlsx')
     @congrant_backup = fixture_file_upload('spec/fixtures/congrant_backup.txt')
     @courses = fixture_file_upload('spec/fixtures/schteach.txt')
+    @cv_pubs = fixture_file_upload('spec/fixtures/cv_pub.csv')
     @pubs = File.read('spec/fixtures/metadata_pub_json.json').to_s
   end
 
@@ -179,7 +180,7 @@ RSpec.describe AiIntegrationController do
     end
 
     it "runs integration of cv publication data" do
-      params = { "target" => :beta }
+      params = { cv_pub_file: @cv_pubs, "target" => :beta }
       post ai_integration_cv_pub_integrate_path, params: params
     end
 
@@ -187,7 +188,7 @@ RSpec.describe AiIntegrationController do
       visit ai_integration_path
       expect(page).to have_content("AI-Integration")
       within('#cv_publications') do 
-        page.attach_file 'cv_pub_file_file', Rails.root.join('spec/fixtures/cv_pub.csv')
+        page.attach_file 'cv_pub_file', Rails.root.join('spec/fixtures/cv_pub.csv')
         page.fill_in 'passcode', :with => passcode
         click_on 'Beta'
       end
