@@ -91,10 +91,13 @@ class AiIntegrationController < ApplicationController
     File.open(f_path, "wb") { |f| f.write(params[:cv_pub_file].read) }
     import_cv_pubs = ImportCVPubs.new(f_path)
     import_cv_pubs.import_cv_pubs_data
+    my_integrate = IntegrateData.new(PubXMLBuilder.new, params[:target])
+    @errors = my_integrate.integrate
     File.delete(f_path) if File.exist?(f_path)
     finish = Time.now
     @time = (((finish - start)/60).to_i.to_s + ' minutes')
     flash[:notice] = "Integration completed in #{@time}."
+    flash[:cv_pubs_errors] = @errors
     redirect_to ai_integration_path
   end
 
