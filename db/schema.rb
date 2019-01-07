@@ -128,6 +128,11 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
     t.integer "citation_count"
     t.boolean "authors_et_al"
     t.string "ai_ids"
+    t.string "web_address"
+    t.text "editors"
+    t.string "institution"
+    t.string "isbnissn"
+    t.string "pubctyst"
     t.index ["pure_ids", "ai_ids"], name: "index_publications_on_pure_ids_and_ai_ids", unique: true
   end
 

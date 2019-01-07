@@ -58,7 +58,12 @@ class ImportCVPubs
       edition: row["EDITION"],
       page_range: row["PAGENUM"],
       dty: row["DTY_PUB"],
-      journal_title: row["JOURNAL_NAME"]
+      journal_title: row["JOURNAL_NAME"],
+      web_address: row["WEB_ADDRESS"],
+      editors: row["EDITORS"],
+      institution: row["INSTITUTION"],
+      isbnissn: row["ISBNISSN"],
+      pubctyst: row["PUBCTYST"]
     }
   end
 end
