@@ -50,11 +50,21 @@ set :pty, true
 # Airbrussh options
 set :format_options, command_output: false
 
-# Default value for :linked_files is []
-set :linked_files, fetch(:linked_files, []).push(
-  'config/database.yml',
-  'config/secrets.yml'
-)
+namespace :deploy do
+  task :symlink_shared do
+    desc 'set up the shared directory to have the symbolic links to the appropriate directories shared between servers'
+    puts release_path.to_s
+    on roles(:web) do
+      execute "ln -sf /rubytools/#{fetch(:application)}/config_#{fetch(:stage)}/#{fetch(:partner)}database.yml #{release_path}/config/database.yml"
+      execute "ln -sf /rubytools/#{fetch(:application)}/config_#{fetch(:stage)}/#{fetch(:partner)}secrets.yml #{release_path}/config/secrets.yml"
+      execute "ln -sf /rubytools/#{fetch(:application)}/config_#{fetch(:stage)}/#{fetch(:partner)}activity_insight.yml #{release_path}/config/activity_insight.yml"
+      execute "ln -sf /rubytools/#{fetch(:application)}/config_#{fetch(:stage)}/#{fetch(:partner)}integration_passcode.yml #{release_path}/config/integration_passcode.yml"
+      execute "mkdir #{release_path}/app/parsing_files"
+    end
+  end
+  before "deploy:assets:precompile", "deploy:symlink_shared"
+  after "deploy:updated", "deploy:migrate"
+end
 
 set :linked_dirs, fetch(:linked_dirs, []).push(
   'log',
