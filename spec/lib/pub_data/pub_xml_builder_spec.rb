@@ -121,6 +121,9 @@ RSpec.describe PubXMLBuilder do
       <PAGENUM access="READ_ONLY">42-43</PAGENUM>
       <CITATION_COUNT access="READ_ONLY">3</CITATION_COUNT>
       <INTELLCONT_AUTH>
+        <FACULTY_NAME access="READ_ONLY">123456</FACULTY_NAME>
+      </INTELLCONT_AUTH>
+      <INTELLCONT_AUTH>
         <FNAME access="READ_ONLY">Billy</FNAME>
         <MNAME access="READ_ONLY">Bob</MNAME>
         <LNAME access="READ_ONLY">Jenkins</LNAME>
@@ -144,6 +147,9 @@ RSpec.describe PubXMLBuilder do
       <PAGENUM access="READ_ONLY">43-44</PAGENUM>
       <CITATION_COUNT access="READ_ONLY">4</CITATION_COUNT>
       <INTELLCONT_AUTH>
+        <FACULTY_NAME access="READ_ONLY">54321</FACULTY_NAME>
+      </INTELLCONT_AUTH>
+      <INTELLCONT_AUTH>
         <FNAME access="READ_ONLY">Franck</FNAME>
         <MNAME access="READ_ONLY">Bob</MNAME>
         <LNAME access="READ_ONLY">Frank</LNAME>
@@ -164,6 +170,9 @@ RSpec.describe PubXMLBuilder do
       <ABSTRACT access="READ_ONLY">&lt;p&gt;Some abstract&lt;/p&gt;</ABSTRACT>
       <PAGENUM access="READ_ONLY">43-47</PAGENUM>
       <CITATION_COUNT access="READ_ONLY">5</CITATION_COUNT>
+      <INTELLCONT_AUTH>
+        <FACULTY_NAME access="READ_ONLY">54321</FACULTY_NAME>
+      </INTELLCONT_AUTH>
       <INTELLCONT_AUTH>
         <FNAME access="READ_ONLY">Franck</FNAME>
         <MNAME access="READ_ONLY">Franc</MNAME>
