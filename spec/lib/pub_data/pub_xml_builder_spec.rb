@@ -103,12 +103,12 @@ RSpec.describe PubXMLBuilder do
       pub_populate_db_obj.populate(data_sets)
 
       expect(pub_xml_builder_obj.batched_xmls).to eq([
-        '<?xml version="1.0" encoding="UTF-8"?>
+'<?xml version="1.0" encoding="UTF-8"?>
 <Data>
   <Record username="abc123">
     <INTELLCONT>
       <TITLE access="READ_ONLY">Title</TITLE>
-      <TITLE access="READ_ONLY">Second Title</TITLE>
+      <TITLE_SECONDARY access="READ_ONLY">Second Title</TITLE_SECONDARY>
       <CONTYPE access="READ_ONLY">Type</CONTYPE>
       <STATUS access="READ_ONLY">Published</STATUS>
       <JOURNAL_NAME access="READ_ONLY">Journal Title</JOURNAL_NAME>
@@ -116,12 +116,10 @@ RSpec.describe PubXMLBuilder do
       <DTY_PUB access="READ_ONLY">2017</DTY_PUB>
       <DTM_PUB access="READ_ONLY">May</DTM_PUB>
       <DTD_PUB access="READ_ONLY">22</DTD_PUB>
-      <ISSUE access="READ_ONLY"/>
       <EDITION access="READ_ONLY">2</EDITION>
       <ABSTRACT access="READ_ONLY">&lt;p&gt;Some abstract&lt;/p&gt;</ABSTRACT>
       <PAGENUM access="READ_ONLY">42-43</PAGENUM>
       <CITATION_COUNT access="READ_ONLY">3</CITATION_COUNT>
-      <AUTHORS_ETAL access="READ_ONLY"/>
       <INTELLCONT_AUTH>
         <FNAME access="READ_ONLY">Billy</FNAME>
         <MNAME access="READ_ONLY">Bob</MNAME>
@@ -133,7 +131,7 @@ RSpec.describe PubXMLBuilder do
   <Record username="xyz123">
     <INTELLCONT>
       <TITLE access="READ_ONLY">Title 2</TITLE>
-      <TITLE access="READ_ONLY">Second Title 2</TITLE>
+      <TITLE_SECONDARY access="READ_ONLY">Second Title 2</TITLE_SECONDARY>
       <CONTYPE access="READ_ONLY">Type 2</CONTYPE>
       <STATUS access="READ_ONLY">Published</STATUS>
       <JOURNAL_NAME access="READ_ONLY">Journal Title 2</JOURNAL_NAME>
@@ -141,12 +139,10 @@ RSpec.describe PubXMLBuilder do
       <DTY_PUB access="READ_ONLY">2018</DTY_PUB>
       <DTM_PUB access="READ_ONLY">June</DTM_PUB>
       <DTD_PUB access="READ_ONLY">20</DTD_PUB>
-      <ISSUE access="READ_ONLY"/>
       <EDITION access="READ_ONLY">3</EDITION>
       <ABSTRACT access="READ_ONLY">&lt;p&gt;Some abstract&lt;/p&gt;</ABSTRACT>
       <PAGENUM access="READ_ONLY">43-44</PAGENUM>
       <CITATION_COUNT access="READ_ONLY">4</CITATION_COUNT>
-      <AUTHORS_ETAL access="READ_ONLY"/>
       <INTELLCONT_AUTH>
         <FNAME access="READ_ONLY">Franck</FNAME>
         <MNAME access="READ_ONLY">Bob</MNAME>
@@ -156,7 +152,7 @@ RSpec.describe PubXMLBuilder do
     </INTELLCONT>
     <INTELLCONT>
       <TITLE access="READ_ONLY">Title 3</TITLE>
-      <TITLE access="READ_ONLY">Second Title 3</TITLE>
+      <TITLE_SECONDARY access="READ_ONLY">Second Title 3</TITLE_SECONDARY>
       <CONTYPE access="READ_ONLY">Type 3</CONTYPE>
       <STATUS access="READ_ONLY">Published</STATUS>
       <JOURNAL_NAME access="READ_ONLY">Journal Title 3</JOURNAL_NAME>
@@ -164,12 +160,10 @@ RSpec.describe PubXMLBuilder do
       <DTY_PUB access="READ_ONLY">2012</DTY_PUB>
       <DTM_PUB access="READ_ONLY">June</DTM_PUB>
       <DTD_PUB access="READ_ONLY">21</DTD_PUB>
-      <ISSUE access="READ_ONLY"/>
       <EDITION access="READ_ONLY">2</EDITION>
       <ABSTRACT access="READ_ONLY">&lt;p&gt;Some abstract&lt;/p&gt;</ABSTRACT>
       <PAGENUM access="READ_ONLY">43-47</PAGENUM>
       <CITATION_COUNT access="READ_ONLY">5</CITATION_COUNT>
-      <AUTHORS_ETAL access="READ_ONLY"/>
       <INTELLCONT_AUTH>
         <FNAME access="READ_ONLY">Franck</FNAME>
         <MNAME access="READ_ONLY">Franc</MNAME>
