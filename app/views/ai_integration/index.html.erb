@@ -199,4 +199,9 @@
     buttons.removeAttr('data-disable-with');
     buttons.attr('disabled', true);
   });
+  $(document).on('click', '#cv_publications :submit', function () {
+    var buttons = $('#cv_publications :submit').not($(this));
+    buttons.removeAttr('data-disable-with');
+    buttons.attr('disabled', true);
+  });
 </script>

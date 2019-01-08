@@ -46,6 +46,7 @@ class PubXMLBuilder
                 (link.publication.institution != nil) ? xml.INSTITUTION_(link.publication.institution, :access => "READ_ONLY") : nil
                 (link.publication.isbnissn != nil) ? xml.ISBNISSN_(link.publication.isbnissn, :access => "READ_ONLY") : nil
                 (link.publication.pubctyst != nil) ? xml.PUBCTYST_(link.publication.pubctyst, :access => "READ_ONLY") : nil
+                xml.INTELLCONT_AUTH_ { xml.FACULTY_NAME_ faculty.user_id, :access => "READ_ONLY" }
                 link.publication.external_authors.each do |author|
                   xml.INTELLCONT_AUTH {
                     (author.f_name != nil) ? xml.FNAME_(author.f_name, :access => "READ_ONLY") : nil
