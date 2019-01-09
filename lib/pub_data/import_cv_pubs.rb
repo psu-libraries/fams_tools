@@ -35,7 +35,7 @@ class ImportCVPubs
           when 4
             external_author.l_name = row[key]
             external_author.publication = publication
-            external_author.save!
+            external_author.save! unless(external_author.f_name.blank? && external_author.m_name.blank? && external_author.l_name.blank?)
             external_author = ExternalAuthor.new
             counter = 1
           end
