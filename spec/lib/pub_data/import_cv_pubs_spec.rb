@@ -13,7 +13,7 @@ RSpec.describe ImportCVPubs do
 
     it "should parse data from csv and import to database" do
       expect{importer.import_cv_pubs_data}.to change{ Publication.count }.by 2
-      expect(ExternalAuthor.count).to eq 2
+      expect(ExternalAuthor.count).to eq 3
       
       p1 = Publication.first
       p2 = Publication.second
@@ -29,10 +29,13 @@ RSpec.describe ImportCVPubs do
       expect(p1.institution).to eq("Penn State")
       expect(p1.isbnissn).to eq(nil)
       expect(p1.pubctyst).to eq("State College, PA")
-      expect(p1.external_authors.count).to eq(1)
+      expect(p1.external_authors.count).to eq(2)
       expect(p1.external_authors.first.l_name).to eq("Bob")
       expect(p1.external_authors.first.f_name).to eq("B.")
       expect(p1.external_authors.first.m_name).to eq("B.")
+      expect(p1.external_authors.second.l_name).to eq("Reynolds")
+      expect(p1.external_authors.second.f_name).to eq("F.")
+      expect(p1.external_authors.second.m_name).to eq("W.")
 
       expect(p2.title).to eq("Test Title 2")
       expect(p2.volume).to eq(2)
