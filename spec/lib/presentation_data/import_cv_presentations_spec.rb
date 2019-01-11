@@ -1,5 +1,5 @@
 require 'rails_helper'
-require 'pub_data/import_cv_presentations'
+require 'presentation_data/import_cv_presentations'
 
 RSpec.describe ImportCVPresentations do
 
