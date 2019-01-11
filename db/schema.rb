@@ -101,7 +101,7 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
   create_table "presentations", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.bigint "faculty_id", null: false
     t.string "title"
-    t.date "dty_date"
+    t.string "dty_date"
     t.string "name"
     t.string "org"
     t.string "location"
