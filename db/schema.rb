@@ -90,6 +90,24 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
     t.index ["faculty_id"], name: "index_personal_contacts_on_faculty_id", unique: true
   end
 
+  create_table "presentation_contributors", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.bigint "presentation_id", null: false
+    t.string "f_name"
+    t.string "m_name"
+    t.string "l_name"
+    t.index ["presentation_id"], name: "index_presentation_contributors_on_presentation_id"
+  end
+
+  create_table "presentations", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.bigint "faculty_id", null: false
+    t.string "title"
+    t.date "dty_date"
+    t.string "name"
+    t.string "org"
+    t.string "location"
+    t.index ["faculty_id"], name: "index_presentations_on_faculty_id"
+  end
+
   create_table "publication_faculty_links", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.bigint "faculty_id"
     t.bigint "publication_id"
@@ -201,6 +219,8 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
   add_foreign_key "contracts", "sponsors"
   add_foreign_key "external_authors", "publications"
   add_foreign_key "personal_contacts", "faculties"
+  add_foreign_key "presentation_contributors", "presentations", on_delete: :cascade
+  add_foreign_key "presentations", "faculties", on_delete: :cascade
   add_foreign_key "publication_faculty_links", "faculties"
   add_foreign_key "publication_faculty_links", "publications"
   add_foreign_key "sections", "courses"
