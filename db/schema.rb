@@ -128,13 +128,15 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
   end
 
   create_table "publications", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.string "pure_ids"
+    t.string "pure_id"
     t.text "title"
     t.integer "volume"
     t.integer "dty"
     t.integer "dtd"
     t.string "journal_title"
+    t.string "journal_issn"
     t.integer "issue"
+    t.string "journal_uuid"
     t.string "page_range"
     t.integer "articleNumber"
     t.string "publisher"
@@ -146,6 +148,7 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
     t.integer "citation_count"
     t.boolean "authors_et_al"
     t.string "ai_ids"
+    t.string "pure_ids"
     t.string "web_address"
     t.text "editors"
     t.string "institution"
