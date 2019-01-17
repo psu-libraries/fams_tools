@@ -1,36 +1,29 @@
 # Activity Insight Integration
 
-This app will pull data from various sources, store the data in a database, and integrate that data into Activity Insight.
+This app parses data from faculty CVs, and integrates data into Activity Insight.
 
-## Database
-
-  -Development/Test/Production: MySQL
-
-## Data
-
-  -dmresults.xlsx    
-
-  -psu-users.xls
-
-  -CONGRANT-tabdel.txt
-
-  -SP18-tabdel.txt
 
 ## Dependencies
 
-**Gems**
+  -ruby 2.5.1
 
-  -httparty
+  -rvm
 
-  -spreadsheet
+  -MySQL
 
-  -rspec-rails (development and test)
+  -ImageMagick (external library "rmagick" depends on)
 
-  -nokogiri
+## Setup
 
-  -webmock
+  Install gems
 
-  -creek
+  `bundle install`
+
+  Modify database.yml with database names and configurations.  Run:
+
+    * `rake db:create`
+
+    * `rake db:migrate`
 
 ## Deploy
 
@@ -42,66 +35,7 @@ This app will pull data from various sources, store the data in a database, and 
 
 ## Usage
 
-*Note: Make sure the development database is properly rolled back and migrated before populating database*
+  * There are rake tasks for running the parsers, populating the db, and integrations for some of the data.  This is for older integrations and were replaced by the function of the GUI.  They are pretty straight forward to use.  Simply run the `format_and_populate` rake task for a dataset, and then run the `integrate` rake task for that same dataset.  However, I'd recommend using the GUI since it is more up-to-date.
 
-*Note: Test integrations on beta and/or alpha before production*
+  * The app has two major functionalities.  One is to parse publication and presentation metadata from CVs.  The other is to integrate various datasets into Activity Insight.
 
-**Importing AI User Data**
-
-  1. This must be done first to ensure the rest of the steps work
-
-  2. Download ai-user (psu-users.xls) information from AI Users and Security Page. 
-
-  3. Store this in /data/
-
-  4. `rake activity_insight:get_user_data`
-
-**Formatting and Populating Database with OSP Data**
-
-  1. Download OSP data in csv format: [dmresults.csv](https://service.sims.psu.edu/digitalmeasures/dmresults.csv)
-
-  2. Store this in /data/
-
-  3. Convert dmresults.csv to an xlsx file called dmresults.xlsx 
-
-  *Note: Some fields contain commas so comma delimited CSV files cannot be parsed by Ruby's built in CSV parser.  Also CSV encoding is a nightmare*
-
-  4. `rake osp_data:format_and_populate`
-
-**Formatting and Populating Database with LionPath Data**
-
-  1. Download LionPath Spring 2018 (or whatever quarter and year) data from box and store in /data/.
-
-  2. Convert 'Instructor Campus ID' column to a date formatted: dd-mmm-yyyy
-
-  3. Convert SP18.csv into a tab delimited text file called SP18-tabdel.txt.
-
-  4. `rake lionpath_data:format_and_populate`
-
-**Formatting and Populating Database with Pure Data**
-
-  1. `rake pure_data:format_and_populate`
- 
-**Removing Duplicate CONGRANT Data**
-
-  1. Duplicate records must be removed from AI before the integration and after populating the database.
-
-  2. Download a backup of the AI data from: [https://www.digitalmeasures.com/login/service/v4/SchemaData:backup/INDIVIDUAL-ACTIVITIES-University](https://www.digitalmeasures.com/login/service/v4/SchemaData:backup/INDIVIDUAL-ACTIVITIES-University)
-
-  3. `cp CONGRANT.csv path/to/ai_integration/data`
-
-  4. Format 'ID' column to a number with 0 decimal places and convert CONGRANT.csv to a tab delimited text file called CONGRANT-tabdel.txt. 
-
-  5. `rake activity_insight:remove_duplicates`
-
-**Integrating OSP Data into AI**
-
-  1. `rake osp_data:integrate`
-
-**Integrating LionPath Data into AI**
-
-  1. `rake lionpath_data:integrate`
-
-**Integrating Pure Data into AI**
-
-  1. `rake pure_data:integrate`
