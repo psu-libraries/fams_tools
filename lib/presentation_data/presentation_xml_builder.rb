@@ -25,10 +25,11 @@ class PresentationXMLBuilder
             faculty.presentations.each do |presentation|
               xml.PRESENT {
                 (presentation.title.present?) ? xml.TITLE_(presentation.title, :access => "READ_ONLY") : nil
-                (presentation.dty_date.present?) ? xml.DTY_DATE_(presentation.dty_date, :access => "READ_ONLY") : nil
+                (presentation.dty_date.present?) ? xml.DTY_END_(presentation.dty_date, :access => "READ_ONLY") : nil
                 (presentation.name.present?) ? xml.NAME_(presentation.name, :access => "READ_ONLY") : nil
                 (presentation.org.present?) ? xml.ORG_(presentation.org, :access => "READ_ONLY") : nil
                 (presentation.location.present?) ? xml.LOCATION_(presentation.location, :access => "READ_ONLY") : nil
+                xml.PRESENT_AUTH_ { xml.FACULTY_NAME_ faculty.user_id }
                 presentation.presentation_contributors.each do |contributor|
                   xml.PRESENT_AUTH {
                     (contributor.f_name.present?) ? xml.FNAME_(contributor.f_name, :access => "READ_ONLY") : nil

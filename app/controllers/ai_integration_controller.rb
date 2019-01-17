@@ -1,6 +1,8 @@
 require 'pub_data/pub_populate_db'
 require 'pub_data/pub_xml_builder'
 require 'pub_data/import_cv_pubs'
+require 'presentation_data/import_cv_presentations'
+require 'presentation_data/presentation_xml_builder'
 require 'osp_data/osp_parser'
 require 'osp_data/osp_populate_db'
 require 'osp_data/osp_xml_builder'
@@ -14,7 +16,7 @@ require 'activity_insight/ai_manage_duplicates'
 
 class AiIntegrationController < ApplicationController
 
-  before_action :delete_all_data, :clear_tmp_files, :confirm_passcode, only: [:osp_integrate, :lionpath_integrate, :pub_integrate, :ldap_integrate, :cv_pub_integrate]
+  before_action :delete_all_data, :clear_tmp_files, :confirm_passcode, only: [:osp_integrate, :lionpath_integrate, :pub_integrate, :ldap_integrate, :cv_pub_integrate, :cv_presentation_integrate]
 
   def osp_integrate
     start = Time.now
@@ -101,6 +103,23 @@ class AiIntegrationController < ApplicationController
     redirect_to ai_integration_path
   end
 
+  def cv_presentation_integrate
+    start = Time.now
+    f_name = params[:cv_presentation_file].original_filename
+    f_path = File.join('app', 'parsing_files', f_name)
+    File.open(f_path, "wb") { |f| f.write(params[:cv_presentation_file].read) }
+    import_cv_presentations = ImportCVPresentations.new(f_path)
+    import_cv_presentations.import_cv_presentations_data
+    my_integrate = IntegrateData.new(PresentationXMLBuilder.new, params[:target])
+    @errors = my_integrate.integrate
+    File.delete(f_path) if File.exist?(f_path)
+    finish = Time.now
+    @time = (((finish - start)/60).to_i.to_s + ' minutes')
+    flash[:notice] = "Integration completed in #{@time}."
+    flash[:cv_presentations_errors] = @errors
+    redirect_to ai_integration_path
+  end
+
   def index
   end
 
@@ -130,6 +149,8 @@ class AiIntegrationController < ApplicationController
     ExternalAuthor.delete_all
     Publication.delete_all
     PersonalContact.delete_all
+    Presentation.delete_all
+    PresentationContributor.delete_all
   end
 
 end
