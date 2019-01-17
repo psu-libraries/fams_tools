@@ -177,6 +177,40 @@
 </div>
 
 <hr>
+<div class="row">
+  <div class="col-sm">
+  <h3>CV Presentations Integration</h3>
+  <%= form_with :url => { :action => "cv_presentation_integrate" }, id: "cv_presentations" do |form| %>
+    <p> <%= label(:cv_presentation_file, text = "CV Presentations CSV") %><%= form.file_field :cv_presentation_file %> </p>
+    <div class="row">
+      <div class="col-xs-1", style="padding:5px 5px;">
+        <p> <%= form.button "Beta".html_safe, class:"btn btn-primary", type: :submit, name: "target", value: :beta,
+                  :data => { disable_with: "<i class='fa fa-spinner fa-pulse'></i> Integrating...", :confirm => "Are you sure you want to integrate into beta?" } %> </p>
+      </div>
+      <div class="col-xs-1", style="padding:5px 5px;">
+        <p> <%= form.button "Alpha".html_safe, class:"btn btn-primary", type: :submit, name: "target", value: :alpha,
+                  :data => { disable_with: "<i class='fa fa-spinner fa-pulse'></i> Integrating...", :confirm => "Are you sure you want to integrate into alpha?" } %> </p>
+      </div>
+      <div class="col-xs-1", style="padding:5px 5px;">
+        <p> <%= form.button "Production".html_safe, class:"btn btn-primary", type: :submit, name: "target", value: :production,
+                  :data => { disable_with: "<i class='fa fa-spinner fa-pulse'></i> Integrating...", :confirm => "Are you sure you want to integrate into production?" } %> </p>
+      </div>
+      <div class="col-xs-1", style="padding:5px 5px;">
+        <p> <%= form.password_field :passcode %> </p>
+      </div>
+    </div>
+  <% end %>
+  </div>
+  <div class="col-sm" style="font-size: 12px; overflow: auto; width:300px; height:200px; border-style: inset;">
+  <% if flash[:cv_presentations_errors] %>
+    <% flash[:cv_presentations_errors].each do |error| %>
+      <p> <%= error %> </p>
+    <% end %>
+  <% end %>
+  </div>
+</div>
+
+<hr>
 
 <script>
   $(document).on('click', '#courses :submit', function () {
@@ -201,6 +235,11 @@
   });
   $(document).on('click', '#cv_publications :submit', function () {
     var buttons = $('#cv_publications :submit').not($(this));
+    buttons.removeAttr('data-disable-with');
+    buttons.attr('disabled', true);
+  });
+  $(document).on('click', '#cv_presentations :submit', function () {
+    var buttons = $('#cv_presentations :submit').not($(this));
     buttons.removeAttr('data-disable-with');
     buttons.attr('disabled', true);
   });

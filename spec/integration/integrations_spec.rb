@@ -206,6 +206,44 @@ RSpec.describe AiIntegrationController do
     end
   end
 
+  describe "#cv_presentation_integrate" do
+    before do
+         stub_request(:post, "https://beta.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University").
+         with(
+           body: cv_presentations_body,
+           headers: {
+       	  'Content-Type'=>'text/xml'
+           }).
+         to_return(status: 200, body: error_message, headers: {})
+    end
+
+    it "runs integration of cv presentation data" do
+      params = { cv_presentation_file: @cv_presntations, "target" => :beta }
+      post ai_integration_cv_presentation_integrate_path, params: params
+    end
+
+    it "gets cv presentation data and sends data to activity insight", type: :feature do
+      visit ai_integration_path
+      expect(page).to have_content("AI-Integration")
+      within('#cv_presentations') do 
+        page.attach_file 'cv_presentation_file', Rails.root.join('spec/fixtures/cv_presentation.csv')
+        page.fill_in 'passcode', :with => passcode
+        click_on 'Beta'
+      end
+      expect(page).to have_content("Integration completed")
+      expect(page).to have_content("Unexpected EOF")
+    end
+
+    it "redirects when wrong passcode supplied", type: :feature do
+      visit ai_integration_path
+      expect(page).to have_content("AI-Integration")
+      within('#cv_presentations') do 
+        click_on 'Beta'
+      end
+      expect(page).to have_content("Wrong Passcode")
+    end
+  end
+
   private
 
   def error_message
@@ -230,5 +268,9 @@ RSpec.describe AiIntegrationController do
 
   def cv_pubs_body
     "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Data>\n  <Record username=\"ljs123\">\n    <INTELLCONT>\n      <TITLE access=\"READ_ONLY\">Test Title 1</TITLE>\n      <CONTYPE access=\"READ_ONLY\">Journal Article</CONTYPE>\n      <JOURNAL_NAME access=\"READ_ONLY\">Test Journal 1</JOURNAL_NAME>\n      <VOLUME access=\"READ_ONLY\">1</VOLUME>\n      <DTY_PUB access=\"READ_ONLY\">2012</DTY_PUB>\n      <EDITION access=\"READ_ONLY\">2</EDITION>\n      <PAGENUM access=\"READ_ONLY\">30-40</PAGENUM>\n      <INSTITUTION access=\"READ_ONLY\">Penn State</INSTITUTION>\n      <PUBCTYST access=\"READ_ONLY\">State College, PA</PUBCTYST>\n      <INTELLCONT_AUTH>\n        <FACULTY_NAME access=\"READ_ONLY\">123456</FACULTY_NAME>\n      </INTELLCONT_AUTH>\n      <INTELLCONT_AUTH>\n        <FNAME access=\"READ_ONLY\">B.</FNAME>\n        <MNAME access=\"READ_ONLY\">B.</MNAME>\n        <LNAME access=\"READ_ONLY\">Bob</LNAME>\n      </INTELLCONT_AUTH>\n      <INTELLCONT_AUTH>\n        <FNAME access=\"READ_ONLY\">F.</FNAME>\n        <MNAME access=\"READ_ONLY\">W.</MNAME>\n        <LNAME access=\"READ_ONLY\">Reynolds</LNAME>\n      </INTELLCONT_AUTH>\n    </INTELLCONT>\n    <INTELLCONT>\n      <TITLE access=\"READ_ONLY\">Test Title 2</TITLE>\n      <CONTYPE access=\"READ_ONLY\">Journal Article</CONTYPE>\n      <JOURNAL_NAME access=\"READ_ONLY\">Test Journal 2</JOURNAL_NAME>\n      <VOLUME access=\"READ_ONLY\">2</VOLUME>\n      <DTY_PUB access=\"READ_ONLY\">2013</DTY_PUB>\n      <EDITION access=\"READ_ONLY\">3</EDITION>\n      <PAGENUM access=\"READ_ONLY\">40-50</PAGENUM>\n      <INSTITUTION access=\"READ_ONLY\">Penn State</INSTITUTION>\n      <PUBCTYST access=\"READ_ONLY\">State College, PA</PUBCTYST>\n      <INTELLCONT_AUTH>\n        <FACULTY_NAME access=\"READ_ONLY\">123456</FACULTY_NAME>\n      </INTELLCONT_AUTH>\n      <INTELLCONT_AUTH>\n        <FNAME access=\"READ_ONLY\">B.</FNAME>\n        <MNAME access=\"READ_ONLY\">B.</MNAME>\n        <LNAME access=\"READ_ONLY\">Bob</LNAME>\n      </INTELLCONT_AUTH>\n    </INTELLCONT>\n  </Record>\n</Data>\n"
+  end
+
+  def cv_presentations_body
+    "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Data>\n  <Record username=\"ljs123\">\n    <PRESENT>\n      <TITLE access=\"READ_ONLY\">Presentation 1</TITLE>\n      <DTY_END access=\"READ_ONLY\">2016</DTY_END>\n      <NAME access=\"READ_ONLY\">Conference 1</NAME>\n      <ORG access=\"READ_ONLY\">Penn State</ORG>\n      <LOCATION access=\"READ_ONLY\">State College, PA</LOCATION>\n      <PRESENT_AUTH>\n        <FACULTY_NAME>123456</FACULTY_NAME>\n      </PRESENT_AUTH>\n      <PRESENT_AUTH>\n        <FNAME access=\"READ_ONLY\">B.</FNAME>\n        <MNAME access=\"READ_ONLY\">B.</MNAME>\n        <LNAME access=\"READ_ONLY\">Bob</LNAME>\n      </PRESENT_AUTH>\n      <PRESENT_AUTH>\n        <FNAME access=\"READ_ONLY\">F.</FNAME>\n        <MNAME access=\"READ_ONLY\">W.</MNAME>\n        <LNAME access=\"READ_ONLY\">Reynolds</LNAME>\n      </PRESENT_AUTH>\n    </PRESENT>\n    <PRESENT>\n      <TITLE access=\"READ_ONLY\">Presentation 2</TITLE>\n      <DTY_END access=\"READ_ONLY\">2009</DTY_END>\n      <NAME access=\"READ_ONLY\">Conference 2</NAME>\n      <ORG access=\"READ_ONLY\">Penn State</ORG>\n      <LOCATION access=\"READ_ONLY\">State College, PA</LOCATION>\n      <PRESENT_AUTH>\n        <FACULTY_NAME>123456</FACULTY_NAME>\n      </PRESENT_AUTH>\n      <PRESENT_AUTH>\n        <FNAME access=\"READ_ONLY\">B.</FNAME>\n        <MNAME access=\"READ_ONLY\">B.</MNAME>\n        <LNAME access=\"READ_ONLY\">Bob</LNAME>\n      </PRESENT_AUTH>\n    </PRESENT>\n  </Record>\n</Data>\n"
   end
 end
