@@ -24,7 +24,24 @@ RSpec.describe PresentationXMLBuilder do
   describe '#batched_xmls' do
     it 'should return a properly formatted xml of PRESENT records' do
       expect(presentation_xml_builder_obj.batched_xmls).to eq([
-
+'<?xml version="1.0" encoding="UTF-8"?>
+<Data>
+  <Record username="abc123">
+    <PRESENT>
+      <TITLE access="READ_ONLY">Test Presentation 1</TITLE>
+      <DTY_DATE access="READ_ONLY">2016</DTY_DATE>
+      <NAME access="READ_ONLY">Name 1</NAME>
+      <ORG access="READ_ONLY">Organization 1</ORG>
+      <LOCATION access="READ_ONLY">Location 1</LOCATION>
+      <PRESENT_AUTH>
+        <FNAME access="READ_ONLY">Arnold</FNAME>
+        <MNAME access="READ_ONLY">Bernie</MNAME>
+        <LNAME access="READ_ONLY">Curt</LNAME>
+      </PRESENT_AUTH>
+    </PRESENT>
+  </Record>
+</Data>
+'
       ])
     end
   end
