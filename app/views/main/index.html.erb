@@ -23,37 +23,59 @@
   <h3>CV Parser</h3>
     <ol>
       <li>Give your Citation Spreadsheet a title in the first form box</li>
-      <li>Copy and paste your citations into the second form box</li>
+      <li>Enter the CV owner's access id (not full email) in the next box</li>
+      <li>Select from the drop-down the type of publication/presentation you are parsing</li>
+      <li>Copy and paste your citations into the final form box</li>
       <li>Then simply click 'Create Citation Spreadsheet'</li>
       <li>Your parsed citations can be found below.  It should be the last link under 'Listing of publication listings'</li>
       <li>Click that link and it will take you to the 'Works' page</li>
-      <li>Your data will be displayed here but it is not entirely reflective of the final xlsx output</li>
-      <li>Click the link at the top to 'Download as xlsx'</li>
+      <li>Your data will be displayed here but it is not entirely reflective of the final spreadsheet output</li>
+      <li>Click the link at the top to 'Download as xlsx' or 'Download as csv'</li>
     </ol>
   <h3>AI-Integration</h3>
   <ul>
     <li><h5>Contract/Grant Integration</h5></li>
     <ol>
-      <li>Download OSP data in csv format: dmresults.csv</li>
+      <li>Download OSP data in csv format: <a href="https://service.sims.psu.edu/digitalmeasures/dmresults.csv">dmresults.csv</a></li>
       <li>Convert dmresults.csv to an xlsx file</li>
       <li>Upload this file to the "Osp data file" form</li>
-      <li>Download a backup zip from the AI backup resource</li>
+      <li>Download a backup .zip from the <a href="https://www.digitalmeasures.com/login/service/v4/SchemaData:backup/INDIVIDUAL-ACTIVITIES-University">AI backup resource</a></li>
       <li>Unzip and open the CONGRANT.csv file</li>
       <li>Format the 'ID' column to a number with 0 decimal places and save the file as a tab-delimited text file</li>
       <li>Upload this file to the "Congrant backup file" form</li>
-      <li>Click the button corresponding to the target environment you wish to integrate with</li>
+      <li>Enter the passcode and click the button corresponding to the target environment you wish to integrate with</li>
     </ol>
     <li><h5>Courses Taught Integration</h5></li>
     <ol>
       <li>Download the latest courses taught information from iTwo</li>
-      <li>Open the file and convert the 'Instructor Campus ID' column to a date formatted dd-mmm-yyyy</li>
+      <li>Open the file and convert the 'Instructor Campus ID' column to a date formatted dd-mmm-yyyy (Ex. 23-Jan-2012)</li>
       <li>Save the file as a tab delimited text file</li>
       <li>Upload this file to the "Courses taught data file" form</li>
-      <li>Click the button corresponding to the target environment you wish to integrate with</li>
+      <li>Enter the passcode and click the button corresponding to the target environment you wish to integrate with</li>
     </ol>
     <li><h5>Publications Integration</h5></li>
     <ol>
-      <li>Click the button corresponding to the target environment you wish to integrate with</li>
+      <li>This will gather data from the Metadata Database through its API.  No file is required</li>
+      <li>Enter the passcode and click the button corresponding to the target environment you wish to integrate with</li>
+    </ol>
+    <li><h5>Personal & Contact Info Integration</h5></li>
+    <ol>
+      <li>This will gather data from LDAP through its API.  No file is required</li>
+      <li>Enter the passcode and click the button corresponding to the target environment you wish to integrate with</li>
+    </ol>
+    <li><h5>CV Publications Integration</h5></li>
+    <ol>
+      <li>Complete parsing of CV publications by using the CV Parser</li>
+      <li>Make sure the file is saved as a UTF-8 encoded CSV file</li>
+      <li>Upload this file to the "Cv publications csv" form</li>
+      <li>Enter the passcode and click the button corresponding to the target environment you wish to integrate with</li>
+    </ol>
+    <li><h5>CV Presentations Integration</h5></li>
+    <ol>
+      <li>Complete parsing of CV publications by using the CV Parser</li>
+      <li>Make sure the file is saved as a UTF-8 encoded CSV file</li>
+      <li>Upload this file to the "Cv presentations csv" form</li>
+      <li>Enter the passcode and click the button corresponding to the target environment you wish to integrate with</li>
     </ol>
   </ul>
 
