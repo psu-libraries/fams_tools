@@ -12,6 +12,7 @@ RSpec.describe MainController do
         page.click_on "Update"
       end
       expect(Faculty.count).to eq(2)
+      expect(page).to have_content("Update successful!")
     end
   end
 
