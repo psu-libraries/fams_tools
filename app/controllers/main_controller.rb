@@ -10,6 +10,7 @@ class MainController < ApplicationController
     my_get_user_data = GetUserData.new(psu_users_path)
     my_get_user_data.call
     File.delete(psu_users_path) if File.exist?(psu_users_path)
+    flash[:notice] = "Update successful!"
     redirect_to root_path
   end
 
