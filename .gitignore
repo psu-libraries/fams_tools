@@ -26,6 +26,7 @@ spec/examples.txt
 .byebug_history
 
 # Ignore other files
+/.idea
 /spec/fixtures/files/*
 /data/*
 /app/parsing_files/*
