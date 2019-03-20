@@ -160,7 +160,7 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
   create_table "sections", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "class_campus_code"
     t.string "cross_listed_flag"
-    t.integer "course_number"
+    t.string "course_number"
     t.string "course_suffix"
     t.string "subject_code"
     t.string "class_section_code"
