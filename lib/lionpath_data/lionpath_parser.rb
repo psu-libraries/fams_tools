@@ -134,7 +134,7 @@ class LionPathParser
       course_split[0].to_s.prepend('0')
     end
     row.delete('Catalog Number')
-    row['Course Number'] = course_split[0]
+    row['Course Number'] = course_split[0].to_s
     row['Course Suffix'] = course_split[1]
   end
 

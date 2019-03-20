@@ -46,6 +46,7 @@ class LionPathXMLBuilder
       }
     end
     return builder.to_xml
+    puts builder.to_xml
   end
 
 end
