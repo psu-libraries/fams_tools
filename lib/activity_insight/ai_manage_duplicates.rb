@@ -191,8 +191,6 @@ class RemoveSystemDups
     case target
     when :beta
       'https://beta.digitalmeasures.com/login/service/v4/SchemaData:delete/INDIVIDUAL-ACTIVITIES-University'
-    when :alpha
-      'https://alpha.digitalmeasures.com/login/service/v4/SchemaData:delete/INDIVIDUAL-ACTIVITIES-University'
     when :production
       #'https://www.digitalmeasures.com/login/service/v4/SchemaData:delete/INDIVIDUAL-ACTIVITIES-University'
     end
