@@ -228,7 +228,6 @@ RSpec.describe RemoveSystemDups do
   end
 
   let(:remove_dups_beta) {RemoveSystemDups.new(:beta)}
-  let(:remove_dups_alpha) {RemoveSystemDups.new(:alpha)}
 
   before do
     allow(STDOUT).to receive(:puts)
@@ -250,17 +249,7 @@ RSpec.describe RemoveSystemDups do
            }).
          to_return(status: 200, body: "<?xml version=\"1.0\"?>\n<Success>\n  <item/>\n</Success>\n", headers: {})
 
-      stub_request(:post, "https://alphawebservices.digitalmeasures.com/login/service/v4/SchemaData:delete/INDIVIDUAL-ACTIVITIES-University").
-         with(
-           body: "<?xml version=\"1.0\"?>\n<Data>\n  <CONGRANT>\n    <item id=\"1234567\"/>\n    <item id=\"2345678\"/>\n  </CONGRANT>\n</Data>\n",
-           headers: {
-       	  'Authorization'=>'Basic cHN1L2Fpc3VwcG9ydDpoQWVxeHBBV3VicQ==',
-       	  'Content-Type'=>'text/xml'
-           }).
-         to_return(status: 200, body: "", headers: {})
-
       remove_dups_beta.call
-      remove_dups_alpha.call
     end
   end
 

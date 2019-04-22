@@ -31,8 +31,6 @@ class IntegrateData
     case target
     when :beta
       return 'https://betawebservices.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University'
-    when :alpha
-      return 'https://alphawebservices.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University'
     when :production
       puts "*Runs Production Integration*"
       #return 'https://webservices.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University'
