@@ -22,7 +22,7 @@ RSpec.describe AiIntegrationController do
   describe "#ldap_integrate" do
 
     before do
-      stub_request(:post, "https://beta.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University").
+      stub_request(:post, "https://betawebservices.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University").
          with(
            body: "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Data>\n  <Record username=\"ajk5603\">\n    <PCI>\n      <EMAIL>ajk5603@psu.edu</EMAIL>\n      <FNAME>A</FNAME>\n      <MNAME>J</MNAME>\n      <LNAME>K</LNAME>\n    </PCI>\n  </Record>\n</Data>\n",
            headers: {
