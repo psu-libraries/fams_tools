@@ -37,7 +37,7 @@ RSpec.describe AiIntegrationController do
 
     before do
 
-      stub_request(:post, "https://beta.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University").
+      stub_request(:post, "https://betawebservices.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University").
           with(
              body: congrant_body,
              headers: {
@@ -45,7 +45,7 @@ RSpec.describe AiIntegrationController do
              }).
          to_return(status: 200, body: error_message, headers: {})
 
-      stub_request(:post, "https://beta.digitalmeasures.com/login/service/v4/SchemaData:delete/INDIVIDUAL-ACTIVITIES-University").
+      stub_request(:post, "https://betawebservices.digitalmeasures.com/login/service/v4/SchemaData:delete/INDIVIDUAL-ACTIVITIES-University").
            with(
              body: "<?xml version=\"1.0\"?>\n<Data>\n  <CONGRANT/>\n</Data>\n",
              headers: {
@@ -85,7 +85,7 @@ RSpec.describe AiIntegrationController do
   describe "#lionpath_integrate" do
     before do
 
-      stub_request(:post, "https://beta.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University").
+      stub_request(:post, "https://betawebservices.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University").
          with(
            body: courses_body,
            headers: {
@@ -133,7 +133,7 @@ RSpec.describe AiIntegrationController do
            }).
          to_return(status: 200, body: @pubs, headers: {})
 
-         stub_request(:post, "https://beta.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University").
+         stub_request(:post, "https://betawebservices.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University").
          with(
            body: pubs_body,
            headers: {
@@ -170,7 +170,7 @@ RSpec.describe AiIntegrationController do
 
   describe "#cv_pub_integrate" do
     before do
-         stub_request(:post, "https://beta.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University").
+         stub_request(:post, "https://betawebservices.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University").
          with(
            body: cv_pubs_body,
            headers: {
@@ -208,7 +208,7 @@ RSpec.describe AiIntegrationController do
 
   describe "#cv_presentation_integrate" do
     before do
-         stub_request(:post, "https://beta.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University").
+         stub_request(:post, "https://betawebservices.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University").
          with(
            body: cv_presentations_body,
            headers: {
