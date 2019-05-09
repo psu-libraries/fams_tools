@@ -50,21 +50,13 @@ class LionPathParser
         hash['Term'],
         hash['Calendar Year'],
         hash['Class Campus Code'],
-        hash['Course Short Description'],
-        hash['Course Long Description'],
         hash['Academic Course ID'],
         hash['Cross Listed Flag'],
         hash['Subject Code'],
         hash['Course Number'],
         hash['Course Suffix'],
         hash['Class Section Code'],
-        hash['Course Credits/Units'],
-        hash['Current Enrollment'],
-        hash['Instruction Mode'],
-        hash['Course Component'],
-        hash['XCourse CoursePre'],
-        hash['XCourse CourseNum'],
-        hash['XCourse CourseNum Suffix']
+        hash['Course Component']
       ]
     } 
   end
