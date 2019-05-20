@@ -27,7 +27,7 @@ RSpec.describe LionPathParser do
                 9999, 'Y', 'MATH', '77A', 1, 3, 25, 100, 'In Person', 'Online', 'Secondary Instructor']}
 
   let(:line7) {['xxx111', 'Summer 2018', 2018, 'UP', 'Math', 'Lots of math.',
-                1111, 'N', 'MATH', '202D', '901D', 3, 25, 0, 'In Person', 'Lecture', 'Primary Instructor']}
+                1111, 'N', 'MATH', '202D', '901D', 3, 25, 0, 'In Person', '', 'Primary Instructor']}
 
   let(:lionpath_parser_obj) {LionPathParser.new}
 
@@ -50,6 +50,7 @@ RSpec.describe LionPathParser do
         should convert "-" in Instruction Mode to "—"' do
       allow(CSV).to receive_message_chain(:read).and_return([headers, line1, line2, line3, line4, line5, line6, line7])
       lionpath_parser_obj.format
+      lionpath_parser_obj.csv_hash[6].delete 'Instruction Mode'
       expect(lionpath_parser_obj.csv_hash[0]['Instructor Campus ID']).to eq('mar83')
       expect(lionpath_parser_obj.csv_hash[1]['Instructor Campus ID']).to eq('mar6783')
       expect(lionpath_parser_obj.csv_hash[2]['Instructor Campus ID']).to eq('xxx111')
@@ -74,6 +75,7 @@ RSpec.describe LionPathParser do
       expect(lionpath_parser_obj.csv_hash[5]['XCourse CourseNum Suffix']).to eq(nil)
       expect(lionpath_parser_obj.csv_hash[0]['Instruction Mode']).to eq('Hybrid – Online & In Person')
       expect(lionpath_parser_obj.csv_hash[0]['Instructor Role']).to eq('Primary Instructor')
+      expect(lionpath_parser_obj.csv_hash[6].keys).not_to include('Instruction Mode')
     end
   end
 

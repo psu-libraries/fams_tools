@@ -140,7 +140,7 @@ class LionPathParser
   end
 
   def format_instruction_mode(row)
-    if row['Instruction Mode'].include? '-'
+    if row['Instruction Mode'] && row['Instruction Mode'].include?('-')
       row['Instruction Mode'].gsub!('-', '–')
     end
   end
