@@ -58,6 +58,7 @@ GEM
     axlsx_rails (0.5.2)
       actionpack (>= 3.1)
       axlsx (>= 2.0.1)
+    bcrypt_pbkdf (1.0.1)
     bibtex-ruby (4.4.7)
       latex-decode (~> 0.0)
     bindex (0.5.0)
@@ -116,6 +117,7 @@ GEM
       rubyzip (~> 1.1.6)
     domain_name (0.5.20180417)
       unf (>= 0.0.5, < 1.0.0)
+    ed25519 (1.2.4)
     erubi (1.7.1)
     execjs (2.7.0)
     factory_bot (4.10.0)
@@ -307,6 +309,7 @@ DEPENDENCIES
   anystyle
   axlsx (= 2.1.0.pre)
   axlsx_rails
+  bcrypt_pbkdf
   bootstrap
   byebug
   capistrano (~> 3.7)
@@ -319,6 +322,7 @@ DEPENDENCIES
   coffee-rails (~> 4.2)
   creek
   docx (~> 0.2.07)
+  ed25519
   factory_bot
   httparty
   jbuilder (~> 2.5)
