@@ -15,6 +15,7 @@ require 'activity_insight/ai_integrate_data'
 require 'activity_insight/ai_manage_duplicates'
 
 class AiIntegrationController < ApplicationController
+  rescue_from StandardError, with: :error_redirect if Rails.env == 'production'
 
   before_action :delete_all_data, :clear_tmp_files, :confirm_passcode, only: [:osp_integrate, :lionpath_integrate, :pub_integrate, :ldap_integrate, :cv_pub_integrate, :cv_presentation_integrate]
 
@@ -151,6 +152,11 @@ class AiIntegrationController < ApplicationController
     PersonalContact.delete_all
     Presentation.delete_all
     PresentationContributor.delete_all
+  end
+
+  def error_redirect(exception)
+    flash[:error] = "#{exception}"
+    redirect_to ai_integration_path
   end
 
 end
