@@ -11,7 +11,7 @@ RSpec.describe OspParser do
   let(:data_book1) do
     data_arr = []
     data_arr << headers 
-    data_arr << {"A2" => 1, "B2" => 1, "C2" => 'X', "D2" => 'X', "E2" => 'X', "F2" => 'X',
+    data_arr << {"A2" => 1, "B2" => 1, "C2" => 'Title &quot; &#39;', "D2" => 'X', "E2" => 'X', "F2" => 'X',
                  "G2" => 'abc123', "H2" => 'X', "I2" => 'Co-PI', "J2" => 1, "K2" => 'Awarded', "L2" => '/', "M2" => '/  /',
                  "N2" => 1, "O2" => 1, "P2" => 1, "Q2" => 'Sun, 01 Jan 2017', "R2" => 'Wed, 12 Dec 2018', "S2" => 'X',
                  "T2" => 'X', "U2" => nil, "V2" => 'X', "W2" => 'X', "X2" => 'X', "Y2" => 'Sun, 01 Feb 2015'}
@@ -101,6 +101,7 @@ RSpec.describe OspParser do
       allow(CSV).to receive(:foreach).and_yield(fake_backup[0]).and_yield(fake_backup[1]).and_yield(fake_backup[2])
       osp_parser_obj.format
       expect(osp_parser_obj.xlsx_hash[0]['grantcontract']).to eq('')
+      expect(osp_parser_obj.xlsx_hash[0]['title']).to match(/Title " '/)
       expect(osp_parser_obj.xlsx_hash[1]['grantcontract']).to eq('Grant')
       expect(osp_parser_obj.xlsx_hash[0]['accessid']).to eq('abc123')
       expect(osp_parser_obj.xlsx_hash[1]['accessid']).to eq('mar26')

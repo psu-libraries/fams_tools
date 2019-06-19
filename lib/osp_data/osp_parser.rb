@@ -14,6 +14,7 @@ class OspParser
   def format
     xlsx_hash.each do |row|
       format_nils(row)
+      format_titles(row)
       format_accessid_field(row)
       format_role_field(row)
       format_date_fields(row)
@@ -177,5 +178,9 @@ class OspParser
     pendnotfund
   end
 
+  def format_titles(row)
+    row['title'].gsub! '&quot;', '"'
+    row['title'].gsub! '&#39;', "'"
+  end
 end
 
