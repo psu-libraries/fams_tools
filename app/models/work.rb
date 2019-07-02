@@ -113,15 +113,15 @@ class Work < ApplicationRecord
       work[:author].each do |author|
         authors << author.reject(&:empty?).join(' ')
       end
-      puts authors
 
-      bibtex_type = :article if ['journal article'].include? work[:contype].downcase
+      bibtex_type = :article if ['journal article', 'journal article, in-house'].include? work[:contype].downcase
       bibtex_type = :conference if ['conference proceeding'].include? work[:contype].downcase
+      bibtex_type = :book if ['book', 'book, chapter'].include? work[:contype].downcase
 
       entry = BibTeX::Entry.new
 
       entry.type = bibtex_type || :article
-      entry.author = authors.join(', ') if work[:author]
+      entry.author = authors if authors
       entry.title = work[:booktitle] if work[:booktitle]
       entry.journal = work[:container] if work[:container]
       entry.year = work[:date] if work[:date]
