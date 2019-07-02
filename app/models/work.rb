@@ -122,7 +122,7 @@ class Work < ApplicationRecord
 
       entry.type = bibtex_type || :article
       entry.author = authors.join(', ') if authors
-      entry.title = work[:booktitle] if work[:booktitle]
+      entry.title = work[:title] if work[:title]
       entry.journal = work[:container] if work[:container]
       entry.year = work[:date] if work[:date]
       entry.number = work[:edition] if work[:edition]
