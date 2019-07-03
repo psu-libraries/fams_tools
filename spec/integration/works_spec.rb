@@ -23,7 +23,6 @@ RSpec.describe 'Works page', type: :feature do
       click_on 'Download as csv'
       header = page.response_headers['Content-Disposition']
       expect(header).to match /^attachment/
-      #expect(header).to match /filename="my_file.csv"$/
     end
 
     it 'downloads bibtex' do
@@ -31,7 +30,6 @@ RSpec.describe 'Works page', type: :feature do
       click_on 'Download as bibtex'
       header = page.response_headers['Content-Disposition']
       expect(header).to match /^attachment/
-      #expect(header).to match /filename="my_file.csv"$/
     end
 
     it 'downloads xlsx' do
@@ -39,7 +37,6 @@ RSpec.describe 'Works page', type: :feature do
       click_on 'Download as xlsx'
       header = page.response_headers['Content-Disposition']
       expect(header).to match /^attachment/
-      #expect(header).to match /filename="my_file.csv"$/
     end
   end
 end

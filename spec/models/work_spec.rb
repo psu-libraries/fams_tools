@@ -43,5 +43,31 @@ describe Work, type: :model do
     it { is_expected.to serialize(:author) }
     it { is_expected.to serialize(:editor) }
   end
+
+  context 'when generating file outputs' do
+    let!(:publication_listing) { FactoryBot.create :publication_listing }
+    let!(:work1) { FactoryBot.create :work, publication_listing: publication_listing }
+    let!(:work2) { FactoryBot.create :work, publication_listing: publication_listing }
+    let(:works) { Work.where(publication_listing: publication_listing.id) }
+
+    describe '#to_csv' do
+      it 'returns a formatted csv' do
+        expect(works.to_csv).to eq csv
+      end
+    end
+
+    describe '#to_bibtex' do
+      it 'returns a formatted bibtex' do
+        expect(works.to_bibtex[1].key).to eq "jim2001b"
+        expect(works.to_bibtex.length).to eq 2
+      end
+    end
+  end
+
+  private
+
+  def csv
+    "INTELLCONT_AUTH_1_FACULTY_NAME,INTELLCONT_AUTH_1_FNAME,INTELLCONT_AUTH_1_MNAME,INTELLCONT_AUTH_1_LNAME,USERNAME,USER_ID,TITLE,VOLUME,EDITION,PAGENUM,DTY_PUB,JOURNAL_NAME,type,CONTYPE,EDITORS,INSTITUTION,PUBCTYST,note\n\"\",Jim,\"\",Bob,test123,,Test,1,2,1-2,2001,Test Journal,article-journal,Journal Article,\"Frank, Zappa\",PSU,State College,Some note\n\"\",Jim,\"\",Bob,test123,,Test,1,2,1-2,2001,Test Journal,article-journal,Journal Article,\"Frank, Zappa\",PSU,State College,Some note\n"
+  end
 end
 
