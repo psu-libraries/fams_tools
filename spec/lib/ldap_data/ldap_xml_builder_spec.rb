@@ -3,18 +3,15 @@ require 'ldap_data/ldap_xml_builder'
 
 RSpec.describe LdapXmlBuilder do
 
-  before do
-    create :personal_contact 
-  end
-
+  let!(:personal_contact) { FactoryBot.create :personal_contact }
   let(:ldap_xml_builder_obj) { LdapXmlBuilder.new }
 
   describe "#batched_ldap_xml" do
     it "should return an array of personal contact data xmls" do
       expect(ldap_xml_builder_obj.batched_xmls).to eq([
-'<?xml version="1.0" encoding="UTF-8"?>
+"<?xml version=\"1.0\" encoding=\"UTF-8\"?>
 <Data>
-  <Record username="abc1">
+  <Record username=\"#{personal_contact.faculty.access_id}\">
     <PCI>
       <OPHONE1>123</OPHONE1>
       <OPHONE2>456</OPHONE2>
@@ -31,7 +28,7 @@ RSpec.describe LdapXmlBuilder do
     </PCI>
   </Record>
 </Data>
-'
+"
       ])
     end
   end
