@@ -1,3 +1,5 @@
+require 'bibtex'
+
 class Work < ApplicationRecord
   serialize :author
   serialize :editor
@@ -101,4 +103,36 @@ class Work < ApplicationRecord
     end
   end
 
+  def self.to_bibtex
+    bib = BibTeX::Bibliography.new
+
+    all.each do |work|
+
+      authors = []
+
+      work[:author].each do |author|
+        authors << author.reject(&:empty?).join(' ')
+      end
+
+      bibtex_type = :article if ['journal article', 'journal article, in-house'].include? work[:contype].downcase
+      bibtex_type = :conference if ['conference proceeding'].include? work[:contype].downcase
+      bibtex_type = :book if ['book', 'book, chapter'].include? work[:contype].downcase
+
+      entry = BibTeX::Entry.new
+
+      entry.type = bibtex_type || :article
+      entry.author = authors.join(', ') if authors
+      entry.title = work[:title] if work[:title]
+      entry.journal = work[:container] if work[:container]
+      entry.year = work[:date] if work[:date]
+      entry.number = work[:edition] if work[:edition]
+      entry.pages = work[:pages] if work[:pages]
+      entry.note = work[:note] if work[:note]
+      entry.volume = work[:volume] if work[:volume]
+
+      bib << entry
+    end
+
+    bib
+  end
 end
