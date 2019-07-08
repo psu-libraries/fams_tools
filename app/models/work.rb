@@ -110,8 +110,10 @@ class Work < ApplicationRecord
 
       authors = []
 
-      work[:author].each do |author|
-        authors << author.reject(&:empty?).join(' ')
+      unless work[:author].nil?
+        work[:author].each do |author|
+          authors << author.reject(&:empty?).join(' ')
+        end
       end
 
       bibtex_type = :article if ['journal article', 'journal article, in-house'].include? work[:contype].downcase
