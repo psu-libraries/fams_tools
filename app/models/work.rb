@@ -110,7 +110,7 @@ class Work < ApplicationRecord
 
       authors = []
 
-      unless work[:author].nil?
+      if work[:author]
         work[:author].each do |author|
           authors << author.reject(&:empty?).join(' ')
         end
