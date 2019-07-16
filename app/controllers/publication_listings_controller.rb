@@ -51,6 +51,11 @@ class PublicationListingsController < ApplicationController
   end
 
   def destroy
+    @publication_listing = PublicationListing.find(params[:publication_listing_id])
+    @publication_listing.destroy
+
+    flash[:notice] = 'Publication listing successfully deleted.'
+    redirect_to publication_listings_path
   end
 
   def index

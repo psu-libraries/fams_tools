@@ -36,4 +36,14 @@ RSpec.describe PublicationListingsController do
       end
     end
   end
+
+  describe 'deleting a publication listing', type: :feature do
+    let!(:publication_listing) { FactoryBot.create :publication_listing }
+
+    it 'clicks link to delete publication listing' do
+      visit publication_listings_path
+      expect{ click_link '[Delete]' }.to change{ PublicationListing.count }.by -1
+      expect(page).to have_current_path(publication_listings_path)
+    end
+  end
 end
