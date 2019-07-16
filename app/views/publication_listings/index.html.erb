@@ -2,6 +2,10 @@
   <h1>CV Parser</h1>
 </div>
 
+<% if flash[:notice]%>
+  <div class="alert alert-success"><%= flash[:notice] %></div>
+<% end  %>
+
 <div class="container">
   <h3>Create a new publication listing</h3>
   <%= form_with( url: publication_listings_url, :multipart => true, :id => 'publication_listing_form' ) do |f| %>
@@ -23,6 +27,6 @@
   <hr>
   <h3> Listing of publication listings</h3> 
   <% @publication_listings.each do |pl| %>
-    <%= link_to  pl.name, publication_listing_works_url(pl) %> (<%= pl.works.count %> Records)<br>
+    <%= link_to  pl.name, publication_listing_works_url(pl) %> (<%= pl.works.count %> Records)  <%= link_to '[Delete]', publication_listing_destroy_path(pl), class: 'delete-link', data: { confirm: 'Are you sure?' }%><br>
   <% end %>
 </div>

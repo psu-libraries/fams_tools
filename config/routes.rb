@@ -10,5 +10,6 @@ Rails.application.routes.draw do
   post '/ai_integration/cv_presentation_integrate', to: 'ai_integration#cv_presentation_integrate'
   resources :publication_listings do
     resources :works
+    get '/destroy', to: 'publication_listings#destroy'
   end
 end
