@@ -11,5 +11,16 @@ namespace :cron do
     open("./public/ai_backups/faculty_activities-all_data_#{Date.today}.zip", "wb") do |file|
       file.write(response.body)
     end
+
+    Dir.foreach("#{Rails.root}/public/ai_backups") do |item|
+      next if item == '.' or item == '..'
+      first_slice = item.gsub('faculty_activities-all_data_', '')
+      second_slice = first_slice.gsub('.zip', '')
+      file_date = Date.parse(second_slice)
+      year_ago = Date.today - 1.year
+      if file_date < year_ago
+        File.delete("#{Rails.root}/public/ai_backups/#{item}") if File.exist?("#{Rails.root}/public/ai_backups/#{item}")
+      end
+    end
   end
 end
