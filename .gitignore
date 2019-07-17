@@ -33,3 +33,4 @@ spec/examples.txt
 *.swp
 /config/activity_insight.yml
 /config/integration_passcode.yml
+/ai_backups
