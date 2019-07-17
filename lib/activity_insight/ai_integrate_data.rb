@@ -2,8 +2,8 @@ class IntegrateData
   attr_accessor :auth, :batched_xmls, :target
 
   def initialize(xml_builder_obj, target)
-    @auth = {:username => Rails.application.config_for(:activity_insight)[:webservices][:username],
-            :password => Rails.application.config_for(:activity_insight)[:webservices][:password]}
+    @auth = {:username => Rails.application.config_for(:activity_insight)["webservices"][:username],
+            :password => Rails.application.config_for(:activity_insight)["webservices"][:password]}
     @batched_xmls = xml_builder_obj.batched_xmls
     @target = target.to_sym
   end
