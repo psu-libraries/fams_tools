@@ -18,6 +18,7 @@ gem 'net-ldap'
 gem 'factory_bot'
 gem 'ed25519'
 gem 'bcrypt_pbkdf'
+gem 'whenever'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.1.5'
