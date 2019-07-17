@@ -1,0 +1,13 @@
+<div class="center jumbotron text-center">
+  <h1>AI Backups</h1>
+</div>
+
+<% if flash[:error]%>
+  <div class="alert alert-danger"><%= flash[:error] %></div>
+<% end %>
+
+<div class="content-container">
+  <% @filenames.each do |filename| %>
+    <p><%= link_to filename.to_s, "/ai_backups/#{filename}", download: filename.to_s, target: '_blank' %></p>
+  <% end %>
+</div>
