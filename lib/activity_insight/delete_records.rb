@@ -23,8 +23,8 @@ class DeleteRecords
   private
 
   def request(data)
-    auth = {:username => Rails.application.config_for(:activity_insight)[:username],
-            :password => Rails.application.config_for(:activity_insight)[:password]}
+    auth = {:username => Rails.application.config_for(:activity_insight)["webservices"][:username],
+            :password => Rails.application.config_for(:activity_insight)["webservices"][:password]}
     url = 'https://betawebservices.digitalmeasures.com/login/service/v4/SchemaData:delete/INDIVIDUAL-ACTIVITIES-University'
     response = HTTParty.post url, :basic_auth => auth, :body => data, :headers => {'Content-type' => 'text/xml'}, :timeout => 320
     puts response
