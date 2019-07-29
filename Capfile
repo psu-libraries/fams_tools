@@ -23,6 +23,7 @@ require 'capistrano/bundler'
 require 'capistrano/passenger'
 #require './lib/capistrano/submodule_strategy' #custom submodule strategy
 require 'capistrano/rbenv_install' #rbenv install plugin
+require "whenever/capistrano"
 
 # Makes Capistrano's output nicer to look at
 require 'airbrussh/capistrano'
