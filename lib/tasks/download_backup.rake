@@ -20,7 +20,7 @@ namespace :cron do
       file_date = Date.parse(second_slice)
       year_ago = Date.today - 1.year
       if file_date < year_ago
-        File.delete("#{path}/#{item}" if File.exist?("#{path}/#{item}")
+        File.delete("#{path}/#{item}") if File.exist?("#{path}/#{item}")
       end
     end
   end
