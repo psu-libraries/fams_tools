@@ -60,7 +60,6 @@ namespace :deploy do
       execute "ln -sf /rubytools/#{fetch(:application)}/config_#{fetch(:stage)}/#{fetch(:partner)}activity_insight.yml #{release_path}/config/activity_insight.yml"
       execute "ln -sf /rubytools/#{fetch(:application)}/config_#{fetch(:stage)}/#{fetch(:partner)}integration_passcode.yml #{release_path}/config/integration_passcode.yml"
       execute "mkdir #{release_path}/app/parsing_files"
-      execute "mkdir #{release_path}/app/ai_backups"
     end
   end
   before "deploy:assets:precompile", "deploy:symlink_shared"
