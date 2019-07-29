@@ -8,6 +8,6 @@
 
 <div class="content-container">
   <% @filenames.each do |filename| %>
-    <p><%= link_to filename.to_s, "#{Rails.root.join('ai_backups', filename.to_s)}", download: filename.to_s, target: '_blank' %></p>
+    <p><%= link_to filename.to_s, "/ai_backups/#{filename}", download: filename.to_s, target: '_blank' %></p>
   <% end %>
 </div>
