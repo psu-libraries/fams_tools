@@ -8,7 +8,7 @@ class AiBackupsListingController < ApplicationController
 
   def collect_file_names
     filenames = []
-    Dir.foreach("#{Rails.root}/public/ai_backups") do |item|
+    Dir.foreach("#{Rails.root}/app/ai_backups") do |item|
       next if item == '.' or item == '..'
       filenames << item
     end
