@@ -12,5 +12,6 @@ Rails.application.routes.draw do
   get '/ai_backups_listing/download', to: 'ai_backups_listing#download'
   resources :publication_listings do
     resources :works
+    get '/destroy', to: 'publication_listings#destroy'
   end
 end

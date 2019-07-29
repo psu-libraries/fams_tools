@@ -1,3 +1,3 @@
 class PublicationListing < ApplicationRecord
-  has_many :works
+  has_many :works, dependent: :delete_all
 end
