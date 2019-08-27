@@ -68,6 +68,8 @@ namespace :convert do
   end
 
 
+  # docx gem was removed due to dependency issues
+  # this task is no longer being used
   task grants: :environment do
     doc = Docx::Document.open('grants.docx')
     doc.paragraphs.each do |p|
