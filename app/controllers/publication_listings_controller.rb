@@ -7,6 +7,7 @@ class PublicationListingsController < ApplicationController
     @citations = AnyStyle.parse(params[:citations].to_s)
     pl = PublicationListing.new(:name => params[:citations_title])
     pl.save
+    byebug
 
     @citations.each_with_index do |item, index|
       work = Work.new(
@@ -17,7 +18,9 @@ class PublicationListingsController < ApplicationController
           :volume => item.dig(:volume, 0),
           :edition => item.dig(:edition, 0),
           :pages => item.dig(:pages, 0),
-          :date => item.dig(:date, 0),
+          :year => year(item),
+          :month => month(item),
+          :day => day(item),
           :booktitle => item.dig(:booktitle, 0),
           :container => item.dig(:"container-title", 0),
           :contype => params[:contype],
@@ -66,6 +69,25 @@ class PublicationListingsController < ApplicationController
   end
 
   private
+
+  def year(item)
+    date_held = split_date(item)
+    date_held.present? ? date_held[0] : nil
+  end
+
+  def month(item)
+    date_held = split_date(item)
+    date_held.present? ? date_held[1] : nil
+  end
+
+  def day(item)
+    date_held = split_date(item)
+    date_held.present? ? date_held[2] : nil
+  end
+
+  def split_date(item)
+    item.dig(:date, 0).present? ?  item.dig(:date, 0).split('-') : nil
+  end
 
   def split_name(name)
     if name&.split(/(?<=[. ])/)&.length == 2

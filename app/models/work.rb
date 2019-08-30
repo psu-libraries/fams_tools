@@ -11,7 +11,7 @@ class Work < ApplicationRecord
       cv_owner = Faculty.find_by(access_id: all.pluck(:username).uniq.first)
       workstype = all.pluck(:contype).uniq.first.downcase
 
-      header_map = [:username, "IGNORE", :title, :journal, :volume, :edition, :pages, :date, :booktitle, :container, :contype, :doi,
+      header_map = [:username, "IGNORE", :title, :journal, :volume, :edition, :pages, :year, :month, :day, :booktitle, :container, :contype, :doi,
         :editor, :institution, :isbn, :location, :note, :publisher, :retrieved, :tech, :translator, :unknown, :url]
 
       empty_col_indices = []
@@ -25,11 +25,11 @@ class Work < ApplicationRecord
       end
 
       if workstype == 'presentations'
-        headers = ['USERNAME', 'USER_ID', 'TITLE', 'journal', 'VOLUME', 'EDITION', 'PAGENUM', 'DTY_DATE', 'booktitle', 'NAME', 'TYPE', 'doi', 'editor', 'ORG', 'isbn', 'LOCATION', 'COMMENT', 'publisher',
+        headers = ['USERNAME', 'USER_ID', 'TITLE', 'journal', 'VOLUME', 'EDITION', 'PAGENUM', 'DTY_END', 'DTM_END', 'DTD_END', 'booktitle', 'NAME', 'TYPE', 'doi', 'editor', 'ORG', 'isbn', 'LOCATION', 'COMMENT', 'publisher',
                     'retrieved', 'tech', 'translator', 'unknown', 'url'
                     ]
       else
-        headers = ['USERNAME', 'USER_ID', 'TITLE', 'journal', 'VOLUME', 'EDITION', 'PAGENUM', 'DTY_PUB', 'booktitle', 'JOURNAL_NAME', 'CONTYPE', 'WEB_ADDRESS', 'EDITORS', 'INSTITUTION', 'ISBNISSN',
+        headers = ['USERNAME', 'USER_ID', 'TITLE', 'journal', 'VOLUME', 'EDITION', 'PAGENUM', 'DTY_END', 'DTM_END', 'DTD_END', 'booktitle', 'JOURNAL_NAME', 'CONTYPE', 'WEB_ADDRESS', 'EDITORS', 'INSTITUTION', 'ISBNISSN',
                     'PUBCTYST', 'COMMENT', 'PUBLISHER', 'retrieved', 'tech', 'translator', 'unknown', 'url'
                     ]
       end
@@ -69,7 +69,7 @@ class Work < ApplicationRecord
 
       all.each do |item, index|
         row = [
-          item[:username], Faculty.find_by(access_id: item[:username])&.user_id, item[:title], item[:journal], item[:volume], item[:edition], item[:pages], item[:date], item[:booktitle], item[:container], item[:contype], item[:doi],
+          item[:username], Faculty.find_by(access_id: item[:username])&.user_id, item[:title], item[:journal], item[:volume], item[:edition], item[:pages], item[:year], item[:month], item[:day], item[:booktitle], item[:container], item[:contype], item[:doi],
           item[:editor]&.join(", "), item[:institution], item[:isbn], item[:location], item[:note], item[:publisher], item[:retrieved], item[:tech], item[:translator],
           item[:unknown], item[:url]
         ]
@@ -126,7 +126,7 @@ class Work < ApplicationRecord
       entry.author = authors.join(', ') if authors
       entry.title = work[:title] if work[:title]
       entry.journal = work[:container] if work[:container]
-      entry.year = work[:date] if work[:date]
+      entry.year = work[:year] if work[:year]
       entry.number = work[:edition] if work[:edition]
       entry.pages = work[:pages] if work[:pages]
       entry.note = work[:note] if work[:note]
