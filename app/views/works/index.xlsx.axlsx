@@ -17,7 +17,7 @@ wb.add_worksheet(:name => "citations") do |sheet|
     end
   end
 
-  if workstype == 'presentation'
+  if workstype == 'presentations'
     headers = ['USERNAME', 'USER_ID', 'TITLE', 'journal', 'volume', 'edition', 'pages', 'DTY_DATE', 'booktitle', 'NAME', 'type', 'TYPE', 'doi', 'editor', 'ORG', 'isbn', 'LOCATION', 'note', 'publisher',
                 'retrieved', 'tech', 'translator', 'unknown', 'url'
                 ]
@@ -44,7 +44,7 @@ wb.add_worksheet(:name => "citations") do |sheet|
     end
   end
 
-  if workstype == 'presentation'
+  if workstype == 'presentations'
     counter = longest - header_length
     while headers.length < longest
       headers.insert(0, ["PRESENT_AUTH_#{counter}_FACULTY_NAME", "PRESENT_AUTH_#{counter}_FNAME", "PRESENT_AUTH_#{counter}_MNAME", "PRESENT_AUTH_#{counter}_LNAME"])
