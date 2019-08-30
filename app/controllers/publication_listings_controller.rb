@@ -7,7 +7,6 @@ class PublicationListingsController < ApplicationController
     @citations = AnyStyle.parse(params[:citations].to_s)
     pl = PublicationListing.new(:name => params[:citations_title])
     pl.save
-    byebug
 
     @citations.each_with_index do |item, index|
       work = Work.new(
