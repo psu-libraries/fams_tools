@@ -11,7 +11,7 @@ class Work < ApplicationRecord
       cv_owner = Faculty.find_by(access_id: all.pluck(:username).uniq.first)
       workstype = all.pluck(:contype).uniq.first.downcase
 
-      header_map = [:username, "IGNORE", :title, :journal, :volume, :edition, :pages, :date, :booktitle, :container, :genre, :contype, :doi,
+      header_map = [:username, "IGNORE", :title, :journal, :volume, :edition, :pages, :date, :booktitle, :container, :contype, :doi,
         :editor, :institution, :isbn, :location, :note, :publisher, :retrieved, :tech, :translator, :unknown, :url]
 
       empty_col_indices = []
@@ -24,13 +24,13 @@ class Work < ApplicationRecord
         end
       end
 
-      if workstype == 'presentation'
-        headers = ['USERNAME', 'USER_ID', 'TITLE', 'journal', 'volume', 'edition', 'pages', 'DTY_DATE', 'booktitle', 'NAME', 'type', 'TYPE', 'doi', 'editor', 'ORG', 'isbn', 'LOCATION', 'note', 'publisher',
+      if workstype == 'presentations'
+        headers = ['USERNAME', 'USER_ID', 'TITLE', 'journal', 'VOLUME', 'EDITION', 'PAGENUM', 'DTY_DATE', 'booktitle', 'NAME', 'TYPE', 'doi', 'editor', 'ORG', 'isbn', 'LOCATION', 'COMMENT', 'publisher',
                     'retrieved', 'tech', 'translator', 'unknown', 'url'
                     ]
       else
-        headers = ['USERNAME', 'USER_ID', 'TITLE', 'journal', 'VOLUME', 'EDITION', 'PAGENUM', 'DTY_PUB', 'booktitle', 'JOURNAL_NAME', 'type', 'CONTYPE', 'WEB_ADDRESS', 'EDITORS', 'INSTITUTION', 'ISBNISSN', 
-                    'PUBCTYST', 'note', 'PUBLISHER', 'retrieved', 'tech', 'translator', 'unknown', 'url'
+        headers = ['USERNAME', 'USER_ID', 'TITLE', 'journal', 'VOLUME', 'EDITION', 'PAGENUM', 'DTY_PUB', 'booktitle', 'JOURNAL_NAME', 'CONTYPE', 'WEB_ADDRESS', 'EDITORS', 'INSTITUTION', 'ISBNISSN',
+                    'PUBCTYST', 'COMMENT', 'PUBLISHER', 'retrieved', 'tech', 'translator', 'unknown', 'url'
                     ]
       end
 
@@ -51,16 +51,16 @@ class Work < ApplicationRecord
         end
       end
 
-      if workstype == 'presentation'
+      if workstype == 'presentations'
         counter = longest - header_length
         while headers.length < longest
-          headers.insert(0, ["PRESENT_AUTH_#{counter}_FACULTY_NAME", "PRESENT_AUTH_#{counter}_FNAME", "PRESENT_AUTH_#{counter}_MNAME", "PRESENT_AUTH_#{counter}_LNAME"])
+          headers.insert(header_length, ["PRESENT_AUTH_#{counter}_FACULTY_NAME", "PRESENT_AUTH_#{counter}_FNAME", "PRESENT_AUTH_#{counter}_MNAME", "PRESENT_AUTH_#{counter}_LNAME"])
           counter -= 1
         end
       else
         counter = longest - header_length
         while headers.length < longest
-          headers.insert(0, ["INTELLCONT_AUTH_#{counter}_FACULTY_NAME", "INTELLCONT_AUTH_#{counter}_FNAME", "INTELLCONT_AUTH_#{counter}_MNAME", "INTELLCONT_AUTH_#{counter}_LNAME"])
+          headers.insert(header_length, ["INTELLCONT_AUTH_#{counter}_FACULTY_NAME", "INTELLCONT_AUTH_#{counter}_FNAME", "INTELLCONT_AUTH_#{counter}_MNAME", "INTELLCONT_AUTH_#{counter}_LNAME"])
           counter -= 1
         end
       end
@@ -69,7 +69,7 @@ class Work < ApplicationRecord
 
       all.each do |item, index|
         row = [
-          item[:username], Faculty.find_by(access_id: item[:username])&.user_id, item[:title], item[:journal], item[:volume], item[:edition], item[:pages], item[:date], item[:booktitle], item[:container], item[:genre], item[:contype], item[:doi],
+          item[:username], Faculty.find_by(access_id: item[:username])&.user_id, item[:title], item[:journal], item[:volume], item[:edition], item[:pages], item[:date], item[:booktitle], item[:container], item[:contype], item[:doi],
           item[:editor]&.join(", "), item[:institution], item[:isbn], item[:location], item[:note], item[:publisher], item[:retrieved], item[:tech], item[:translator],
           item[:unknown], item[:url]
         ]
@@ -83,18 +83,18 @@ class Work < ApplicationRecord
         unless item[:author].nil?
           item[:author]&.reverse&.each do |author|
             if cv_owner.present? && author[2]&.upcase == cv_owner&.l_name&.upcase && author[0][0]&.upcase == cv_owner&.f_name[0]&.upcase
-              row.insert(0, [cv_owner&.user_id, author[0], author[1], author[2]])
+              row.insert(header_length, [cv_owner&.user_id, author[0], author[1], author[2]])
             else
-              row.insert(0, ["", author[0], author[1], author[2]])
+              row.insert(header_length, ["", author[0], author[1], author[2]])
             end
           end 
 
           while row.length < longest
-            row.insert(item[:author].length, ["", "", "", ""])
+            row.insert(header_length + item[:author].length, ["", "", "", ""])
           end
         else
           while row.length < longest
-            row.insert(0, ["", "", "", ""])
+            row.insert(header_length, ["", "", "", ""])
           end
         end
 
