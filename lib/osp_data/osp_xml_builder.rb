@@ -28,7 +28,7 @@ class OspXMLBuilder
                 xml.OSPKEY_ link.contract.osp_key, :access => "READ_ONLY"
                 xml.BASE_AGREE_ link.contract.base_agreement, :access => "READ_ONLY"
                 xml.TYPE_ link.contract.grant_contract, :access => "READ_ONLY"
-                xml.TITLE_ link.contract.title, :access => "READ_ONLY"
+                (link.contract.title.present?) ? xml.TITLE_(link.contract.title.gsub(/[^[:print:]]/,''), :access => "READ_ONLY") : nil
                 xml.SPONORG_ link.contract.sponsor.sponsor_name, :access => "READ_ONLY"
                 xml.AWARDORG_ link.contract.sponsor.sponsor_type, :access => "READ_ONLY"
                 xml.CONGRANT_INVEST {
