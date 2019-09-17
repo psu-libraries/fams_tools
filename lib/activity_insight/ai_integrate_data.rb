@@ -13,13 +13,13 @@ class IntegrateData
     counter = 0
     puts url(target)
     batched_xmls.each do |xml|
-      puts xml
+      Rails.logger.info xml
       response = HTTParty.post url(target), :body => xml, :headers => {'Content-type' => 'text/xml'}, :basic_auth => auth, :timeout => 180
       if response.to_s.include? 'Error'
         counter += 1
         errors << response.parsed_response
       end
-      puts response
+      Rails.logger.info response
     end
     return errors
     #puts counter
