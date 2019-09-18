@@ -26,7 +26,7 @@ class OspParser
   def filter_by_date
     kept_rows = []
     xlsx_hash.each do |row|
-      if (row['submitted'].empty?) && (row['awarded'].present?)
+      if (row['submitted'].blank?) && (row['awarded'].present?)
         if (row['awarded'].split('-')[0].to_i >= 2011) && (row['awarded'].split('-')[0].to_i <= DateTime.now.year)
           kept_rows << row
         end
