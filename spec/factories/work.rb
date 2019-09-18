@@ -6,7 +6,9 @@ FactoryBot.define do
     volume { 1 }
     edition { 2 }
     pages { '1-2' }
-    date { 2001 }
+    year { 2001 }
+    month { 9 }
+    day { 30 }
     item { nil }
     booktitle { nil }
     container { 'Test Journal' }
