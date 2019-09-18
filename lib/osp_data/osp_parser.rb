@@ -26,8 +26,14 @@ class OspParser
   def filter_by_date
     kept_rows = []
     xlsx_hash.each do |row|
-      if (row['submitted'].split('-')[0].to_i >= 2011) && (row['submitted'].split('-')[0].to_i <= 2018) 
-        kept_rows << row
+      if (row['submitted'].empty?) && (row['awarded'].present?)
+        if (row['awarded'].split('-')[0].to_i >= 2011) && (row['awarded'].split('-')[0].to_i <= DateTime.now.year)
+          kept_rows << row
+        end
+      else
+        if (row['submitted'].split('-')[0].to_i >= 2011) && (row['submitted'].split('-')[0].to_i <= DateTime.now.year)
+          kept_rows << row
+        end
       end
     end
     @xlsx_hash = kept_rows
@@ -109,7 +115,7 @@ class OspParser
 
   def format_accessid_field(row)
     if row['accessid'].to_s.include? ', '
-      unless row['accessid'].to_s.split(' ')[3] == '2018'
+      unless (row['accessid'].to_s.split(' ')[3]) == (DateTime.now.year.to_s)
         row['accessid'] = row['accessid'].to_s.split(' ')[2].downcase + row['accessid'].to_s.split(' ')[3][2..3]
       else
         row['accessid'] = row['accessid'].to_s.split(' ')[2].downcase + row['accessid'].to_s.split(' ')[1].sub!(/^0+/, "")
