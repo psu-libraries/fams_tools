@@ -75,7 +75,7 @@ class ImportGpaData
   end
 
   def course_number(row)
-    row['Course & Sect(s)'].split(' ')[1].split('.')[1].scan(/\d+|\D+/)[0]
+    row['Course & Sect(s)'].split(' ')[1].split('.')[0].scan(/\d+|\D+/)[0].to_s
   end
 
   def year(row)
@@ -83,13 +83,15 @@ class ImportGpaData
   end
 
   def semester(row)
-    case row[3]
+    case row['Sem'][3].to_i
     when 1
       return 'Spring'
     when 5
       return 'Summer 1'
     when 8
       return 'Fall'
+    else
+      return nil
     end
   end
 
@@ -98,10 +100,10 @@ class ImportGpaData
   end
 
   def course_number_suffix(row)
-    row['Course & Sect(s)'].split(' ')[1].split('.')[1].scan(/\d+|\D+/)[1]
+    row['Course & Sect(s)'].split(' ')[1].split('.')[0].scan(/\d+|\D+/)[1]
   end
 
   def section_number(row)
-    row['Course & Sect(s)'].split(' ')[1].split('.')[2]
+    row['Course & Sect(s)'].split(' ')[1].split('.')[1].to_s
   end
 end

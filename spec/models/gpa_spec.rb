@@ -7,12 +7,12 @@ describe Gpa, type: :model do
     it { is_expected.to have_db_column(:semester).of_type(:string) }
     it { is_expected.to have_db_column(:year).of_type(:integer) }
     it { is_expected.to have_db_column(:course_prefix).of_type(:string) }
-    it { is_expected.to have_db_column(:course_number).of_type(:integer) }
+    it { is_expected.to have_db_column(:course_number).of_type(:string) }
     it { is_expected.to have_db_column(:course_number_suffix).of_type(:string) }
-    it { is_expected.to have_db_column(:section_number).of_type(:integer) }
+    it { is_expected.to have_db_column(:section_number).of_type(:string) }
     it { is_expected.to have_db_column(:campus).of_type(:string) }
     it { is_expected.to have_db_column(:number_of_grades).of_type(:integer) }
-    it { is_expected.to have_db_column(:course_gpa).of_type(:integer) }
+    it { is_expected.to have_db_column(:course_gpa).of_type(:float) }
     it { is_expected.to have_db_column(:grade_dist_a).of_type(:integer) }
     it { is_expected.to have_db_column(:grade_dist_a_minus).of_type(:integer) }
     it { is_expected.to have_db_column(:grade_dist_b_plus).of_type(:integer) }
