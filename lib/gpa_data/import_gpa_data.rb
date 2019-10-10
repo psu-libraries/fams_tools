@@ -38,6 +38,7 @@ class ImportGpaData
 
   def populate_db(row)
     faculty = Faculty.find_by(access_id: row['Access ID'])
+    return if faculty.blank? || faculty.college != 'LA'
 
     gpa = Gpa.new({faculty: faculty}.merge!(gpa_data_attrs(row, faculty)))
 
