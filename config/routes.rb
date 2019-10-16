@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   get '/ai_integration', to: 'ai_integration#index'
   post '/ai_integration/osp_integrate', to: 'ai_integration#osp_integrate'
   post '/ai_integration/lionpath_integrate', to: 'ai_integration#lionpath_integrate'
+  post '/ai_integration/gpa_integrate', to: 'ai_integration#gpa_integrate'
   post '/ai_integration/pub_integrate', to: 'ai_integration#pub_integrate'
   post '/ai_integration/ldap_integrate', to: 'ai_integration#ldap_integrate'
   post '/ai_integration/cv_pub_integrate', to: 'ai_integration#cv_pub_integrate'
