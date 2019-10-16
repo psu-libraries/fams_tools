@@ -3,7 +3,7 @@ require 'gpa_data/gpa_xml_builder'
 
 RSpec.describe GpaXmlBuilder do
 
-  let!(:faculty) { FactoryBot.create :faculty }
+  let!(:faculty) { FactoryBot.create :faculty, college: 'LA' }
   let!(:gpa1) { FactoryBot.create :gpa, faculty: faculty }
   let!(:gpa2) { FactoryBot.create :gpa, faculty: faculty }
   let(:gpa_xml_builder) { described_class.new }
