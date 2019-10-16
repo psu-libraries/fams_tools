@@ -1,6 +1,6 @@
 class GpaXmlBuilder
   def initialize
-    @faculties = Faculty.joins(:gpas).group('id').where({ college: 'LA', campus: 'UP' })
+    @faculties = Faculty.joins(:gpas).group('id').where(college: 'LA')
   end
 
   def batched_xmls

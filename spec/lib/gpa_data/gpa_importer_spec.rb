@@ -5,8 +5,8 @@ RSpec.describe ImportGpaData do
   let(:gpa_parser_obj) { ImportGpaData.new 'spec/fixtures/gpa_data.xlsx' }
 
   before do
-    FactoryBot.create :faculty, access_id: 'abc123'
-    FactoryBot.create :faculty, access_id: 'def456'
+    FactoryBot.create :faculty, access_id: 'abc123', college: 'LA'
+    FactoryBot.create :faculty, access_id: 'def456', college: 'LA'
   end
 
   describe "#import" do
