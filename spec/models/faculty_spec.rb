@@ -9,6 +9,7 @@ describe Faculty, type: :model do
     it { is_expected.to have_db_column(:m_name).of_type(:string) }
     it { is_expected.to have_db_column(:l_name).of_type(:string) }
     it { is_expected.to have_db_column(:college).of_type(:string) }
+    it { is_expected.to have_db_column(:campus).of_type(:string) }
 
     it { is_expected.to have_db_index(:access_id).unique(true) }
   end
@@ -21,5 +22,6 @@ describe Faculty, type: :model do
     it { is_expected.to have_many(:contracts) }
     it { is_expected.to have_many(:sections) }
     it { is_expected.to have_many(:courses) }
+    it { is_expected.to have_many(:gpas) }
   end
 end
