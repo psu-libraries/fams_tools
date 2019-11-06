@@ -14,8 +14,8 @@
   <div class="col-sm">
   <h3>Contract/Grant Integration</h3>
   <%= form_with :url => { :action => "osp_integrate" }, id: "congrant" do |form| %>
-    <p> <%= label(:congrant_file, text = "OSP Data File") %><%= form.file_field :congrant_file %> </p>
-    <p> <%= label(:ai_backup_file, text = "CONGRANT backup File") %><%= form.file_field :ai_backup_file %> </p>
+    <p> <%= label(:congrant_file, text = "OSP Data File") %><%= form.file_field :congrant_file, required: true %> </p>
+    <p> <%= label(:ai_backup_file, text = "CONGRANT backup File") %><%= form.file_field :ai_backup_file, required: true %> </p>
     <div class="row">
       <div class="col-xs-1", style="padding:5px 5px;">
         <p> <%= form.button "Beta".html_safe, class:"btn btn-primary", type: :submit, name: "target", value: :beta, 
@@ -43,7 +43,7 @@
   <div class="col-sm">
   <h3>Courses Taught Integration</h3>
   <%= form_with :url => { :action => "lionpath_integrate" }, id: "courses" do |form| %>
-    <p> <%= label(:courses_file, text = "Courses Taught Data File") %><%= form.file_field :courses_file %> </p>
+    <p> <%= label(:courses_file, text = "Courses Taught Data File") %><%= form.file_field :courses_file, required: true %> </p>
     <div class="row">
       <div class="col-xs-1", style="padding:5px 5px;">
         <p> <%= form.button "Beta".html_safe, class:"btn btn-primary", type: :submit, name: "target", value: :beta,
@@ -63,6 +63,36 @@
     <h4>Courses Taught Integration Errors:</h4>
     <br/>
     <p><%= link_to "Download Error Log", "psu/error_outputs/courses_errors.log", download: "courses_errors.log", target: '_blank', class: "btn btn-secondary" %></p>
+  </div>
+</div>
+<hr>
+
+<div class="row">
+  <div class="col-sm">
+  <h3>GPA Integration</h3>
+  <%= form_with :url => { :action => "gpa_integrate" }, id: "gpa" do |form| %>
+    <p> <%= label(:gpa_file, text = "GPA Data File") %><%= form.file_field :gpa_file, required: true %> </p>
+    <div class="row">
+      <div class="col-xs-1", style="padding:5px 5px;">
+        <p> <%= form.button "Beta".html_safe, class:"btn btn-primary", type: :submit, name: "target", value: :beta,
+                  :data => { disable_with: "<i class='fa fa-spinner fa-pulse'></i> Integrating...", :confirm => "Are you sure you want to integrate into beta?" } %> </p>
+      </div>
+      <div class="col-xs-1", style="padding:5px 5px;">
+        <p> <%= form.button "Production".html_safe, class:"btn btn-primary", type: :submit, name: "target", value: :production,
+                  :data => { disable_with: "<i class='fa fa-spinner fa-pulse'></i> Integrating...", :confirm => "Are you sure you want to integrate into production?" } %> </p>
+      </div>
+      <div class="col-xs-1", style="padding:5px 5px;">
+        <p> <%= form.password_field :passcode %> </p>
+      </div>
+    </div>
+  <% end %>
+  </div>
+  <div class="col-sm" style="font-size: 12px; overflow: auto; width:300px; height:200px; border-style: inset;">
+  <% if flash[:gpa_errors] %>
+    <% flash[:gpa_errors].each do |error| %>
+      <p> <%= error %> </p>
+    <% end %>
+  <% end %>
   </div>
 </div>
 <hr>
@@ -129,7 +159,7 @@
   <div class="col-sm">
   <h3>CV Publications Integration</h3>
   <%= form_with :url => { :action => "cv_pub_integrate" }, id: "cv_publications" do |form| %>
-    <p> <%= label(:cv_pub_file, text = "CV Publications CSV") %><%= form.file_field :cv_pub_file %> </p>
+    <p> <%= label(:cv_pub_file, text = "CV Publications CSV") %><%= form.file_field :cv_pub_file, required: true %> </p>
     <div class="row">
       <div class="col-xs-1", style="padding:5px 5px;">
         <p> <%= form.button "Beta".html_safe, class:"btn btn-primary", type: :submit, name: "target", value: :beta,
@@ -159,7 +189,7 @@
   <div class="col-sm">
   <h3>CV Presentations Integration</h3>
   <%= form_with :url => { :action => "cv_presentation_integrate" }, id: "cv_presentations" do |form| %>
-    <p> <%= label(:cv_presentation_file, text = "CV Presentations CSV") %><%= form.file_field :cv_presentation_file %> </p>
+    <p> <%= label(:cv_presentation_file, text = "CV Presentations CSV") %><%= form.file_field :cv_presentation_file, required: true %> </p>
     <div class="row">
       <div class="col-xs-1", style="padding:5px 5px;">
         <p> <%= form.button "Beta".html_safe, class:"btn btn-primary", type: :submit, name: "target", value: :beta,
@@ -194,6 +224,11 @@
   });
   $(document).on('click', '#congrant :submit', function () {
     var buttons = $('#congrant :submit').not($(this));
+    buttons.removeAttr('data-disable-with');
+    buttons.attr('disabled', true);
+  });
+  $(document).on('click', '#gpa :submit', function () {
+    var buttons = $('#gpa :submit').not($(this));
     buttons.removeAttr('data-disable-with');
     buttons.attr('disabled', true);
   });
