@@ -21,6 +21,7 @@ class AiIntegrationController < ApplicationController
 
   def osp_integrate
     start = Time.now
+    error_logger = Logger.new('public/psu/error_outputs/osp_errors.log')
     f_name = params[:congrant_file].original_filename
     f_path = File.join('app', 'parsing_files', f_name)
     File.open(f_path, "wb") { |f| f.write(params[:congrant_file].read) }
@@ -39,12 +40,14 @@ class AiIntegrationController < ApplicationController
     File.delete(backup_path) if File.exist?(backup_path)
     File.delete(f_path) if File.exist?(f_path)
     flash[:notice] = "Integration completed in #{@time}."
-    flash[:congrant_errors] = @errors
+    error_logger.info "Errors for Contract/Grant Integration to #{params[:target]} on: #{DateTime.now}"
+    error_logger.error @errors
     redirect_to ai_integration_path
   end
   
   def lionpath_integrate
     start = Time.now
+    error_logger = Logger.new('public/psu/error_outputs/courses_errors.log')
     f_name = params[:courses_file].original_filename
     f_path = File.join('app', 'parsing_files', f_name)
     File.open(f_path, "wb") { |f| f.write(params[:courses_file].read) }
@@ -57,7 +60,8 @@ class AiIntegrationController < ApplicationController
     @time = (((finish - start)/60).to_i.to_s + ' minutes')
     File.delete(f_path) if File.exist?(f_path)
     flash[:notice] = "Integration completed in #{@time}."
-    flash[:courses_errors] = @errors
+    error_logger.info "Errors for Courses Taught Integration to #{params[:target]} on: #{DateTime.now}"
+    error_logger.error @errors
     redirect_to ai_integration_path 
   end
 
