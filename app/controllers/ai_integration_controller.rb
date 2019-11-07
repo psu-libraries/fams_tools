@@ -69,6 +69,7 @@ class AiIntegrationController < ApplicationController
 
   def gpa_integrate
     start = Time.now
+    error_logger = Logger.new('public/psu/error_outputs/gpa_errors.log')
     f_name = params[:gpa_file].original_filename
     f_path = File.join('app', 'parsing_files', f_name)
     File.open(f_path, "wb") { |f| f.write(params[:gpa_file].read) }
@@ -81,7 +82,8 @@ class AiIntegrationController < ApplicationController
     @time = (((finish - start)/60).to_i.to_s + ' minutes')
     File.delete(f_path) if File.exist?(f_path)
     flash[:notice] = "Integration completed in #{@time}."
-    flash[:courses_errors] = @errors
+    error_logger.info "Errors for GPA Integration to #{params[:target]} on: #{DateTime.now}"
+    error_logger.error @errors
     redirect_to ai_integration_path
   end
 

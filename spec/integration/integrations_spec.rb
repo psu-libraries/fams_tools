@@ -61,6 +61,10 @@ RSpec.describe AiIntegrationController do
 
     it "takes contract/grant file, parses, and send data to activity insight", type: :feature do
       visit ai_integration_path
+      logger = double('logger')
+      allow(Logger).to receive(:new).and_return(logger)
+      expect(logger).to receive(:info).with(/Errors for Contract\/Grant/)
+      expect(logger).to receive(:error).with([/Unexpected EOF in prolog/])
       expect(page).to have_content("AI-Integration")
       within('#congrant') do 
         page.attach_file 'congrant_file', Rails.root.join('spec/fixtures/contract_grants.xlsx')
@@ -69,7 +73,6 @@ RSpec.describe AiIntegrationController do
         click_on 'Beta'
       end
       expect(page).to have_content("Integration completed")
-      expect(page).to have_content("Unexpected EOF")
     end
 
     it "redirects when wrong passcode supplied", type: :feature do
@@ -101,6 +104,10 @@ RSpec.describe AiIntegrationController do
 
     it "takes lionpath file, parses, and send data to activity insight", type: :feature do
       visit ai_integration_path
+      logger = double('logger')
+      allow(Logger).to receive(:new).and_return(logger)
+      expect(logger).to receive(:info).with(/Errors for Courses Taught/)
+      expect(logger).to receive(:error).with([/Unexpected EOF in prolog/])
       expect(page).to have_content("AI-Integration")
       within('#courses') do 
         page.attach_file 'courses_file', Rails.root.join('spec/fixtures/schteach.txt')
@@ -108,7 +115,6 @@ RSpec.describe AiIntegrationController do
         click_on 'Beta'
       end
       expect(page).to have_content("Integration completed")
-      expect(page).to have_content("Unexpected EOF")
     end
 
     it "redirects when wrong passcode supplied", type: :feature do

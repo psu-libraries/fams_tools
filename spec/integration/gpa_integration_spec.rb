@@ -24,6 +24,10 @@ RSpec.describe AiIntegrationController do
     context "when passcode is supplied and beta integration is clicked", type: :feature do
       it "integrates gpa data into AI beta" do
         visit ai_integration_path
+        logger = double('logger')
+        allow(Logger).to receive(:new).and_return(logger)
+        expect(logger).to receive(:info).with(/Errors for GPA/)
+        expect(logger).to receive(:error).with([])
         expect(page).to have_content("GPA Integration")
         within('#gpa') do
           page.attach_file 'gpa_file', Rails.root.join('spec/fixtures/gpa_data.xlsx')
