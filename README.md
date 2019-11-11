@@ -1,6 +1,6 @@
 # Activity Insight Integration
 
-This app parses data from faculty CVs, and integrates data into Activity Insight.
+This app parses data from faculty CVs, and integrates data into Activity Insight.  It also stores backups of the Activity Insight database.
 
 
 ## Dependencies
@@ -14,6 +14,8 @@ This app parses data from faculty CVs, and integrates data into Activity Insight
   -ImageMagick (external library "rmagick" depends on)
 
 ## Setup
+
+*Refer to the docker documentation (/docker/README.md) for proper development setup*
 
   Install gems
 
@@ -37,5 +39,4 @@ This app parses data from faculty CVs, and integrates data into Activity Insight
 
   * There are rake tasks for running the parsers, populating the db, and integrations for some of the data.  This is for older integrations and were replaced by the function of the GUI.  They are pretty straight forward to use.  Simply run the `format_and_populate` rake task for a dataset, and then run the `integrate` rake task for that same dataset.  However, I'd recommend using the GUI since it is more up-to-date.
 
-  * The app has two major functionalities.  One is to parse publication and presentation metadata from CVs.  The other is to integrate various datasets into Activity Insight.  Integrations include Contract/Grants data (from OSP), Courses Taught data (from LionPath), Publication data (from Metadata DB), Personal & Contact Info (from LDAP), and both publications and presentations from CVs that have been parsed by the CV Parser.  
-
+  * The app has two major functions.  One is to parse publication and presentation metadata from CVs.  The other is to integrate various datasets into Activity Insight.  Integrations include Contract/Grants data (from OSP), Courses Taught data (from LionPath), Publication data (from Metadata DB), GPA data (from college of LA), Personal & Contact Info (from LDAP), and both publications and presentations from CVs that have been parsed by the CV Parser.  
