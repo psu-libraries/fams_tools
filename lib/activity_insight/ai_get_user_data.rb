@@ -32,7 +32,8 @@ class GetUserData
           f_name:    row['First Name'],
           l_name:    row['Last Name'],
           m_name:    row['Middle Name'],
-          college:   row['College']})
+          college:   row['College'],
+          campus:   row['Campus']})
       end
     end
   end

@@ -28,7 +28,7 @@ class OspXMLBuilder
                 xml.OSPKEY_ link.contract.osp_key, :access => "READ_ONLY"
                 xml.BASE_AGREE_ link.contract.base_agreement, :access => "READ_ONLY"
                 xml.TYPE_ link.contract.grant_contract, :access => "READ_ONLY"
-                xml.TITLE_ link.contract.title, :access => "READ_ONLY"
+                (link.contract.title.present?) ? xml.TITLE_(link.contract.title.gsub(/[^[:print:]]/,''), :access => "READ_ONLY") : nil
                 xml.SPONORG_ link.contract.sponsor.sponsor_name, :access => "READ_ONLY"
                 xml.AWARDORG_ link.contract.sponsor.sponsor_type, :access => "READ_ONLY"
                 xml.CONGRANT_INVEST {
@@ -45,9 +45,15 @@ class OspXMLBuilder
                 if college_list.include? faculty.college
                   xml.STATUS_ link.contract.status, :access => "READ_ONLY"
                 end
-                xml.DTM_SUB_ Date.strptime(link.contract.submitted.to_s, '%Y-%m-%d').strftime('%B'), :access => "READ_ONLY"
-                xml.DTD_SUB_ Date.strptime(link.contract.submitted.to_s, '%Y-%m-%d').strftime('%d'), :access => "READ_ONLY"
-                xml.DTY_SUB_ Date.strptime(link.contract.submitted.to_s, '%Y-%m-%d').strftime('%Y'), :access => "READ_ONLY"
+                begin
+                  xml.DTM_SUB_ Date.strptime(link.contract.submitted.to_s, '%Y-%m-%d').strftime('%B'), :access => "READ_ONLY"
+                  xml.DTD_SUB_ Date.strptime(link.contract.submitted.to_s, '%Y-%m-%d').strftime('%d'), :access => "READ_ONLY"
+                  xml.DTY_SUB_ Date.strptime(link.contract.submitted.to_s, '%Y-%m-%d').strftime('%Y'), :access => "READ_ONLY"
+                rescue ArgumentError
+                  xml.DTM_SUB_
+                  xml.DTD_SUB_
+                  xml.DTY_SUB_
+                end
                 begin
                   xml.DTM_AWARD_ Date.strptime(link.contract.awarded.to_s, '%Y-%m-%d').strftime('%B'), :access => "READ_ONLY"
                   xml.DTD_AWARD_ Date.strptime(link.contract.awarded.to_s, '%Y-%m-%d').strftime('%d'), :access => "READ_ONLY"
