@@ -249,6 +249,9 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
     t.index ["publication_listing_id"], name: "index_works_on_publication_listing_id"
   end
 
+  add_foreign_key "contract_faculty_links", "contracts"
+  add_foreign_key "contract_faculty_links", "faculties"
+  add_foreign_key "contracts", "sponsors"
   add_foreign_key "external_authors", "publications"
   add_foreign_key "gpas", "faculties"
   add_foreign_key "personal_contacts", "faculties"
