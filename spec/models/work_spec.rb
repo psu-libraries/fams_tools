@@ -10,7 +10,9 @@ describe Work, type: :model do
     it { is_expected.to have_db_column(:volume).of_type(:string) }
     it { is_expected.to have_db_column(:edition).of_type(:string) }
     it { is_expected.to have_db_column(:pages).of_type(:string) }
-    it { is_expected.to have_db_column(:date).of_type(:string) }
+    it { is_expected.to have_db_column(:year).of_type(:integer) }
+    it { is_expected.to have_db_column(:month).of_type(:integer) }
+    it { is_expected.to have_db_column(:day).of_type(:integer) }
     it { is_expected.to have_db_column(:item).of_type(:string) }
     it { is_expected.to have_db_column(:booktitle).of_type(:string) }
     it { is_expected.to have_db_column(:container).of_type(:string) }
@@ -67,7 +69,7 @@ describe Work, type: :model do
   private
 
   def csv
-    "INTELLCONT_AUTH_1_FACULTY_NAME,INTELLCONT_AUTH_1_FNAME,INTELLCONT_AUTH_1_MNAME,INTELLCONT_AUTH_1_LNAME,USERNAME,USER_ID,TITLE,VOLUME,EDITION,PAGENUM,DTY_PUB,JOURNAL_NAME,type,CONTYPE,EDITORS,INSTITUTION,PUBCTYST,note\n\"\",Jim,\"\",Bob,test123,,Test,1,2,1-2,2001,Test Journal,article-journal,Journal Article,\"Frank, Zappa\",PSU,State College,Some note\n\"\",\"\",\"\",\"\",test123,,Test,1,2,1-2,2001,Test Journal,article-journal,Journal Article,\"Frank, Zappa\",PSU,State College,Some note\n"
+    "USERNAME,USER_ID,TITLE,VOLUME,EDITION,PAGENUM,DTY_END,DTM_END,DTD_END,JOURNAL_NAME,CONTYPE,EDITORS,INSTITUTION,PUBCTYST,COMMENT,INTELLCONT_AUTH_1_FACULTY_NAME,INTELLCONT_AUTH_1_FNAME,INTELLCONT_AUTH_1_MNAME,INTELLCONT_AUTH_1_LNAME\ntest123,,Test,1,2,1-2,2001,9,30,Test Journal,Journal Article,\"Frank, Zappa\",PSU,State College,Some note,\"\",Jim,\"\",Bob\ntest123,,Test,1,2,1-2,2001,9,30,Test Journal,Journal Article,\"Frank, Zappa\",PSU,State College,Some note,\"\",\"\",\"\",\"\"\n"
   end
 end
 

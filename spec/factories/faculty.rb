@@ -6,5 +6,6 @@ FactoryBot.define do
     l_name { 'User' }
     m_name { 'Person' }
     college { 'EN' }
+    campus { 'UP' }
   end
 end

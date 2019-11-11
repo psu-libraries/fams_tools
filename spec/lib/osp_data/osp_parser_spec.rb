@@ -9,6 +9,7 @@ RSpec.describe OspParser do
               "T1" => 'totalenddate', "U1" => 'grantcontract', "V1" => 'baseagreement', "W1" => 'agreementtype', "X1" => 'agreement', "Y1" => 'notfunded'}
 
   let(:data_book1) do
+    current_year = DateTime.now.year
     data_arr = []
     data_arr << headers 
     data_arr << {"A2" => 1, "B2" => 1, "C2" => 'Title &quot; &#39;', "D2" => 'X', "E2" => 'X', "F2" => 'X',
@@ -20,7 +21,7 @@ RSpec.describe OspParser do
                  "N3" => 1, "O3" => 1, "P3" => 1, "Q3" => 'X', "R3" => 'X', "S3" => 'X',
                  "T3" => 'X', "U3" => 'Grant', "V3" => 'X', "W3" => 'X', "X3" => 'X', "Y3" => '/  /'}
     data_arr << {"A4" => 1, "B4" => 1, "C4" => 'X', "D4" => 'X', "E4" => 'X', "F4" => 'X',
-                 "G4" => 'Tue, 02 Jan 2018', "H4" => 'X', "I4" => 'Post Doctoral', "J4" => 1, "K4" => 'Awarded', "L4" => 'X', "M4" => 'X',
+                 "G4" => "Tue, 02 Jan #{current_year}", "H4" => 'X', "I4" => 'Post Doctoral', "J4" => 1, "K4" => 'Awarded', "L4" => 'X', "M4" => 'X',
                  "N4" => 1, "O4" => 1, "P4" => 1, "Q4" => 'Sun, 01 Jan 2017', "R4" => 'Wed, 12 Dec 2018', "S4" => 'X',
                  "T4" => 'X', "U4" => 'Grant', "V4" => 'X', "W4" => 'X', "X4" => 'X', "Y4" => '/  /'}
     data_arr << {"A5" => 1, "B5" => 1, "C5" => 'X', "D5" => 'X', "E5" => 'X', "F5" => 'X',
@@ -41,6 +42,10 @@ RSpec.describe OspParser do
                  "M4" => 'X', "N4" => 1, "O4" => 1, "P4" => 1, "Q4" => 'X', "R4" => 'X', "S4" => 'X', "T4" => 'X', "U4" => 'X', "V4" => 'X', "W4" => 'X', "X4" => 'X'}
     data_arr << {"A5" => 1, "B5" => 1, "C5" => 'X', "D5" => 'X', "E5" => 'X', "F5" => 'X', "G5" => 'X', "H5" => 'X', "I5" => 'X', "J5" => 1, "K5" => 'X', "L5" => '1989-04-01',
                 "M5" => 'X', "N5" => 1, "O5" => 1, "P5" => 1, "Q5" => 'X', "R5" => 'X', "S5" => 'X', "T5" => 'X', "U5" => 'X', "V5" => 'X', "W5" => 'X', "X5" => 'X'}
+    data_arr << {"A6" => 1, "B6" => 1, "C6" => 'X', "D6" => 'X', "E6" => 'X', "F6" => 'X', "G6" => 'X', "H6" => 'X', "I6" => 'X', "J6" => 1, "K6" => 'X', "L6" => '',
+                 "M6" => '2013-02-01', "N6" => 1, "O6" => 1, "P6" => 1, "Q6" => 'X', "R6" => 'X', "S6" => 'X', "T6" => 'X', "U6" => 'X', "V6" => 'X', "W6" => 'X', "X6" => 'X'}
+    data_arr << {"A7" => 1, "B7" => 1, "C7" => 'X', "D7" => 'X', "E7" => 'X', "F7" => 'X', "G7" => 'X', "H7" => 'X', "I7" => 'X', "J7" => 1, "K7" => 'X', "L7" => '',
+                 "M7" => '', "N7" => 1, "O7" => 1, "P7" => 1, "Q7" => 'X', "R7" => 'X', "S7" => 'X', "T7" => 'X', "U7" => 'X', "V7" => 'X', "W7" => 'X', "X7" => 'X'}
     data_arr
   end
 
@@ -132,7 +137,7 @@ RSpec.describe OspParser do
       allow(Creek::Book).to receive_message_chain(:new, :sheets, :[], :rows).and_return(data_book2)
       allow(CSV).to receive(:foreach).and_yield(fake_backup[0]).and_yield(fake_backup[1]).and_yield(fake_backup[2])
       osp_parser_obj.filter_by_date
-      expect(osp_parser_obj.xlsx_hash.count).to eq(1)
+      expect(osp_parser_obj.xlsx_hash.count).to eq(2)
     end
   end
 

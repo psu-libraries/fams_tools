@@ -7,12 +7,11 @@ end
 
 gem 'rmagick'
 gem 'rtesseract'
-gem 'docx', '~> 0.2.07', :require => ["docx"]
 gem 'redis'
 gem 'redis-namespace'
 gem 'anystyle'
-gem 'rubyzip', '~>1.1.0'
-gem 'axlsx', '2.1.0.pre'
+gem 'rubyzip', '>= 1.2.2'
+gem 'axlsx'
 gem 'axlsx_rails'
 gem 'net-ldap'
 gem 'factory_bot'
@@ -53,7 +52,7 @@ gem 'jbuilder', '~> 2.5'
 # gem 'capistrano-rails', group: :development
 
 gem 'spreadsheet'
-gem 'nokogiri'
+gem 'nokogiri', '>= 1.10.4'
 gem 'httparty'
 gem 'webmock'
 gem 'creek'
