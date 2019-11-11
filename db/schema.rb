@@ -68,7 +68,37 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
     t.string "l_name"
     t.string "m_name"
     t.string "college"
+    t.string "campus"
     t.index ["access_id"], name: "index_faculties_on_access_id", unique: true
+  end
+
+  create_table "gpas", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+    t.bigint "faculty_id"
+    t.string "semester"
+    t.integer "year"
+    t.string "course_prefix"
+    t.string "course_number"
+    t.string "course_number_suffix"
+    t.string "section_number"
+    t.string "campus"
+    t.integer "number_of_grades"
+    t.float "course_gpa", limit: 24
+    t.integer "grade_dist_a"
+    t.integer "grade_dist_a_minus"
+    t.integer "grade_dist_b_plus"
+    t.integer "grade_dist_b"
+    t.integer "grade_dist_b_minus"
+    t.integer "grade_dist_c_plus"
+    t.integer "grade_dist_c"
+    t.integer "grade_dist_d"
+    t.integer "grade_dist_f"
+    t.integer "grade_dist_w"
+    t.integer "grade_dist_ld"
+    t.integer "grade_dist_other"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["faculty_id", "semester", "year", "course_prefix", "course_number", "course_number_suffix", "section_number", "campus"], name: "unique_key", unique: true, length: { semester: 50, course_prefix: 50, course_number_suffix: 50, campus: 50 }
+    t.index ["faculty_id"], name: "index_gpas_on_faculty_id"
   end
 
   create_table "personal_contacts", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
@@ -193,7 +223,6 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
     t.string "volume"
     t.string "edition"
     t.string "pages"
-    t.string "date"
     t.string "item"
     t.string "booktitle"
     t.string "container"
@@ -214,6 +243,9 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "username"
+    t.integer "year"
+    t.integer "month"
+    t.integer "day"
     t.index ["publication_listing_id"], name: "index_works_on_publication_listing_id"
   end
 
@@ -221,6 +253,9 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
   add_foreign_key "contract_faculty_links", "faculties"
   add_foreign_key "contracts", "sponsors"
   add_foreign_key "external_authors", "publications"
+  add_foreign_key "gpas", "faculties"
+  add_foreign_key "masterlist_staff_organisation_relations", "masterlist_organisations", on_delete: :cascade
+  add_foreign_key "masterlist_staff_organisation_relations", "masterlist_people", on_delete: :cascade
   add_foreign_key "personal_contacts", "faculties"
   add_foreign_key "presentation_contributors", "presentations", on_delete: :cascade
   add_foreign_key "presentations", "faculties", on_delete: :cascade
