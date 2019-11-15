@@ -83,7 +83,7 @@ class AiIntegrationController < ApplicationController
 
   def pub_integrate
     start = Time.now
-    import_pubs = GetPubData.new
+    import_pubs = GetPubData.new(params[:college])
     import_pubs.call(PubPopulateDB.new)
     my_integrate = IntegrateData.new(PubXMLBuilder.new, params[:target])
     @errors = my_integrate.integrate
@@ -142,6 +142,8 @@ class AiIntegrationController < ApplicationController
   end
 
   def index
+    @colleges = Faculty.distinct.pluck(:college).reject(&:blank?)
+    @colleges << 'All Colleges'
   end
 
   private

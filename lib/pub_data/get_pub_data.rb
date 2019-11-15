@@ -1,8 +1,10 @@
 class GetPubData
+  class MDBError < StandardError; end
   attr_accessor :user_ids, :pub_json, :pub_hash
 
-  def initialize
-    @user_ids = Faculty.pluck(:access_id)
+  def initialize(college)
+    @user_ids = Faculty.where(college: college.to_s).pluck(:access_id) unless college == "All Colleges"
+    @user_ids = Faculty.pluck(:access_id) if college == "All Colleges"
     @pub_json = []
     @pub_hash = [] 
   end
@@ -13,6 +15,7 @@ class GetPubData
       url = "https://stage.metadata.libraries.psu.edu/v1/users/publications"
       @pub_json = HTTParty.post(url, :body => "#{batch}", :headers => headers, :timeout => 100)
       json_to_hash(pub_json)
+      puts pub_hash
       format(pub_hash)
       pub_populate_obj.populate(pub_hash)
     end
@@ -34,6 +37,7 @@ class GetPubData
   end
 
   def json_to_hash(pub_json)
+    raise MDBError.new(pub_json["message"]) if [401, 400, 403, 404, 500, 501, 502, 503].include? pub_json["code"]
     @pub_hash = JSON.parse(pub_json.body)
   end
 
