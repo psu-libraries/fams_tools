@@ -16,7 +16,6 @@ class DeleteRecords
         }
       }
     end
-    puts builder.to_xml
     request(builder.to_xml)
   end
 
@@ -27,7 +26,7 @@ class DeleteRecords
             :password => Rails.application.config_for(:activity_insight)["webservices"][:password]}
     url = 'https://betawebservices.digitalmeasures.com/login/service/v4/SchemaData:delete/INDIVIDUAL-ACTIVITIES-University'
     response = HTTParty.post url, :basic_auth => auth, :body => data, :headers => {'Content-type' => 'text/xml'}, :timeout => 320
-    puts response
+    #puts response
   end
 
 end

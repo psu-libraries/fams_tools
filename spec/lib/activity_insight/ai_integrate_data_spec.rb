@@ -153,10 +153,6 @@ RSpec.describe IntegrateData do
       ]
   end
 
-  before do
-    allow(STDOUT).to receive(:puts)
-  end
-
   describe '#integrate' do
     it 'should send a POST request to DM Webservices' do
       osp_xml_builder_obj = double()
