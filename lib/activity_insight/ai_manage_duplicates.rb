@@ -176,12 +176,11 @@ class RemoveSystemDups
          }
       end
       delete_xml = builder.to_xml
-      puts delete_xml
       auth = {:username => Rails.application.config_for(:activity_insight)["webservices"][:username],
               :password => Rails.application.config_for(:activity_insight)["webservices"][:password]}
       url = get_url(target)
       response = HTTParty.post url, :basic_auth => auth, :body => delete_xml, :headers => {'Content-type' => 'text/xml'}, :timeout => 180
-      puts response
+      # puts response
     else
       #puts 'No Duplicates'
     end

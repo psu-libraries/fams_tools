@@ -82,6 +82,7 @@ class AiIntegrationController < ApplicationController
   end
 
   def pub_integrate
+    raise StandardError, "Must select a college." if params[:college].empty?
     start = Time.now
     import_pubs = GetPubData.new(params[:college])
     import_pubs.call(PubPopulateDB.new)
@@ -178,6 +179,7 @@ class AiIntegrationController < ApplicationController
   end
 
   def error_redirect(exception)
+    Rails.logger.error exception.to_s
     flash[:error] = "#{exception}"
     redirect_to ai_integration_path
   end

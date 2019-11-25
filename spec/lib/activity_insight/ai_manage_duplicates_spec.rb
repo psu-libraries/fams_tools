@@ -229,10 +229,6 @@ RSpec.describe RemoveSystemDups do
 
   let(:remove_dups_beta) {RemoveSystemDups.new(:beta)}
 
-  before do
-    allow(STDOUT).to receive(:puts)
-  end
-
   describe "#call" do
     it "should identify duplicates and
         should make a request to DM to remove duplicates" do

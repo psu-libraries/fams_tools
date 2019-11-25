@@ -15,10 +15,6 @@ RSpec.describe AiIntegrationController do
     Rails.application.config_for(:integration_passcode)[:passcode]
   end
 
-  before do
-    allow(STDOUT).to receive(:puts)
-  end
-
   describe "#ldap_integrate" do
 
     before do
