@@ -101,51 +101,6 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
     t.index ["faculty_id"], name: "index_gpas_on_faculty_id"
   end
 
-  create_table "masterlist_organisations", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
-    t.string "organisation_id"
-    t.string "org_type"
-    t.string "name_en"
-    t.string "profile_en"
-    t.string "country"
-    t.date "start_date_on"
-    t.date "end_date_on"
-    t.string "visibility"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "masterlist_people", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
-    t.string "person_id", null: false
-    t.boolean "profiled"
-    t.string "username"
-    t.string "email"
-    t.string "post_nominals"
-    t.string "first_name"
-    t.string "last_name"
-    t.string "gender", default: "UNKNOWN"
-    t.string "visibility"
-    t.string "profile_photo"
-    t.boolean "externally_authenticated"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "masterlist_staff_organisation_relations", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
-    t.bigint "masterlist_person_id", null: false
-    t.bigint "masterlist_organisation_id", null: false
-    t.string "job_description"
-    t.string "employed_as"
-    t.date "person_start_date_on"
-    t.date "person_end_date_on"
-    t.string "relation_email"
-    t.boolean "primary"
-    t.string "staff_type"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["masterlist_organisation_id"], name: "relation_to_organisation"
-    t.index ["masterlist_person_id"], name: "relation_to_person"
-  end
-
   create_table "personal_contacts", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.bigint "faculty_id", null: false
     t.string "telephone_number"
@@ -299,8 +254,6 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
   add_foreign_key "contracts", "sponsors"
   add_foreign_key "external_authors", "publications"
   add_foreign_key "gpas", "faculties"
-  add_foreign_key "masterlist_staff_organisation_relations", "masterlist_organisations", on_delete: :cascade
-  add_foreign_key "masterlist_staff_organisation_relations", "masterlist_people", on_delete: :cascade
   add_foreign_key "personal_contacts", "faculties"
   add_foreign_key "presentation_contributors", "presentations", on_delete: :cascade
   add_foreign_key "presentations", "faculties", on_delete: :cascade
