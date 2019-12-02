@@ -89,6 +89,7 @@ class AiIntegrationController < ApplicationController
 
   def pub_integrate
     start = Time.now
+    error_logger = Logger.new('public/psu/error_outputs/publications_errors.log')
     import_pubs = GetPubData.new
     import_pubs.call(PubPopulateDB.new)
     my_integrate = IntegrateData.new(PubXMLBuilder.new, params[:target])
@@ -96,7 +97,8 @@ class AiIntegrationController < ApplicationController
     finish = Time.now
     @time = (((finish - start)/60).to_i.to_s + ' minutes')
     flash[:notice] = "Integration completed in #{@time}."
-    flash[:pubs_errors] = @errors
+    error_logger.info "Errors for Publications to #{params[:target]} on: #{DateTime.now}"
+    error_logger.error @errors
     redirect_to ai_integration_path
   end
 

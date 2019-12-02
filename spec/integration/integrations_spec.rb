@@ -54,11 +54,6 @@ RSpec.describe AiIntegrationController do
            to_return(status: 200, body: "", headers: {})
     end
 
-    it "runs integration of contract/grants" do
-      params = { congrant_file: @contract_grants, ai_backup_file: @congrant_backup, passcode: passcode, "target" => :beta }
-      post ai_integration_osp_integrate_path, params: params
-    end
-
     it "takes contract/grant file, parses, and send data to activity insight", type: :feature do
       visit ai_integration_path
       logger = double('logger')
@@ -95,11 +90,6 @@ RSpec.describe AiIntegrationController do
        	  'Content-Type'=>'text/xml'
            }).
          to_return(status: 200, body: error_message, headers: {})
-    end
-
-    it "runs integration of courses taught data" do
-      params = { courses_file: @courses, "target" => :beta }
-      post ai_integration_lionpath_integrate_path, params: params
     end
 
     it "takes lionpath file, parses, and send data to activity insight", type: :feature do
@@ -148,20 +138,18 @@ RSpec.describe AiIntegrationController do
          to_return(status: 200, body: error_message, headers: {})
     end
 
-    it "runs integration of publication data" do
-      params = { "target" => :beta }
-      post ai_integration_pub_integrate_path, params: params
-    end
-
     it "gets publication data sends data to activity insight", type: :feature do
       visit ai_integration_path
+      logger = double('logger')
+      allow(Logger).to receive(:new).and_return(logger)
+      expect(logger).to receive(:info).with(/Errors for Publications/)
+      expect(logger).to receive(:error).with([/Unexpected EOF in prolog/])
       expect(page).to have_content("AI-Integration")
       within('#publications') do 
         page.fill_in 'passcode', :with => passcode
         click_on 'Beta'
       end
       expect(page).to have_content("Integration completed")
-      expect(page).to have_content("Unexpected EOF")
     end
 
     it "redirects when wrong passcode supplied", type: :feature do
@@ -183,11 +171,6 @@ RSpec.describe AiIntegrationController do
        	  'Content-Type'=>'text/xml'
            }).
          to_return(status: 200, body: error_message, headers: {})
-    end
-
-    it "runs integration of cv publication data" do
-      params = { cv_pub_file: @cv_pubs, "target" => :beta }
-      post ai_integration_cv_pub_integrate_path, params: params
     end
 
     it "gets cv publication data sends data to activity insight", type: :feature do
@@ -221,11 +204,6 @@ RSpec.describe AiIntegrationController do
        	  'Content-Type'=>'text/xml'
            }).
          to_return(status: 200, body: error_message, headers: {})
-    end
-
-    it "runs integration of cv presentation data" do
-      params = { cv_presentation_file: @cv_presntations, "target" => :beta }
-      post ai_integration_cv_presentation_integrate_path, params: params
     end
 
     it "gets cv presentation data and sends data to activity insight", type: :feature do
