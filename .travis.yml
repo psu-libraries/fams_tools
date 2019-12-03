@@ -1,1 +1,8 @@
 language: ruby
+
+before_install:
+  - "gem --version"
+  - "gem update --system"
+  - "gem --version"
+  - "gem install bundler"
+  - "gem update bundler"
