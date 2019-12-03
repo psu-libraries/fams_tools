@@ -1,5 +1,6 @@
 language: ruby
 cache: bundler
+bundler_args: "--without development debug"
 
 before_install:
   - "gem --version"
