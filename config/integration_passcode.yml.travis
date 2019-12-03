@@ -1,0 +1,8 @@
+production:
+  :passcode: "fake"
+
+development:
+  :passcode: "fake"
+
+test:
+  :passcode: "fake"
