@@ -1,0 +1,29 @@
+production:
+  webservices:
+    :username: "fake"
+    :password: "fake"
+  backups_service:
+    :username: "fake"
+    :password: "fake"
+  metadata_db:
+    :key: "fake"
+
+development:
+  webservices:
+    :username: "fake"
+    :password: "fake"
+  backups_service:
+    :username: "fake"
+    :password: "fake"
+  metadata_db:
+    :key: "fake"
+
+test:
+  webservices:
+    :username: "fake"
+    :password: "fake"
+  backups_service:
+    :username: "fake"
+    :password: "fake"
+  metadata_db:
+    :key: "fake"
