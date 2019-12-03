@@ -1,0 +1,27 @@
+language: ruby
+
+before_install:
+  - "gem --version"
+  - "gem update --system"
+  - "gem --version"
+  - "gem install bundler"
+  - "gem update bundler"
+
+before_script:
+  - "cp config/database.yml.travis config/database.yml"
+  - "cp config/activity_insight.yml.travis config/activity_insight.yml"
+  - "cp config/integration_passcode.yml.travis config/integration_passcode.yml"
+  - "mkdir app/parsing_files"
+
+script:
+  - "bundle exec rake db:create"
+  - "bundle exec rake db:test:load"
+  - "bundle exec rake db:migrate RAILS_ENV=test"
+  - "bundle exec rspec"
+
+services:
+  - mysql
+
+addons:
+  mariadb: '10.2'
+

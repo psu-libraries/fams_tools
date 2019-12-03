@@ -244,7 +244,6 @@ RSpec.describe RemoveSystemDups do
          with(
            body: "<?xml version=\"1.0\"?>\n<Data>\n  <CONGRANT>\n    <item id=\"1234567\"/>\n    <item id=\"2345678\"/>\n  </CONGRANT>\n</Data>\n",
            headers: {
-       	  'Authorization'=>'Basic cHN1L2Fpc3VwcG9ydDpoQWVxeHBBV3VicQ==',
        	  'Content-Type'=>'text/xml'
            }).
          to_return(status: 200, body: "<?xml version=\"1.0\"?>\n<Success>\n  <item/>\n</Success>\n", headers: {})
