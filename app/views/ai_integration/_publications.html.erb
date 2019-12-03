@@ -1,0 +1,13 @@
+<div class="col-sm">
+  <h3>Publications Integration</h3>
+  <%= form_with :url => { :action => "pub_integrate" }, id: "publications" do |form| %>
+    <div class="row">
+      <%= render 'buttons_and_code', form: form %>
+    </div>
+  <% end %>
+</div>
+<div class="col-sm">
+  <h4>Publications Integration Errors:</h4>
+  <br/>
+  <p><%= link_to "Download Error Log", "psu/error_outputs/gpa_errors.log", download: "gpa_errors.log", target: '_blank', class: "btn btn-secondary" %></p>
+</div>

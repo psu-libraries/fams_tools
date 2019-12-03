@@ -1,0 +1,15 @@
+<div class="col-sm">
+  <h3>Contract/Grant Integration</h3>
+  <%= form_with :url => { :action => "osp_integrate" }, id: "congrant" do |form| %>
+    <p> <%= label(:congrant_file, text = "OSP Data File") %><%= form.file_field :congrant_file, required: true %> </p>
+    <p> <%= label(:ai_backup_file, text = "CONGRANT backup File") %><%= form.file_field :ai_backup_file, required: true %> </p>
+    <div class="row">
+      <%= render 'buttons_and_code', form: form %>
+    </div>
+  <% end %>
+</div>
+<div class="col-sm">
+  <h4>Contract/Grant Integration Errors:</h4>
+  <br/>
+  <p><%= link_to "Download Error Log", "psu/error_outputs/osp_errors.log", download: "osp_errors.log", target: '_blank', class: "btn btn-secondary" %></p>
+</div>
