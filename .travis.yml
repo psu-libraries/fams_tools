@@ -11,6 +11,7 @@ before_script:
   - "cp config/database.yml.travis config/database.yml"
   - "cp config/activity_insight.yml.travis config/activity_insight.yml"
   - "cp config/integration_passcode.yml.travis config/integration_passcode.yml"
+  - "mkdir app/parsing_files"
 
 script:
   - "bundle exec rake db:create"
