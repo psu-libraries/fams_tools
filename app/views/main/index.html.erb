@@ -2,11 +2,7 @@
   <h1>FAMS Tools</h1>
 </div>
 
-<% if flash[:notice]%>
-  <div class="alert alert-success"><%= flash[:notice] %></div>
-<% elsif flash[:alert]%>
-  <div class="alert alert-warning"><%= flash[:alert] %></div>
-<% end %>
+<%= render 'shared/flashes' %>
 
 <div class="container-fluid">
   <h3>Setup</h3>

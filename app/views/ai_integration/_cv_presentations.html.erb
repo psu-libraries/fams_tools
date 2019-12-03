@@ -1,0 +1,16 @@
+<div class="col-sm">
+  <h3>CV Presentations Integration</h3>
+  <%= form_with :url => { :action => "cv_presentation_integrate" }, id: "cv_presentations" do |form| %>
+    <p> <%= label(:cv_presentation_file, text = "CV Presentations CSV") %><%= form.file_field :cv_presentation_file, required: true %> </p>
+    <div class="row">
+      <%= render 'buttons_and_code', form: form %>
+    </div>
+  <% end %>
+</div>
+<div class="col-sm" style="font-size: 12px; overflow: auto; width:300px; height:200px; border-style: inset;">
+  <% if flash[:cv_presentations_errors] %>
+    <% flash[:cv_presentations_errors].each do |error| %>
+      <p> <%= error %> </p>
+    <% end %>
+  <% end %>
+</div>
