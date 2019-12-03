@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/psu-stewardship/ai_integration.svg?token=aQpc68FoUpxpqgvP9XN9&branch=master)](https://travis-ci.com/psu-stewardship/ai_integration)
+
 # Activity Insight Integration
 
 This app parses data from faculty CVs, and integrates data into Activity Insight.  It also stores backups of the Activity Insight database.
