@@ -5,35 +5,10 @@
 <%= render 'shared/flashes' %>
 
 <div class="row">
-  <%= render 'congrant' %>
-</div>
-<hr>
-
-<div class="row">
-  <%= render 'courses_taught' %>
-</div>
-<hr>
-
-<div class="row">
-  <%= render 'gpa' %>
-</div>
-<hr>
-
-<div class="row">
-  <%= render 'publications' %>
-</div>
-<hr>
-
-<div class="row">
-  <%= render 'personal_contact' %>
-</div>
-<hr>
-
-<div class="row">
-  <%= render 'cv_publications' %>
+  <%= select(:label, :integration_type, @integration_types, include_blank: "Select an integration type") %>
 </div>
 
-<hr>
-<div class="row">
-  <%= render 'cv_presentations' %>
+<br />
+<div id="integration_container" class="row">
+
 </div>

@@ -19,6 +19,8 @@ require 'gpa_data/gpa_xml_builder'
 class AiIntegrationController < ApplicationController
   rescue_from StandardError, with: :error_redirect if Rails.env == 'production'
 
+  skip_before_action :verify_authenticity_token, only: :render_integrator
+
   before_action :delete_all_data, :clear_tmp_files, :confirm_passcode, only: [:osp_integrate, :lionpath_integrate, :gpa_integrate, :pub_integrate, :ldap_integrate, :cv_pub_integrate, :cv_presentation_integrate]
 
   def osp_integrate
@@ -150,6 +152,34 @@ class AiIntegrationController < ApplicationController
   end
 
   def index
+    @integration_types = { "Contract/Grant Integration" => :congrant,
+                           "Courses Taught Integration" => :courses_taught,
+                           "GPA Integration" => :gpa,
+                           "Publications Integration" => :publications,
+                           "Personal & Contact Integration" => :personal_contact,
+                           "CV Publications Integration" => :cv_publications,
+                           "CV Presentations" => :cv_presentations }
+  end
+
+  def render_integrator
+    case params[:integration_type].to_sym
+    when :congrant
+      render partial: 'congrant.html.erb'
+    when :courses_taught
+      render partial: 'courses_taught.html.erb'
+    when :gpa
+      render partial: 'gpa.html.erb'
+    when :publications
+      render partial: 'publications.html.erb'
+    when :personal_contact
+      render partial: 'personal_contact.html.erb'
+    when :cv_publications
+      render partial: 'cv_publications.html.erb'
+    when :cv_presentations
+      render partial: 'cv_presentations.html.erb'
+    else
+      render partial: 'blank.html.erb'
+    end
   end
 
   private

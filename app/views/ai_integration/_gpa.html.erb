@@ -1,5 +1,4 @@
 <div class="col-sm">
-  <h3>GPA Integration</h3>
   <%= form_with :url => { :action => "gpa_integrate" }, id: "gpa" do |form| %>
     <p> <%= label(:gpa_file, text = "GPA Data File") %><%= form.file_field :gpa_file, required: true %> </p>
     <div class="row">
