@@ -1,5 +1,4 @@
 <div class="col-sm">
-  <h3>Courses Taught Integration</h3>
   <%= form_with :url => { :action => "lionpath_integrate" }, id: "courses" do |form| %>
     <p> <%= label(:courses_file, text = "Courses Taught Data File") %><%= form.file_field :courses_file, required: true %> </p>
     <div class="row">

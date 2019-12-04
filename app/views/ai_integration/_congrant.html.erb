@@ -1,5 +1,4 @@
 <div class="col-sm">
-  <h3>Contract/Grant Integration</h3>
   <%= form_with :url => { :action => "osp_integrate" }, id: "congrant" do |form| %>
     <p> <%= label(:congrant_file, text = "OSP Data File") %><%= form.file_field :congrant_file, required: true %> </p>
     <p> <%= label(:ai_backup_file, text = "CONGRANT backup File") %><%= form.file_field :ai_backup_file, required: true %> </p>
