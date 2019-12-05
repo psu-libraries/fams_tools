@@ -15,10 +15,6 @@ RSpec.describe AiIntegrationController do
     Rails.application.config_for(:integration_passcode)[:passcode]
   end
 
-  before do
-    allow(STDOUT).to receive(:puts)
-  end
-
   describe "#ldap_integrate" do
 
     before do
@@ -31,28 +27,27 @@ RSpec.describe AiIntegrationController do
          to_return(status: 200, body: "", headers: {})
     end
 
-    it "runs integration of personal contact info" do
-      params = { passcode: passcode, "target" => :beta }
-      post ai_integration_ldap_integrate_path, params: params
-    end
-
-    it "gets ldap data and sends data to activity insight", type: :feature do
-      visit ai_integration_path
-      expect(page).to have_content("AI-Integration")
-      within('#personal_contacts') do
-        page.fill_in 'passcode', :with => passcode
-        click_on 'Beta'
+    context 'when Personal & Contact Integration is selected', type: :feature, js: true do
+      it "gets ldap data and sends data to activity insight" do
+        visit ai_integration_path
+        select("Personal & Contact Integration", from: "label_integration_type").select_option
+        expect(page).to have_content("AI-Integration")
+        within('#personal_contacts') do
+          page.fill_in 'passcode', :with => passcode
+          click_on 'Beta'
+        end
+        expect(page).to have_content("Integration completed")
       end
-      expect(page).to have_content("Integration completed")
-    end
 
-    it "redirects when wrong passcode supplied", type: :feature do
-      visit ai_integration_path
-      expect(page).to have_content("AI-Integration")
-      within('#personal_contacts') do
-        click_on 'Beta'
+      it "redirects when wrong passcode supplied" do
+        visit ai_integration_path
+        select("Personal & Contact Integration", from: "label_integration_type").select_option
+        expect(page).to have_content("AI-Integration")
+        within('#personal_contacts') do
+          click_on 'Beta'
+        end
+        expect(page).to have_content("Wrong Passcode")
       end
-      expect(page).to have_content("Wrong Passcode")
     end
   end
 end

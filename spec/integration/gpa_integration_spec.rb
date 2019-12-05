@@ -21,9 +21,11 @@ RSpec.describe AiIntegrationController do
           to_return(status: 200, body: "", headers: {})
     end
 
-    context "when passcode is supplied and beta integration is clicked", type: :feature do
+    context "when passcode is supplied and beta integration is clicked", type: :feature, js: true do
       it "integrates gpa data into AI beta" do
         visit ai_integration_path
+        select("GPA Integration", from: "label_integration_type").select_option
+        puts page.driver.console_messages
         logger = double('logger')
         allow(Logger).to receive(:new).and_return(logger)
         expect(logger).to receive(:info).with(/Errors for GPA/)
@@ -37,8 +39,9 @@ RSpec.describe AiIntegrationController do
         expect(page).to have_content("Integration completed")
       end
 
-      it "redirects when wrong passcode supplied", type: :feature do
+      it "redirects when wrong passcode supplied" do
         visit ai_integration_path
+        select("GPA Integration", from: "label_integration_type").select_option
         within('#gpa') do
           page.attach_file 'gpa_file', Rails.root.join('spec/fixtures/gpa_data.xlsx')
           click_on 'Beta'
