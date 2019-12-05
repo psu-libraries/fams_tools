@@ -5,10 +5,8 @@
     </div>
   <% end %>
 </div>
-<div class="col-sm" style="font-size: 12px; overflow: auto; width:300px; height:200px; border-style: inset;">
-  <% if flash[:per_cont_errors] %>
-    <% flash[:per_cont_errors].each do |error| %>
-      <p> <%= error %> </p>
-    <% end %>
-  <% end %>
+<div class="col-sm">
+  <h4>Personal & Contact Info Integration Errors:</h4>
+  <br/>
+  <%= render 'file_download_button', log_path: @ldap_log_path %>
 </div>

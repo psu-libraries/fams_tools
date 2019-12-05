@@ -71,6 +71,7 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'shoulda-matchers', '4.0.0.rc1'
   gem 'rails-controller-testing'
+  gem 'rspec-retry'
 end
 
 group :development do

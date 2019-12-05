@@ -6,10 +6,8 @@
     </div>
   <% end %>
 </div>
-<div class="col-sm" style="font-size: 12px; overflow: auto; width:300px; height:200px; border-style: inset;">
-  <% if flash[:cv_pubs_errors] %>
-    <% flash[:cv_pubs_errors].each do |error| %>
-      <p> <%= error %> </p>
-    <% end %>
-  <% end %>
+<div class="col-sm">
+  <h4>CV Presentations Integration Errors:</h4>
+  <br/>
+  <%= render 'file_download_button', log_path: @cv_presentations_log_path %>
 </div>

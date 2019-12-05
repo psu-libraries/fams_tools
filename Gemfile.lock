@@ -252,6 +252,8 @@ GEM
       rspec-expectations (~> 3.9.0)
       rspec-mocks (~> 3.9.0)
       rspec-support (~> 3.9.0)
+    rspec-retry (0.6.2)
+      rspec-core (> 3.3)
     rspec-support (3.9.0)
     rtesseract (3.0.4)
       nokogiri
@@ -369,6 +371,7 @@ DEPENDENCIES
   redis-namespace
   rmagick
   rspec-rails
+  rspec-retry
   rtesseract
   rubyzip (>= 1.2.2)
   sass-rails (~> 5.0)
