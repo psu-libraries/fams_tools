@@ -1,5 +1,7 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 require 'spec_helper'
+require 'headless'
+
 abort("The Rails environment is running in production mode!") if Rails.env.production?
 # Add additional requires below this line. Rails is not loaded until this point!
 
@@ -57,4 +59,14 @@ Shoulda::Matchers.configure do |config|
     with.test_framework :rspec
     with.library :rails
   end
+end
+
+#Capybara configurations
+Capybara.javascript_driver = :webkit
+headless = Headless.new
+headless.start
+at_exit { headless.stop }
+
+Capybara::Webkit.configure do |config|
+  config.block_unknown_urls
 end

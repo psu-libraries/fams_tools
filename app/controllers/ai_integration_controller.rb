@@ -158,7 +158,7 @@ class AiIntegrationController < ApplicationController
                            "Publications Integration" => :publications,
                            "Personal & Contact Integration" => :personal_contact,
                            "CV Publications Integration" => :cv_publications,
-                           "CV Presentations" => :cv_presentations }
+                           "CV Presentations Integration" => :cv_presentations }
   end
 
   def render_integrator

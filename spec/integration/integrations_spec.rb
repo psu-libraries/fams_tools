@@ -29,10 +29,6 @@ RSpec.describe AiIntegrationController do
     Rails.application.config_for(:integration_passcode)[:passcode]
   end
 
-  before do
-    allow(STDOUT).to receive(:puts)
-  end
-
   describe "#osp_integrate" do
 
     before do
@@ -54,29 +50,33 @@ RSpec.describe AiIntegrationController do
            to_return(status: 200, body: "", headers: {})
     end
 
-    it "takes contract/grant file, parses, and send data to activity insight", type: :feature do
-      visit ai_integration_path
-      logger = double('logger')
-      allow(Logger).to receive(:new).and_return(logger)
-      expect(logger).to receive(:info).with(/Errors for Contract\/Grant/)
-      expect(logger).to receive(:error).with([/Unexpected EOF in prolog/])
-      expect(page).to have_content("AI-Integration")
-      within('#congrant') do 
-        page.attach_file 'congrant_file', Rails.root.join('spec/fixtures/contract_grants.xlsx')
-        page.attach_file 'ai_backup_file', Rails.root.join('spec/fixtures/congrant_backup.txt')
-        page.fill_in 'passcode', :with => passcode
-        click_on 'Beta'
+    context 'when Contract/Grant Integration is selected', type: :feature, js: true do
+      it "takes contract/grant file, parses, and send data to activity insight" do
+        visit ai_integration_path
+        select("Contract/Grant Integration", from: "label_integration_type").select_option
+        logger = double('logger')
+        allow(Logger).to receive(:new).and_return(logger)
+        expect(logger).to receive(:info).with(/Errors for Contract\/Grant/)
+        expect(logger).to receive(:error).with([/Unexpected EOF in prolog/])
+        expect(page).to have_content("AI-Integration")
+        within('#congrant') do
+          page.attach_file 'congrant_file', Rails.root.join('spec/fixtures/contract_grants.xlsx')
+          page.attach_file 'ai_backup_file', Rails.root.join('spec/fixtures/congrant_backup.txt')
+          page.fill_in 'passcode', :with => passcode
+          click_on 'Beta'
+        end
+        expect(page).to have_content("Integration completed")
       end
-      expect(page).to have_content("Integration completed")
-    end
 
-    it "redirects when wrong passcode supplied", type: :feature do
-      visit ai_integration_path
-      expect(page).to have_content("AI-Integration")
-      within('#congrant') do 
-        click_on 'Beta'
+      it "redirects when wrong passcode supplied" do
+        visit ai_integration_path
+        select("Contract/Grant", from: "label_integration_type").select_option
+        expect(page).to have_content("AI-Integration")
+        within('#congrant') do
+          click_on 'Beta'
+        end
+        expect(page).to have_content("Wrong Passcode")
       end
-      expect(page).to have_content("Wrong Passcode")
     end
   end
 
@@ -92,28 +92,32 @@ RSpec.describe AiIntegrationController do
          to_return(status: 200, body: error_message, headers: {})
     end
 
-    it "takes lionpath file, parses, and send data to activity insight", type: :feature do
-      visit ai_integration_path
-      logger = double('logger')
-      allow(Logger).to receive(:new).and_return(logger)
-      expect(logger).to receive(:info).with(/Errors for Courses Taught/)
-      expect(logger).to receive(:error).with([/Unexpected EOF in prolog/])
-      expect(page).to have_content("AI-Integration")
-      within('#courses') do 
-        page.attach_file 'courses_file', Rails.root.join('spec/fixtures/schteach.txt')
-        page.fill_in 'passcode', :with => passcode
-        click_on 'Beta'
+    context 'when Courses Taught Integration is selected', type: :feature, js: true do
+      it "takes lionpath file, parses, and send data to activity insight" do
+        visit ai_integration_path
+        select("Courses Taught Integration", from: "label_integration_type").select_option
+        logger = double('logger')
+        allow(Logger).to receive(:new).and_return(logger)
+        expect(logger).to receive(:info).with(/Errors for Courses Taught/)
+        expect(logger).to receive(:error).with([/Unexpected EOF in prolog/])
+        expect(page).to have_content("AI-Integration")
+        within('#courses') do
+          page.attach_file 'courses_file', Rails.root.join('spec/fixtures/schteach.txt')
+          page.fill_in 'passcode', :with => passcode
+          click_on 'Beta'
+        end
+        expect(page).to have_content("Integration completed")
       end
-      expect(page).to have_content("Integration completed")
-    end
 
-    it "redirects when wrong passcode supplied", type: :feature do
-      visit ai_integration_path
-      expect(page).to have_content("AI-Integration")
-      within('#courses') do 
-        click_on 'Beta'
+      it "redirects when wrong passcode supplied" do
+        visit ai_integration_path
+        select("Courses Taught Integration", from: "label_integration_type").select_option
+        expect(page).to have_content("AI-Integration")
+        within('#courses') do
+          click_on 'Beta'
+        end
+        expect(page).to have_content("Wrong Passcode")
       end
-      expect(page).to have_content("Wrong Passcode")
     end
   end
 
@@ -138,27 +142,31 @@ RSpec.describe AiIntegrationController do
          to_return(status: 200, body: error_message, headers: {})
     end
 
-    it "gets publication data sends data to activity insight", type: :feature do
-      visit ai_integration_path
-      logger = double('logger')
-      allow(Logger).to receive(:new).and_return(logger)
-      expect(logger).to receive(:info).with(/Errors for Publications/)
-      expect(logger).to receive(:error).with([/Unexpected EOF in prolog/])
-      expect(page).to have_content("AI-Integration")
-      within('#publications') do 
-        page.fill_in 'passcode', :with => passcode
-        click_on 'Beta'
+    context 'when Publications Integration is selected', type: :feature, js: true do
+      it "gets publication data sends data to activity insight" do
+        visit ai_integration_path
+        select("Publications Integration", from: "label_integration_type").select_option
+        logger = double('logger')
+        allow(Logger).to receive(:new).and_return(logger)
+        expect(logger).to receive(:info).with(/Errors for Publications/)
+        expect(logger).to receive(:error).with([/Unexpected EOF in prolog/])
+        expect(page).to have_content("AI-Integration")
+        within('#publications') do
+          page.fill_in 'passcode', :with => passcode
+          click_on 'Beta'
+        end
+        expect(page).to have_content("Integration completed")
       end
-      expect(page).to have_content("Integration completed")
-    end
 
-    it "redirects when wrong passcode supplied", type: :feature do
-      visit ai_integration_path
-      expect(page).to have_content("AI-Integration")
-      within('#publications') do 
-        click_on 'Beta'
+      it "redirects when wrong passcode supplied" do
+        visit ai_integration_path
+        select("Publications Integration", from: "label_integration_type").select_option
+        expect(page).to have_content("AI-Integration")
+        within('#publications') do
+          click_on 'Beta'
+        end
+        expect(page).to have_content("Wrong Passcode")
       end
-      expect(page).to have_content("Wrong Passcode")
     end
   end
 
@@ -173,25 +181,29 @@ RSpec.describe AiIntegrationController do
          to_return(status: 200, body: error_message, headers: {})
     end
 
-    it "gets cv publication data sends data to activity insight", type: :feature do
-      visit ai_integration_path
-      expect(page).to have_content("AI-Integration")
-      within('#cv_publications') do 
-        page.attach_file 'cv_pub_file', Rails.root.join('spec/fixtures/cv_pub.csv')
-        page.fill_in 'passcode', :with => passcode
-        click_on 'Beta'
+    context 'when CV Publications Integration is selected', type: :feature, js: true do
+      it "gets cv publication data sends data to activity insight" do
+        visit ai_integration_path
+        select("CV Publications Integration", from: "label_integration_type").select_option
+        expect(page).to have_content("AI-Integration")
+        within('#cv_publications') do
+          page.attach_file 'cv_pub_file', Rails.root.join('spec/fixtures/cv_pub.csv')
+          page.fill_in 'passcode', :with => passcode
+          click_on 'Beta'
+        end
+        expect(page).to have_content("Integration completed")
+        expect(page).to have_content("Unexpected EOF")
       end
-      expect(page).to have_content("Integration completed")
-      expect(page).to have_content("Unexpected EOF")
-    end
 
-    it "redirects when wrong passcode supplied", type: :feature do
-      visit ai_integration_path
-      expect(page).to have_content("AI-Integration")
-      within('#cv_publications') do 
-        click_on 'Beta'
+      it "redirects when wrong passcode supplied" do
+        visit ai_integration_path
+        select("CV Publications Integration", from: "label_integration_type").select_option
+        expect(page).to have_content("AI-Integration")
+        within('#cv_publications') do
+          click_on 'Beta'
+        end
+        expect(page).to have_content("Wrong Passcode")
       end
-      expect(page).to have_content("Wrong Passcode")
     end
   end
 
@@ -206,25 +218,29 @@ RSpec.describe AiIntegrationController do
          to_return(status: 200, body: error_message, headers: {})
     end
 
-    it "gets cv presentation data and sends data to activity insight", type: :feature do
-      visit ai_integration_path
-      expect(page).to have_content("AI-Integration")
-      within('#cv_presentations') do 
-        page.attach_file 'cv_presentation_file', Rails.root.join('spec/fixtures/cv_presentation.csv')
-        page.fill_in 'passcode', :with => passcode
-        click_on 'Beta'
+    context 'when CV Presentations Integration is selected', type: :feature, js: true do
+      it "gets cv presentation data and sends data to activity insight" do
+        visit ai_integration_path
+        select("CV Presentations Integration", from: "label_integration_type").select_option
+        expect(page).to have_content("AI-Integration")
+        within('#cv_presentations') do
+          page.attach_file 'cv_presentation_file', Rails.root.join('spec/fixtures/cv_presentation.csv')
+          page.fill_in 'passcode', :with => passcode
+          click_on 'Beta'
+        end
+        expect(page).to have_content("Integration completed")
+        expect(page).to have_content("Unexpected EOF")
       end
-      expect(page).to have_content("Integration completed")
-      expect(page).to have_content("Unexpected EOF")
-    end
 
-    it "redirects when wrong passcode supplied", type: :feature do
-      visit ai_integration_path
-      expect(page).to have_content("AI-Integration")
-      within('#cv_presentations') do 
-        click_on 'Beta'
+      it "redirects when wrong passcode supplied" do
+        visit ai_integration_path
+        select("CV Presentations Integration", from: "label_integration_type").select_option
+        expect(page).to have_content("AI-Integration")
+        within('#cv_presentations') do
+          click_on 'Beta'
+        end
+        expect(page).to have_content("Wrong Passcode")
       end
-      expect(page).to have_content("Wrong Passcode")
     end
   end
 
