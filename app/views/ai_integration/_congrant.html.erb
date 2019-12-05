@@ -10,5 +10,5 @@
 <div class="col-sm">
   <h4>Contract/Grant Integration Errors:</h4>
   <br/>
-  <p><%= link_to "Download Error Log", "psu/error_outputs/osp_errors.log", download: "osp_errors.log", target: '_blank', class: "btn btn-secondary" %></p>
+  <%= render 'file_download_button', log_path: @osp_log_path %>
 </div>

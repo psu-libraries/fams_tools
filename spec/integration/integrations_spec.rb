@@ -185,6 +185,10 @@ RSpec.describe AiIntegrationController do
       it "gets cv publication data sends data to activity insight" do
         visit ai_integration_path
         select("CV Publications Integration", from: "label_integration_type").select_option
+        logger = double('logger')
+        allow(Logger).to receive(:new).and_return(logger)
+        expect(logger).to receive(:info).with(/Errors for CV Publications/)
+        expect(logger).to receive(:error).with([/Unexpected EOF in prolog/])
         expect(page).to have_content("AI-Integration")
         within('#cv_publications') do
           page.attach_file 'cv_pub_file', Rails.root.join('spec/fixtures/cv_pub.csv')
@@ -192,7 +196,6 @@ RSpec.describe AiIntegrationController do
           click_on 'Beta'
         end
         expect(page).to have_content("Integration completed")
-        expect(page).to have_content("Unexpected EOF")
       end
 
       it "redirects when wrong passcode supplied" do
@@ -222,6 +225,10 @@ RSpec.describe AiIntegrationController do
       it "gets cv presentation data and sends data to activity insight" do
         visit ai_integration_path
         select("CV Presentations Integration", from: "label_integration_type").select_option
+        logger = double('logger')
+        allow(Logger).to receive(:new).and_return(logger)
+        expect(logger).to receive(:info).with(/Errors for CV Presentations/)
+        expect(logger).to receive(:error).with([/Unexpected EOF in prolog/])
         expect(page).to have_content("AI-Integration")
         within('#cv_presentations') do
           page.attach_file 'cv_presentation_file', Rails.root.join('spec/fixtures/cv_presentation.csv')
@@ -229,7 +236,6 @@ RSpec.describe AiIntegrationController do
           click_on 'Beta'
         end
         expect(page).to have_content("Integration completed")
-        expect(page).to have_content("Unexpected EOF")
       end
 
       it "redirects when wrong passcode supplied" do

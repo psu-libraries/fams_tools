@@ -24,13 +24,17 @@ RSpec.describe AiIntegrationController do
            headers: {
        	  'Content-Type'=>'text/xml'
            }).
-         to_return(status: 200, body: "", headers: {})
+         to_return(status: 200, body: "Success", headers: {})
     end
 
     context 'when Personal & Contact Integration is selected', type: :feature, js: true do
       it "gets ldap data and sends data to activity insight" do
         visit ai_integration_path
         select("Personal & Contact Integration", from: "label_integration_type").select_option
+        logger = double('logger')
+        allow(Logger).to receive(:new).and_return(logger)
+        expect(logger).to receive(:info).with(/Errors for Personal & Contact In/)
+        expect(logger).to receive(:error)
         expect(page).to have_content("AI-Integration")
         within('#personal_contacts') do
           page.fill_in 'passcode', :with => passcode

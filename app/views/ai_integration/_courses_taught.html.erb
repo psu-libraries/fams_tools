@@ -9,5 +9,5 @@
 <div class="col-sm">
   <h4>Courses Taught Integration Errors:</h4>
   <br/>
-  <p><%= link_to "Download Error Log", "psu/error_outputs/courses_errors.log", download: "courses_errors.log", target: '_blank', class: "btn btn-secondary" %></p>
+  <%= render 'file_download_button', log_path: @courses_log_path %>
 </div>
