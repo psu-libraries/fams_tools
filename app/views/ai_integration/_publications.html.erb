@@ -1,0 +1,15 @@
+<div class="col-sm">
+  <%= form_with :url => { :action => "pub_integrate" }, id: "publications" do |form| %>
+    <div class="row">
+      <p>College: <%= form.select(:college, @colleges, {include_blank: "Select a college"}) %></p>
+    </div>
+    <div class="row">
+      <%= render 'buttons_and_code', form: form %>
+    </div>
+  <% end %>
+</div>
+<div class="col-sm">
+  <h4>Publications Integration Errors:</h4>
+  <br/>
+  <%= render 'file_download_button', log_path: @publications_log_path %>
+</div>
