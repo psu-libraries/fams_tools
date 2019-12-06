@@ -1,18 +1,21 @@
 class GetPubData
+  class MDBError < StandardError; end
   attr_accessor :user_ids, :pub_json, :pub_hash
 
-  def initialize
-    @user_ids = Faculty.pluck(:access_id)
+  def initialize(college)
+    @user_ids = Faculty.where(college: college.to_s).pluck(:access_id) unless college == "All Colleges"
+    @user_ids = Faculty.pluck(:access_id) if college == "All Colleges"
     @pub_json = []
     @pub_hash = [] 
   end
 
   def call(pub_populate_obj)
     user_ids.each_slice(100) do |batch|
-      headers = {"Accept" => "application/json", "Content-Type" => "application/json"}
-      url = "https://stage.metadata.libraries.psu.edu/v1/users/publications"
-      @pub_json = HTTParty.post(url, :body => "#{batch}", :headers => headers, :timeout => 100)
+      headers = {"Accept" => "application/json", "Content-Type" => "application/json", "X-API-Key" => "#{Rails.application.config_for(:activity_insight)["metadata_db"][:key]}"}
+      url = "https://metadata.libraries.psu.edu/v1/users/publications"
+      @pub_json = HTTParty.post(url, :body => "#{batch}", :headers => headers, :timeout => 200)
       json_to_hash(pub_json)
+      # puts pub_hash
       format(pub_hash)
       pub_populate_obj.populate(pub_hash)
     end
@@ -34,6 +37,7 @@ class GetPubData
   end
 
   def json_to_hash(pub_json)
+    raise MDBError.new(pub_json["message"]) if [401, 400, 403, 404, 500, 501, 502, 503].include? pub_json["code"]
     @pub_hash = JSON.parse(pub_json.body)
   end
 
@@ -41,22 +45,22 @@ class GetPubData
     pub_type = publication["attributes"]["publication_type"]
     case college
     when 'CA', 'BK', 'LW', 'GV', 'MD', 'AB', 'AA', 'BA', 'BC', 'UC', 'AL', 'LA', 'NR', 'IST'
-      if pub_type == 'Article' || pub_type == 'Review Article' || pub_type == "Review article" || pub_type == "Journal Article"
-        pub_type = 'Journal Article, Academic Journal'
+      if pub_type == 'Article' || pub_type == 'Review Article' || pub_type == "Review article" || pub_type == "Journal Article" || pub_type == "Academic Journal Article"
+        publication["attributes"]["publication_type"] = 'Journal Article, Academic Journal'
       elsif pub_type == 'Conference article'
-        pub_type = 'Conference Proceeding'
+        publication["attributes"]["publication_type"] = 'Conference Proceeding'
       elsif pub_type == 'Comment/debate' || pub_type == 'Letter' || pub_type == 'Short survey' || pub_type == 'Editorial'
-        pub_type = 'Other'
+        publication["attributes"]["publication_type"] = 'Other'
       end
     when 'EM', 'AG', 'EN', 'HH', 'ED', 'UL', 'CM', 'UE', 'SC'
       if pub_type == 'Article' || pub_type == 'Review Article' || pub_type == "Review article" || pub_type == 'Journal Article, Academic Journal'
-        pub_type = 'Journal Article'
+        publication["attributes"]["publication_type"] = 'Journal Article'
       elsif pub_type == 'Conference article'
-        pub_type = 'Conference Proceeding'
+        publication["attributes"]["publication_type"] = 'Conference Proceeding'
       elsif pub_type == 'Comment/debate' || pub_type == 'Letter' || pub_type == 'Short survey' || pub_type == 'Editorial'
-        pub_type = 'Other'
+        publication["attributes"]["publication_type"] = 'Other'
       elsif pub_type == 'Book/Film/Article review'
-        pub_type = 'Reviews, Book'
+        publication["attributes"]["publication_type"] = 'Reviews, Book'
       end
     end
   end

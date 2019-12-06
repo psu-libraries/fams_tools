@@ -25,7 +25,7 @@ class AiIntegrationController < ApplicationController
 
   def osp_integrate
     start = Time.now
-    error_logger = Logger.new("public/#{@osp_log_path}")
+    error_logger = Logger.new("#{@osp_log_path}")
     f_name = params[:congrant_file].original_filename
     f_path = File.join('app', 'parsing_files', f_name)
     File.open(f_path, "wb") { |f| f.write(params[:congrant_file].read) }
@@ -51,7 +51,7 @@ class AiIntegrationController < ApplicationController
   
   def lionpath_integrate
     start = Time.now
-    error_logger = Logger.new("public/#{@courses_log_path}")
+    error_logger = Logger.new("#{@courses_log_path}")
     f_name = params[:courses_file].original_filename
     f_path = File.join('app', 'parsing_files', f_name)
     File.open(f_path, "wb") { |f| f.write(params[:courses_file].read) }
@@ -71,7 +71,7 @@ class AiIntegrationController < ApplicationController
 
   def gpa_integrate
     start = Time.now
-    error_logger = Logger.new("public/#{@gpas_log_path}")
+    error_logger = Logger.new("#{@gpas_log_path}")
     f_name = params[:gpa_file].original_filename
     f_path = File.join('app', 'parsing_files', f_name)
     File.open(f_path, "wb") { |f| f.write(params[:gpa_file].read) }
@@ -90,9 +90,10 @@ class AiIntegrationController < ApplicationController
   end
 
   def pub_integrate
+    raise StandardError, "Must select a college." if params[:college].empty?
     start = Time.now
-    error_logger = Logger.new("public/#{@publications_log_path}")
-    import_pubs = GetPubData.new
+    import_pubs = GetPubData.new(params[:college])
+    error_logger = Logger.new("#{@publications_log_path}")
     import_pubs.call(PubPopulateDB.new)
     my_integrate = IntegrateData.new(PubXMLBuilder.new, params[:target])
     @errors = my_integrate.integrate
@@ -106,7 +107,7 @@ class AiIntegrationController < ApplicationController
 
   def ldap_integrate
     start = Time.now
-    error_logger = Logger.new("public/#{@ldap_log_path}")
+    error_logger = Logger.new("#{@ldap_log_path}")
     import_ldap = ImportLdapData.new
     import_ldap.import_ldap_data
     ldap_integrate = IntegrateData.new(LdapXmlBuilder.new, params[:target])
@@ -121,7 +122,7 @@ class AiIntegrationController < ApplicationController
 
   def cv_pub_integrate
     start = Time.now
-    error_logger = Logger.new("public/#{@cv_publications_log_path}")
+    error_logger = Logger.new("#{@cv_publications_log_path}")
     f_name = params[:cv_pub_file].original_filename
     f_path = File.join('app', 'parsing_files', f_name)
     File.open(f_path, "wb") { |f| f.write(params[:cv_pub_file].read) }
@@ -140,7 +141,7 @@ class AiIntegrationController < ApplicationController
 
   def cv_presentation_integrate
     start = Time.now
-    error_logger = Logger.new("public/#{@cv_presentations_log_path}")
+    error_logger = Logger.new("#{@cv_presentations_log_path}")
     f_name = params[:cv_presentation_file].original_filename
     f_path = File.join('app', 'parsing_files', f_name)
     File.open(f_path, "wb") { |f| f.write(params[:cv_presentation_file].read) }
@@ -176,6 +177,8 @@ class AiIntegrationController < ApplicationController
     when :gpa
       render partial: 'gpa.html.erb'
     when :publications
+      @colleges = Faculty.distinct.pluck(:college).reject(&:blank?)
+      @colleges << 'All Colleges'
       render partial: 'publications.html.erb'
     when :personal_contact
       render partial: 'personal_contact.html.erb'
@@ -220,6 +223,7 @@ class AiIntegrationController < ApplicationController
   end
 
   def error_redirect(exception)
+    Rails.logger.error exception.to_s
     flash[:error] = "#{exception}"
     redirect_to ai_integration_path
   end
