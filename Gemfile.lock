@@ -366,7 +366,7 @@ DEPENDENCIES
   mysql2 (< 0.5)
   net-ldap
   nokogiri (>= 1.10.4)
-  puma (~> 3.7)
+  puma (~> 3.12)
   rails (~> 5.2.0)
   rails-controller-testing
   redis
