@@ -225,12 +225,12 @@ class AiIntegrationController < ApplicationController
   end
 
   def set_log_paths
-    @osp_log_path = Pathname.new("psu/error_outputs/osp_errors.log")
-    @courses_log_path = Pathname.new("psu/error_outputs/courses_errors.log")
-    @gpas_log_path = Pathname.new("psu/error_outputs/gpa_errors.log")
-    @publications_log_path = Pathname.new("psu/error_outputs/publications_errors.log")
-    @ldap_log_path = Pathname.new("psu/error_outputs/ldap_errors.log")
-    @cv_publications_log_path = Pathname.new("psu/error_outputs/cv_publications_errors.log")
-    @cv_presentations_log_path = Pathname.new("psu/error_outputs/cv_presentations_errors.log")
+    @osp_log_path = Pathname.new("log/osp_errors.log")
+    @courses_log_path = Pathname.new("log/courses_errors.log")
+    @gpas_log_path = Pathname.new("log/gpa_errors.log")
+    @publications_log_path = Pathname.new("log/publications_errors.log")
+    @ldap_log_path = Pathname.new("log/ldap_errors.log")
+    @cv_publications_log_path = Pathname.new("log/cv_publications_errors.log")
+    @cv_presentations_log_path = Pathname.new("log/cv_presentations_errors.log")
   end
 end

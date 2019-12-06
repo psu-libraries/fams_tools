@@ -5,7 +5,7 @@ namespace :cron do
   desc 'downloads a backup zip file from AI backups resource'
 
   task download_backup: :environment do
-    path = "#{Rails.root.to_s}/public/psu/backups"
+    path = "#{Rails.root.to_s}/public/psu"
     auth = { :username => Rails.application.config_for(:activity_insight)["backups_service"][:username],
              :password => Rails.application.config_for(:activity_insight)["backups_service"][:password] }
     response = HTTParty.get 'https://webservices.digitalmeasures.com/login/service/v4/SchemaData:backup/INDIVIDUAL-ACTIVITIES-University', basic_auth: auth

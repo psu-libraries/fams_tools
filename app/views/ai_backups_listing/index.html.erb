@@ -8,6 +8,6 @@
 
 <div class="content-container">
   <% @filenames.each do |filename| %>
-    <p><%= link_to filename.to_s, "psu/backups/#{filename}", download: filename.to_s, target: '_blank' %></p>
+    <p><%= link_to filename.to_s, "psu/#{filename}", download: filename.to_s, target: '_blank' %></p>
   <% end %>
 </div>
