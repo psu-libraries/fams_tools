@@ -1,0 +1,13 @@
+<div class="col-sm">
+  <%= form_with :url => { :action => "lionpath_integrate" }, id: "courses" do |form| %>
+    <p> <%= label(:courses_file, text = "Courses Taught Data File") %><%= form.file_field :courses_file, required: true %> </p>
+    <div class="row">
+      <%= render 'buttons_and_code', form: form %>
+    </div>
+  <% end %>
+</div>
+<div class="col-sm">
+  <h4>Courses Taught Integration Errors:</h4>
+  <br/>
+  <%= render 'file_download_button', log_path: @courses_log_path %>
+</div>

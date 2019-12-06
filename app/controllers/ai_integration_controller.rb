@@ -19,10 +19,13 @@ require 'gpa_data/gpa_xml_builder'
 class AiIntegrationController < ApplicationController
   rescue_from StandardError, with: :error_redirect if Rails.env == 'production'
 
+  skip_before_action :verify_authenticity_token, only: :render_integrator
+  before_action :set_log_paths
   before_action :delete_all_data, :clear_tmp_files, :confirm_passcode, only: [:osp_integrate, :lionpath_integrate, :gpa_integrate, :pub_integrate, :ldap_integrate, :cv_pub_integrate, :cv_presentation_integrate]
 
   def osp_integrate
     start = Time.now
+    error_logger = Logger.new("public/#{@osp_log_path}")
     f_name = params[:congrant_file].original_filename
     f_path = File.join('app', 'parsing_files', f_name)
     File.open(f_path, "wb") { |f| f.write(params[:congrant_file].read) }
@@ -41,12 +44,14 @@ class AiIntegrationController < ApplicationController
     File.delete(backup_path) if File.exist?(backup_path)
     File.delete(f_path) if File.exist?(f_path)
     flash[:notice] = "Integration completed in #{@time}."
-    flash[:congrant_errors] = @errors
+    error_logger.info "Errors for Contract/Grant Integration to #{params[:target]} on: #{DateTime.now}"
+    error_logger.error @errors
     redirect_to ai_integration_path
   end
   
   def lionpath_integrate
     start = Time.now
+    error_logger = Logger.new("public/#{@courses_log_path}")
     f_name = params[:courses_file].original_filename
     f_path = File.join('app', 'parsing_files', f_name)
     File.open(f_path, "wb") { |f| f.write(params[:courses_file].read) }
@@ -59,12 +64,14 @@ class AiIntegrationController < ApplicationController
     @time = (((finish - start)/60).to_i.to_s + ' minutes')
     File.delete(f_path) if File.exist?(f_path)
     flash[:notice] = "Integration completed in #{@time}."
-    flash[:courses_errors] = @errors
+    error_logger.info "Errors for Courses Taught Integration to #{params[:target]} on: #{DateTime.now}"
+    error_logger.error @errors
     redirect_to ai_integration_path 
   end
 
   def gpa_integrate
     start = Time.now
+    error_logger = Logger.new("public/#{@gpas_log_path}")
     f_name = params[:gpa_file].original_filename
     f_path = File.join('app', 'parsing_files', f_name)
     File.open(f_path, "wb") { |f| f.write(params[:gpa_file].read) }
@@ -77,12 +84,14 @@ class AiIntegrationController < ApplicationController
     @time = (((finish - start)/60).to_i.to_s + ' minutes')
     File.delete(f_path) if File.exist?(f_path)
     flash[:notice] = "Integration completed in #{@time}."
-    flash[:courses_errors] = @errors
+    error_logger.info "Errors for GPA Integration to #{params[:target]} on: #{DateTime.now}"
+    error_logger.error @errors
     redirect_to ai_integration_path
   end
 
   def pub_integrate
     start = Time.now
+    error_logger = Logger.new("public/#{@publications_log_path}")
     import_pubs = GetPubData.new
     import_pubs.call(PubPopulateDB.new)
     my_integrate = IntegrateData.new(PubXMLBuilder.new, params[:target])
@@ -90,12 +99,14 @@ class AiIntegrationController < ApplicationController
     finish = Time.now
     @time = (((finish - start)/60).to_i.to_s + ' minutes')
     flash[:notice] = "Integration completed in #{@time}."
-    flash[:pubs_errors] = @errors
+    error_logger.info "Errors for Publications Integration to #{params[:target]} on: #{DateTime.now}"
+    error_logger.error @errors
     redirect_to ai_integration_path
   end
 
   def ldap_integrate
     start = Time.now
+    error_logger = Logger.new("public/#{@ldap_log_path}")
     import_ldap = ImportLdapData.new
     import_ldap.import_ldap_data
     ldap_integrate = IntegrateData.new(LdapXmlBuilder.new, params[:target])
@@ -103,12 +114,14 @@ class AiIntegrationController < ApplicationController
     finish = Time.now
     @time = (((finish - start)/60).to_i.to_s + ' minutes')
     flash[:notice] = "Integration completed in #{@time}."
-    flash[:pubs_errors] = @errors
+    error_logger.info "Errors for Personal & Contact Info Integration to #{params[:target]} on: #{DateTime.now}"
+    error_logger.error @errors
     redirect_to ai_integration_path
   end
 
   def cv_pub_integrate
     start = Time.now
+    error_logger = Logger.new("public/#{@cv_publications_log_path}")
     f_name = params[:cv_pub_file].original_filename
     f_path = File.join('app', 'parsing_files', f_name)
     File.open(f_path, "wb") { |f| f.write(params[:cv_pub_file].read) }
@@ -120,12 +133,14 @@ class AiIntegrationController < ApplicationController
     finish = Time.now
     @time = (((finish - start)/60).to_i.to_s + ' minutes')
     flash[:notice] = "Integration completed in #{@time}."
-    flash[:cv_pubs_errors] = @errors
+    error_logger.info "Errors for CV Publications Integration to #{params[:target]} on: #{DateTime.now}"
+    error_logger.error @errors
     redirect_to ai_integration_path
   end
 
   def cv_presentation_integrate
     start = Time.now
+    error_logger = Logger.new("public/#{@cv_presentations_log_path}")
     f_name = params[:cv_presentation_file].original_filename
     f_path = File.join('app', 'parsing_files', f_name)
     File.open(f_path, "wb") { |f| f.write(params[:cv_presentation_file].read) }
@@ -137,11 +152,40 @@ class AiIntegrationController < ApplicationController
     finish = Time.now
     @time = (((finish - start)/60).to_i.to_s + ' minutes')
     flash[:notice] = "Integration completed in #{@time}."
-    flash[:cv_presentations_errors] = @errors
+    error_logger.info "Errors for CV Presentations Integration to #{params[:target]} on: #{DateTime.now}"
+    error_logger.error @errors
     redirect_to ai_integration_path
   end
 
   def index
+    @integration_types = { "Contract/Grant Integration" => :congrant,
+                           "Courses Taught Integration" => :courses_taught,
+                           "GPA Integration" => :gpa,
+                           "Publications Integration" => :publications,
+                           "Personal & Contact Integration" => :personal_contact,
+                           "CV Publications Integration" => :cv_publications,
+                           "CV Presentations Integration" => :cv_presentations }
+  end
+
+  def render_integrator
+    case params[:integration_type].to_sym
+    when :congrant
+      render partial: 'congrant.html.erb'
+    when :courses_taught
+      render partial: 'courses_taught.html.erb'
+    when :gpa
+      render partial: 'gpa.html.erb'
+    when :publications
+      render partial: 'publications.html.erb'
+    when :personal_contact
+      render partial: 'personal_contact.html.erb'
+    when :cv_publications
+      render partial: 'cv_publications.html.erb'
+    when :cv_presentations
+      render partial: 'cv_presentations.html.erb'
+    else
+      render partial: 'blank.html.erb'
+    end
   end
 
   private
@@ -180,4 +224,13 @@ class AiIntegrationController < ApplicationController
     redirect_to ai_integration_path
   end
 
+  def set_log_paths
+    @osp_log_path = Pathname.new("log/osp_errors.log")
+    @courses_log_path = Pathname.new("log/courses_errors.log")
+    @gpas_log_path = Pathname.new("log/gpa_errors.log")
+    @publications_log_path = Pathname.new("log/publications_errors.log")
+    @ldap_log_path = Pathname.new("log/ldap_errors.log")
+    @cv_publications_log_path = Pathname.new("log/cv_publications_errors.log")
+    @cv_presentations_log_path = Pathname.new("log/cv_presentations_errors.log")
+  end
 end
