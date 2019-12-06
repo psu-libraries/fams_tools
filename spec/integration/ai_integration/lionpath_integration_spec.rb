@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe "#lionpath_integrate" do
-  let(:faculty_1) {
+  let!(:faculty_1) {
     Faculty.create(access_id: 'ljs123',
                    user_id:   '123456',
                    f_name:    'Larry',
@@ -9,7 +9,7 @@ describe "#lionpath_integrate" do
                    m_name:    '',
                    college:   'BA')
   }
-  let(:faculty_2) {
+  let!(:faculty_2) {
     Faculty.create(access_id: 'ajl123',
                    user_id:   '345678',
                    f_name:    'Abraham',
@@ -21,19 +21,19 @@ describe "#lionpath_integrate" do
     Rails.application.config_for(:integration_passcode)[:passcode]
   }
 
-  before do
-    @courses = fixture_file_upload('spec/fixtures/schteach.txt')
-
-    stub_request(:post, "https://betawebservices.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University").
-        with(
-            body: courses_body,
-            headers: {
-                'Content-Type'=>'text/xml'
-            }).
-        to_return(status: 200, body: error_message, headers: {})
-  end
-
   context 'when Courses Taught Integration is selected', type: :feature, js: true do
+    before do
+      @courses = fixture_file_upload('spec/fixtures/schteach.txt')
+
+      stub_request(:post, "https://betawebservices.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University").
+          with(
+              body: courses_body,
+              headers: {
+                  'Content-Type'=>'text/xml'
+              }).
+          to_return(status: 200, body: error_message, headers: {})
+    end
+
     it "takes lionpath file, parses, and send data to activity insight" do
       visit ai_integration_path
       select("Courses Taught Integration", from: "label_integration_type").select_option

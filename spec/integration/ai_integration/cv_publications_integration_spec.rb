@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe "#cv_pub_integrate" do
-  let(:faculty_1) {
+  let!(:faculty_1) {
     Faculty.create(access_id: 'ljs123',
                    user_id:   '123456',
                    f_name:    'Larry',
@@ -9,7 +9,7 @@ describe "#cv_pub_integrate" do
                    m_name:    '',
                    college:   'BA')
   }
-  let(:faculty_2) {
+  let!(:faculty_2) {
     Faculty.create(access_id: 'ajl123',
                    user_id:   '345678',
                    f_name:    'Abraham',

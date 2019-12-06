@@ -1,50 +1,49 @@
 require 'rails_helper'
 
 describe "#osp_integrate" do
-
-  let(:faculty_1) {
+  let!(:faculty_1) {
     Faculty.create(access_id: 'ljs123',
-                 user_id:   '123456',
-                 f_name:    'Larry',
-                 l_name:    'Smith',
-                 m_name:    '',
-                 college:   'BA')
+                   user_id:   '123456',
+                   f_name:    'Larry',
+                   l_name:    'Smith',
+                   m_name:    '',
+                   college:   'BA')
   }
-  let(:faculty_2) {
+  let!(:faculty_2) {
     Faculty.create(access_id: 'ajl123',
-                 user_id:   '345678',
-                 f_name:    'Abraham',
-                 l_name:    'Lincoln',
-                 m_name:    '',
-                 college:   'LA')
+                   user_id:   '345678',
+                   f_name:    'Abraham',
+                   l_name:    'Lincoln',
+                   m_name:    '',
+                   college:   'LA')
   }
 
   let(:passcode) {
     Rails.application.config_for(:integration_passcode)[:passcode]
   }
 
-  before do
-    @contract_grants = fixture_file_upload('spec/fixtures/contract_grants.xlsx')
-    @congrant_backup = fixture_file_upload('spec/fixtures/congrant_backup.txt')
-
-    stub_request(:post, "https://betawebservices.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University").
-        with(
-            body: congrant_body,
-            headers: {
-                'Content-Type'=>'text/xml'
-            }).
-        to_return(status: 200, body: error_message, headers: {})
-
-    stub_request(:post, "https://betawebservices.digitalmeasures.com/login/service/v4/SchemaData:delete/INDIVIDUAL-ACTIVITIES-University").
-        with(
-            body: "<?xml version=\"1.0\"?>\n<Data>\n  <CONGRANT/>\n</Data>\n",
-            headers: {
-                'Content-Type'=>'text/xml'
-            }).
-        to_return(status: 200, body: "", headers: {})
-  end
-
   context 'when Contract/Grant Integration is selected', type: :feature, js: true do
+    before do
+      @contract_grants = fixture_file_upload('spec/fixtures/contract_grants.xlsx')
+      @congrant_backup = fixture_file_upload('spec/fixtures/congrant_backup.txt')
+
+      stub_request(:post, "https://betawebservices.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University").
+          with(
+              body: congrant_body,
+              headers: {
+                  'Content-Type'=>'text/xml'
+              }).
+          to_return(status: 200, body: error_message, headers: {})
+
+      stub_request(:post, "https://betawebservices.digitalmeasures.com/login/service/v4/SchemaData:delete/INDIVIDUAL-ACTIVITIES-University").
+          with(
+              body: "<?xml version=\"1.0\"?>\n<Data>\n  <CONGRANT/>\n</Data>\n",
+              headers: {
+                  'Content-Type'=>'text/xml'
+              }).
+          to_return(status: 200, body: "", headers: {})
+    end
+
     it "takes contract/grant file, parses, and send data to activity insight" do
       visit ai_integration_path
       select("Contract/Grant Integration", from: "label_integration_type").select_option
