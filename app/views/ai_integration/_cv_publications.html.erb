@@ -1,0 +1,13 @@
+<div class="col-sm">
+  <%= form_with :url => { :action => "cv_pub_integrate" }, id: "cv_publications" do |form| %>
+    <p> <%= label(:cv_pub_file, text = "CV Publications CSV") %><%= form.file_field :cv_pub_file, required: true %> </p>
+    <div class="row">
+      <%= render 'buttons_and_code', form: form %>
+    </div>
+  <% end %>
+</div>
+<div class="col-sm">
+  <h4>CV Publications Integration Errors:</h4>
+  <br/>
+  <%= render 'file_download_button', log_path: @cv_publications_log_path %>
+</div>
