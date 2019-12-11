@@ -162,7 +162,7 @@ class AiIntegrationController < ApplicationController
     @integration_types = { "Contract/Grant Integration" => :congrant,
                            "Courses Taught Integration" => :courses_taught,
                            "GPA Integration" => :gpa,
-                           "Publications Integration" => :publications,
+                           "RMD Publications Integration" => :publications,
                            "Personal & Contact Integration" => :personal_contact,
                            "CV Publications Integration" => :cv_publications,
                            "CV Presentations Integration" => :cv_presentations }
@@ -177,7 +177,7 @@ class AiIntegrationController < ApplicationController
     when :gpa
       render partial: 'gpa.html.erb'
     when :publications
-      @colleges = Faculty.distinct.pluck(:college).reject(&:blank?)
+      @colleges = Faculty.distinct.pluck(:college).reject(&:blank?).sort
       @colleges << 'All Colleges'
       render partial: 'publications.html.erb'
     when :personal_contact
@@ -229,12 +229,12 @@ class AiIntegrationController < ApplicationController
   end
 
   def set_log_paths
-    @osp_log_path = Pathname.new("log/osp_errors.log")
-    @courses_log_path = Pathname.new("log/courses_errors.log")
-    @gpas_log_path = Pathname.new("log/gpa_errors.log")
-    @publications_log_path = Pathname.new("log/publications_errors.log")
-    @ldap_log_path = Pathname.new("log/ldap_errors.log")
-    @cv_publications_log_path = Pathname.new("log/cv_publications_errors.log")
-    @cv_presentations_log_path = Pathname.new("log/cv_presentations_errors.log")
+    @osp_log_path = Pathname.new("shared/log/osp_errors.log")
+    @courses_log_path = Pathname.new("shared/log/courses_errors.log")
+    @gpas_log_path = Pathname.new("shared/log/gpa_errors.log")
+    @publications_log_path = Pathname.new("shared/log/publications_errors.log")
+    @ldap_log_path = Pathname.new("shared/log/ldap_errors.log")
+    @cv_publications_log_path = Pathname.new("shared/log/cv_publications_errors.log")
+    @cv_presentations_log_path = Pathname.new("shared/log/cv_presentations_errors.log")
   end
 end
