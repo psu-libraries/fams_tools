@@ -1,1 +1,1 @@
-<p><%= link_to "Download Error Log", log_path.to_s, download: log_path.basename.to_s, target: '_blank', class: "btn btn-secondary" %></p>
+<p><%= link_to "Download Error Log", log_path.to_s, download: "shared/#{log_path.basename}", target: '_blank', class: "btn btn-secondary" %></p>
