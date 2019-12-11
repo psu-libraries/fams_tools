@@ -22,7 +22,7 @@ describe "#pub_integrate" do
     Rails.application.config_for(:integration_passcode)[:passcode]
   }
 
-  context 'when Publications Integration is selected', type: :feature, js: true do
+  context 'when RMD Publications Integration is selected', type: :feature, js: true do
     before do
       @pubs = File.read('spec/fixtures/metadata_pub_json.json').to_s
 
@@ -46,7 +46,7 @@ describe "#pub_integrate" do
 
     it "gets publication data sends data to activity insight" do
       visit ai_integration_path
-      select("Publications Integration", from: "label_integration_type").select_option
+      select("RMD Publications Integration", from: "label_integration_type").select_option
       logger = double('logger')
       allow(Logger).to receive(:new).and_return(logger)
       expect(logger).to receive(:info).with(/Errors for Publications/)
@@ -62,7 +62,7 @@ describe "#pub_integrate" do
 
     it "redirects when wrong passcode supplied" do
       visit ai_integration_path
-      select("Publications Integration", from: "label_integration_type").select_option
+      select("RMD Publications Integration", from: "label_integration_type").select_option
       expect(page).to have_content("AI-Integration")
       within('#publications') do
         click_on 'Beta'
