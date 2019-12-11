@@ -70,6 +70,7 @@ set :linked_dirs, fetch(:linked_dirs, []).push(
   'log',
   'public/system',
   'public/psu',
+  'public/log',
   'tmp/cache',
   'tmp/pids',
   'tmp/sockets',
