@@ -2,6 +2,8 @@ require 'rails_helper'
 require 'activity_insight/ai_get_user_data'
 
 RSpec.describe GetUserData do
+
+  let!(:faculty1) { FactoryBot.create :faculty, access_id: 'xxx111' }
   
   let(:fake_book) do
     book = Spreadsheet::Workbook.new
@@ -18,6 +20,7 @@ RSpec.describe GetUserData do
 
   describe '#call' do
     it 'should get user data' do
+      expect(Faculty.find(faculty1.id)).to be_present
       allow(Spreadsheet).to receive_message_chain(:open, :worksheet) {fake_book}
       get_user_data_obj.call
       expect(Faculty.all.count).to eq(1)
