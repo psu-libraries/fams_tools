@@ -16,7 +16,7 @@ RSpec.describe GpaXmlBuilder do
   <Record username=\"#{faculty.access_id}\">
     <GRADE_DIST_GPA>
       <TYT_TERM>Spring</TYT_TERM>
-      <TYY_TERM>2019</TYY_TERM>
+      <TYY_TERM>#{DateTime.now.year}</TYY_TERM>
       <COURSEPRE>CRIM</COURSEPRE>
       <COURSENUM>1</COURSENUM>
       <SECTION>001</SECTION>
@@ -38,7 +38,7 @@ RSpec.describe GpaXmlBuilder do
     </GRADE_DIST_GPA>
     <GRADE_DIST_GPA>
       <TYT_TERM>Spring</TYT_TERM>
-      <TYY_TERM>2019</TYY_TERM>
+      <TYY_TERM>#{DateTime.now.year}</TYY_TERM>
       <COURSEPRE>CRIM</COURSEPRE>
       <COURSENUM>2</COURSENUM>
       <SECTION>001</SECTION>
