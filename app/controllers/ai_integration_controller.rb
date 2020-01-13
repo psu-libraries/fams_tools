@@ -22,6 +22,7 @@ class AiIntegrationController < ApplicationController
   skip_before_action :verify_authenticity_token, only: :render_integrator
   before_action :set_log_paths
   before_action :delete_all_data, :clear_tmp_files, :confirm_passcode, only: [:osp_integrate, :lionpath_integrate, :gpa_integrate, :pub_integrate, :ldap_integrate, :cv_pub_integrate, :cv_presentation_integrate]
+  after_action :delete_all_data, :clear_tmp_files, only: [:osp_integrate, :lionpath_integrate, :gpa_integrate, :pub_integrate, :ldap_integrate, :cv_pub_integrate, :cv_presentation_integrate]
 
   def osp_integrate
     start = Time.now
