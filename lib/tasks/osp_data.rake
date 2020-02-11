@@ -1,4 +1,3 @@
-require 'osp_data/osp_populate_db'
 require 'osp_data/osp_xml_builder'
 require 'activity_insight/ai_integrate_data'
 

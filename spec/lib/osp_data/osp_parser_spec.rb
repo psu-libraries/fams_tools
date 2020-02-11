@@ -1,7 +1,7 @@
 require 'rails_helper'
-require 'osp_data/osp_parser'
+require 'osp_data/osp_importer'
 
-RSpec.describe OspParser do
+RSpec.describe OspImporter do
   
   headers =  {"A1" => 'ospkey', "B1" => 'ordernumber', "C1" => 'title', "D1" => 'sponsor', "E1" => 'sponsortype', "F1" => 'parentsponsor', 
               "G1" => 'accessid', "H1" => 'department', "I1" => 'role', "J1" => 'pctcredit', "K1" => 'status', "L1" => 'submitted', "M1" => 'awarded', 
@@ -91,7 +91,7 @@ RSpec.describe OspParser do
   end
 
 
-  let(:osp_parser_obj) {OspParser.new}
+  let(:osp_parser_obj) {OspImporter.new}
 
   describe "#format" do
     it "should convert nils to ' ' and 

@@ -1,5 +1,4 @@
 require 'rails_helper'
-require 'osp_data/osp_populate_db'
 require 'byebug'
 
 RSpec.describe OspPopulateDB do
@@ -45,7 +44,7 @@ RSpec.describe OspPopulateDB do
 
   describe '#populate' do
     it 'should populate the database with osp data' do
-      osp_populate_db_obj.osp_parser = OspParser.allocate
+      osp_populate_db_obj.osp_parser = OspImporter.allocate
       osp_populate_db_obj.osp_parser.xlsx_hash = fake_sheet
       osp_populate_db_obj.populate
       expect(Sponsor.all.count).to eq(2)
