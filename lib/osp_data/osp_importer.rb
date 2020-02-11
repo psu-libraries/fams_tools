@@ -1,18 +1,26 @@
 require 'creek'
 
-class OspParser
+class OspImporter
   attr_accessor :xlsx_hash, :active_users, :xlsx_obj, :pendnotfund
 
   def initialize(osp_path = 'data/dmresults.xlsx', backup_path = 'data/CONGRANT-tabdel.txt')
     @xlsx_obj = Creek::Book.new(osp_path).sheets[0].rows
-    @xlsx_hash = convert_xlsx_to_hash(xlsx_obj)
-    @active_users = Faculty.pluck(:access_id)
+    @headers = @xlsx_obj.first
     @pendnotfund = find_converts(backup_path)
   end
 
-  #Run all local formatting methods
-  def format
-    xlsx_hash.each do |row|
+  #Run all local formatting methods then import to db
+  def format_and_populate
+    counter = 0
+    xlsx_obj.each do |row|
+      if counter == 0
+        counter += 1
+        next
+      end
+      row = convert_xlsx_row_to_hash(row)
+      next unless is_user(row)
+      next unless is_good_date(row)
+      next unless is_proper_status(row)
       format_nils(row)
       format_titles(row)
       format_accessid_field(row)
@@ -20,49 +28,40 @@ class OspParser
       format_date_fields(row)
       format_pending(row)
       format_start_end(row)
+      populate_db_with_row(row)
     end
   end
 
-  def filter_by_date
-    kept_rows = []
-    xlsx_hash.each do |row|
-      if (row['submitted'].blank?) && (row['awarded'].present?)
-        if (row['awarded'].split('-')[0].to_i >= 2011) && (row['awarded'].split('-')[0].to_i <= DateTime.now.year)
-          kept_rows << row
-        end
+  def is_good_date(row)
+    if (row['submitted'].blank?) && (row['awarded'].present?)
+      if (row['awarded'].split('-')[0].to_i >= 2011) && (row['awarded'].split('-')[0].to_i <= DateTime.now.year)
+        true
+      end
+    else
+      if (row['submitted'].split('-')[0].to_i >= 2011) && (row['submitted'].split('-')[0].to_i <= DateTime.now.year)
+        true
+      end
+    end
+    false
+  end
+
+  def is_user(row)
+    user = Faculty.find_by(user_id: row['access_id'])
+    return true if user.present?
+
+    false
+  end
+
+  def is_proper_status(row)
+    if row['status'] == 'Purged' || row['status'] == 'Withdrawn'
+      if pendnotfund.include? row['ospkey']
+        true
       else
-        if (row['submitted'].split('-')[0].to_i >= 2011) && (row['submitted'].split('-')[0].to_i <= DateTime.now.year)
-          kept_rows << row
-        end
+        false
       end
+    else
+      true
     end
-    @xlsx_hash = kept_rows
-  end
-
-  def filter_by_user
-    kept_rows = []
-    xlsx_hash.each do |row|
-      if active_users.include? row['accessid']
-        kept_rows << row
-      end
-    end
-    @xlsx_hash = kept_rows
-  end
-
-  def filter_by_status
-    index = 0
-    keys = []
-    kept_rows = []
-    xlsx_hash.each do |row|
-      if row['status'] == 'Purged' || row['status'] == 'Withdrawn'
-        if pendnotfund.include? row['ospkey']
-          kept_rows << row
-        end
-      else
-        kept_rows << row
-      end
-    end
-    @xlsx_hash = kept_rows
   end
 
   def write_results_to_xl(filename = 'data/dmresults-formatted.xls') 
@@ -81,28 +80,9 @@ class OspParser
 
   private
 
-  def csv_to_hashes(congrant_data)
-    keys = congrant_data[0]
-    congrant_data[1..-1].map {|a| Hash[ keys.zip(a) ] }
-  end
-
-  def convert_xlsx_to_hash(xlsx_sheet)
-    counter = 0
-    keys = []
-    data = []
-    data_hashed = []
-    xlsx_sheet.each do |row|
-      values = []
-      if counter == 0
-        row.each {|k,v| keys << v}
-      else
-        row.each {|k,v| values << v}
-        data << values
-      end 
-      counter += 1
-    end
-    data.each {|a| data_hashed << Hash[ keys.zip(a) ] }
-    return data_hashed
+  def convert_xlsx_row_to_hash(row)
+    keys = @headers.values
+    Hash[ keys.zip(row.values) ]
   end
 
   def format_nils(row)
@@ -187,6 +167,40 @@ class OspParser
   def format_titles(row)
     row['title'].gsub! '&quot;', '"'
     row['title'].gsub! '&#39;', "'"
+  end
+
+  def populate_db_with_row(row)
+    sponsor = Sponsor.find_or_create_by(sponsor_name: row['sponsor']) do |attr|
+                             attr.sponsor_type = row['sponsortype']
+                             end
+
+    contract = Contract.find_or_create_by(osp_key: row['ospkey']) do |attr|
+                                          attr.title = row['title']
+                                          attr.sponsor = sponsor
+                                          attr.status = row['status']
+                                          attr.submitted = row['submitted']
+                                          attr.awarded = row['awarded']
+                                          attr.requested = row['requested']
+                                          attr.funded = row['funded']
+                                          attr.total_anticipated = row['totalanticipated']
+                                          attr.start_date = row['startdate']
+                                          attr.end_date = row['enddate']
+                                          attr.grant_contract = row['grantcontract']
+                                          attr.base_agreement = row['baseagreement']
+                                          attr.notfunded = row['notfunded']
+                                          end
+
+    faculty = Faculty.find_by(access_id: row['accessid'])
+
+    begin
+      ContractFacultyLink.create(contract:   contract,
+                                 faculty:    faculty,
+                                 role:       row['role'],
+                                 pct_credit: row['pctcredit'])
+
+    rescue ActiveRecord::RecordNotUnique
+      return
+    end
   end
 end
 

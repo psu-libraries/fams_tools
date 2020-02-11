@@ -3,8 +3,7 @@ require 'pub_data/pub_xml_builder'
 require 'pub_data/import_cv_pubs'
 require 'presentation_data/import_cv_presentations'
 require 'presentation_data/presentation_xml_builder'
-require 'osp_data/osp_parser'
-require 'osp_data/osp_populate_db'
+require 'osp_data/osp_importer'
 require 'osp_data/osp_xml_builder'
 require 'lionpath_data/lionpath_parser'
 require 'lionpath_data/lionpath_populate_db'
@@ -33,9 +32,8 @@ class AiIntegrationController < ApplicationController
     backup_name = params[:ai_backup_file].original_filename
     backup_path = File.join('app', 'parsing_files', backup_name)
     File.open(backup_path, "wb") { |f| f.write(params[:ai_backup_file].read) }
-    my_populate = OspPopulateDB.new(OspParser.new(osp_path = f_path, backup_path = backup_path))
-    my_populate.format_and_filter
-    my_populate.populate
+    my_populate = OspImporter.new(osp_path = f_path, backup_path = backup_path)
+    my_populate.format_and_populate
     my_remove_system_dups = RemoveSystemDups.new(filepath = backup_path, params[:target])
     my_remove_system_dups.call
     my_integrate = IntegrateData.new(OspXMLBuilder.new, params[:target])
