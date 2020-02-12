@@ -18,35 +18,37 @@ class OspImporter
         next
       end
       row = convert_xlsx_row_to_hash(row)
+      format_date_fields(row)
+      format_accessid_field(row)
       next unless is_user(row)
       next unless is_good_date(row)
       next unless is_proper_status(row)
       format_nils(row)
       format_titles(row)
-      format_accessid_field(row)
       format_role_field(row)
-      format_date_fields(row)
       format_pending(row)
       format_start_end(row)
       populate_db_with_row(row)
     end
   end
 
+  private
+
   def is_good_date(row)
     if (row['submitted'].blank?) && (row['awarded'].present?)
       if (row['awarded'].split('-')[0].to_i >= 2011) && (row['awarded'].split('-')[0].to_i <= DateTime.now.year)
-        true
+        return true
       end
-    else
+    elsif row['awarded'].present?
       if (row['submitted'].split('-')[0].to_i >= 2011) && (row['submitted'].split('-')[0].to_i <= DateTime.now.year)
-        true
+        return true
       end
     end
     false
   end
 
   def is_user(row)
-    user = Faculty.find_by(user_id: row['access_id'])
+    user = Faculty.find_by(access_id: row['accessid'])
     return true if user.present?
 
     false
@@ -55,9 +57,9 @@ class OspImporter
   def is_proper_status(row)
     if row['status'] == 'Purged' || row['status'] == 'Withdrawn'
       if pendnotfund.include? row['ospkey']
-        true
+        return true
       else
-        false
+        return false
       end
     else
       true
@@ -77,8 +79,6 @@ class OspImporter
     end
     wb.write filename 
   end
-
-  private
 
   def convert_xlsx_row_to_hash(row)
     keys = @headers.values
