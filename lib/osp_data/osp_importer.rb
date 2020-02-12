@@ -39,7 +39,7 @@ class OspImporter
       if (row['awarded'].split('-')[0].to_i >= 2011) && (row['awarded'].split('-')[0].to_i <= DateTime.now.year)
         return true
       end
-    elsif row['awarded'].present?
+    else
       if (row['submitted'].split('-')[0].to_i >= 2011) && (row['submitted'].split('-')[0].to_i <= DateTime.now.year)
         return true
       end
