@@ -139,7 +139,7 @@ class RemoveSystemDups
   end
 
   def check_local_db(duplicates_stored)
-    Contract.all.each do |contract|
+    Contract.find_each do |contract|
       duplicates_stored.each do |duplicate|
         if contract.osp_key.to_s == duplicate[2]
           duplicates_final << duplicate

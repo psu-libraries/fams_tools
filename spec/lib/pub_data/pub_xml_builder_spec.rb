@@ -95,14 +95,14 @@ RSpec.describe PubXMLBuilder do
                    college:   'CA')
   end
 
-  let(:pub_xml_builder_obj) {PubXMLBuilder.new}
+  let(:xml_builder_obj) {PubXMLBuilder.new}
 
   describe '#batched_pub_xml' do
     it 'should return an xml of INTELLCONT records' do
       pub_populate_db_obj = PubPopulateDB.new
       pub_populate_db_obj.populate(data_sets)
 
-      expect(pub_xml_builder_obj.batched_xmls).to eq([
+      expect(xml_builder_obj.xmls_enumerator.first).to eq(
 '<?xml version="1.0" encoding="UTF-8"?>
 <Data>
   <Record username="abc123">
@@ -183,7 +183,7 @@ RSpec.describe PubXMLBuilder do
   </Record>
 </Data>
 '
-      ])
+      )
     end
   end
 end

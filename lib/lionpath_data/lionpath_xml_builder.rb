@@ -1,16 +1,13 @@
 require 'nokogiri'
 
 class LionPathXMLBuilder
-  def initialize
-    @faculties = Faculty.joins(:sections).group('id')
-  end
 
-  def batched_xmls
-    xml_batches = []
-    @faculties.each_slice(20) do |batch|
-      xml_batches << build_xml(batch)
+  def xmls_enumerator
+    Enumerator.new do |i|
+      Faculty.joins(:sections).group('id').find_in_batches(batch_size: 20) do |batch|
+        i << build_xml(batch)
+      end
     end
-    return xml_batches
   end
 
   private

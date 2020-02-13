@@ -19,11 +19,11 @@ RSpec.describe PresentationXMLBuilder do
                                    l_name: 'Curt')
   end
 
-  let(:presentation_xml_builder_obj) {PresentationXMLBuilder.new}
+  let(:xml_builder_obj) {PresentationXMLBuilder.new}
 
   describe '#batched_xmls' do
     it 'should return a properly formatted xml of PRESENT records' do
-      expect(presentation_xml_builder_obj.batched_xmls).to eq([
+      expect(xml_builder_obj.xmls_enumerator.first).to eq(
 '<?xml version="1.0" encoding="UTF-8"?>
 <Data>
   <Record username="abc123">
@@ -45,7 +45,7 @@ RSpec.describe PresentationXMLBuilder do
   </Record>
 </Data>
 '
-      ])
+      )
     end
   end
 end
