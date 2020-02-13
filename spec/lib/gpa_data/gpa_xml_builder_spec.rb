@@ -6,11 +6,11 @@ RSpec.describe GpaXmlBuilder do
   let!(:faculty) { FactoryBot.create :faculty, college: 'LA' }
   let!(:gpa1) { FactoryBot.create :gpa, faculty: faculty }
   let!(:gpa2) { FactoryBot.create :gpa, faculty: faculty }
-  let(:gpa_xml_builder) { described_class.new }
+  let(:xml_builder_obj) { described_class.new }
 
   describe "#batched_gpa_xmls" do
     it "should return an array of gpa data xmls" do
-      expect(gpa_xml_builder.batched_xmls).to eq([
+      expect(xml_builder_obj.xmls_enumerator.first).to eq(
 "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
 <Data>
   <Record username=\"#{faculty.access_id}\">
@@ -60,7 +60,7 @@ RSpec.describe GpaXmlBuilder do
     </GRADE_DIST_GPA>
   </Record>
 </Data>
-"])
+")
     end
   end
 end
