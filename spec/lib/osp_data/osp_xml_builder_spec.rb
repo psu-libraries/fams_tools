@@ -16,7 +16,7 @@ RSpec.describe OspXMLBuilder do
       'role' => 'Principal Investigator', 'pctcredit' => 100, 'userid' => 321, 'notfunded' => '2015-02-01'}]
   end
 
-  let(:osp_xml_builder_obj) {OspXMLBuilder.new}
+  let(:xml_builder_obj) {OspXMLBuilder.new}
 
   describe '#batched_osp_xml' do
     it 'should return an xml of CONGRANT records' do
@@ -61,7 +61,7 @@ RSpec.describe OspXMLBuilder do
                                    pct_credit: row['pctcredit'])
 
       end
-      expect(osp_xml_builder_obj.batched_xmls).to eq([
+      expect(xml_builder_obj.xmls_enumerator.first).to eq(
 '<?xml version="1.0" encoding="UTF-8"?>
 <Data>
   <Record username="aaa111">
@@ -139,7 +139,7 @@ RSpec.describe OspXMLBuilder do
     </CONGRANT>
   </Record>
 </Data>
-'])
+')
         end
       end
     end

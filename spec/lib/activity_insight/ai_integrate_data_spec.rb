@@ -156,7 +156,7 @@ RSpec.describe IntegrateData do
   describe '#integrate' do
     it 'should send a POST request to DM Webservices' do
       osp_xml_builder_obj = double()
-      allow(osp_xml_builder_obj).to receive(:batched_xmls).and_return(xml_arr)
+      allow(osp_xml_builder_obj).to receive(:xmls_enumerator).and_return(xml_arr)
 
       osp_integrate_obj = IntegrateData.new(osp_xml_builder_obj, :beta)
       osp_integrate_obj.auth = {:username => 'Username', :password => 'Password'}
