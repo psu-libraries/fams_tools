@@ -1,6 +1,3 @@
-require 'osp_data/osp_xml_builder'
-require 'activity_insight/ai_integrate_data'
-
 namespace :osp_data do
 
   desc "Clean and filter data from dmresults.csv.

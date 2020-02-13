@@ -1,2 +1,0 @@
-module PublicationListingsHelper
-end

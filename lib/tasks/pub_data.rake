@@ -1,7 +1,3 @@
-require 'pub_data/pub_populate_db'
-require 'pub_data/pub_xml_builder'
-require 'activity_insight/ai_integrate_data'
-  
 namespace :pub_data do
 
   desc "Import pub data to our database"
