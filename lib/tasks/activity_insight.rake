@@ -1,7 +1,3 @@
-require 'activity_insight/ai_manage_duplicates'
-require 'activity_insight/ai_get_user_data'
-require 'activity_insight/delete_records'
-
 namespace :activity_insight do
 
   desc "Find duplicates for user"
