@@ -16,7 +16,7 @@ RSpec.describe LionPathXMLBuilder do
       'Course Component' => 'Lecture', 'XCourse CoursePre' => '', 'XCourse CourseNum' => '', 'XCourse CourseNum Suffix' => '', 'Instructor Load Factor' => 100}]
   end
 
-  let(:lionpath_xml_builder_obj) {LionPathXMLBuilder.new}
+  let(:xml_builder_obj) {LionPathXMLBuilder.new}
 
   describe '#batched_lionpath_xml' do
     it 'should return a list with an xml of SCHTEACH records' do
@@ -50,7 +50,7 @@ RSpec.describe LionPathXMLBuilder do
                        xcourse_course_num:     row['XCourse CourseNum'],
                        xcourse_course_suf:     row['XCourse CourseNum Suffix'])
       end
-      expect(lionpath_xml_builder_obj.batched_xmls).to eq([
+      expect(xml_builder_obj.xmls_enumerator.first).to eq(
 '<?xml version="1.0" encoding="UTF-8"?>
 <Data>
   <Record username="abc123">
@@ -99,7 +99,7 @@ RSpec.describe LionPathXMLBuilder do
   </Record>
 </Data>
 '
-      ])
+      )
         end
       end
     end
