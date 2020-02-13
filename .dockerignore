@@ -2,3 +2,4 @@ vendor/cache
 .git
 public/psu/*
 /log/*
+/app/parsing_files/*
