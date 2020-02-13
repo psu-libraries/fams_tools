@@ -1,7 +1,7 @@
 require 'creek'
 
 class OspImporter
-  attr_accessor :xlsx_hash, :active_users, :xlsx_obj, :pendnotfund
+  attr_accessor :headers, :xlsx_obj, :pendnotfund
 
   def initialize(osp_path = 'data/dmresults.xlsx', backup_path = 'data/CONGRANT-tabdel.txt')
     @xlsx_obj = Creek::Book.new(osp_path).sheets[0].rows
@@ -81,7 +81,7 @@ class OspImporter
   end
 
   def convert_xlsx_row_to_hash(row)
-    keys = @headers.values
+    keys = headers.values
     Hash[ keys.zip(row.values) ]
   end
 

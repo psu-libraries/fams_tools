@@ -1,10 +1,10 @@
 class IntegrateData
-  attr_accessor :auth, :batched_xmls, :target
+  attr_accessor :auth, :xml_builder_enum, :target
 
   def initialize(xml_builder_obj, target)
     @auth = {:username => Rails.application.config_for(:activity_insight)["webservices"][:username],
             :password => Rails.application.config_for(:activity_insight)["webservices"][:password]}
-    @batched_xmls = xml_builder_obj.batched_xmls
+    @xml_builder_enum = xml_builder_obj.xmls_enumerator
     @target = target.to_sym
   end
 
@@ -12,7 +12,7 @@ class IntegrateData
     errors = []
     counter = 0
     Rails.logger.info url(target)
-    batched_xmls.each do |xml|
+    xml_builder_enum.each do |xml|
       Rails.logger.info xml
       response = HTTParty.post url(target), :body => xml, :headers => {'Content-type' => 'text/xml'}, :basic_auth => auth, :timeout => 180
       if response.to_s.include? 'Error'
