@@ -1,20 +1,3 @@
-require 'pub_data/pub_populate_db'
-require 'pub_data/pub_xml_builder'
-require 'pub_data/import_cv_pubs'
-require 'presentation_data/import_cv_presentations'
-require 'presentation_data/presentation_xml_builder'
-require 'osp_data/osp_importer'
-require 'osp_data/osp_xml_builder'
-require 'lionpath_data/lionpath_parser'
-require 'lionpath_data/lionpath_populate_db'
-require 'lionpath_data/lionpath_xml_builder'
-require 'ldap_data/import_ldap_data'
-require 'ldap_data/ldap_xml_builder'
-require 'activity_insight/ai_integrate_data'
-require 'activity_insight/ai_manage_duplicates'
-require 'gpa_data/import_gpa_data'
-require 'gpa_data/gpa_xml_builder'
-
 class AiIntegrationController < ApplicationController
   rescue_from StandardError, with: :error_redirect if Rails.env == 'production'
 
