@@ -1,7 +1,3 @@
-require 'lionpath_data/lionpath_populate_db'
-require 'lionpath_data/lionpath_xml_builder'
-require 'activity_insight/ai_integrate_data'
-
 namespace :lionpath_data do
 
   desc "Filter and format LionPath data.
