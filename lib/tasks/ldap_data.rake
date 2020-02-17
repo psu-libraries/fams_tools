@@ -1,6 +1,3 @@
-require 'ldap_data/import_ldap_data'
-require 'ldap_data/ldap_xml_builder'
-
 namespace :ldap_data do
 
   desc "Get personal contact information from ldap"
