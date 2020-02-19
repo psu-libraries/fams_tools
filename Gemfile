@@ -51,6 +51,9 @@ gem 'jbuilder', '~> 2.5'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
+# Lightweight job management in memory w/ ActiveJob
+gem 'sucker_punch'
+
 gem 'spreadsheet'
 gem 'nokogiri', '>= 1.10.4'
 gem 'httparty'

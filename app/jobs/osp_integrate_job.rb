@@ -1,5 +1,4 @@
 class OspIntegrateJob < ApplicationJob
-  queue_as :default
 
   def perform(params, log_path)
     error_logger = Logger.new("public/#{log_path}")

@@ -1,5 +1,4 @@
 class PubIntegrateJob < ApplicationJob
-  queue_as :default
 
   def perform(params, log_path)
     import_pubs = GetPubData.new(params[:college])
