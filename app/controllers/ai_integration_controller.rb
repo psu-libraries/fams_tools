@@ -17,7 +17,7 @@ class AiIntegrationController < ApplicationController
   
   def lionpath_integrate
     start = Time.now
-    LionpathIntegrateJob.perform_now(params, @courses_log_path)
+    LionpathIntegrateJob.new.perform(params, @courses_log_path)
     finish = Time.now
     time = (((finish - start)/60).to_i.to_s + ' minutes')
     flash[:notice] = "Integration completed in #{time}."
@@ -26,7 +26,7 @@ class AiIntegrationController < ApplicationController
 
   def gpa_integrate
     start = Time.now
-    GpaIntegrateJob.perform_now(params, @gpas_log_path)
+    GpaIntegrateJob.new.perform(params, @gpas_log_path)
     finish = Time.now
     time = (((finish - start)/60).to_i.to_s + ' minutes')
     flash[:notice] = "Integration completed in #{time}."
@@ -36,7 +36,7 @@ class AiIntegrationController < ApplicationController
   def pub_integrate
     raise StandardError, "Must select a college." if params[:college].empty?
     start = Time.now
-    PubIntegrateJob.perform_now(params, @publications_log_path)
+    PubIntegrateJob.new.perform(params, @publications_log_path)
     finish = Time.now
     time = (((finish - start)/60).to_i.to_s + ' minutes')
     flash[:notice] = "Integration completed in #{time}."
@@ -45,7 +45,7 @@ class AiIntegrationController < ApplicationController
 
   def ldap_integrate
     start = Time.now
-    LdapIntegrateJob.perform_now(params, @ldap_log_path)
+    LdapIntegrateJob.new.perform(params, @ldap_log_path)
     finish = Time.now
     time = (((finish - start)/60).to_i.to_s + ' minutes')
     flash[:notice] = "Integration completed in #{time}."
@@ -54,7 +54,7 @@ class AiIntegrationController < ApplicationController
 
   def cv_pub_integrate
     start = Time.now
-    CvPubIntegrateJob.perform_now(params, @cv_publications_log_path)
+    CvPubIntegrateJob.new.perform(params, @cv_publications_log_path)
     finish = Time.now
     time = (((finish - start)/60).to_i.to_s + ' minutes')
     flash[:notice] = "Integration completed in #{time}."
@@ -63,7 +63,7 @@ class AiIntegrationController < ApplicationController
 
   def cv_presentation_integrate
     start = Time.now
-    CvPresentationIntegrateJob.perform_now(params, @cv_presentations_log_path)
+    CvPresentationIntegrateJob.new.perform(params, @cv_presentations_log_path)
     finish = Time.now
     time = (((finish - start)/60).to_i.to_s + ' minutes')
     flash[:notice] = "Integration completed in #{time}."
