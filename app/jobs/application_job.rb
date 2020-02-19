@@ -8,9 +8,7 @@ class ApplicationJob < ActiveJob::Base
   discard_on(StandardError) do |job, error|
     raise error.class if error.class == ConcurrentJobsError
 
-    self.clear_busy
-    self.clear_tmp_files
-    self.delete_all_data
+    clean_up
   end
 
   private
@@ -23,18 +21,24 @@ class ApplicationJob < ActiveJob::Base
     Busy.new('integration').increment
   end
 
-  def clear_busy
+  def self.clean_up
+    clear_busy
+    clear_tmp_files
+    delete_all_data
+  end
+
+  def self.clear_busy
     Busy.clear
   end
 
-  def clear_tmp_files
+  def self.clear_tmp_files
     Dir.foreach('app/parsing_files') do |f|
       fn = File.join('app/parsing_files', f)
       File.delete(fn) if File.exist?(fn) && f != '.' && f != '..'
     end
   end
 
-  def delete_all_data
+  def self.delete_all_data
     ContractFacultyLink.delete_all
     Contract.delete_all
     Sponsor.delete_all
