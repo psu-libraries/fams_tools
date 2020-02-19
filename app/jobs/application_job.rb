@@ -21,24 +21,24 @@ class ApplicationJob < ActiveJob::Base
     Busy.new('integration').increment
   end
 
-  def self.clean_up
+  def clean_up
     clear_busy
     clear_tmp_files
     delete_all_data
   end
 
-  def self.clear_busy
+  def clear_busy
     Busy.clear
   end
 
-  def self.clear_tmp_files
+  def clear_tmp_files
     Dir.foreach('app/parsing_files') do |f|
       fn = File.join('app/parsing_files', f)
       File.delete(fn) if File.exist?(fn) && f != '.' && f != '..'
     end
   end
 
-  def self.delete_all_data
+  def delete_all_data
     ContractFacultyLink.delete_all
     Contract.delete_all
     Sponsor.delete_all

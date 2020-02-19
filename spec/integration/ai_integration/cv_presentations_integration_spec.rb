@@ -1,4 +1,4 @@
-require 'rails_helper'
+require 'integration/integrations_helper'
 
 describe "#cv_presentation_integrate" do
   let!(:faculty_1) {

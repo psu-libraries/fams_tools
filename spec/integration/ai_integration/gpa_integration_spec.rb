@@ -1,4 +1,4 @@
-require 'rails_helper'
+require 'integration/integrations_helper'
 
 describe "#gpa_integrate" do
   let!(:faculty_1) { Faculty.create(access_id: 'abc123', college:   'LA') }
