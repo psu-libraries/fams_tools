@@ -3,8 +3,7 @@ class AiIntegrationController < ApplicationController
 
   skip_before_action :verify_authenticity_token, only: :render_integrator
   before_action :set_log_paths
-  before_action :delete_all_data, :clear_tmp_files, :confirm_passcode, only: [:osp_integrate, :lionpath_integrate, :gpa_integrate, :pub_integrate, :ldap_integrate, :cv_pub_integrate, :cv_presentation_integrate]
-  after_action :delete_all_data, :clear_tmp_files, only: [:osp_integrate, :lionpath_integrate, :gpa_integrate, :pub_integrate, :ldap_integrate, :cv_pub_integrate, :cv_presentation_integrate]
+  before_action :confirm_passcode, only: [:osp_integrate, :lionpath_integrate, :gpa_integrate, :pub_integrate, :ldap_integrate, :cv_pub_integrate, :cv_presentation_integrate]
 
   def osp_integrate
     start = Time.now
@@ -17,7 +16,7 @@ class AiIntegrationController < ApplicationController
   
   def lionpath_integrate
     start = Time.now
-    LionpathIntegrateJob.new.perform(params, @courses_log_path)
+    LionpathIntegrateJob.perform_now(params, @courses_log_path)
     finish = Time.now
     time = (((finish - start)/60).to_i.to_s + ' minutes')
     flash[:notice] = "Integration completed in #{time}."
@@ -26,7 +25,7 @@ class AiIntegrationController < ApplicationController
 
   def gpa_integrate
     start = Time.now
-    GpaIntegrateJob.new.perform(params, @gpas_log_path)
+    GpaIntegrateJob.perform_now(params, @gpas_log_path)
     finish = Time.now
     time = (((finish - start)/60).to_i.to_s + ' minutes')
     flash[:notice] = "Integration completed in #{time}."
@@ -36,7 +35,7 @@ class AiIntegrationController < ApplicationController
   def pub_integrate
     raise StandardError, "Must select a college." if params[:college].empty?
     start = Time.now
-    PubIntegrateJob.new.perform(params, @publications_log_path)
+    PubIntegrateJob.perform_now(params, @publications_log_path)
     finish = Time.now
     time = (((finish - start)/60).to_i.to_s + ' minutes')
     flash[:notice] = "Integration completed in #{time}."
@@ -45,7 +44,7 @@ class AiIntegrationController < ApplicationController
 
   def ldap_integrate
     start = Time.now
-    LdapIntegrateJob.new.perform(params, @ldap_log_path)
+    LdapIntegrateJob.perform_now(params, @ldap_log_path)
     finish = Time.now
     time = (((finish - start)/60).to_i.to_s + ' minutes')
     flash[:notice] = "Integration completed in #{time}."
@@ -54,7 +53,7 @@ class AiIntegrationController < ApplicationController
 
   def cv_pub_integrate
     start = Time.now
-    CvPubIntegrateJob.new.perform(params, @cv_publications_log_path)
+    CvPubIntegrateJob.perform_now(params, @cv_publications_log_path)
     finish = Time.now
     time = (((finish - start)/60).to_i.to_s + ' minutes')
     flash[:notice] = "Integration completed in #{time}."
@@ -63,7 +62,7 @@ class AiIntegrationController < ApplicationController
 
   def cv_presentation_integrate
     start = Time.now
-    CvPresentationIntegrateJob.new.perform(params, @cv_presentations_log_path)
+    CvPresentationIntegrateJob.perform_now(params, @cv_presentations_log_path)
     finish = Time.now
     time = (((finish - start)/60).to_i.to_s + ' minutes')
     flash[:notice] = "Integration completed in #{time}."
@@ -110,28 +109,6 @@ class AiIntegrationController < ApplicationController
       flash[:alert] = "Wrong Passcode"
       redirect_to ai_integration_path
     end
-  end
-
-  def clear_tmp_files
-    Dir.foreach('app/parsing_files') do |f|
-      fn = File.join('app/parsing_files', f)
-      File.delete(fn) if File.exist?(fn) && f != '.' && f != '..'
-    end
-  end
-
-  def delete_all_data
-    ContractFacultyLink.delete_all
-    Contract.delete_all
-    Sponsor.delete_all
-    Section.delete_all
-    Course.delete_all
-    PublicationFacultyLink.delete_all
-    ExternalAuthor.delete_all
-    Publication.delete_all
-    PersonalContact.delete_all
-    Presentation.delete_all
-    PresentationContributor.delete_all
-    Gpa.delete_all
   end
 
   def error_redirect(exception)
