@@ -22,6 +22,7 @@ RSpec.describe ApplicationJob do
     it 'discards and runs cleanup' do
       allow_any_instance_of(OspIntegrateJob).to receive(:perform).and_raise StandardError
       expect_any_instance_of(ApplicationJob::Busy).to receive(:increment)
+      expect_any_instance_of(ApplicationJob).to receive(:clean_up)
       expect{ OspIntegrateJob.perform_now(params, '/log/path') }.not_to change{ described_class::Busy.new('integration').value }
     end
   end
