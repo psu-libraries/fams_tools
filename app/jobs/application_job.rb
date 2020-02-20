@@ -8,10 +8,16 @@ class ApplicationJob < ActiveJob::Base
   discard_on(StandardError) do |job, error|
     raise error.class if error.class == ConcurrentJobsError
 
-    clean_up
+    job.clean_up
   end
 
   private
+
+  def clean_up
+    clear_busy
+    clear_tmp_files
+    delete_all_data
+  end
 
   def prevent_concurrent_jobs
     raise ConcurrentJobsError, 'An integration is currently running.' if Busy.new('integration').value != 0
@@ -19,12 +25,6 @@ class ApplicationJob < ActiveJob::Base
 
   def increment_busy
     Busy.new('integration').increment
-  end
-
-  def clean_up
-    clear_busy
-    clear_tmp_files
-    delete_all_data
   end
 
   def clear_busy
