@@ -1,9 +1,8 @@
 class ApplicationJob < ActiveJob::Base
   class ConcurrentJobsError < StandardError; end
-  include SuckerPunch::Counter
 
-  before_perform :prevent_concurrent_jobs, :increment_busy, :clear_tmp_files, :delete_all_data
-  after_perform :clear_busy, :clear_tmp_files, :delete_all_data
+  before_perform :prevent_concurrent_jobs, :integration_start, :clear_tmp_files, :delete_all_data
+  after_perform :integration_stop, :clear_tmp_files, :delete_all_data
 
   discard_on(StandardError) do |job, error|
     raise error.class if error.class == ConcurrentJobsError
@@ -13,7 +12,7 @@ class ApplicationJob < ActiveJob::Base
   end
 
   def clean_up
-    clear_busy
+    integration_stop
     clear_tmp_files
     delete_all_data
   end
@@ -21,15 +20,15 @@ class ApplicationJob < ActiveJob::Base
   private
 
   def prevent_concurrent_jobs
-    raise ConcurrentJobsError, 'An integration is currently running.' if Busy.new('integration').value != 0
+    raise ConcurrentJobsError, 'An integration is currently running.' if Integration.is_running?
   end
 
-  def increment_busy
-    Busy.new('integration').increment
+  def integration_start
+    Integration.start
   end
 
-  def clear_busy
-    Busy.clear
+  def integration_stop
+    Integration.stop
   end
 
   def clear_tmp_files

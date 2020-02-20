@@ -17,6 +17,7 @@ describe "#cv_presentation_integrate" do
                    m_name:    '',
                    college:   'LA')
   }
+  let!(:integration) { FactoryBot.create :integration }
   let(:passcode) {
     Rails.application.config_for(:integration_passcode)[:passcode]
   }
