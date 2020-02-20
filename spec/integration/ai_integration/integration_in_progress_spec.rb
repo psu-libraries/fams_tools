@@ -10,6 +10,8 @@ RSpec.describe AiIntegrationController do
       expect(page).to have_content 'An integration is currently in progress'
       expect(page).not_to have_button 'Beta'
       expect(page).not_to have_button 'Production'
+      # The following counter needs to be cleared or it will impact other tests
+      ApplicationJob::Busy.clear
     end
   end
 end
