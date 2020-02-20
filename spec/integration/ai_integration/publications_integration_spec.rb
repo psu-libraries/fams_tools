@@ -50,7 +50,7 @@ describe "#pub_integrate" do
       select("RMD Publications Integration", from: "label_integration_type").select_option
       logger = double('logger')
       allow(Logger).to receive(:new).and_return(logger)
-      expect(logger).to receive(:info).with(/Errors for Publications/)
+      expect(logger).to receive(:info).with(/initiated at:|Errors for Publications/).twice
       expect(logger).to receive(:error).with([/Unexpected EOF in prolog/])
       expect(page).to have_content("AI-Integration")
       within('#publications') do

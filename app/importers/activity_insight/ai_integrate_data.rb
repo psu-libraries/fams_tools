@@ -16,8 +16,14 @@ class IntegrateData
       Rails.logger.info xml
       response = HTTParty.post url(target), :body => xml, :headers => {'Content-type' => 'text/xml'}, :basic_auth => auth, :timeout => 180
       if response.to_s.include? 'Error'
+        osp_keys = Nokogiri::XML(xml).xpath("//OSPKEY").collect{|r| r.children.to_s}
+        itr_errors = []
         counter += 1
-        errors << response.parsed_response
+        itr_errors << response.parsed_response
+        itr_errors << Nokogiri::XML(xml).xpath("//Record").collect{|r| r.attr('username')}
+        itr_errors << osp_keys unless osp_keys.empty?
+        itr_errors.flatten!
+        errors << itr_errors.join(', ')
       end
       Rails.logger.info response
     end

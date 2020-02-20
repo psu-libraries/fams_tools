@@ -40,7 +40,7 @@ describe "#lionpath_integrate" do
       select("Courses Taught Integration", from: "label_integration_type").select_option
       logger = double('logger')
       allow(Logger).to receive(:new).and_return(logger)
-      expect(logger).to receive(:info).with(/Errors for Courses Taught/)
+      expect(logger).to receive(:info).with(/initiated at:|Errors for Courses Taught/).twice
       expect(logger).to receive(:error).with([/Unexpected EOF in prolog/])
       expect(page).to have_content("AI-Integration")
       within('#courses') do
