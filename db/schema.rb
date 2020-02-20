@@ -101,6 +101,13 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
     t.index ["faculty_id"], name: "index_gpas_on_faculty_id"
   end
 
+  create_table "integrations", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.string "process_type"
+    t.boolean "is_active"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "personal_contacts", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.bigint "faculty_id", null: false
     t.string "telephone_number"

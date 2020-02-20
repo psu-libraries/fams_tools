@@ -10,6 +10,7 @@ describe "#ldap_integrate" do
                    m_name:    'J',
                    college:   'EN')
   }
+  let!(:integration) { FactoryBot.create :integration }
 
   let(:passcode) do
     Rails.application.config_for(:integration_passcode)[:passcode]
