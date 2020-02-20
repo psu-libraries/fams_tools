@@ -8,6 +8,8 @@ RSpec.describe AiIntegrationController do
     Rails.application.config_for(:integration_passcode)[:passcode]
   end
 
+  let!(:integration) { FactoryBot.create :integration }
+
   xit "rescues StandardErrors in production and displays the error", type: :feature do
     allow(Rails).to receive(:env) { "production".inquiry }
     visit ai_integration_path

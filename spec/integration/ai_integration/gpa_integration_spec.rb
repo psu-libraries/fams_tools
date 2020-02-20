@@ -3,6 +3,7 @@ require 'integration/integrations_helper'
 describe "#gpa_integrate" do
   let!(:faculty_1) { Faculty.create(access_id: 'abc123', college:   'LA') }
   let!(:faculty_2) { Faculty.create(access_id: 'def456', college:   'LA') }
+  let!(:integration) { FactoryBot.create :integration }
   let(:passcode) { Rails.application.config_for(:integration_passcode)[:passcode] }
   let(:gpa_file) { fixture_file_upload('spec/fixtures/gpa_data.xlsx') }
   before do
