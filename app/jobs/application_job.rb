@@ -9,6 +9,7 @@ class ApplicationJob < ActiveJob::Base
     raise error.class if error.class == ConcurrentJobsError
 
     job.clean_up
+    raise error
   end
 
   def clean_up
