@@ -1,4 +1,4 @@
-require 'rails_helper'
+require 'integration/integrations_helper'
 
 # In order to test this, you must comment out "if Rails.env == 'production'"
 # in ai_integration controller.  Also need to un xit the spec.

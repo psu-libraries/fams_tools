@@ -3,140 +3,69 @@ class AiIntegrationController < ApplicationController
 
   skip_before_action :verify_authenticity_token, only: :render_integrator
   before_action :set_log_paths
-  before_action :delete_all_data, :clear_tmp_files, :confirm_passcode, only: [:osp_integrate, :lionpath_integrate, :gpa_integrate, :pub_integrate, :ldap_integrate, :cv_pub_integrate, :cv_presentation_integrate]
-  after_action :delete_all_data, :clear_tmp_files, only: [:osp_integrate, :lionpath_integrate, :gpa_integrate, :pub_integrate, :ldap_integrate, :cv_pub_integrate, :cv_presentation_integrate]
+  before_action :confirm_passcode, only: [:osp_integrate, :lionpath_integrate, :gpa_integrate, :pub_integrate, :ldap_integrate, :cv_pub_integrate, :cv_presentation_integrate]
 
   def osp_integrate
     start = Time.now
-    error_logger = Logger.new("public/#{@osp_log_path}")
-    f_name = params[:congrant_file].original_filename
-    f_path = File.join('app', 'parsing_files', f_name)
-    File.open(f_path, "wb") { |f| f.write(params[:congrant_file].read) }
-    backup_name = params[:ai_backup_file].original_filename
-    backup_path = File.join('app', 'parsing_files', backup_name)
-    File.open(backup_path, "wb") { |f| f.write(params[:ai_backup_file].read) }
-    my_populate = OspImporter.new(osp_path = f_path, backup_path = backup_path)
-    my_populate.format_and_populate
-    my_remove_system_dups = RemoveSystemDups.new(filepath = backup_path, params[:target])
-    my_remove_system_dups.call
-    my_integrate = IntegrateData.new(OspXMLBuilder.new, params[:target])
-    @errors = my_integrate.integrate
+    OspIntegrateJob.perform_now(params, @osp_log_path)
     finish = Time.now
-    @time = (((finish - start)/60).to_i.to_s + ' minutes')
-    File.delete(backup_path) if File.exist?(backup_path)
-    File.delete(f_path) if File.exist?(f_path)
-    flash[:notice] = "Integration completed in #{@time}."
-    error_logger.info "Errors for Contract/Grant Integration to #{params[:target]} on: #{DateTime.now}"
-    error_logger.error @errors
+    time = (((finish - start)/60).to_i.to_s + ' minutes')
+    flash[:notice] = "Integration completed in #{time}."
     redirect_to ai_integration_path
   end
   
   def lionpath_integrate
     start = Time.now
-    error_logger = Logger.new("public/#{@courses_log_path}")
-    f_name = params[:courses_file].original_filename
-    f_path = File.join('app', 'parsing_files', f_name)
-    File.open(f_path, "wb") { |f| f.write(params[:courses_file].read) }
-    my_lionpath_populate = LionPathPopulateDB.new(LionPathParser.new(filepath = f_path))
-    my_lionpath_populate.format_and_filter
-    my_lionpath_populate.populate
-    lionpath_integrate = IntegrateData.new(LionPathXMLBuilder.new, params[:target])
-    @errors = lionpath_integrate.integrate
+    LionpathIntegrateJob.perform_now(params, @courses_log_path)
     finish = Time.now
-    @time = (((finish - start)/60).to_i.to_s + ' minutes')
-    File.delete(f_path) if File.exist?(f_path)
-    flash[:notice] = "Integration completed in #{@time}."
-    error_logger.info "Errors for Courses Taught Integration to #{params[:target]} on: #{DateTime.now}"
-    error_logger.error @errors
-    redirect_to ai_integration_path 
+    time = (((finish - start)/60).to_i.to_s + ' minutes')
+    flash[:notice] = "Integration completed in #{time}."
+    redirect_to ai_integration_path
   end
 
   def gpa_integrate
     start = Time.now
-    error_logger = Logger.new("public/#{@gpas_log_path}")
-    f_name = params[:gpa_file].original_filename
-    f_path = File.join('app', 'parsing_files', f_name)
-    File.open(f_path, "wb") { |f| f.write(params[:gpa_file].read) }
-    gpa_importer = ImportGpaData.new(f_path)
-    gpa_importer.import
-    gpa_xml_builder = GpaXmlBuilder.new
-    gpa_integration = IntegrateData.new(gpa_xml_builder, params[:target])
-    @errors = gpa_integration.integrate
+    GpaIntegrateJob.perform_now(params, @gpas_log_path)
     finish = Time.now
-    @time = (((finish - start)/60).to_i.to_s + ' minutes')
-    File.delete(f_path) if File.exist?(f_path)
-    flash[:notice] = "Integration completed in #{@time}."
-    error_logger.info "Errors for GPA Integration to #{params[:target]} on: #{DateTime.now}"
-    error_logger.error @errors
+    time = (((finish - start)/60).to_i.to_s + ' minutes')
+    flash[:notice] = "Integration completed in #{time}."
     redirect_to ai_integration_path
   end
 
   def pub_integrate
     raise StandardError, "Must select a college." if params[:college].empty?
     start = Time.now
-    import_pubs = GetPubData.new(params[:college])
-    error_logger = Logger.new("public/#{@publications_log_path}")
-    import_pubs.call(PubPopulateDB.new)
-    my_integrate = IntegrateData.new(PubXMLBuilder.new, params[:target])
-    @errors = my_integrate.integrate
+    PubIntegrateJob.perform_now(params, @publications_log_path)
     finish = Time.now
-    @time = (((finish - start)/60).to_i.to_s + ' minutes')
-    flash[:notice] = "Integration completed in #{@time}."
-    error_logger.info "Errors for Publications Integration to #{params[:target]} on: #{DateTime.now}"
-    error_logger.error @errors
+    time = (((finish - start)/60).to_i.to_s + ' minutes')
+    flash[:notice] = "Integration completed in #{time}."
     redirect_to ai_integration_path
   end
 
   def ldap_integrate
     start = Time.now
-    error_logger = Logger.new("public/#{@ldap_log_path}")
-    import_ldap = ImportLdapData.new
-    import_ldap.import_ldap_data
-    ldap_integrate = IntegrateData.new(LdapXmlBuilder.new, params[:target])
-    @errors = ldap_integrate.integrate
+    LdapIntegrateJob.perform_now(params, @ldap_log_path)
     finish = Time.now
-    @time = (((finish - start)/60).to_i.to_s + ' minutes')
-    flash[:notice] = "Integration completed in #{@time}."
-    error_logger.info "Errors for Personal & Contact Info Integration to #{params[:target]} on: #{DateTime.now}"
-    error_logger.error @errors
+    time = (((finish - start)/60).to_i.to_s + ' minutes')
+    flash[:notice] = "Integration completed in #{time}."
     redirect_to ai_integration_path
   end
 
   def cv_pub_integrate
     start = Time.now
-    error_logger = Logger.new("public/#{@cv_publications_log_path}")
-    f_name = params[:cv_pub_file].original_filename
-    f_path = File.join('app', 'parsing_files', f_name)
-    File.open(f_path, "wb") { |f| f.write(params[:cv_pub_file].read) }
-    import_cv_pubs = ImportCVPubs.new(f_path)
-    import_cv_pubs.import_cv_pubs_data
-    my_integrate = IntegrateData.new(PubXMLBuilder.new, params[:target])
-    @errors = my_integrate.integrate
-    File.delete(f_path) if File.exist?(f_path)
+    CvPubIntegrateJob.perform_now(params, @cv_publications_log_path)
     finish = Time.now
-    @time = (((finish - start)/60).to_i.to_s + ' minutes')
-    flash[:notice] = "Integration completed in #{@time}."
-    error_logger.info "Errors for CV Publications Integration to #{params[:target]} on: #{DateTime.now}"
-    error_logger.error @errors
+    time = (((finish - start)/60).to_i.to_s + ' minutes')
+    flash[:notice] = "Integration completed in #{time}."
     redirect_to ai_integration_path
   end
 
   def cv_presentation_integrate
     start = Time.now
-    error_logger = Logger.new("public/#{@cv_presentations_log_path}")
-    f_name = params[:cv_presentation_file].original_filename
-    f_path = File.join('app', 'parsing_files', f_name)
-    File.open(f_path, "wb") { |f| f.write(params[:cv_presentation_file].read) }
-    import_cv_presentations = ImportCVPresentations.new(f_path)
-    import_cv_presentations.import_cv_presentations_data
-    my_integrate = IntegrateData.new(PresentationXMLBuilder.new, params[:target])
-    @errors = my_integrate.integrate
-    File.delete(f_path) if File.exist?(f_path)
+    CvPresentationIntegrateJob.perform_now(params, @cv_presentations_log_path)
     finish = Time.now
-    @time = (((finish - start)/60).to_i.to_s + ' minutes')
-    flash[:notice] = "Integration completed in #{@time}."
-    error_logger.info "Errors for CV Presentations Integration to #{params[:target]} on: #{DateTime.now}"
-    error_logger.error @errors
+    time = (((finish - start)/60).to_i.to_s + ' minutes')
+    flash[:notice] = "Integration completed in #{time}."
     redirect_to ai_integration_path
   end
 
@@ -180,28 +109,6 @@ class AiIntegrationController < ApplicationController
       flash[:alert] = "Wrong Passcode"
       redirect_to ai_integration_path
     end
-  end
-
-  def clear_tmp_files
-    Dir.foreach('app/parsing_files') do |f|
-      fn = File.join('app/parsing_files', f)
-      File.delete(fn) if File.exist?(fn) && f != '.' && f != '..'
-    end
-  end
-
-  def delete_all_data
-    ContractFacultyLink.delete_all
-    Contract.delete_all
-    Sponsor.delete_all
-    Section.delete_all
-    Course.delete_all
-    PublicationFacultyLink.delete_all
-    ExternalAuthor.delete_all
-    Publication.delete_all
-    PersonalContact.delete_all
-    Presentation.delete_all
-    PresentationContributor.delete_all
-    Gpa.delete_all
   end
 
   def error_redirect(exception)
