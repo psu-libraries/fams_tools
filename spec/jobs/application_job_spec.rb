@@ -14,6 +14,7 @@ RSpec.describe ApplicationJob do
   context 'when another integration is running' do
     it 'returns a ConcurrentJobsError' do
       allow_any_instance_of(ApplicationJob::Busy).to receive(:value).and_return 1
+      expect_any_instance_of(ApplicationJob::Busy).not_to receive(:increment)
       expect{ OspIntegrateJob.perform_now(params, '/log/path') }.to raise_error ApplicationJob::ConcurrentJobsError
     end
   end
