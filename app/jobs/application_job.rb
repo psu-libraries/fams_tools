@@ -11,13 +11,13 @@ class ApplicationJob < ActiveJob::Base
     job.clean_up
   end
 
-  private
-
   def clean_up
     clear_busy
     clear_tmp_files
     delete_all_data
   end
+
+  private
 
   def prevent_concurrent_jobs
     raise ConcurrentJobsError, 'An integration is currently running.' if Busy.new('integration').value != 0
