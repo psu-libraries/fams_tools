@@ -2,13 +2,13 @@ class ImportCVPubs
   attr_accessor :data
 
   def initialize(filepath)
-    @data = CSV.read(filepath, { encoding: "UTF-8" } )
+    @data = CSV.read(filepath, encoding: "utf-8")
   end
 
   def import_cv_pubs_data
     rows = arrays_to_hashes(data)
     rows.each do |row|
-      faculty = Faculty.find_by(user_id: row["USER_ID"])
+      faculty = Faculty.find_by(access_id: row["USERNAME"].downcase)
 
       publication = Publication.create!(publication_attributes(row))
       
@@ -48,6 +48,7 @@ class ImportCVPubs
 
   def arrays_to_hashes(data)
     headers = data.first
+    headers.first.gsub!("\xEF\xBB\xBF".force_encoding("UTF-8"), '')
     data[1..-1].map! { |n| Hash[ headers.zip(n) ] }
   end
 
