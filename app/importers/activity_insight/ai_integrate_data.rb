@@ -10,25 +10,23 @@ class IntegrateData
 
   def integrate
     errors = []
-    counter = 0
     Rails.logger.info url(target)
     xml_builder_enum.each do |xml|
       Rails.logger.info xml
       response = HTTParty.post url(target), :body => xml, :headers => {'Content-type' => 'text/xml'}, :basic_auth => auth, :timeout => 180
       if response.to_s.include? 'Error'
         osp_keys = Nokogiri::XML(xml).xpath("//OSPKEY").collect{|r| r.children.to_s}
+        access_ids = Nokogiri::XML(xml).xpath("//Record").collect{|r| r.attr('username')}
         itr_errors = []
-        counter += 1
         itr_errors << response.parsed_response
-        itr_errors << Nokogiri::XML(xml).xpath("//Record").collect{|r| r.attr('username')}
+        itr_errors << access_ids unless access_ids.empty?
         itr_errors << osp_keys unless osp_keys.empty?
         itr_errors.flatten!
         errors << itr_errors.join(', ')
       end
       Rails.logger.info response
     end
-    return errors
-    #puts counter
+    errors
   end
 
   private
@@ -41,5 +39,4 @@ class IntegrateData
       return 'https://webservices.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University'
     end
   end
-
 end
