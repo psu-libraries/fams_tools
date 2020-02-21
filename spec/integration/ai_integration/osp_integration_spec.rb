@@ -50,7 +50,7 @@ describe "#osp_integrate" do
       select("Contract/Grant Integration", from: "label_integration_type").select_option
       logger = double('logger')
       allow(Logger).to receive(:new).and_return(logger)
-      expect(logger).to receive(:info).with(/Errors for Contract\/Grant/)
+      expect(logger).to receive(:info).with(/initiated at:|Errors for Contract\/Grant/).twice
       expect(logger).to receive(:error).with([/Unexpected EOF in prolog/])
       expect(page).to have_content("AI-Integration")
       within('#congrant') do

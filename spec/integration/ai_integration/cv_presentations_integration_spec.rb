@@ -38,7 +38,7 @@ describe "#cv_presentation_integrate" do
       select("CV Presentations Integration", from: "label_integration_type").select_option
       logger = double('logger')
       allow(Logger).to receive(:new).and_return(logger)
-      expect(logger).to receive(:info).with(/Errors for CV Presentations/)
+      expect(logger).to receive(:info).with(/initiated at:|Errors for CV Presentations/).twice
       expect(logger).to receive(:error).with([/Unexpected EOF in prolog/])
       expect(page).to have_content("AI-Integration")
       within('#cv_presentations') do

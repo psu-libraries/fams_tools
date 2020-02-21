@@ -32,7 +32,7 @@ describe "#ldap_integrate" do
       select("Personal & Contact Integration", from: "label_integration_type").select_option
       logger = double('logger')
       allow(Logger).to receive(:new).and_return(logger)
-      expect(logger).to receive(:info).with(/Errors for Personal & Contact In/)
+      expect(logger).to receive(:info).with(/initiated at:|Errors for Personal & Contact In/).twice
       expect(logger).to receive(:error)
       expect(page).to have_content("AI-Integration")
       within('#personal_contacts') do

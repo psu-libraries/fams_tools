@@ -177,7 +177,7 @@ RSpec.describe IntegrateData do
 <Error>The following errors were detected:
   <Message>Unexpected EOF in prolog at [row,col {unknown-source}]: [2,0] Nested exception: Unexpected EOF in prolog at [row,col {unknown-source}]: [2,0]</Message>
 </Error>", headers: {})
-      expect(osp_integrate_obj.integrate).to eq(["<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<Error>The following errors were detected:\n  <Message>Unexpected EOF in prolog at [row,col {unknown-source}]: [2,0] Nested exception: Unexpected EOF in prolog at [row,col {unknown-source}]: [2,0]</Message>\n</Error>"])
+      expect(osp_integrate_obj.integrate).to eq(["<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<Error>The following errors were detected:\n  <Message>Unexpected EOF in prolog at [row,col {unknown-source}]: [2,0] Nested exception: Unexpected EOF in prolog at [row,col {unknown-source}]: [2,0]</Message>\n</Error>, ccc111, ttt222, 315235, 654572"])
     end
   end
 
