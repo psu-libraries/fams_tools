@@ -3,7 +3,7 @@ require 'importers/importers_helper'
 RSpec.describe ImportCVPubs do
 
   before do
-    Faculty.create( user_id: 123456 )
+    Faculty.create( access_id: "ars123" )
   end
 
   describe "#import_cv_pubs_data" do
