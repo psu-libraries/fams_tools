@@ -23,7 +23,7 @@ describe "#gpa_integrate" do
       puts page.driver.console_messages
       logger = double('logger')
       allow(Logger).to receive(:new).and_return(logger)
-      expect(logger).to receive(:info).with(/Errors for GPA/)
+      expect(logger).to receive(:info).with(/initiated at:|Errors for GPA/).twice
       expect(logger).to receive(:error).with([])
       expect(page).to have_content("GPA Integration")
       within('#gpa') do

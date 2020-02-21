@@ -40,7 +40,7 @@ describe "#cv_pub_integrate" do
       select("CV Publications Integration", from: "label_integration_type").select_option
       logger = double('logger')
       allow(Logger).to receive(:new).and_return(logger)
-      expect(logger).to receive(:info).with(/Errors for CV Publications/)
+      expect(logger).to receive(:info).with(/initiated at:|Errors for CV Publications/).twice
       expect(logger).to receive(:error).with([/Unexpected EOF in prolog/])
       expect(page).to have_content("AI-Integration")
       within('#cv_publications') do
