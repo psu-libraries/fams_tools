@@ -19,8 +19,8 @@ class PubXMLBuilder
           xml.Record('username' => faculty.access_id) {
             faculty.publication_faculty_links.each do |link|
               xml.INTELLCONT {
-                (link.publication.title.present?) ? xml.TITLE_(link.publication.title, :access => "READ_ONLY") : nil
-                (link.publication.secondary_title.present?) ? xml.TITLE_SECONDARY_(link.publication.secondary_title, :access => "READ_ONLY") : nil
+                (link.publication.title.present?) ? xml.TITLE_(link.publication.title.gsub(/[^[:print:]]/,''), :access => "READ_ONLY") : nil
+                (link.publication.secondary_title.present?) ? xml.TITLE_SECONDARY_(link.publication.secondary_title.gsub(/[^[:print:]]/,''), :access => "READ_ONLY") : nil
                 (link.category.present?) ? xml.CONTYPE_(link.category, :access => "READ_ONLY") : nil
                 (link.status.present?) ? xml.STATUS_(link.status, :access => "READ_ONLY") : nil
                 (link.publication.journal_title.present?) ? xml.JOURNAL_NAME_(link.publication.journal_title, :access => "READ_ONLY") : nil
