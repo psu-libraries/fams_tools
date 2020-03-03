@@ -1,33 +1,30 @@
 class AiIntegrationController < ApplicationController
   rescue_from StandardError, with: :error_redirect if Rails.env == 'production'
 
+  INTEGRATIONS = %i[osp_integrate lionpath_integrate gpa_integrate
+                    pub_integrate ldap_integrate cv_pub_integrate
+                    cv_presentation_integrate].freeze
+
   skip_before_action :verify_authenticity_token, only: :render_integrator
   before_action :set_log_paths
-  before_action :confirm_passcode, only: integrations
-  after_action :after_redirect, only: integrations
+  before_action :confirm_passcode, only: INTEGRATIONS
 
   def osp_integrate
     start = Time.now
     OspIntegrateJob.perform_now(params, @osp_log_path)
-    finish = Time.now
-    time = (((finish - start) / 60).to_i.to_s + ' minutes')
-    flash[:notice] = "Integration completed in #{time}."
+    finished(start)
   end
 
   def lionpath_integrate
     start = Time.now
     LionpathIntegrateJob.perform_now(params, @courses_log_path)
-    finish = Time.now
-    time = (((finish - start) / 60).to_i.to_s + ' minutes')
-    flash[:notice] = "Integration completed in #{time}."
+    finished(start)
   end
 
   def gpa_integrate
     start = Time.now
     GpaIntegrateJob.perform_now(params, @gpas_log_path)
-    finish = Time.now
-    time = (((finish - start) / 60).to_i.to_s + ' minutes')
-    flash[:notice] = "Integration completed in #{time}."
+    finished(start)
   end
 
   def pub_integrate
@@ -35,34 +32,25 @@ class AiIntegrationController < ApplicationController
 
     start = Time.now
     PubIntegrateJob.perform_now(params, @publications_log_path)
-    finish = Time.now
-    time = (((finish - start) / 60).to_i.to_s + ' minutes')
-    flash[:notice] = "Integration completed in #{time}."
+    finished(start)
   end
 
   def ldap_integrate
     start = Time.now
     LdapIntegrateJob.perform_now(params, @ldap_log_path)
-    finish = Time.now
-    time = (((finish - start) / 60).to_i.to_s + ' minutes')
-    flash[:notice] = "Integration completed in #{time}."
+    finished(start)
   end
 
   def cv_pub_integrate
     start = Time.now
     CvPubIntegrateJob.perform_now(params, @cv_publications_log_path)
-    finish = Time.now
-    time = (((finish - start) / 60).to_i.to_s + ' minutes')
-    flash[:notice] = "Integration completed in #{time}."
-    redirect_to ai_integration_path
+    finished(start)
   end
 
   def cv_presentation_integrate
     start = Time.now
     CvPresentationIntegrateJob.perform_now(params, @cv_presentations_log_path)
-    finish = Time.now
-    time = (((finish - start) / 60).to_i.to_s + ' minutes')
-    flash[:notice] = "Integration completed in #{time}."
+    finished(start)
   end
 
   def index
@@ -92,11 +80,6 @@ class AiIntegrationController < ApplicationController
     @cv_presentations_log_path = Pathname.new('log/cv_presentations_errors.log')
   end
 
-  def integrations
-    %i[osp_integrate lionpath_integrate gpa_integrate pub_integrate
-       ldap_integrate cv_pub_integrate cv_presentation_integrate]
-  end
-
   def confirm_passcode
     return if params[:passcode] == passcode
 
@@ -108,7 +91,10 @@ class AiIntegrationController < ApplicationController
     Rails.application.config_for(:integration_passcode)[:passcode]
   end
 
-  def after_redirect
+  def finished(start_time)
+    finish = Time.now
+    time = (((finish - start_time) / 60).to_i.to_s + ' minutes')
+    flash[:notice] = "Integration completed in #{time}."
     redirect_to ai_integration_path
   end
 
