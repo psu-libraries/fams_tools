@@ -1,6 +1,4 @@
 class PublicationListingsController < ApplicationController
-  def new; end
-
   def create
     pl = PublicationListing.new(name: params[:citations_title])
     pl.save
@@ -13,10 +11,6 @@ class PublicationListingsController < ApplicationController
     redirect_to publication_listings_url
   end
 
-  def update; end
-
-  def edit; end
-
   def destroy
     pl = PublicationListing.find(params[:publication_listing_id])
     pl.destroy
@@ -28,8 +22,6 @@ class PublicationListingsController < ApplicationController
   def index
     @publication_listings = PublicationListing.all
   end
-
-  def show; end
 
   private
 

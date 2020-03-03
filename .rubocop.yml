@@ -8,3 +8,7 @@ Metrics/AbcSize:
 Metrics/MethodLength:
   Exclude:
     - 'app/controllers/publication_listings_controller.rb'
+    - 'app/controllers/concerns/controller_services.rb'
+Metrics/CyclomaticComplexity:
+  Exclude:
+    - 'app/controllers/concerns/controller_services.rb'
