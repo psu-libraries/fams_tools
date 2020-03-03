@@ -5,6 +5,9 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
+# Audit gems for vulnerabilities
+gem 'bundle-audit'
+
 # NLP gem for parsing CVs
 gem 'anystyle'
 
