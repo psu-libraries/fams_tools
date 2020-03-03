@@ -5,9 +5,6 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
-# Audit gems for vulnerabilities
-gem 'bundle-audit'
-
 # NLP gem for parsing CVs
 gem 'anystyle'
 
@@ -82,6 +79,12 @@ group :development, :test do
   gem 'rails-controller-testing'
   gem 'rspec-retry'
   gem 'database_cleaner'
+  # Audit gems for vulnerabilities
+  gem 'bundle-audit'
+  # Ruby code linter
+  gem 'rubocop', require: false
+  # Code coverage
+  gem 'simplecov', require: false
 end
 
 group :development do
