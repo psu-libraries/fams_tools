@@ -8,8 +8,6 @@ end
 # NLP gem for parsing CVs
 gem 'anystyle'
 
-gem 'rubyzip', '>= 1.2.2'
-
 # For manipulating and generating xlsx
 gem 'axlsx'
 gem 'axlsx_rails'
@@ -29,8 +27,6 @@ gem 'whenever'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.2.0'
-# Use sqlite3 as the database for Active Record
-#gem 'sqlite3'
 # Use mysql as the database for Active Record
 # ActiveRecord only works with specific versions of mysql2.
 gem 'mysql2' , '< 0.5'
@@ -51,13 +47,6 @@ gem 'coffee-rails', '~> 4.2'
 gem 'turbolinks', '~> 5'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.5'
-# Use Redis adapter to run Action Cable in production
-# gem 'redis', '~> 4.0'
-# Use ActiveModel has_secure_password
-# gem 'bcrypt', '~> 3.1.7'
-
-# Use Capistrano for deployment
-# gem 'capistrano-rails', group: :development
 
 # Manipulating spreadsheets
 gem 'spreadsheet'
