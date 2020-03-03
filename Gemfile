@@ -5,18 +5,26 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
-gem 'rmagick'
-gem 'rtesseract'
-gem 'redis'
-gem 'redis-namespace'
+# NLP gem for parsing CVs
 gem 'anystyle'
+
 gem 'rubyzip', '>= 1.2.2'
+
+# For manipulating and generating xlsx
 gem 'axlsx'
 gem 'axlsx_rails'
+
+# Ldap library
 gem 'net-ldap'
+
+# Test model factories
 gem 'factory_bot'
+
+# For use of newer ssh keys
 gem 'ed25519'
 gem 'bcrypt_pbkdf'
+
+# For scheduled tasks
 gem 'whenever'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
@@ -51,14 +59,23 @@ gem 'jbuilder', '~> 2.5'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
+# Manipulating spreadsheets
 gem 'spreadsheet'
-gem 'nokogiri', '>= 1.10.4'
+
+# Http client
 gem 'httparty'
+
+# Mocking outgoing requests
 gem 'webmock'
+
+# Stream xlsx files
 gem 'creek'
+
+# UX framework
 gem 'bootstrap'
+
+# Jquery for dom manipulation
 gem 'jquery-rails'
-gem 'listen', '>= 3.0.5', '< 3.2'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
