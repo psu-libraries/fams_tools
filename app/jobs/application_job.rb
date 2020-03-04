@@ -20,7 +20,7 @@ class ApplicationJob < ActiveJob::Base
   private
 
   def prevent_concurrent_jobs
-    raise ConcurrentJobsError, 'An integration is currently running.' if Integration.is_running?
+    raise ConcurrentJobsError, 'An integration is currently running.' if Integration.running?
   end
 
   def integration_start
