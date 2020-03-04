@@ -1,0 +1,14 @@
+Documentation:
+  Enabled: false
+Style/FrozenStringLiteralComment:
+  Enabled: false
+Metrics/AbcSize:
+  Exclude:
+    - 'app/controllers/publication_listings_controller.rb'
+Metrics/MethodLength:
+  Exclude:
+    - 'app/controllers/publication_listings_controller.rb'
+    - 'app/controllers/concerns/controller_services.rb'
+Metrics/CyclomaticComplexity:
+  Exclude:
+    - 'app/controllers/concerns/controller_services.rb'
