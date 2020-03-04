@@ -1,18 +1,19 @@
 class Integration < ApplicationRecord
+  PROCESS_TYPE = 'integration'.freeze
 
-  def self.is_running?
-    find_by(process_type: 'integration').is_active
+  def self.running?
+    find_by(process_type: PROCESS_TYPE).is_active
   end
 
   def self.start
-    find_by(process_type: 'integration').update_attribute(:is_active, true)
+    find_by(process_type: PROCESS_TYPE).update_attribute(:is_active, true)
   end
 
   def self.stop
-    find_by(process_type: 'integration').update_attribute(:is_active, false)
+    find_by(process_type: PROCESS_TYPE).update_attribute(:is_active, false)
   end
 
   def self.seed
-    Integration.create(process_type: 'integration', is_active: 'false')
+    Integration.create(process_type: PROCESS_TYPE, is_active: 'false')
   end
 end
