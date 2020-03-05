@@ -5,7 +5,7 @@ RSpec.describe AiIntegrationController do
 
   context 'when an integration is currently running', type: :feature, js: true do
     it 'does not render submit buttons and displays message' do
-      allow(Integration).to receive(:is_running?).and_return true
+      allow(Integration).to receive(:running?).and_return true
       visit ai_integration_path
       select("Contract/Grant Integration", from: "label_integration_type").select_option
       expect(page).to have_content 'An integration is currently in progress'
