@@ -1,0 +1,38 @@
+require 'rails_helper'
+
+describe WorkOutputs do
+  let!(:publication_listing) { FactoryBot.create :publication_listing }
+  let!(:work1) { FactoryBot.create :work, publication_listing: publication_listing }
+  let!(:work2) { FactoryBot.create :work, publication_listing: publication_listing, author: nil }
+  let(:works) { Work.where(publication_listing: publication_listing.id) }
+  let(:csv) do
+    "USERNAME,USER_ID,TITLE,VOLUME,EDITION,PAGENUM,DTY_END,DTM_END,DTD_END,JOURNAL_NAME,CONTYPE,EDITORS,INSTITUTION,PUBCTYST,COMMENT,INTELLCONT_AUTH_1_FACULTY_NAME,INTELLCONT_AUTH_1_FNAME,INTELLCONT_AUTH_1_MNAME,INTELLCONT_AUTH_1_LNAME\ntest123,,Test,1,2,1-2,2001,9,30,Test Journal,Journal Article,\"Frank, Zappa\",PSU,State College,Some note,\"\",Jim,\"\",Bob\ntest123,,Test,1,2,1-2,2001,9,30,Test Journal,Journal Article,\"Frank, Zappa\",PSU,State College,Some note,\"\",\"\",\"\",\"\"\n"
+  end
+
+  # These subclasses of WorkOutputs all have different implementations of #output
+  describe '#CSVOutput' do
+    describe '#output' do
+      it 'returns a properly formatted csv file' do
+        expect(CSVOutput.new(works).output).to eq csv
+      end
+    end
+  end
+
+  describe '#BibtexOutput' do
+    describe '#output' do
+      it 'returns a properly formatted bibtex file' do
+        expect(BibtexOutput.new(works).output[1].key).to eq "unknown2001a"
+        expect(BibtexOutput.new(works).output.length).to eq 2
+      end
+    end
+  end
+
+  describe '#XLSXOutput' do
+    describe '#output' do
+      it 'returns a properly formatted xlsx file' do
+        expect(XLSXOutput.new(works).output(Axlsx::Package.new.workbook).workbook.worksheets.first.rows.first.first.row.collect { |n| n.value }).to eq ["USERNAME", "USER_ID", "TITLE", "VOLUME", "EDITION", "PAGENUM", "DTY_END", "DTM_END", "DTD_END", "JOURNAL_NAME", "CONTYPE", "EDITORS", "INSTITUTION", "PUBCTYST", "COMMENT", "INTELLCONT_AUTH_1_FACULTY_NAME", "INTELLCONT_AUTH_1_FNAME", "INTELLCONT_AUTH_1_MNAME", "INTELLCONT_AUTH_1_LNAME"]
+        expect(XLSXOutput.new(works).output(Axlsx::Package.new.workbook).workbook.worksheets.first.rows.second.first.row.collect { |n| n.value }).to eq ["test123", nil, "Test", 1, 2, "1-2", 2001, 9, 30, "Test Journal", "Journal Article", "Frank, Zappa", "PSU", "State College", "Some note", "", "Jim", "", "Bob"]
+      end
+    end
+  end
+end

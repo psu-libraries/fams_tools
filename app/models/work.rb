@@ -12,4 +12,8 @@ class Work < ApplicationRecord
   def self.to_bibtex
     BibtexOutput.new(all).output
   end
+
+  def self.to_xlsx(axlsx_workbook)
+    XLSXOutput.new(all).output(axlsx_workbook)
+  end
 end
