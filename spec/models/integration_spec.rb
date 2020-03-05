@@ -7,12 +7,12 @@ describe Integration, type: :model do
     it { is_expected.to have_db_column(:is_active).of_type(:boolean) }
   end
 
-  describe '#is_running?' do
+  describe '#running?' do
     it 'checks if integration is_active' do
       integration = FactoryBot.create :integration
-      expect(Integration.is_running?).to eq false
+      expect(Integration.running?).to eq false
       integration.update_attribute :is_active, true
-      expect(Integration.is_running?).to eq true
+      expect(Integration.running?).to eq true
     end
   end
 
