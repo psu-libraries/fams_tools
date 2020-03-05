@@ -12,36 +12,31 @@ class BibtexOutput < WorkOutputs
 
   def authors(work)
     authors_arr = []
-    if work[:author]
-      work[:author].each do |author|
-        authors_arr << author.reject(&:blank?).join(' ')
-      end
+    work[:author]&.each do |author|
+      authors_arr << author.reject(&:blank?).join(' ')
     end
     authors_arr
-  end
-
-  def bibtex_type(contype)
-    contype_downcase = contype.downcase
-    if ['journal article', 'journal article, in-house'].include? contype_downcase
-      :article
-    elsif ['conference proceeding'].include? contype_downcase
-      :conference
-    elsif ['book', 'book, chapter'].include? contype_downcase
-      :book
-    end
   end
 
   def entry(work, authors)
     entry_obj = BibTeX::Entry.new
     entry_obj.type = bibtex_type(work[:contype]) || :article
     entry_obj.author = authors.join(', ') if authors
-    entry_obj.title = work[:title] if work[:title]
-    entry_obj.journal = work[:container] if work[:container]
-    entry_obj.year = work[:year] if work[:year]
-    entry_obj.number = work[:edition] if work[:edition]
-    entry_obj.pages = work[:pages] if work[:pages]
-    entry_obj.note = work[:note] if work[:note]
-    entry_obj.volume = work[:volume] if work[:volume]
+    entry_attrs = %i[title journal year number pages note volume]
+    work_attrs = %i[title container year edition pages note volume]
+    attrs_mapped = Hash[entry_attrs.zip(work_attrs)]
+    attrs_mapped.each { |k, v| entry_obj[k] = work[v] if work[v] }
     entry_obj
+  end
+
+  def bibtex_type(contype)
+    contype_down = contype.downcase
+    if ['journal article', 'journal article, in-house'].include? contype_down
+      :article
+    elsif ['conference proceeding'].include? contype_down
+      :conference
+    elsif ['book', 'book, chapter'].include? contype_down
+      :book
+    end
   end
 end
