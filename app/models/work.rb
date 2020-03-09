@@ -6,14 +6,14 @@ class Work < ApplicationRecord
   belongs_to :publication_listing
 
   def self.to_csv
-    CSVOutput.new(all).output
+    SpreadsheetOutput.new(find_each).output
   end
 
   def self.to_bibtex
-    BibtexOutput.new(all).output
+    BibtexOutput.new(find_each).output
   end
 
   def self.to_xlsx(axlsx_workbook)
-    XLSXOutput.new(all).output(axlsx_workbook)
+    XLSXOutput.new(find_each).output(axlsx_workbook)
   end
 end
