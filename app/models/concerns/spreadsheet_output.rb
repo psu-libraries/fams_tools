@@ -124,7 +124,7 @@ class SpreadsheetOutput < WorkOutputs
   end
 
   def author_is_owner(author)
-    return false if author[0].empty?
+    return false if author[0].nil? || author[0].empty?
 
     owner_f_name = cv_owner&.f_name
     cond1 = author[2]&.upcase == cv_owner&.l_name&.upcase
