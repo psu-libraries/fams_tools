@@ -1,19 +1,15 @@
 class SpreadsheetOutput < WorkOutputs
-  def output
-    # Defined in subclass
+  def output(*args)
+    csv = CSV.generate({ encoding: 'utf-8' }) do |csv|
+      csv << formatted_headers
+      works.each do |item|
+        csv << formatted_row(item)
+      end
+    end
+    remove_empty_cols(csv)
   end
 
   private
-
-  def empty_col_indices
-    indices = []
-    HEADER_MAP.each_with_index do |header, index|
-      unless header == :ignore
-        indices << index if works.pluck(header).compact.empty?
-      end
-    end
-    indices
-  end
 
   def headers
     header_array = []
@@ -22,21 +18,8 @@ class SpreadsheetOutput < WorkOutputs
     header_array.flatten
   end
 
-  def marked_empty_headers
-    headers_item = headers
-    empty_col_indices.each do |index|
-      headers_item[index] = :delete
-    end
-    headers_item
-  end
-
-  def stripped_headers(marked_headers)
-    marked_headers.delete(:delete)
-    marked_headers
-  end
-
   def header_length
-    stripped_headers(marked_empty_headers).length
+    headers.length
   end
 
   def longest
@@ -80,12 +63,12 @@ class SpreadsheetOutput < WorkOutputs
   end
 
   def formatted_headers
-    headers_cleaned = stripped_headers(marked_empty_headers)
+    headers_obj = headers
     if workstype == 'presentations'
-      return formatted_pres_headers(headers_cleaned)
+      return formatted_pres_headers(headers_obj)
     end
 
-    formatted_pub_headers(headers_cleaned)
+    formatted_pub_headers(headers_obj)
   end
 
   def row(item)
@@ -98,7 +81,7 @@ class SpreadsheetOutput < WorkOutputs
 
   def row_assign(item, key)
     if key == :ignore
-      return Faculty.find_by(access_id: item[:username])&.user_id
+      return cv_owner.user_id if cv_owner
     end
 
     return item[key]&.join(', ') if key == :editor
@@ -108,20 +91,8 @@ class SpreadsheetOutput < WorkOutputs
 
   def formatted_row(item)
     row_item = row(item)
-    mark_empty_row(row_item)
-    remove_empty_row(row_item)
     format_row(row_item, item)
     row_item.flatten
-  end
-
-  def mark_empty_row(row_item)
-    empty_col_indices.each do |index|
-      row_item[index] = :delete
-    end
-  end
-
-  def remove_empty_row(row_item)
-    row_item.delete(:delete)
   end
 
   def format_row(row_item, item)
@@ -153,6 +124,8 @@ class SpreadsheetOutput < WorkOutputs
   end
 
   def author_is_owner(author)
+    return false if author[0].nil? || author[0].empty?
+
     owner_f_name = cv_owner&.f_name
     cond1 = author[2]&.upcase == cv_owner&.l_name&.upcase
     cond2 = author[0][0]&.upcase == owner_f_name[0]&.upcase
@@ -169,5 +142,13 @@ class SpreadsheetOutput < WorkOutputs
     while row_item.length < longest
       row_item.insert(header_length, ['', '', '', ''])
     end
+  end
+
+  def remove_empty_cols(csv)
+    csv = CSV.parse(csv, headers: true)
+    headers.each do |header|
+      csv.delete(header) if csv[header].compact.empty?
+    end
+    csv
   end
 end
