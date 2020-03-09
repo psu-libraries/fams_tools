@@ -6,14 +6,14 @@ describe WorkOutputs do
   let!(:work2) { FactoryBot.create :work, publication_listing: publication_listing, author: nil }
   let(:works) { Work.where(publication_listing: publication_listing.id) }
   let(:csv) do
-    "USERNAME,USER_ID,TITLE,VOLUME,EDITION,PAGENUM,DTY_END,DTM_END,DTD_END,JOURNAL_NAME,CONTYPE,EDITORS,INSTITUTION,PUBCTYST,COMMENT,INTELLCONT_AUTH_1_FACULTY_NAME,INTELLCONT_AUTH_1_FNAME,INTELLCONT_AUTH_1_MNAME,INTELLCONT_AUTH_1_LNAME\ntest123,,Test,1,2,1-2,2001,9,30,Test Journal,Journal Article,\"Frank, Zappa\",PSU,State College,Some note,\"\",Jim,\"\",Bob\ntest123,,Test,1,2,1-2,2001,9,30,Test Journal,Journal Article,\"Frank, Zappa\",PSU,State College,Some note,\"\",\"\",\"\",\"\"\n"
+    "USERNAME,TITLE,VOLUME,EDITION,PAGENUM,DTY_END,DTM_END,DTD_END,JOURNAL_NAME,CONTYPE,EDITORS,INSTITUTION,PUBCTYST,COMMENT,INTELLCONT_AUTH_1_FACULTY_NAME,INTELLCONT_AUTH_1_FNAME,INTELLCONT_AUTH_1_MNAME,INTELLCONT_AUTH_1_LNAME\ntest123,Test,1,2,1-2,2001,9,30,Test Journal,Journal Article,\"Frank, Zappa\",PSU,State College,Some note,\"\",Jim,\"\",Bob\ntest123,Test,1,2,1-2,2001,9,30,Test Journal,Journal Article,\"Frank, Zappa\",PSU,State College,Some note,\"\",\"\",\"\",\"\"\n"
   end
 
   # These subclasses of WorkOutputs all have different implementations of #output
-  describe '#CSVOutput' do
+  describe '#SpreadsheetOutput' do
     describe '#output' do
       it 'returns a properly formatted csv file' do
-        expect(CSVOutput.new(works).output).to eq csv
+        expect(SpreadsheetOutput.new(works).output.to_csv).to eq csv
       end
     end
   end
@@ -30,8 +30,8 @@ describe WorkOutputs do
   describe '#XLSXOutput' do
     describe '#output' do
       it 'returns a properly formatted xlsx file' do
-        expect(XLSXOutput.new(works).output(Axlsx::Package.new.workbook).workbook.worksheets.first.rows.first.first.row.collect { |n| n.value }).to eq ["USERNAME", "USER_ID", "TITLE", "VOLUME", "EDITION", "PAGENUM", "DTY_END", "DTM_END", "DTD_END", "JOURNAL_NAME", "CONTYPE", "EDITORS", "INSTITUTION", "PUBCTYST", "COMMENT", "INTELLCONT_AUTH_1_FACULTY_NAME", "INTELLCONT_AUTH_1_FNAME", "INTELLCONT_AUTH_1_MNAME", "INTELLCONT_AUTH_1_LNAME"]
-        expect(XLSXOutput.new(works).output(Axlsx::Package.new.workbook).workbook.worksheets.first.rows.second.first.row.collect { |n| n.value }).to eq ["test123", nil, "Test", 1, 2, "1-2", 2001, 9, 30, "Test Journal", "Journal Article", "Frank, Zappa", "PSU", "State College", "Some note", "", "Jim", "", "Bob"]
+        expect(XLSXOutput.new(works).output(Axlsx::Package.new.workbook).workbook.worksheets.first.rows.first.first.row.collect { |n| n.value }).to eq ["USERNAME", "TITLE", "VOLUME", "EDITION", "PAGENUM", "DTY_END", "DTM_END", "DTD_END", "JOURNAL_NAME", "CONTYPE", "EDITORS", "INSTITUTION", "PUBCTYST", "COMMENT", "INTELLCONT_AUTH_1_FACULTY_NAME", "INTELLCONT_AUTH_1_FNAME", "INTELLCONT_AUTH_1_MNAME", "INTELLCONT_AUTH_1_LNAME"]
+        expect(XLSXOutput.new(works).output(Axlsx::Package.new.workbook).workbook.worksheets.first.rows.second.first.row.collect { |n| n.value }).to eq ["test123", "Test", 1, 2, "1-2", 2001, 9, 30, "Test Journal", "Journal Article", "Frank, Zappa", "PSU", "State College", "Some note", "", "Jim", "", "Bob"]
       end
     end
   end
