@@ -19,7 +19,7 @@ class PresentationXMLBuilder
           xml.Record('username' => faculty.access_id) {
             faculty.presentations.each do |presentation|
               xml.PRESENT {
-                (presentation.title.present?) ? xml.TITLE_(presentation.title, :access => "READ_ONLY") : nil
+                (presentation.title.present?) ? xml.TITLE_(presentation.title.gsub(/[^[:print:]]/,''), :access => "READ_ONLY") : nil
                 (presentation.dty_date.present?) ? xml.DTY_END_(presentation.dty_date, :access => "READ_ONLY") : nil
                 (presentation.name.present?) ? xml.NAME_(presentation.name, :access => "READ_ONLY") : nil
                 (presentation.org.present?) ? xml.ORG_(presentation.org, :access => "READ_ONLY") : nil

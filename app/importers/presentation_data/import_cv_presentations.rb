@@ -44,6 +44,7 @@ class ImportCVPresentations
 
   def arrays_to_hashes(data)
     headers = data.first
+    headers.first.gsub!("\xEF\xBB\xBF".force_encoding("UTF-8"), '')
     data[1..-1].map! { |n| Hash[ headers.zip(n) ] }
   end
 
