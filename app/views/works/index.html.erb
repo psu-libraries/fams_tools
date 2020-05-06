@@ -10,7 +10,6 @@
 <table class="table table-striped table-responsive">
   <tr>
     <th>username</th>
-    <th>activity insight id</th>
     <th>author</th>
     <th>title</th>
     <th>journal</th>
@@ -40,7 +39,6 @@
   <% @works.each do |w| %>
     <tr>
       <td><%= w.username %></td>
-      <td><%= Faculty.find_by(access_id: w.username)&.user_id %></td>
       <td><%= w.author %></td>
       <td><%= w.title %></td>
       <td><%= w.journal %></td>

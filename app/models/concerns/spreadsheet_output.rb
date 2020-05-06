@@ -44,8 +44,7 @@ class SpreadsheetOutput < WorkOutputs
   end
 
   def present_auth_headers(counter)
-    %W[PRESENT_AUTH_#{counter}_FACULTY_NAME PRESENT_AUTH_#{counter}_FNAME
-       PRESENT_AUTH_#{counter}_MNAME PRESENT_AUTH_#{counter}_LNAME]
+    %W[PRESENT_AUTH_#{counter}_FNAME PRESENT_AUTH_#{counter}_MNAME PRESENT_AUTH_#{counter}_LNAME]
   end
 
   def formatted_pub_headers(header_item)
@@ -58,8 +57,7 @@ class SpreadsheetOutput < WorkOutputs
   end
 
   def intellcont_auth_headers(counter)
-    %W[INTELLCONT_AUTH_#{counter}_FACULTY_NAME INTELLCONT_AUTH_#{counter}_FNAME
-       INTELLCONT_AUTH_#{counter}_MNAME INTELLCONT_AUTH_#{counter}_LNAME]
+    %W[INTELLCONT_AUTH_#{counter}_FNAME INTELLCONT_AUTH_#{counter}_MNAME INTELLCONT_AUTH_#{counter}_LNAME]
   end
 
   def formatted_headers
@@ -111,25 +109,7 @@ class SpreadsheetOutput < WorkOutputs
   end
 
   def insert_authors(row_item, author)
-    if can_insert_owner(author)
-      row_item.insert(header_length, [cv_owner&.user_id, author[0],
-                                      author[1], author[2]])
-    else
-      row_item.insert(header_length, ['', author[0], author[1], author[2]])
-    end
-  end
-
-  def can_insert_owner(author)
-    cv_owner.present? && author_is_owner(author)
-  end
-
-  def author_is_owner(author)
-    return false if author[0].nil? || author[0].empty?
-
-    owner_f_name = cv_owner&.f_name
-    cond1 = author[2]&.upcase == cv_owner&.l_name&.upcase
-    cond2 = author[0][0]&.upcase == owner_f_name[0]&.upcase
-    cond1 && cond2
+    row_item.insert(header_length, [author[0], author[1], author[2]])
   end
 
   def match_length_author(row_item, item)
