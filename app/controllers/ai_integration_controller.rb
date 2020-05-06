@@ -2,8 +2,7 @@ class AiIntegrationController < ApplicationController
   rescue_from StandardError, with: :error_redirect if Rails.env == 'production'
 
   INTEGRATIONS = %i[osp_integrate lionpath_integrate gpa_integrate
-                    pub_integrate ldap_integrate cv_pub_integrate
-                    cv_presentation_integrate].freeze
+                    pub_integrate ldap_integrate].freeze
 
   skip_before_action :verify_authenticity_token, only: :render_integrator
   before_action :set_log_paths
@@ -41,27 +40,13 @@ class AiIntegrationController < ApplicationController
     finished(start)
   end
 
-  def cv_pub_integrate
-    start = Time.now
-    CvPubIntegrateJob.perform_now(params, @cv_publications_log_path)
-    finished(start)
-  end
-
-  def cv_presentation_integrate
-    start = Time.now
-    CvPresentationIntegrateJob.perform_now(params, @cv_presentations_log_path)
-    finished(start)
-  end
-
   def index
     @integration_types =
       { 'Contract/Grant Integration' => :congrant,
         'Courses Taught Integration' => :courses_taught,
         'GPA Integration' => :gpa,
         'RMD Publications Integration' => :publications,
-        'Personal & Contact Integration' => :personal_contact,
-        'CV Publications Integration' => :cv_publications,
-        'CV Presentations Integration' => :cv_presentations }
+        'Personal & Contact Integration' => :personal_contact }
   end
 
   def render_integrator
@@ -76,8 +61,6 @@ class AiIntegrationController < ApplicationController
     @gpas_log_path = Pathname.new('log/gpa_errors.log')
     @publications_log_path = Pathname.new('log/publications_errors.log')
     @ldap_log_path = Pathname.new('log/ldap_errors.log')
-    @cv_publications_log_path = Pathname.new('log/cv_publications_errors.log')
-    @cv_presentations_log_path = Pathname.new('log/cv_presentations_errors.log')
   end
 
   def confirm_passcode

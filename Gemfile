@@ -6,7 +6,7 @@ git_source(:github) do |repo_name|
 end
 
 # NLP gem for parsing CVs
-gem 'anystyle'
+gem 'anystyle', '~> 1.3'
 
 # For manipulating and generating xlsx
 gem 'axlsx'
