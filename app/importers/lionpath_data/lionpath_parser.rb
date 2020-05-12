@@ -14,7 +14,6 @@ class LionPathParser
 
   def format
     csv_hash.each do |row|
-      format_ID(row)
       format_term(row)
       format_catalog_number(row)
       format_section_code(row)
@@ -96,22 +95,6 @@ class LionPathParser
   def convert_csv_to_hash(csv_array)
     keys = csv_array[0]
     csv_array[1..-1].map {|a| Hash[ keys.zip(a) ] }
-  end
-
-  #Converts dates back into psuIDs
-  def format_ID(row)
-    return if row['Instructor Campus ID'].nil?
-
-    if row['Instructor Campus ID'].include? '-'
-      case
-      when row['Instructor Campus ID'].split('-')[0] != "1"
-        row['Instructor Campus ID'] = row['Instructor Campus ID'].split('-')[1].downcase + row['Instructor Campus ID'].split('-')[0]
-      when row['Instructor Campus ID'].split('-')[2] =~ /19\d{2}/
-        row['Instructor Campus ID'] = row['Instructor Campus ID'].split('-')[1].downcase + row['Instructor Campus ID'].split('-')[2][2..3]
-      when row['Instructor Campus ID'].split('-')[2] =~ /\d{4}/
-        row['Instructor Campus ID'] = row['Instructor Campus ID'].split('-')[1].downcase + row['Instructor Campus ID'].split('-')[2]
-      end
-    end
   end
 
   #Converts 'Term' from season and year to just season
