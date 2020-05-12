@@ -10,4 +10,4 @@ ls -t app/parsing_files/ | head -1 | xargs -I '{}' mv app/parsing_files/{} app/p
 rm app/parsing_files/PE_RP_ACTIVITY_INSIGHT*
 
 # Run integration
-bundle exec rake courses_taught:integrate
+RAILS_ENV=production bundle exec rake courses_taught:integrate
