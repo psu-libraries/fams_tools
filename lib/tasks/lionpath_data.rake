@@ -1,28 +1,14 @@
-namespace :lionpath_data do
+namespace :courses_taught do
 
-  desc "Filter and format LionPath data.
-        Write to xls.
-        Populate database."
-
-  task format_and_populate: :environment do
-    start = Time.now
-    my_lionpath_populate = LionPathPopulateDB.new
-    my_lionpath_populate.format_and_filter
-    my_lionpath_populate.write
-    my_lionpath_populate.populate
-    finish = Time.now
-    puts(((finish - start)/60).to_s + ' mins')
-  end
-
-  desc "Integrate data into AI through WebServices."
+  desc "Integrate Courses Taught data."
 
   task integrate: :environment do
     start = Time.now
-    lionpath_integrate = IntegrateData.new(LionPathXMLBuilder.new, :beta)
-    lionpath_integrate.integrate
+    # Takes params hash -> params[:target] and params[:courses_file]
+    # Also needs path to log file from Rails.root
+    params = { target: :beta, courses_file: "courses_taught.csv"}
+    LionpathIntegrateJob.perform_now(params, 'log/courses_errors.log')
     finish = Time.now
     puts(((finish - start)/60).to_s + ' mins')
   end
-
 end
-
