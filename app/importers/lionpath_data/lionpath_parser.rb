@@ -6,7 +6,7 @@ class LionPathParser
   attr_accessor :csv_hash, :active_users, :csv_object
 
   def initialize(filepath = 'data/creditcoursestaught.txt')
-    @csv_object = CSV.read(filepath, encoding: "ISO-8859-1:UTF-8", col_sep: "\t") 
+    @csv_object = CSV.read(filepath, encoding: "ISO-8859-1:UTF-8", quote_char: '"', force_quotes: true)
     @csv_hash = convert_csv_to_hash(csv_object)
     @active_users = Faculty.pluck(:access_id)
     @flagged = []
@@ -36,6 +36,8 @@ class LionPathParser
   def filter_by_user
     kept_rows = []
     csv_hash.each do |row|
+      next if row['Instructor Campus ID'].nil?
+
       if active_users.include? row['Instructor Campus ID'].downcase
         kept_rows << row
       end
@@ -98,6 +100,8 @@ class LionPathParser
 
   #Converts dates back into psuIDs
   def format_ID(row)
+    return if row['Instructor Campus ID'].nil?
+
     if row['Instructor Campus ID'].include? '-'
       case
       when row['Instructor Campus ID'].split('-')[0] != "1"
