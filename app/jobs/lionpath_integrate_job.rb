@@ -10,6 +10,8 @@ class LionpathIntegrateJob < ApplicationJob
       f_path = File.join('app', 'parsing_files', f_name)
       File.open(f_path, "wb") { |f| f.write(params[:courses_file].read) }
     else
+      # Running bash script to grab lionpath files
+      `#{Rails.root}/bin/courses-taught.sh`
       f_path = File.join('app', 'parsing_files', 'courses_taught.csv')
     end
     my_lionpath_populate = LionPathPopulateDB.new(LionPathParser.new(filepath = f_path))
