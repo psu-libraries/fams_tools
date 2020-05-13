@@ -5,7 +5,7 @@ class LionpathIntegrateJob < ApplicationJob
   def perform(params, log_path, file_exist=false)
     error_logger = Logger.new("public/#{log_path}")
     error_logger.info "Courses Taught Integration to #{params[:target]} initiated at: #{DateTime.now}"
-    if file_exist.false?
+    if file_exist == false
       f_name = params[:courses_file].original_filename
       f_path = File.join('app', 'parsing_files', f_name)
       File.open(f_path, "wb") { |f| f.write(params[:courses_file].read) }
