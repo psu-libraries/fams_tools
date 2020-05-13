@@ -4,10 +4,9 @@ namespace :courses_taught do
 
   task integrate: :environment do
     start = Time.now
-    # Takes params hash -> params[:target] and params[:courses_file]
-    # Also needs path to log file from Rails.root
-    params = { target: :beta, courses_file: "courses_taught.csv"}
-    LionpathIntegrateJob.perform_now(params, 'log/courses_errors.log')
+    # Takes params hash -> params[:target] must be defined (:beta or :prod)
+    params = { target: :beta }
+    LionpathIntegrateJob.perform_now(params, 'log/courses_errors.log', true)
     finish = Time.now
     puts(((finish - start)/60).to_s + ' mins')
   end
