@@ -51,7 +51,7 @@ describe "#osp_integrate" do
       logger = double('logger')
       allow(Logger).to receive(:new).and_return(logger)
       expect(logger).to receive(:info).with(/initiated at:|Errors for Contract\/Grant/).twice
-      expect(logger).to receive(:error).with([/Unexpected EOF in prolog/])
+      expect(logger).to receive(:error)
       expect(page).to have_content("AI-Integration")
       within('#congrant') do
         page.attach_file 'congrant_file', Rails.root.join('spec/fixtures/contract_grants.xlsx')
