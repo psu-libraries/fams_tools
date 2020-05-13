@@ -29,8 +29,9 @@ class LionpathIntegrateJob < ApplicationJob
   end
 
   def populate_course_data(f_path)
-    lionpath_populate_obj(f_path).format_and_filter
-    lionpath_populate_obj(f_path).populate
+    lionpath = lionpath_populate_obj(f_path)
+    lionpath.format_and_filter
+    lionpath.populate
   end
 
   def lionpath_populate_obj(f_path)
