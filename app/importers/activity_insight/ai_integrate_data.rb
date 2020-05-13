@@ -17,12 +17,11 @@ class IntegrateData
       if response.to_s.include? 'Error'
         osp_keys = Nokogiri::XML(xml).xpath("//OSPKEY").collect{|r| r.children.to_s}
         access_ids = Nokogiri::XML(xml).xpath("//Record").collect{|r| r.attr('username')}
-        itr_errors = []
-        itr_errors << response.parsed_response
-        itr_errors << access_ids unless access_ids.empty?
-        itr_errors << osp_keys unless osp_keys.empty?
-        itr_errors.flatten!
-        errors << itr_errors.join(', ')
+        itr_errors = {}
+        itr_errors[:response] = response.parsed_response
+        itr_errors[:affected_faculty] = access_ids unless access_ids.empty?
+        itr_errors[:affected_osps] = osp_keys unless osp_keys.empty?
+        errors << itr_errors
       end
       Rails.logger.info response
     end
