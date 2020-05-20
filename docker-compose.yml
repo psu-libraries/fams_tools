@@ -18,6 +18,11 @@ services:
     - db
     stdin_open: true
     tty: true
+    volumes:
+    - type: bind
+      consistency: cached
+      source: .
+      target: /ai_integration/
 
 volumes:
   ai-integration-data:
