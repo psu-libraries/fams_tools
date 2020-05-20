@@ -7,22 +7,22 @@ RSpec.describe LionPathParser do
                   'Academic Course ID', 'Cross Listed Flag', 'Subject Code', 'Catalog Number', 'Class Section Code', 'Course Credits/Units',
                   'Current Enrollment', 'Instructor Load Factor', 'Instruction Mode', 'Course Component', 'Instructor Role']}
 
-  let(:line1) {['1-Mar-1983', 'Spring 2018', 2018, 'UP', 'Math', 'Lots of math.', 
+  let(:line1) {['mar83', 'Spring 2018', 2018, 'UP', 'Math', 'Lots of math.',
                 9999, 'Y', 'MATH', 1, '01C', 3, 25, 100, 'Hybrid - Online & In Person', 'Lecture', 'Primary Instructor']}
 
-  let(:line2) {['1-Mar-6783', 'Spring 2018', 2018, 'UP', 'Math', 'Lots of math.', 
+  let(:line2) {['mar6783', 'Spring 2018', 2018, 'UP', 'Math', 'Lots of math.',
                 2222, 'Y', 'MATH', '77A', 1, 3, 25, 100, 'In Person', 'Lecture', 'Secondary Instructor']}
 
   let(:line3) {['xxx111', 'Spring 2018', 2018, 'UP', 'Math', 'Lots of math.', 
                 1111, 'N', 'MATH', '202D', '901D', 3, 25, 100, 'In Person', 'Lecture', 'Primary Instructor']}
 
-  let(:line4) {['23-Jan-2018', 'Spring 2018', 2018, 'UP', 'Math', 'Lots of math.', 
+  let(:line4) {['jan23', 'Spring 2018', 2018, 'UP', 'Math', 'Lots of math.',
                 1111, 'N', 'MATH', 20, 1, 3, 25, 100, 'In Person', 'Lecture', 'Secondary Instructor']}
 
   let(:line5) {['zzz999', 'Spring 2018', 2018, 'UP', 'Math', 'Lots of math.', 
                 1111, 'N', 'MATH', 20, 1, 3, 25, 100, 'In Person', 'Lecture', 'Primary Instructor']}
 
-  let(:line6) {['1-Mar-1983', 'Spring 2018', 2018, 'UP', 'Math', 'Lots of math.', 
+  let(:line6) {['mar83', 'Spring 2018', 2018, 'UP', 'Math', 'Lots of math.',
                 9999, 'Y', 'MATH', '77A', 1, 3, 25, 100, 'In Person', 'Online', 'Secondary Instructor']}
 
   let(:line7) {['xxx111', 'Summer 2018', 2018, 'UP', 'Math', 'Lots of math.',

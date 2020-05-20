@@ -6,7 +6,7 @@ class LionPathParser
   attr_accessor :csv_hash, :active_users, :csv_object
 
   def initialize(filepath = 'data/creditcoursestaught.txt')
-    @csv_object = CSV.read(filepath, encoding: "ISO-8859-1:UTF-8", col_sep: "\t") 
+    @csv_object = CSV.read(filepath, encoding: "ISO-8859-1:UTF-8", quote_char: '"', force_quotes: true)
     @csv_hash = convert_csv_to_hash(csv_object)
     @active_users = Faculty.pluck(:access_id)
     @flagged = []
@@ -14,7 +14,6 @@ class LionPathParser
 
   def format
     csv_hash.each do |row|
-      format_ID(row)
       format_term(row)
       format_catalog_number(row)
       format_section_code(row)
@@ -36,6 +35,8 @@ class LionPathParser
   def filter_by_user
     kept_rows = []
     csv_hash.each do |row|
+      next if row['Instructor Campus ID'].nil?
+
       if active_users.include? row['Instructor Campus ID'].downcase
         kept_rows << row
       end
@@ -94,20 +95,6 @@ class LionPathParser
   def convert_csv_to_hash(csv_array)
     keys = csv_array[0]
     csv_array[1..-1].map {|a| Hash[ keys.zip(a) ] }
-  end
-
-  #Converts dates back into psuIDs
-  def format_ID(row)
-    if row['Instructor Campus ID'].include? '-'
-      case
-      when row['Instructor Campus ID'].split('-')[0] != "1"
-        row['Instructor Campus ID'] = row['Instructor Campus ID'].split('-')[1].downcase + row['Instructor Campus ID'].split('-')[0]
-      when row['Instructor Campus ID'].split('-')[2] =~ /19\d{2}/
-        row['Instructor Campus ID'] = row['Instructor Campus ID'].split('-')[1].downcase + row['Instructor Campus ID'].split('-')[2][2..3]
-      when row['Instructor Campus ID'].split('-')[2] =~ /\d{4}/
-        row['Instructor Campus ID'] = row['Instructor Campus ID'].split('-')[1].downcase + row['Instructor Campus ID'].split('-')[2]
-      end
-    end
   end
 
   #Converts 'Term' from season and year to just season
