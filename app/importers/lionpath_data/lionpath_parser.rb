@@ -94,7 +94,8 @@ class LionPathParser
 
   def convert_csv_to_hash(csv_array)
     keys = csv_array[0]
-    csv_array[1..-1].map {|a| Hash[ keys.zip(a) ] }
+    keys[0].gsub!("ï»¿".force_encoding("UTF-8"), '')
+    csv_array[1..-1].map{ |a| Hash[ keys.zip(a) ] }
   end
 
   #Converts 'Term' from season and year to just season
