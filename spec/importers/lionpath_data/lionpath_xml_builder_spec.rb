@@ -6,12 +6,12 @@ RSpec.describe LionPathXMLBuilder do
     [{'Term' => 'Spring', 'Calendar Year' => 2018, 'Course Short Description' => 'The Class', 'Course Long Description' => 'This is the class that a teacher teaches.',
       'Acedemic Course ID' => 12345, 'Instructor Campus ID' => 'abc123', 'f_name' => 'Allen', 'l_name' => 'Carter', 'm_name' => 'Bob',
       'Class Campus Code' => 'UP', 'Cross Listed Flag' => 'N', 'Subject Code' => 'MGMT', 'Course Number' => '001', 'Course Suffix' => 'B',
-      'Class Section Code' => '001', 'Course Credits/Units' => 3, 'Current Enrollment' => 100, 'Instruction Mode' => 'In Person', 'Instructor Role' => 'Primary Instructor',
+      'Class Section Code' => '001', 'Course Credits/Units' => 3, 'Current Enrollment' => 100, 'Instructor Mode' => 'In Person', 'Instructor Role' => 'Primary Instructor',
       'Course Component' => 'Lecture', 'XCourse CoursePre' => '', 'XCourse CourseNum' => '', 'XCourse CourseNum Suffix' => '', 'Instructor Load Factor' => 100},
      {'Term' => 'Spring', 'Calendar Year' => 2018, 'Course Short Description' => 'The Other Class', 'Course Long Description' => 'This is the class that students learn in.',
       'Acedemic Course ID' => 54321, 'Instructor Campus ID' => 'cba321', 'f_name' => 'Carl', 'l_name' => 'Abraham', 'm_name' => 'Brett',
       'Class Campus Code' => 'UP', 'Cross Listed Flag' => 'N', 'Subject Code' => 'HIST', 'Course Number' => '100', 'Course Suffix' => 'A',
-      'Class Section Code' => '002', 'Course Credits/Units' => 3, 'Current Enrollment' => 50, 'Instruction Mode' => 'In Person', 'Instructor Role' => 'Primary Instructor',
+      'Class Section Code' => '002', 'Course Credits/Units' => 3, 'Current Enrollment' => 50, 'Instructor Mode' => 'In Person', 'Instructor Role' => 'Primary Instructor',
       'Course Component' => 'Lecture', 'XCourse CoursePre' => '', 'XCourse CourseNum' => '', 'XCourse CourseNum Suffix' => '', 'Instructor Load Factor' => 100}]
   end
 
@@ -42,7 +42,7 @@ RSpec.describe LionPathXMLBuilder do
                        course_credits:         row['Course Credits/Units'],
                        current_enrollment:     row['Current Enrollment'],
                        instructor_load_factor: row['Instructor Load Factor'],
-                       instruction_mode:       row['Instruction Mode'],
+                       instruction_mode:       row['Instructor Mode'],
                        instructor_role:        row['Instructor Role'],
                        course_component:       row['Course Component'],
                        xcourse_course_pre:     row['XCourse CoursePre'],

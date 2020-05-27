@@ -51,9 +51,13 @@
     </ol>
     <li><h5>Courses Taught Integration</h5></li>
     <ol>
-      <li>Download the latest courses taught information from iTwo</li>
-      <li>Open the file and convert the 'Instructor Campus ID' column to a date formatted dd-mmm-yyyy (Ex. 23-Jan-2012)</li>
-      <li>Save the file as a tab delimited text file</li>
+      <strong class="text-danger">This integration is fully automated.  It runs at 00:00 on July 1st, October 1st, and February 1st.</br>
+      If you are using iTwo to generate the file, you must use DM's manual import.</br>
+      To run this integration with the GUI:</strong>
+      </br>
+      </br>
+      <li>Use `sftp` to download the latest Courses Taught file from the Lionpath server to the Rubytools server</li>
+      <li>Use `scp` to copy this file from the Rubytools server to a local machine</li>
       <li>From the integration screen, upload this file where it says "Courses taught data file"</li>
       <li>Enter the passcode and click the button corresponding to the target environment you wish to integrate with</li>
     </ol>
@@ -75,20 +79,6 @@
       <li>This will gather data from LDAP through its API.  No file is required</li>
       <li>Enter the passcode and click the button corresponding to the target environment you wish to integrate with</li>
     </ol>
-    <li><h5>CV Publications Integration</h5></li>
-    <ol>
-      <li>Complete parsing of CV publications by using the CV Parser</li>
-      <li>Make sure the file is saved as a UTF-8 encoded CSV file</li>
-      <li>From the integration screen, upload this file where it says "Cv publications csv"</li>
-      <li>Enter the passcode and click the button corresponding to the target environment you wish to integrate with</li>
-    </ol>
-    <li><h5>CV Presentations Integration</h5></li>
-    <ol>
-      <li>Complete parsing of CV presentations by using the CV Parser</li>
-      <li>Make sure the file is saved as a UTF-8 encoded CSV file</li>
-      <li>From the integration screen, upload this file where it says "Cv presentations csv"</li>
-      <li>Enter the passcode and click the button corresponding to the target environment you wish to integrate with</li>
-    </ol>
   </ul>
-
+  </br>
 </div>

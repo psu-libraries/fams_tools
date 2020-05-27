@@ -4,7 +4,7 @@ RSpec.describe LionPathPopulateDB do
 
   headers = ['Instructor Campus ID', 'Term', 'Calendar Year', 'Class Campus Code', 'Course Short Description', 'Course Long Description',
              'Academic Course ID', 'Cross Listed Flag', 'Subject Code', 'Class Section Code', 'Course Credits/Units',
-             'Current Enrollment', 'Instructor Load Factor', 'Instruction Mode', 'Course Component', 'Instructor Role', 'Course Number',
+             'Current Enrollment', 'Instructor Load Factor', 'Instructor Mode', 'Course Component', 'Instructor Role', 'Course Number',
              'Course Suffix', 'XCourse CoursePre', 'XCourse CourseNum', 'XCourse CourseNum Suffix', 'm_name', 'l_name', 'f_name']
 
   let(:fake_sheet) do
