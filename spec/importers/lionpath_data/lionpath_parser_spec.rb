@@ -5,7 +5,7 @@ RSpec.describe LionPathParser do
 
   let(:headers) {['Instructor Campus ID', 'Term', 'Calendar Year', 'Class Campus Code', 'Course Short Description', 'Course Long Description',
                   'Academic Course ID', 'Cross Listed Flag', 'Subject Code', 'Catalog Number', 'Class Section Code', 'Course Credits/Units',
-                  'Current Enrollment', 'Instructor Load Factor', 'Instruction Mode', 'Course Component', 'Instructor Role']}
+                  'Current Enrollment', 'Instructor Load Factor', 'Instructor Mode', 'Course Component', 'Instructor Role']}
 
   let(:line1) {['mar83', 'Spring 2018', 2018, 'UP', 'Math', 'Lots of math.',
                 9999, 'Y', 'MATH', 1, '01C', 3, 25, 100, 'Hybrid - Online & In Person', 'Lecture', 'Primary Instructor']}
@@ -45,11 +45,10 @@ RSpec.describe LionPathParser do
         should add leading zeroes to "Course Number" column and
         should add leading zeroes to "Class Section Code" column and
         should seperate "Course Suffix" from "Class Section Code" and
-        should add data to "XCourse CoursePre" "XCourse CourseNum" "XCourse CourseNum Suffix"
-        should convert "-" in Instruction Mode to "—"' do
+        should add data to "XCourse CoursePre" "XCourse CourseNum" "XCourse CourseNum Suffix"' do
       allow(CSV).to receive_message_chain(:read).and_return([headers, line1, line2, line3, line4, line5, line6, line7])
       lionpath_parser_obj.format
-      lionpath_parser_obj.csv_hash[6].delete 'Instruction Mode'
+      lionpath_parser_obj.csv_hash[6].delete 'Instructor Mode'
       expect(lionpath_parser_obj.csv_hash[0]['Instructor Campus ID']).to eq('mar83')
       expect(lionpath_parser_obj.csv_hash[1]['Instructor Campus ID']).to eq('mar6783')
       expect(lionpath_parser_obj.csv_hash[2]['Instructor Campus ID']).to eq('xxx111')
@@ -72,9 +71,9 @@ RSpec.describe LionPathParser do
       expect(lionpath_parser_obj.csv_hash[5]['XCourse CoursePre']).to eq('MATH')
       expect(lionpath_parser_obj.csv_hash[5]['XCourse CourseNum']).to eq('001')
       expect(lionpath_parser_obj.csv_hash[5]['XCourse CourseNum Suffix']).to eq(nil)
-      expect(lionpath_parser_obj.csv_hash[0]['Instruction Mode']).to eq('Hybrid – Online & In Person')
+      expect(lionpath_parser_obj.csv_hash[0]['Instructor Mode']).to eq('Hybrid - Online & In Person')
       expect(lionpath_parser_obj.csv_hash[0]['Instructor Role']).to eq('Primary Instructor')
-      expect(lionpath_parser_obj.csv_hash[6].keys).not_to include('Instruction Mode')
+      expect(lionpath_parser_obj.csv_hash[6].keys).not_to include('Instructor Mode')
     end
   end
 
