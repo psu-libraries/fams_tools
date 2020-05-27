@@ -1,5 +1,6 @@
 vendor/cache
 .git
-public/psu/*
-/log/*
-/app/parsing_files/*
+public/psu
+public/log
+/log
+/app/parsing_files
