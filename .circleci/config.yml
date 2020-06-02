@@ -18,10 +18,6 @@ jobs:
           name: "Build Container"
           command: |
             docker-compose build
-
-      - run:
-          name: "Run Container"
-          command: |
             docker-compose up -d
 
 #      - run:
@@ -32,4 +28,5 @@ jobs:
       - run:
           name: "Rspec"
           command: |
+            docker-compose up -d
             docker-compose exec web bundle exec rspec
