@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/psu-stewardship/ai_integration.svg?token=aQpc68FoUpxpqgvP9XN9&branch=master)](https://travis-ci.com/psu-stewardship/ai_integration)
+[![CircleCI](https://circleci.com/gh/psu-stewardship/ai_integration.svg?style=svg)](https://circleci.com/gh/psu-stewardship/ai_integration)
 
 # AI Integration (FAMS Tools)
 
