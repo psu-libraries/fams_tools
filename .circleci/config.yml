@@ -21,11 +21,15 @@ jobs:
 
       - run:
           name: "Run Container"
+          # Initial setup of db takes longer than usual.
+          # Run the db service first, then wait 10 seconds
+          # for the rest.
           command: |
             docker-compose up -d db &&
             sleep 10s &&
             docker-compose up -d
 
+      # TODO Uncomment when rubocop fixes are completed
 #      - run:
 #          name: "Rubocop"
 #          command: |
