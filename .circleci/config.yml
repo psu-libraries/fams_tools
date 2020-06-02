@@ -7,7 +7,7 @@ jobs:
       - checkout
       - run: "mv config/activity_insight.ym.circleci config/activity_insight.yml &&
               mv config/database.yml.circleci config/database.yml &&
-              mv config/integration_passcode.yml.circleci config/integration_passcode.yml
+              mv config/integration_passcode.yml.circleci config/integration_passcode.yml"
 
       - run:
           name: "Build Container"
