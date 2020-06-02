@@ -15,9 +15,13 @@ jobs:
             mkdir public/psu
 
       - run:
-          name: "Build & Run Container"
+          name: "Build Container"
           command: |
             docker-compose build
+
+      - run:
+          name: "Run Container"
+          command: |
             docker-compose up -d
 
 #      - run:
