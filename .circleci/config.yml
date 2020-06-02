@@ -2,10 +2,10 @@ version: 2.1
 
 jobs:
   build:
-    docker:
-      - image: circleci/cci-demo-docker-primary:0.0.2
+    machine: true
     steps:
       - checkout
+      - setup_remote_docker
       - run:
           name: "Build Container"
           command: |
