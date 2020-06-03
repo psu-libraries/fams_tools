@@ -1,0 +1,41 @@
+version: 2.1
+
+jobs:
+  build:
+    machine: true
+    steps:
+      - checkout
+      - run:
+          name: "Setup Files and Directories"
+          command: |
+            mv config/activity_insight.yml.circleci config/activity_insight.yml &&
+            mv config/database.yml.circleci config/database.yml &&
+            mv config/integration_passcode.yml.circleci config/integration_passcode.yml &&
+            mkdir app/parsing_files &&
+            mkdir public/psu
+
+      - run:
+          name: "Build Container"
+          command: |
+            docker-compose build
+
+      - run:
+          name: "Run Container"
+          # Initial setup of db takes longer than usual.
+          # Run the db service first, then wait 10 seconds
+          # for the rest.
+          command: |
+            docker-compose up -d db &&
+            sleep 10s &&
+            docker-compose up -d
+
+      # TODO Uncomment when rubocop fixes are completed
+#      - run:
+#          name: "Rubocop"
+#          command: |
+#            docker-compose exec web bundle exec rubocop
+
+      - run:
+          name: "Rspec"
+          command: |
+            docker-compose exec web bundle exec rspec
