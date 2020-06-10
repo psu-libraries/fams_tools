@@ -83,7 +83,7 @@ class PublicationListingsController < ApplicationController
   end
 
   def split_name(name)
-    return name if name.empty?
+    return name if name.blank?
 
     if name.split(/(?<=[. ])/).length == 2
       [name.split(/(?<=[. ])/)[0].strip, name.split(/(?<=[. ])/)[1].strip]
