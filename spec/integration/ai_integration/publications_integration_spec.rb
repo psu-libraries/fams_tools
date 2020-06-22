@@ -51,7 +51,7 @@ describe "#pub_integrate" do
       logger = double('logger')
       allow(Logger).to receive(:new).and_return(logger)
       expect(logger).to receive(:info).with(/initiated at:|Errors for Publications/).twice
-      expect(logger).to receive(:error)
+      expect(logger).to receive(:error).exactly(3).times
       expect(page).to have_content("AI-Integration")
       within('#publications') do
         page.fill_in 'passcode', :with => passcode

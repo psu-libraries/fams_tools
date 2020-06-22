@@ -24,7 +24,7 @@ describe "#gpa_integrate" do
       logger = double('logger')
       allow(Logger).to receive(:new).and_return(logger)
       expect(logger).to receive(:info).with(/initiated at:|Errors for GPA/).twice
-      expect(logger).to receive(:error).with([])
+      expect(logger).not_to receive(:error)
       expect(page).to have_content("GPA Integration")
       within('#gpa') do
         page.attach_file 'gpa_file', Rails.root.join('spec/fixtures/gpa_data.xlsx')
