@@ -1,6 +1,6 @@
 class PubIntegrateJob < ApplicationJob
 
-  def integrate(params)
+  def integrate(params, _file_exist = false)
     import_pubs = GetPubData.new(params[:college])
     import_pubs.call(PubPopulateDB.new)
     my_integrate = IntegrateData.new(PubXMLBuilder.new, params[:target])

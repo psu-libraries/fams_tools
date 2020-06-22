@@ -1,4 +1,6 @@
 require 'rails_helper'
+require_relative '../../app/importers/activity_insight/ai_integrate_data'
+require_relative '../../app/importers/lionpath_data/lionpath_populate_db'
 
 RSpec.describe ApplicationJob do
   let(:params) { {key1: 'value1', key2: 'value2'} }
@@ -36,6 +38,15 @@ RSpec.describe ApplicationJob do
       expect_any_instance_of(OspIntegrateJob).to receive(:integration_stop)
       expect{ OspIntegrateJob.perform_now(params, '/log/path') }.to raise_error StandardError
       expect(Integration.running?).to eq false
+    end
+  end
+
+  context 'when running lionpath integration' do
+    it 'accepts _file_exits parameter and calls system' do
+      allow_any_instance_of(LionpathIntegrateJob).to receive(:`).and_return(true)
+      allow_any_instance_of(LionpathIntegrateJob).to receive(:populate_course_data).and_return(true)
+      allow_any_instance_of(LionpathIntegrateJob).to receive(:integrate_course_data).and_return(true)
+      LionpathIntegrateJob.perform_now(params, '/log/path', true)
     end
   end
 end

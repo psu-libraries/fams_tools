@@ -1,6 +1,6 @@
 class GpaIntegrateJob < ApplicationJob
 
-  def integrate(params)
+  def integrate(params, _file_exist = false)
     f_name = params[:gpa_file].original_filename
     f_path = File.join('app', 'parsing_files', f_name)
     File.open(f_path, "wb") { |f| f.write(params[:gpa_file].read) }
