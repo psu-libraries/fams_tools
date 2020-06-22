@@ -46,7 +46,7 @@ RSpec.describe ApplicationJob do
       allow_any_instance_of(LionpathIntegrateJob).to receive(:`).and_return(true)
       allow_any_instance_of(LionpathIntegrateJob).to receive(:populate_course_data).and_return(true)
       allow_any_instance_of(LionpathIntegrateJob).to receive(:integrate_course_data).and_return([{}])
-      LionpathIntegrateJob.perform_now(params, '/log/path', true)
+      LionpathIntegrateJob.perform_now(params, 'log/courses_errors.log', true)
     end
   end
 
