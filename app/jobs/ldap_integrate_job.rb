@@ -1,6 +1,6 @@
 class LdapIntegrateJob < ApplicationJob
 
-  def integrate(params)
+  def integrate(params, _file_exist = false)
     import_ldap = ImportLdapData.new
     import_ldap.import_ldap_data
     ldap_integrate = IntegrateData.new(LdapXmlBuilder.new, params[:target])
