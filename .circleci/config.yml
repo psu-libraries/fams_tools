@@ -13,6 +13,7 @@ jobs:
             mv config/integration_passcode.yml.circleci config/integration_passcode.yml &&
             mkdir app/parsing_files &&
             mkdir public/psu
+            mkdir public/log
 
       - run:
           name: "Build Container"
