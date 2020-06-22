@@ -45,8 +45,25 @@ RSpec.describe ApplicationJob do
     it 'accepts _file_exits parameter and calls system' do
       allow_any_instance_of(LionpathIntegrateJob).to receive(:`).and_return(true)
       allow_any_instance_of(LionpathIntegrateJob).to receive(:populate_course_data).and_return(true)
-      allow_any_instance_of(LionpathIntegrateJob).to receive(:integrate_course_data).and_return(true)
+      allow_any_instance_of(LionpathIntegrateJob).to receive(:integrate_course_data).and_return([{}])
       LionpathIntegrateJob.perform_now(params, '/log/path', true)
+    end
+  end
+
+  context 'when AI Webservices returns errors' do
+    it 'parses errors and displays it in a log file' do
+      allow_any_instance_of(OspIntegrateJob).to receive(:integrate).and_return([{response: 'error',
+                                                                                 affected_faculty: 'abc123',
+                                                                                 affected_osps: '123456'},
+                                                                                {response: 'error',
+                                                                                 affected_faculty: 'abc123',
+                                                                                 affected_osps: '123456'}
+                                                                               ])
+      logger = double('logger')
+      allow(Logger).to receive(:new).and_return(logger)
+      expect(logger).to receive(:info).twice
+      expect(logger).to receive(:error).with(/Error:|Affected Faculty:|Affected OSPs|_______/).exactly(8).times
+      OspIntegrateJob.perform_now({target: :beta}, '/path', false)
     end
   end
 end
