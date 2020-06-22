@@ -22,7 +22,12 @@ class ApplicationJob < ActiveJob::Base
     error_logger.info "#{name} to #{params[:target]} initiated at: #{DateTime.now}"
     errors = integrate(params, _file_exist)
     error_logger.info "Errors for #{name} to #{params[:target]} at: #{DateTime.now}"
-    error_logger.error errors
+    errors.each do |error|
+      error_logger.error "____________________________________________________"
+      error_logger.error "Error: #{error[:response]}" if error[:response]
+      error_logger.error "Affected Faculty: #{error[:affected_faculty]}" if error[:affected_faculty]
+      error_logger.error "Affected OSPs: #{error[:affected_osps]}" if error[:affected_osps]
+    end
   end
 
   private
