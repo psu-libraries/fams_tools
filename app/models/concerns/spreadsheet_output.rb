@@ -13,8 +13,13 @@ class SpreadsheetOutput < WorkOutputs
 
   def headers
     header_array = []
-    header_array << PRES_HEADERS if workstype == 'presentations'
-    header_array << PUB_HEADERS if workstype != 'presentations'
+    if workstype == 'presentations'
+      header_array << PRES_HEADERS
+      @header_map = PRES_MAP
+    else
+      header_array << PUB_HEADERS
+      @header_map = PUB_MAP
+    end
     header_array.flatten
   end
 
@@ -71,7 +76,7 @@ class SpreadsheetOutput < WorkOutputs
 
   def row(item)
     row_arr = []
-    HEADER_MAP.each do |key|
+    @header_map.each do |key|
       row_arr << row_assign(item, key)
     end
     row_arr
