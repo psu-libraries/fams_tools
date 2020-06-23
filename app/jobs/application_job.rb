@@ -17,7 +17,24 @@ class ApplicationJob < ActiveJob::Base
     delete_all_data
   end
 
+  def perform(params, log_path, _file_exist = false)
+    error_logger = Logger.new("public/#{log_path}")
+    error_logger.info "#{name} to #{params[:target]} initiated at: #{DateTime.now}"
+    errors = integrate(params, _file_exist)
+    error_logger.info "Errors for #{name} to #{params[:target]} at: #{DateTime.now}"
+    errors.each do |error|
+      error_logger.error "____________________________________________________"
+      error_logger.error "Error: #{error[:response]}" if error[:response]
+      error_logger.error "Affected Faculty: #{error[:affected_faculty]}" if error[:affected_faculty]
+      error_logger.error "Affected OSPs: #{error[:affected_osps]}" if error[:affected_osps]
+    end
+  end
+
   private
+
+  def name
+    ## Define in subclass as a string that describes this integration
+  end
 
   def prevent_concurrent_jobs
     raise ConcurrentJobsError, 'An integration is currently running.' if Integration.running?
