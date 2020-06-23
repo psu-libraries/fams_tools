@@ -14,7 +14,7 @@ describe WorkOutputs do
     "USERNAME,TITLE,VOLUME,EDITION,PAGENUM,DTY_END,DTM_END,DTD_END,JOURNAL_NAME,CONTYPE,EDITORS,INSTITUTION,PUBCTYST,COMMENT,INTELLCONT_AUTH_1_FNAME,INTELLCONT_AUTH_1_MNAME,INTELLCONT_AUTH_1_LNAME\ntest123,Test,1,2,1-2,2001,9,30,Test Journal,Journal Article,\"Frank, Zappa\",PSU,State College,Some note,Jim,\"\",Bob\ntest123,Test,1,2,1-2,2001,9,30,Test Journal,Journal Article,\"Frank, Zappa\",PSU,State College,Some note,\"\",\"\",\"\",\"\"\n"
   end
   let(:pres_csv) do
-    "USERNAME,TITLE,EDITION,PAGENUM,DTY_END,DTM_END,DTD_END,NAME,TYPE,editor,ORG,LOCATION,COMMENT,PRESENT_AUTH_1_FNAME,PRESENT_AUTH_1_MNAME,PRESENT_AUTH_1_LNAME\ntest123,Test,2,1-2,2001,9,30,Test Journal,Presentations,\"Frank, Zappa\",PSU,State College,Some note,Jim,\"\",Bob\ntest123,Test,2,1-2,2001,9,30,Test Journal,Presentations,\"Frank, Zappa\",PSU,State College,Some note,\"\",\"\",\"\",\"\"\n"
+    "USERNAME,TITLE,EDITION,DTY_END,DTM_END,DTD_END,NAME,TYPE,editor,ORG,LOCATION,COMMENT,PRESENT_AUTH_1_FNAME,PRESENT_AUTH_1_MNAME,PRESENT_AUTH_1_LNAME\ntest123,Test,2,2001,9,30,Test Journal,Presentations,\"Frank, Zappa\",PSU,State College,Some note,Jim,\"\",Bob\ntest123,Test,2,2001,9,30,Test Journal,Presentations,\"Frank, Zappa\",PSU,State College,Some note,\"\",\"\",\"\",\"\"\n"
   end
 
   # These subclasses of WorkOutputs all have different implementations of #output
@@ -69,10 +69,10 @@ describe WorkOutputs do
           XLSXOutput.new(works2).output(Axlsx::Package.new.workbook).workbook.worksheets.first.rows.second.first.row.collect { |n| n.value }
         }
         it 'returns a properly formatted xlsx file' do
-          expect(first_row_collect).to eq ['USERNAME', 'TITLE', 'EDITION', 'PAGENUM', 'DTY_END', 'DTM_END', 'DTD_END',
+          expect(first_row_collect).to eq ['USERNAME', 'TITLE', 'EDITION', 'DTY_END', 'DTM_END', 'DTD_END',
                                            'NAME', 'TYPE', 'editor', 'ORG', 'LOCATION', 'COMMENT',
                                            'PRESENT_AUTH_1_FNAME', 'PRESENT_AUTH_1_MNAME', 'PRESENT_AUTH_1_LNAME']
-          expect(second_row_collect).to eq ["test123", "Test", 2, "1-2", 2001, 9, 30, "Test Journal", "Presentations",
+          expect(second_row_collect).to eq ["test123", "Test", 2, 2001, 9, 30, "Test Journal", "Presentations",
                                             "Frank, Zappa", "PSU", "State College", "Some note", "Jim", "", "Bob"]
         end
       end
