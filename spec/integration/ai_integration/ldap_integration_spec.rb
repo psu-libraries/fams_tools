@@ -33,7 +33,7 @@ describe "#ldap_integrate" do
       logger = double('logger')
       allow(Logger).to receive(:new).and_return(logger)
       expect(logger).to receive(:info).with(/initiated at:|Errors for Personal & Contact In/).twice
-      expect(logger).to receive(:error)
+      expect(logger).not_to receive(:error)
       expect(page).to have_content("AI-Integration")
       within('#personal_contacts') do
         page.fill_in 'passcode', :with => passcode

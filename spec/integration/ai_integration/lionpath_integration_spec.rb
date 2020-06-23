@@ -41,8 +41,9 @@ describe "#lionpath_integrate" do
       logger = double('logger')
       allow(Logger).to receive(:new).and_return(logger)
       expect(logger).to receive(:info).with(/initiated at:|Errors for Courses Taught/).twice
-      expect(logger).to receive(:error).with([{ :affected_faculty=>["ljs123", "ajl123"],
-                                                :response=> /Unexpected EOF in prolog/ }])
+      expect(logger).to receive(:error).with("Affected Faculty: [\"ljs123\", \"ajl123\"]")
+      expect(logger).to receive(:error).with(/_______________________/)
+      expect(logger).to receive(:error).with(/<Message>Unexpected EOF in/)
       expect(page).to have_content("AI-Integration")
       within('#courses') do
         page.attach_file 'courses_file', Rails.root.join('spec/fixtures/schteach.csv')
