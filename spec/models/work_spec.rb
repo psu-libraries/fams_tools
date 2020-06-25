@@ -10,9 +10,7 @@ describe Work, type: :model do
     it { is_expected.to have_db_column(:volume).of_type(:string) }
     it { is_expected.to have_db_column(:edition).of_type(:string) }
     it { is_expected.to have_db_column(:pages).of_type(:string) }
-    it { is_expected.to have_db_column(:year).of_type(:integer) }
-    it { is_expected.to have_db_column(:month).of_type(:integer) }
-    it { is_expected.to have_db_column(:day).of_type(:integer) }
+    it { is_expected.to have_db_column(:date).of_type(:string) }
     it { is_expected.to have_db_column(:item).of_type(:string) }
     it { is_expected.to have_db_column(:booktitle).of_type(:string) }
     it { is_expected.to have_db_column(:container).of_type(:string) }

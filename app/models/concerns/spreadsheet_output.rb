@@ -79,18 +79,50 @@ class SpreadsheetOutput < WorkOutputs
     @header_map.each do |key|
       row_arr << row_assign(item, key)
     end
-    row_arr
+    row_arr.flatten
   end
 
   def row_assign(item, key)
     if key == :ignore
       return cv_owner.user_id if cv_owner
+    elsif key == :date
+      return formatted_date(item[key])
     end
 
     return item[key]&.join(', ') if key == :editor
 
     item[key]
   end
+
+  def formatted_date(indexed_item)
+    if workstype == 'presentations'
+      return [year(indexed_item), month(indexed_item), day(indexed_item),
+              year(indexed_item), month(indexed_item), day(indexed_item)]
+    end
+
+    [year(indexed_item), month(indexed_item), day(indexed_item)]
+  end
+
+  # TODO Abstract to Module
+  def year(indexed_item)
+    date_held = split_date(indexed_item)
+    date_held.present? ? date_held[0] : nil
+  end
+
+  def month(indexed_item)
+    date_held = split_date(indexed_item)
+    date_held.present? ? date_held[1] : nil
+  end
+
+  def day(indexed_item)
+    date_held = split_date(indexed_item)
+    date_held.present? ? date_held[2] : nil
+  end
+
+  def split_date(indexed_item)
+    indexed_item.present? ? indexed_item.split('-') : nil
+  end
+  # End of module
 
   def formatted_row(item)
     row_item = row(item)
