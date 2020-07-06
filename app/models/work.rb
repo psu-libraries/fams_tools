@@ -1,5 +1,3 @@
-require 'bibtex'
-
 class Work < ApplicationRecord
   serialize :author
   serialize :editor
@@ -7,10 +5,6 @@ class Work < ApplicationRecord
 
   def self.to_csv
     SpreadsheetOutput.new(find_each).output
-  end
-
-  def self.to_bibtex
-    BibtexOutput.new(find_each).output
   end
 
   def self.to_xlsx(axlsx_workbook)
