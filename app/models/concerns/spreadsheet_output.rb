@@ -108,7 +108,9 @@ class SpreadsheetOutput < WorkOutputs
       return [date.to_s, '', '', '', '', '']
     end
 
-    [year(date), month(date), day(date)]
+    return [year(date), month(date), day(date)] if date.instance_of?(Date)
+
+    [date, "", ""]
   end
 
   def split_date(date)
