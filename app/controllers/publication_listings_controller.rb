@@ -2,9 +2,9 @@ class PublicationListingsController < ApplicationController
   def create
     pl = PublicationListing.new(name: params[:citations_title])
     pl.save
-    citations.each do |item|
+    citations.zip(parsed_citations) do |citation, item|
       work = Work.new(
-        work_attrs(item, pl)
+        work_attrs(citation, item, pl)
       )
       work.save
     end
@@ -25,11 +25,15 @@ class PublicationListingsController < ApplicationController
 
   private
 
-  def citations
+  def parsed_citations
     AnyStyle.parse(params[:citations].to_s)
   end
 
-  def work_attrs(item, publication_listing)
+  def citations
+    AnyStyle::Document.parse(params[:citations].to_s)
+  end
+
+  def work_attrs(citation, item, publication_listing)
     {
       username: params[:username],
       author: item[:author]&.collect do |e|
@@ -57,6 +61,7 @@ class PublicationListingsController < ApplicationController
       translator: item.dig(:translator, 0),
       unknown: item.dig(:unknown, 0),
       url: item.dig(:url, 0),
+      citation: citation.first.to_s,
       publication_listing: publication_listing
     }
   end
