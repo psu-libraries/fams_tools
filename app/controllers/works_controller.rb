@@ -19,7 +19,6 @@ class WorksController < ApplicationController
       format.html
       format.xlsx { render xlsx: 'index', filename: @xlsx_name }
       format.csv { send_data @works.to_csv, filename: @csv_name }
-      format.bibtex { send_data @works.to_bibtex }
     end
   end
 end
