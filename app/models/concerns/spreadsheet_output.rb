@@ -112,6 +112,8 @@ class SpreadsheetOutput < WorkOutputs
   end
 
   def split_date(date)
+    return nil if date.nil?
+
     if date.match(/[0-9]-[0-9]?[0-9],/)
       first_date = date.gsub(/-[0-9]?[0-9]/, '')
       second_date = date.gsub(/[0-9]?[0-9]-/, '')
