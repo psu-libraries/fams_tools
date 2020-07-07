@@ -10,8 +10,8 @@ RSpec.describe 'Works page', type: :feature do
     it 'displays works information' do
       visit "publication_listings/#{publication_listing.id}/works"
       expect(page).to have_content(publication_listing.name)
-      expect(page).to have_content('username')
-      expect(page).to have_content('container')
+      expect(page).to have_content('Username')
+      expect(page).to have_content('Container')
       expect(page).to have_content('test123')
       expect(page).to have_content('Test')
       expect(page).to have_content('Jim')
