@@ -40,9 +40,7 @@ class PublicationListingsController < ApplicationController
       volume: item.dig(:volume, 0),
       edition: item.dig(:edition, 0),
       pages: item.dig(:pages, 0),
-      year: year(item),
-      month: month(item),
-      day: day(item),
+      date: item.dig(:date, 0),
       booktitle: item.dig(:booktitle, 0),
       container: item.dig(:'container-title', 0),
       contype: params[:contype],
@@ -61,25 +59,6 @@ class PublicationListingsController < ApplicationController
       url: item.dig(:url, 0),
       publication_listing: publication_listing
     }
-  end
-
-  def year(item)
-    date_held = split_date(item)
-    date_held.present? ? date_held[0] : nil
-  end
-
-  def month(item)
-    date_held = split_date(item)
-    date_held.present? ? date_held[1] : nil
-  end
-
-  def day(item)
-    date_held = split_date(item)
-    date_held.present? ? date_held[2] : nil
-  end
-
-  def split_date(item)
-    item.dig(:date, 0).present? ? item.dig(:date, 0).split('-') : nil
   end
 
   def split_name(name)

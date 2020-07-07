@@ -5,7 +5,6 @@ Style/FrozenStringLiteralComment:
 Metrics/AbcSize:
   Exclude:
     - 'app/controllers/publication_listings_controller.rb'
-    - 'app/models/concerns/bibtex_output.rb'
 Metrics/MethodLength:
   Exclude:
     - 'app/controllers/publication_listings_controller.rb'

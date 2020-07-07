@@ -250,9 +250,7 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "username"
-    t.integer "year"
-    t.integer "month"
-    t.integer "day"
+    t.string "date"
     t.index ["publication_listing_id"], name: "index_works_on_publication_listing_id"
   end
 

@@ -1,4 +1,6 @@
 class SpreadsheetOutput < WorkOutputs
+  include OutputDates
+
   def output(*args)
     csv = CSV.generate({ encoding: 'utf-8' }) do |csv|
       csv << formatted_headers
@@ -13,8 +15,13 @@ class SpreadsheetOutput < WorkOutputs
 
   def headers
     header_array = []
-    header_array << PRES_HEADERS if workstype == 'presentations'
-    header_array << PUB_HEADERS if workstype != 'presentations'
+    if workstype == 'presentations'
+      header_array << PRES_HEADERS
+      @header_map = PRES_MAP
+    else
+      header_array << PUB_HEADERS
+      @header_map = PUB_MAP
+    end
     header_array.flatten
   end
 
@@ -71,20 +78,55 @@ class SpreadsheetOutput < WorkOutputs
 
   def row(item)
     row_arr = []
-    HEADER_MAP.each do |key|
+    @header_map.each do |key|
       row_arr << row_assign(item, key)
     end
-    row_arr
+    row_arr.flatten
   end
 
   def row_assign(item, key)
     if key == :ignore
       return cv_owner.user_id if cv_owner
+    elsif key == :date
+      return formatted_date(split_date(item[key]))
     end
 
     return item[key]&.join(', ') if key == :editor
 
     item[key]
+  end
+
+  def formatted_date(date)
+    if workstype == 'presentations' && date.nil?
+      return ['', '', '', '', '', '']
+    elsif workstype == 'presentations' && date.instance_of?(Array)
+      return [year(date[0]), month(date[0]), day(date[0]),
+              year(date[1]), month(date[1]), day(date[1])]
+    elsif workstype == 'presentations' && date.instance_of?(Date)
+      return [year(date), month(date), day(date), '', '', '']
+    elsif workstype == 'presentations'
+      return [date.to_s, '', '', '', '', '']
+    end
+
+    return [year(date), month(date), day(date)] if date.instance_of?(Date)
+
+    [date, "", ""]
+  end
+
+  def split_date(date)
+    return nil if date.nil?
+
+    if date.match(/[0-9]-[0-9]?[0-9],/)
+      first_date = date.gsub(/-[0-9]?[0-9]/, '')
+      second_date = date.gsub(/[0-9]?[0-9]-/, '')
+      return [first_date, second_date]
+    end
+
+    begin
+      return Date.parse(date.to_s)
+    rescue ArgumentError
+      return date.to_s
+    end
   end
 
   def formatted_row(item)

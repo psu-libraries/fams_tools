@@ -24,13 +24,6 @@ RSpec.describe 'Works page', type: :feature do
       expect(header).to match /^attachment/
     end
 
-    it 'downloads bibtex' do
-      visit "publication_listings/#{publication_listing.id}/works"
-      click_on 'Download as bibtex'
-      header = page.response_headers['Content-Disposition']
-      expect(header).to match /^attachment/
-    end
-
     it 'downloads xlsx' do
       visit "publication_listings/#{publication_listing.id}/works"
       click_on 'Download as xlsx'
