@@ -1,4 +1,6 @@
 class SpreadsheetOutput < WorkOutputs
+  include OutputDates
+
   def output(*args)
     csv = CSV.generate({ encoding: 'utf-8' }) do |csv|
       csv << formatted_headers
@@ -86,7 +88,7 @@ class SpreadsheetOutput < WorkOutputs
     if key == :ignore
       return cv_owner.user_id if cv_owner
     elsif key == :date
-      return formatted_date(item[key])
+      return formatted_date(split_date(item[key]))
     end
 
     return item[key]&.join(', ') if key == :editor
@@ -94,35 +96,34 @@ class SpreadsheetOutput < WorkOutputs
     item[key]
   end
 
-  def formatted_date(indexed_item)
-    if workstype == 'presentations'
-      return [year(indexed_item), month(indexed_item), day(indexed_item),
-              year(indexed_item), month(indexed_item), day(indexed_item)]
+  def formatted_date(date)
+    if workstype == 'presentations' && date.nil?
+      return ['', '', '', '', '', '']
+    elsif workstype == 'presentations' && date.instance_of?(Array)
+      return [year(date[0]), month(date[0]), day(date[0]),
+              year(date[1]), month(date[1]), day(date[1])]
+    elsif workstype == 'presentations' && date.instance_of?(Date)
+      return [year(date), month(date), day(date), '', '', '']
+    elsif workstype == 'presentations'
+      return [date.to_s, '', '', '', '', '']
     end
 
-    [year(indexed_item), month(indexed_item), day(indexed_item)]
+    [year(date), month(date), day(date)]
   end
 
-  # TODO Abstract to Module
-  def year(indexed_item)
-    date_held = split_date(indexed_item)
-    date_held.present? ? date_held[0] : nil
-  end
+  def split_date(date)
+    if date.match(/[0-9]-[0-9]?[0-9],/)
+      first_date = date.gsub(/-[0-9]?[0-9]/, '')
+      second_date = date.gsub(/[0-9]?[0-9]-/, '')
+      return [first_date, second_date]
+    end
 
-  def month(indexed_item)
-    date_held = split_date(indexed_item)
-    date_held.present? ? date_held[1] : nil
+    begin
+      return Date.parse(date.to_s)
+    rescue ArgumentError
+      return date.to_s
+    end
   end
-
-  def day(indexed_item)
-    date_held = split_date(indexed_item)
-    date_held.present? ? date_held[2] : nil
-  end
-
-  def split_date(indexed_item)
-    indexed_item.present? ? indexed_item.split('-') : nil
-  end
-  # End of module
 
   def formatted_row(item)
     row_item = row(item)
