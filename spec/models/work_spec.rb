@@ -29,6 +29,7 @@ describe Work, type: :model do
     it { is_expected.to have_db_column(:unknown).of_type(:string) }
     it { is_expected.to have_db_column(:url).of_type(:string) }
     it { is_expected.to have_db_column(:username).of_type(:string) }
+    it { is_expected.to have_db_column(:citation).of_type(:text) }
     it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(null: false) }
     it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(null: false) }
 
