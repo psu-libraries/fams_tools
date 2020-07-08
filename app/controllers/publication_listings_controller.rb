@@ -23,6 +23,13 @@ class PublicationListingsController < ApplicationController
     @publication_listings = PublicationListing.all
   end
 
+  def update
+    @publication_listing = PublicationListing.find_by_id(params[:id])
+    @publication_listing.update_attributes(publication_listing_params)
+    flash[:notice] = "Update Successful"
+    redirect_to(publication_listing_works_path(@publication_listing))
+  end
+
   private
 
   def parsed_citations
@@ -74,5 +81,15 @@ class PublicationListingsController < ApplicationController
     else
       [name, '']
     end
+  end
+
+  def publication_listing_params
+    params.require(:publication_listing).permit(works_attributes: [:id, :author, :title, :journal, :volume,
+                                                                   :edition, :pages, :item, :booktitle,
+                                                                   :container, :contype, :genre, :doi,
+                                                                   :editor, :institution, :isbn, :location,
+                                                                   :note, :publisher, :retrieved, :tech,
+                                                                   :translator, :unknown, :url, :username,
+                                                                   :date, :_destroy])
   end
 end
