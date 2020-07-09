@@ -14,16 +14,16 @@ class WorkOutputs
   # and [DTY_START, DTM_START, DTD_START, DTY_END, DTM_END, DTD_END] in PRES_HEADERS
   PRES_MAP = %i[username contype title container location date
                 edition note institution pages volume journal booktitle doi
-                editor isbn publisher retrieved tech translator unknown url].freeze
+                editors isbn publisher retrieved tech translator unknown url].freeze
 
   PUB_MAP = %i[username title journal volume edition pages
                date booktitle container contype doi
-               editor institution isbn location note publisher retrieved
+               editors institution isbn location note publisher retrieved
                tech translator unknown url].freeze
 
   PRES_HEADERS = ['USERNAME', 'TYPE', 'TITLE', 'NAME', 'LOCATION', ['DTM_START', 'DTD_START', 'DTY_START',
                   'DTM_END', 'DTD_END', 'DTY_END'], 'edition', 'note', 'institution', 'pages', 'volume',
-                  'journal', 'booktitle', 'doi', 'editor', 'isbn', 'publisher', 'retrieved',
+                  'journal', 'booktitle', 'doi', 'editors', 'isbn', 'publisher', 'retrieved',
                   'tech', 'translator', 'unknown', 'url'].freeze
 
   PUB_HEADERS = ['USERNAME', 'TITLE', 'journal', 'VOLUME', 'EDITION', 'PAGENUM',

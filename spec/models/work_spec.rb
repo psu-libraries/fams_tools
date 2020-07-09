@@ -4,7 +4,6 @@ describe Work, type: :model do
   describe 'columns' do
     it { is_expected.to have_db_column(:id).of_type(:integer).with_options(null: false) }
     it { is_expected.to have_db_column(:publication_listing_id).of_type(:integer) }
-    it { is_expected.to have_db_column(:author).of_type(:text) }
     it { is_expected.to have_db_column(:title).of_type(:text) }
     it { is_expected.to have_db_column(:journal).of_type(:string) }
     it { is_expected.to have_db_column(:volume).of_type(:string) }
@@ -17,7 +16,6 @@ describe Work, type: :model do
     it { is_expected.to have_db_column(:contype).of_type(:string) }
     it { is_expected.to have_db_column(:genre).of_type(:string) }
     it { is_expected.to have_db_column(:doi).of_type(:string) }
-    it { is_expected.to have_db_column(:editor).of_type(:text) }
     it { is_expected.to have_db_column(:institution).of_type(:string) }
     it { is_expected.to have_db_column(:isbn).of_type(:string) }
     it { is_expected.to have_db_column(:location).of_type(:string) }
@@ -38,11 +36,8 @@ describe Work, type: :model do
 
   describe 'associations' do
     it { is_expected.to belong_to(:publication_listing) }
-  end
-
-  describe 'serializations' do
-    it { is_expected.to serialize(:author) }
-    it { is_expected.to serialize(:editor) }
+    it { is_expected.to have_many(:authors) }
+    it { is_expected.to have_many(:editors) }
   end
 end
 
