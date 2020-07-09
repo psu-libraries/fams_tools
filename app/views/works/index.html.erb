@@ -49,12 +49,17 @@
           <%= table_row %>
             <td><%= counter.to_s %><% counter += 1 %></td>
             <td><%= fw.text_field :username, size: "5x3" %></td>
-            <td>
+            <td class="names-column">
             <% counter_2 = 1 %>
             <%= fw.fields_for :authors do |fwa| %>
-              <div class="row names-column"><%= counter_2.to_s %>.<%= fwa.text_field :f_name, size: "7x1" %><%= fwa.text_field :m_name, size: "2x1" %><%= fwa.text_field :l_name, size: "7x1" %></div>
-              <% counter_2 += 1 %>
+              <div class="row names-column">
+                <%= counter_2.to_s %>.<%= render 'author_fields', f: fwa %>
+                <% counter_2 += 1 %>
+              </div>
             <% end %>
+            <div>
+              <%= link_to_add_association 'Add Author', fw, :authors %>
+            </div>
             </td>
             <td><%= fw.text_area :title, size: "15x10" %></td>
             <td><%= fw.text_area :journal, size: "10x3" %></td>
@@ -70,9 +75,14 @@
             <td>
             <% counter_3 = 1 %>
             <%= fw.fields_for :editors do |fwe| %>
-              <div class="row names-column"><%= counter_3.to_s %>.<%= fwe.text_field :f_name %><%= fwe.text_field :m_name %></p><%= fwe.text_field :l_name %></div>
-              <% counter_3 += 1 %>
+              <div class="row names-column">
+                <%= counter_3.to_s %>.<%= render 'editor_fields', f: fwe %>
+                <% counter_3 += 1 %>
+              </div>
             <% end %>
+            <div class="names-column">
+              <%= link_to_add_association 'Add Editor', fw, :editors %>
+            </div>
             </td>
             <td><%= fw.text_area :institution, size: "10x3" %></td>
             <td><%= fw.text_area :isbn, size: "10x3" %></td>
