@@ -23,5 +23,6 @@ FactoryBot.define do
     unknown { nil }
     url { nil }
     username { 'test123' }
+    citation { 'Testy McTester. Journal Article, Sept 30, 2001.  Test Journal.' }
   end
 end
