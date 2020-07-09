@@ -1,6 +1,5 @@
 FactoryBot.define do
   factory :work do
-    author { [['Jim', '', 'Bob']] }
     title { 'Test' }
     journal { nil }
     volume { 1 }
@@ -13,7 +12,6 @@ FactoryBot.define do
     contype { 'Journal Article' }
     genre { 'article-journal' }
     doi { nil }
-    editor { [['Frank', 'Zappa']] }
     institution { 'PSU' }
     isbn { nil }
     location { 'State College' }

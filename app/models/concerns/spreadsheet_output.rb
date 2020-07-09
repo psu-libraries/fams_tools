@@ -32,11 +32,11 @@ class SpreadsheetOutput < WorkOutputs
   def longest
     num = 0
     works.each do |item|
-      next if item[:author].nil?
+      next if item.authors.blank?
 
-      next unless num < item[:author].length + header_length
+      next unless num < item.authors.length + header_length
 
-      num = item[:author].length + header_length
+      num = item.authors.length + header_length
     end
     num
   end
@@ -89,6 +89,8 @@ class SpreadsheetOutput < WorkOutputs
       return cv_owner.user_id if cv_owner
     elsif key == :date
       return formatted_date(split_date(item[key]))
+    elsif key == :editors
+      return item.editors.collect{|e| "#{e.f_name} #{e.m_name} #{e.l_name}"}.join(', ')
     end
 
     return item[key]&.join(', ') if key == :editor
@@ -136,7 +138,7 @@ class SpreadsheetOutput < WorkOutputs
   end
 
   def format_row(row_item, item)
-    if item[:author].present?
+    if item.authors.present?
       format_author_data(row_item, item)
     else
       match_length(row_item)
@@ -144,19 +146,19 @@ class SpreadsheetOutput < WorkOutputs
   end
 
   def format_author_data(row_item, item)
-    item[:author]&.reverse&.each do |author|
+    item.authors&.reverse&.each do |author|
       insert_authors(row_item, author)
     end
     match_length_author(row_item, item)
   end
 
   def insert_authors(row_item, author)
-    row_item.insert(header_length, [author[0], author[1], author[2]])
+    row_item.insert(header_length, [author.f_name, author.m_name, author.l_name])
   end
 
   def match_length_author(row_item, item)
     while row_item.length < longest
-      row_item.insert(header_length + item[:author].length, ['', '', '', ''])
+      row_item.insert(header_length + item.authors.length, ['', '', '', ''])
     end
   end
 
