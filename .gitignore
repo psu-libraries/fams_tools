@@ -35,3 +35,4 @@ spec/examples.txt
 /config/integration_passcode.yml
 /public/psu
 /public/log
+/coverage
