@@ -4,6 +4,8 @@ require 'webmock/rspec'
 require 'shoulda/matchers'
 require 'rspec/rails'
 require 'rspec/retry'
+require 'simplecov'
+SimpleCov.start
 
 # Prevent database truncation if the environment is production
 WebMock.disable_net_connect!(allow_localhost: true)

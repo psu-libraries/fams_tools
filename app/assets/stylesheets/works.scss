@@ -1,3 +1,51 @@
 // Place all the styles related to the works controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+.grey-row {
+  background-color: #DADADA;
+}
+
+.row-full{
+  width: 90vw;
+  position: relative;
+  margin-left: -45vw;
+  margin-top: 25px;
+  left: 50%;
+  font-size: 12px;
+}
+
+table {
+  position: relative;
+}
+
+th, td {
+  border: 1px solid black;
+}
+
+th {
+  background-color: white;
+  position: sticky;
+  top: 0;
+  box-shadow: 0 2px 2px 1px rgba(0, 0, 0, 100);
+}
+
+div.works-box {
+  height: 800px;
+  overflow: auto;
+  box-shadow: 0 2px 2px 1px rgba(0, 0, 0, 100);
+}
+
+.names-field {
+  padding-left: 20px;
+}
+
+.remove-nested {
+  color: red;
+  padding-left: 5px;
+}
+
+.names-column {
+  width: 235px;
+  padding-left: 10px;
+}

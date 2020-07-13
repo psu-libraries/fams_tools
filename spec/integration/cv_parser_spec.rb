@@ -17,6 +17,8 @@ RSpec.describe PublicationListingsController do
       end
       expect(PublicationListing.count).to eq(1)
       expect(Work.count).to eq(2)
+      expect(Work.first.authors.count).to eq(3)
+      expect(Work.first.citation).to match /1. Billy, B.O.B.,/
       expect(page).to have_content("Title (2 Records)")
     end
 

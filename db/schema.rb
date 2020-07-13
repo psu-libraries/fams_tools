@@ -12,6 +12,14 @@
 
 ActiveRecord::Schema.define(version: 2018050314201234) do
 
+  create_table "authors", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.string "f_name"
+    t.string "m_name"
+    t.string "l_name"
+    t.bigint "work_id"
+    t.index ["work_id"], name: "fk_rails_ef7807179c"
+  end
+
   create_table "contract_faculty_links", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "role"
     t.integer "pct_credit"
@@ -47,6 +55,14 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
     t.string "course_short_description"
     t.text "course_long_description"
     t.index ["academic_course_id", "term", "calendar_year"], name: "index_courses_on_academic_course_id_and_term_and_calendar_year", unique: true
+  end
+
+  create_table "editors", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.string "f_name"
+    t.string "m_name"
+    t.string "l_name"
+    t.bigint "work_id"
+    t.index ["work_id"], name: "fk_rails_6c877ed7df"
   end
 
   create_table "external_authors", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
@@ -224,7 +240,6 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
 
   create_table "works", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.bigint "publication_listing_id"
-    t.text "author"
     t.text "title"
     t.string "journal"
     t.string "volume"
@@ -236,7 +251,6 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
     t.string "contype"
     t.string "genre"
     t.string "doi"
-    t.text "editor"
     t.string "institution"
     t.string "isbn"
     t.string "location"
@@ -251,12 +265,15 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
     t.datetime "updated_at", null: false
     t.string "username"
     t.string "date"
+    t.text "citation"
     t.index ["publication_listing_id"], name: "index_works_on_publication_listing_id"
   end
 
+  add_foreign_key "authors", "works"
   add_foreign_key "contract_faculty_links", "contracts"
   add_foreign_key "contract_faculty_links", "faculties"
   add_foreign_key "contracts", "sponsors"
+  add_foreign_key "editors", "works"
   add_foreign_key "external_authors", "publications"
   add_foreign_key "gpas", "faculties"
   add_foreign_key "personal_contacts", "faculties"
