@@ -40,6 +40,10 @@ This app parses data from faculty CVs, and integrates data into Activity Insight
   
   * The Lionpath integration is fully automated and runs on a cron schedule.  Contract/Grants will be fully automated soon.  The rest must be run by using the GUI.  Usage instructions are on the homepage.
   
+  * Further documentation for this application can be found on its root page (/).  Documentation for the CV Parser can be found there.
+  
+  * The CV Parser uses the AnyStyle gem to parse/pasted citations through a web form.  The subsequently parsed data can then be edited and updated in another form to get the data properly formatted.  The data can be exported as a csv or xlsx file.
+  
 ## Development
 
   After running the container, any changes to the code on your local machine will change in the container.  Sometimes the rails server needs to be restarted to pick up certain changes.  To do this run:
