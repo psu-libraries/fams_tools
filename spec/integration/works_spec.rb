@@ -5,16 +5,24 @@ RSpec.describe 'Works page', type: :feature do
   let!(:faculty) { FactoryBot.create :faculty }
   let!(:publication_listing) { FactoryBot.create :publication_listing }
   let!(:work) { FactoryBot.create :work, publication_listing: publication_listing }
+  let!(:author) { FactoryBot.create :author, work: work }
+  let!(:editor) { FactoryBot.create :editor, work: work }
 
   describe "#show" do
     it 'displays works information' do
       visit "publication_listings/#{publication_listing.id}/works"
       expect(page).to have_content(publication_listing.name)
-      expect(page).to have_content('username')
-      expect(page).to have_content('container')
-      expect(page).to have_content('test123')
-      expect(page).to have_content('Test')
-      expect(page).to have_content('Jim')
+      expect(page).to have_content('Username')
+      expect(page).to have_content('Container')
+      expect(page).to have_xpath("//input[@value='#{work.username}']")
+      expect(page).to have_xpath("//input[@value='#{work.authors.first.f_name}']")
+      expect(page).to have_xpath("//input[@value='#{work.editors.first.f_name}']")
+      expect(page).to have_content(work.title)
+      expect(page).to have_content(work.citation)
+      expect(page).to have_link('Add Author')
+      expect(page).to have_link('Add Editor')
+      expect(page).to have_xpath("//i[@class='fa remove-nested fa-close']")
+      expect(page).to have_button('Update Works')
     end
 
     it 'downloads csv' do

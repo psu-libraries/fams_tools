@@ -15,5 +15,6 @@ Rails.application.routes.draw do
   resources :publication_listings do
     resources :works
     get '/destroy', to: 'publication_listings#destroy'
+    post '/update', to: 'publication_listings#update'
   end
 end
