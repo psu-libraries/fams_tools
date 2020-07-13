@@ -5,7 +5,7 @@ describe WorkOutputs do
   let!(:work1) { FactoryBot.create :work, publication_listing: publication_listing }
   let!(:work2) { FactoryBot.create :work, publication_listing: publication_listing }
   let!(:publication_listing_2) { FactoryBot.create :publication_listing }
-  let!(:work3) { FactoryBot.create :work, publication_listing: publication_listing_2, contype: 'Presentations' }
+  let!(:work3) { FactoryBot.create :work, publication_listing: publication_listing_2, contype: 'Presentations', date: 'September 1-30, 2011' }
   let!(:work4) { FactoryBot.create :work, publication_listing: publication_listing_2, contype: 'Presentations' }
   let(:works) { Work.where(publication_listing: publication_listing.id) }
   let(:works2) { Work.where(publication_listing: publication_listing_2.id) }
@@ -17,7 +17,7 @@ describe WorkOutputs do
     "USERNAME,TITLE,VOLUME,EDITION,PAGENUM,DTY_END,DTM_END,DTD_END,JOURNAL_NAME,CONTYPE,EDITORS,INSTITUTION,PUBCTYST,COMMENT,INTELLCONT_AUTH_1_FNAME,INTELLCONT_AUTH_1_MNAME,INTELLCONT_AUTH_1_LNAME\ntest123,Test,1,2,1-2,2001,9,30,Test Journal,Journal Article,#{editor.f_name} #{editor.m_name} #{editor.l_name},PSU,State College,Some note,#{author_1.f_name},#{author_1.m_name},#{author_1.l_name}\ntest123,Test,1,2,1-2,2001,9,30,Test Journal,Journal Article,\"\",PSU,State College,Some note,\"\",\"\",\"\",\"\"\n"
   end
   let(:pres_csv) do
-    "USERNAME,TYPE,TITLE,NAME,LOCATION,DTM_START,DTD_START,DTY_START,DTM_END,DTD_END,DTY_END,edition,note,institution,pages,volume,editors,PRESENT_AUTH_1_FNAME,PRESENT_AUTH_1_MNAME,PRESENT_AUTH_1_LNAME\ntest123,Presentations,Test,Test Journal,State College,2001,9,30,\"\",\"\",\"\",2,Some note,PSU,1-2,1,#{editor_2.f_name} #{editor_2.m_name} #{editor_2.l_name},#{author_2.f_name},#{author_2.m_name},#{author_2.l_name}\ntest123,Presentations,Test,Test Journal,State College,2001,9,30,\"\",\"\",\"\",2,Some note,PSU,1-2,1,\"\",\"\",\"\",\"\",\"\"\n"
+    "USERNAME,TYPE,TITLE,NAME,LOCATION,DTM_START,DTD_START,DTY_START,DTM_END,DTD_END,DTY_END,edition,note,institution,pages,volume,editors,PRESENT_AUTH_1_FNAME,PRESENT_AUTH_1_MNAME,PRESENT_AUTH_1_LNAME\ntest123,Presentations,Test,Test Journal,State College,2011,9,1,2011,9,30,2,Some note,PSU,1-2,1,#{editor_2.f_name} #{editor_2.m_name} #{editor_2.l_name},#{author_2.f_name},#{author_2.m_name},#{author_2.l_name}\ntest123,Presentations,Test,Test Journal,State College,2001,9,30,\"\",\"\",\"\",2,Some note,PSU,1-2,1,\"\",\"\",\"\",\"\",\"\"\n"
   end
 
   # These subclasses of WorkOutputs all have different definitions of #output
@@ -67,8 +67,8 @@ describe WorkOutputs do
                                            "DTY_START", 'DTM_END', 'DTD_END', 'DTY_END', 'edition', 'note',
                                            'institution', 'pages', 'volume', 'editors', 'PRESENT_AUTH_1_FNAME',
                                            'PRESENT_AUTH_1_MNAME', 'PRESENT_AUTH_1_LNAME']
-          expect(second_row_collect).to eq ["test123", "Presentations", "Test", "Test Journal", "State College", 2001,
-                                            9, 30, "", "", "", 2, "Some note", "PSU", "1-2", 1,
+          expect(second_row_collect).to eq ["test123", "Presentations", "Test", "Test Journal", "State College", 2011,
+                                            9, 1, 2011, 9, 30, 2, "Some note", "PSU", "1-2", 1,
                                             "#{editor_2.f_name} #{editor_2.m_name} #{editor_2.l_name}",
                                             "#{author_2.f_name}", "Person", "User"]
         end
