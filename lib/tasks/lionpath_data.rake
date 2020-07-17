@@ -5,8 +5,8 @@ namespace :courses_taught do
   task integrate: :environment do
     Rails.application.eager_load!
     start = Time.now
-    # Takes params hash -> params[:target] must be defined (:beta or :prod)
-    params = { target: :prod }
+    # Takes params hash -> params[:target] must be defined (:beta or :production)
+    params = { target: :production }
     LionpathIntegrateJob.perform_now(params, 'log/courses_errors.log', true)
     finish = Time.now
     puts(((finish - start)/60).to_s + ' mins')
