@@ -63,3 +63,5 @@ This app parses data from faculty CVs, and integrates data into Activity Insight
 ## Documentation
 
 * Setting up Capybara with Webkit in a Docker Container: https://sites.psu.edu/dltdocs/?p=4767
+
+
