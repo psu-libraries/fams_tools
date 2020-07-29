@@ -1,8 +1,8 @@
 class Work < ApplicationRecord
   belongs_to :publication_listing
-  has_many :authors
+  has_many :authors, dependent: :delete_all
   accepts_nested_attributes_for :authors, reject_if: :all_blank, allow_destroy: true
-  has_many :editors
+  has_many :editors, dependent: :delete_all
   accepts_nested_attributes_for :editors, reject_if: :all_blank, allow_destroy: true
 
   def self.to_csv

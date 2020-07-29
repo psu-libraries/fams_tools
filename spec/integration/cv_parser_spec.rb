@@ -41,6 +41,8 @@ RSpec.describe PublicationListingsController do
 
   describe 'deleting a publication listing', type: :feature do
     let!(:publication_listing) { FactoryBot.create :publication_listing }
+    let!(:work) { FactoryBot.create :work, publication_listing: publication_listing }
+    let!(:author) { FactoryBot.create :author, work: work }
 
     it 'clicks link to delete publication listing' do
       visit publication_listings_path
