@@ -269,11 +269,11 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
     t.index ["publication_listing_id"], name: "index_works_on_publication_listing_id"
   end
 
-  add_foreign_key "authors", "works"
+  add_foreign_key "authors", "works", on_delete: :cascade
   add_foreign_key "contract_faculty_links", "contracts"
   add_foreign_key "contract_faculty_links", "faculties"
   add_foreign_key "contracts", "sponsors"
-  add_foreign_key "editors", "works"
+  add_foreign_key "editors", "works", on_delete: :cascade
   add_foreign_key "external_authors", "publications"
   add_foreign_key "gpas", "faculties"
   add_foreign_key "personal_contacts", "faculties"
@@ -283,5 +283,5 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
   add_foreign_key "publication_faculty_links", "publications"
   add_foreign_key "sections", "courses"
   add_foreign_key "sections", "faculties"
-  add_foreign_key "works", "publication_listings"
+  add_foreign_key "works", "publication_listings", on_delete: :cascade
 end
