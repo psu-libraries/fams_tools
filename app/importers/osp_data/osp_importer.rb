@@ -23,6 +23,7 @@ class OspImporter
       next unless is_user(row)
       next unless is_good_date(row)
       next unless is_proper_status(row)
+      format_sponsor_type(row)
       format_nils(row)
       format_titles(row)
       format_role_field(row)
@@ -83,6 +84,12 @@ class OspImporter
   def convert_xlsx_row_to_hash(row)
     keys = headers.values
     Hash[ keys.zip(row.values) ]
+  end
+
+  def format_sponsor_type(row)
+    if row['sponsortype'] == 'Associations, Institutes, Societies and Voluntary'
+      row['sponsortype'] = 'Associations, Institutes, Societies and Voluntary Health Agencies'
+    end
   end
 
   def format_nils(row)
