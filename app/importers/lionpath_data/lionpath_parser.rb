@@ -108,7 +108,7 @@ class LionPathParser
   #Adds leading zeroes to 'Catalog Number' and converts to string
   #and splits 'Catalog Number' into 'Course Number' and 'Course Suffix'
   def format_catalog_number(row)
-    course_split = row['Catalog Number'].to_s.split(/(?<=\d)(?=[A-Za-z])/)
+    course_split = row['Catalog Number'].to_s.strip.split(/(?<=\d)(?=[A-Za-z])/)
     while course_split[0].length < 3
       course_split[0].to_s.prepend('0')
     end
@@ -119,7 +119,7 @@ class LionPathParser
 
   #Adds leading zeroes to 'Class Section Code' and splits suffix off
   def format_section_code(row)
-    section_split = row['Class Section Code'].to_s.split(/(?<=\d)(?=[A-Za-z])/)
+    section_split = row['Class Section Code'].to_s.strip.split(/(?<=\d)(?=[A-Za-z])/)
     while section_split[0].length < 3
       section_split[0].to_s.prepend('0')
     end

@@ -11,7 +11,7 @@ RSpec.describe LionPathParser do
                 9999, 'Y', 'MATH', 1, '01C', 3, 25, 100, 'Hybrid - Online & In Person', 'Lecture', 'Primary Instructor']}
 
   let(:line2) {['mar6783', 'Spring 2018', 2018, 'UP', 'Math', 'Lots of math.',
-                2222, 'Y', 'MATH', '77A', 1, 3, 25, 100, 'In Person', 'Lecture', 'Secondary Instructor']}
+                2222, 'Y', 'MATH', '  77A ', 1, 3, 25, 100, 'In Person', 'Lecture', 'Secondary Instructor']}
 
   let(:line3) {['xxx111', 'Spring 2018', 2018, 'UP', 'Math', 'Lots of math.', 
                 1111, 'N', 'MATH', '202D', '901D', 3, 25, 100, 'In Person', 'Lecture', 'Primary Instructor']}
