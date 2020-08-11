@@ -37,10 +37,10 @@ namespace :activity_insight do
 
   end
 
-  task :delete_records, [:xlsx_path] do |task, args|
+  task :delete_records, [:resource, :target] do |task, args|
 
     start = Time.now
-    DeleteRecords.new.delete(args[:xlsx_path])
+    DeleteRecords.new(args[:resource], args[:target]).delete
     finish = Time.now
     puts(((finish - start)/60).to_s + ' mins')
 
