@@ -8,8 +8,8 @@ class DeleteRecords
     builder = Nokogiri::XML::Builder.new do |xml|
       xml.Data {
         xml.send(resource.to_s) {
-          CSV.foreach(csv_path, headers: true) do |row, index|
-            if row.empty? || index == 0
+          CSV.foreach(csv_path, headers: true) do |row|
+            if row.empty?
               next
             else
               xml.item( 'id' => row['ID'] )
