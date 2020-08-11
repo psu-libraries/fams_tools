@@ -1,16 +1,18 @@
 class DeleteRecords
+  def initialize(resource, target)
+    @resource = resource
+    @target = target
+  end
 
-  def delete(xlsx_path)
+  def delete
     builder = Nokogiri::XML::Builder.new do |xml|
       xml.Data {
-        xml.SCHTEACH {
-          Creek::Book.new('data/delete.xlsx').sheets[0].rows.each_with_index do |row, index|
-            unless row.empty?
-              row.each do |k,v|
-                xml.item( 'id' => v ) if index != 0
-              end
+        xml.send(resource.to_s) {
+          CSV.foreach(csv_path, headers: true) do |row|
+            if row.empty?
+              next
             else
-              break
+              xml.item( 'id' => row['ID'] )
             end
           end
         }
@@ -21,12 +23,23 @@ class DeleteRecords
 
   private
 
+  def csv_path
+    "#{Rails.root}/app/parsing_files/delete.csv"
+  end
+
   def request(data)
     auth = {:username => Rails.application.config_for(:activity_insight)["webservices"][:username],
             :password => Rails.application.config_for(:activity_insight)["webservices"][:password]}
-    url = 'https://betawebservices.digitalmeasures.com/login/service/v4/SchemaData:delete/INDIVIDUAL-ACTIVITIES-University'
+    if target == :beta
+      url = 'https://betawebservices.digitalmeasures.com/login/service/v4/SchemaData:delete/INDIVIDUAL-ACTIVITIES-University'
+    elsif target == :prod
+      url = 'https://webservices.digitalmeasures.com/login/service/v4/SchemaData:delete/INDIVIDUAL-ACTIVITIES-University'
+    else
+      return
+    end
     response = HTTParty.post url, :basic_auth => auth, :body => data, :headers => {'Content-type' => 'text/xml'}, :timeout => 320
-    #puts response
+    puts response
   end
 
+  attr_reader :target, :resource
 end
