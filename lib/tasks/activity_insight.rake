@@ -38,9 +38,10 @@ namespace :activity_insight do
   end
 
   task :delete_records, [:resource, :target] do |task, args|
+    require_relative '../../app/importers/activity_insight/delete_records'
 
     start = Time.now
-    DeleteRecords.new(args[:resource], args[:target]).delete
+    DeleteRecords.new(args[:resource], args[:target].to_sym).delete
     finish = Time.now
     puts(((finish - start)/60).to_s + ' mins')
 
