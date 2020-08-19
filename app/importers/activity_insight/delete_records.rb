@@ -1,5 +1,11 @@
 class DeleteRecords
+  class InvalidResource < StandardError; end
+
+  RESOURCES = %w[CONGRANT SCHTEACH INTELLCONT PCI GRADE_DIST_GPA STUDENT_RATING].freeze
+
   def initialize(resource, target)
+    raise InvalidResource unless RESOURCES.include? resource.to_s
+
     @resource = resource
     @target = target
   end
