@@ -8,8 +8,7 @@ Rails.application.routes.draw do
   post '/ai_integration/gpa_integrate', to: 'ai_integration#gpa_integrate'
   post '/ai_integration/pub_integrate', to: 'ai_integration#pub_integrate'
   post '/ai_integration/ldap_integrate', to: 'ai_integration#ldap_integrate'
-  post '/ai_integration/cv_pub_integrate', to: 'ai_integration#cv_pub_integrate'
-  post '/ai_integration/cv_presentation_integrate', to: 'ai_integration#cv_presentation_integrate'
+  post '/ai_integration/delete_records', to: 'ai_integration#delete_records'
   get '/ai_backups_listing', to: 'ai_backups_listing#index'
   get '/ai_backups_listing/download', to: 'ai_backups_listing#download'
   resources :publication_listings do
