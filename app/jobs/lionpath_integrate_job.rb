@@ -40,7 +40,7 @@ class LionpathIntegrateJob < ApplicationJob
   end
 
   def lionpath_integrate_obj(target)
-    IntegrateData.new(LionPathXMLBuilder.new, target)
+    IntegrateData.new(LionPathXMLBuilder.new.xmls_enumerator, target, :post)
   end
 
   def name

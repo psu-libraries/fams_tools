@@ -34,20 +34,8 @@ class DeleteRecords
   end
 
   def request(data)
-    auth = {:username => Rails.application.config_for(:activity_insight)["webservices"][:username],
-            :password => Rails.application.config_for(:activity_insight)["webservices"][:password]}
-    if target.to_sym == :beta
-      url = 'https://betawebservices.digitalmeasures.com/login/service/v4/SchemaData:delete/INDIVIDUAL-ACTIVITIES-University'
-    elsif target.to_sym == :production
-      url = 'https://webservices.digitalmeasures.com/login/service/v4/SchemaData:delete/INDIVIDUAL-ACTIVITIES-University'
-    else
-      return
-    end
-    response = HTTParty.post url, :basic_auth => auth, :body => data, :headers => {'Content-type' => 'text/xml'}, :timeout => 320
-    Rails.logger.info response
-    return [response.to_s] if response.to_s.include? 'Error'
-
-    []
+    integrator = IntegrateData.new([data], target, :delete)
+    integrator.integrate
   end
 
   attr_reader :target, :resource

@@ -6,8 +6,8 @@ class GpaIntegrateJob < ApplicationJob
     File.open(f_path, "wb") { |f| f.write(params[:gpa_file].read) }
     gpa_importer = ImportGpaData.new(f_path)
     gpa_importer.import
-    gpa_xml_builder = GpaXmlBuilder.new
-    gpa_integration = IntegrateData.new(gpa_xml_builder, params[:target])
+    gpa_xml_builder = GpaXmlBuilder.new.xmls_enumerator
+    gpa_integration = IntegrateData.new(gpa_xml_builder, params[:target], :post)
     errors = gpa_integration.integrate
     File.delete(f_path) if File.exist?(f_path)
     errors

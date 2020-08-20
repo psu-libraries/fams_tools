@@ -11,7 +11,7 @@ class OspIntegrateJob < ApplicationJob
     my_populate.format_and_populate
     my_remove_system_dups = RemoveSystemDups.new(filepath = backup_path, params[:target])
     my_remove_system_dups.call
-    my_integrate = IntegrateData.new(OspXMLBuilder.new, params[:target])
+    my_integrate = IntegrateData.new(OspXMLBuilder.new.xmls_enumerator, params[:target], :post)
     errors = my_integrate.integrate
     File.delete(backup_path) if File.exist?(backup_path)
     File.delete(f_path) if File.exist?(f_path)
