@@ -13,10 +13,9 @@ module ControllerServices
       render partial: 'publications.html.erb'
     when :personal_contact
       render partial: 'personal_contact.html.erb'
-    when :cv_publications
-      render partial: 'cv_publications.html.erb'
-    when :cv_presentations
-      render partial: 'cv_presentations.html.erb'
+    when :delete_records
+      @resources = DeleteRecords::RESOURCES.sort
+      render partial: 'delete_records.html.erb'
     else
       render partial: 'blank.html.erb'
     end

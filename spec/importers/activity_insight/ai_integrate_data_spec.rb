@@ -152,11 +152,8 @@ RSpec.describe IntegrateData do
   end
 
   describe '#integrate' do
-    it 'should send a POST request to DM Webservices' do
-      osp_xml_builder_obj = double()
-      allow(osp_xml_builder_obj).to receive(:xmls_enumerator).and_return(xml_arr)
-
-      osp_integrate_obj = IntegrateData.new(osp_xml_builder_obj, :beta)
+    it 'sends a POST request to DM Beta Webservices' do
+      osp_integrate_obj = IntegrateData.new(xml_arr, :beta, :post)
       osp_integrate_obj.auth = {:username => 'Username', :password => 'Password'}
       stub_request(:post, "https://betawebservices.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University").
          with(
@@ -178,6 +175,13 @@ RSpec.describe IntegrateData do
   <Message>Unexpected EOF in prolog at [row,col {unknown-source}]: [2,0] Nested exception: Unexpected EOF in prolog at [row,col {unknown-source}]: [2,0]</Message>
 </Error>", headers: {})
       expect(osp_integrate_obj.integrate).to eq(error_output)
+    end
+  end
+
+  context 'when passing :delete to the third param' do
+    it 'uses delete resource url' do
+      integrate_data = IntegrateData.new(xml_arr, :beta, :delete)
+      expect(integrate_data.send(:url)).to eq 'https://betawebservices.digitalmeasures.com/login/service/v4/SchemaData:delete/INDIVIDUAL-ACTIVITIES-University'
     end
   end
 

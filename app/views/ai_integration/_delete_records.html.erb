@@ -1,0 +1,14 @@
+<div class="col-sm">
+  <%= form_with :url => { :action => "delete_records" }, id: "delete_records" do |form| %>
+      <p>Resource: <%= form.select(:resource, @resources, {include_blank: "Select a resource"}) %></p>
+      <p><%= label(:ids_file, text = "IDs to delete file") %><%= form.file_field :ids_file, required: true %></p>
+    <div class="row">
+      <%= render 'buttons_and_code', form: form %>
+    </div>
+  <% end %>
+</div>
+<div class="col-sm">
+  <h4>Delete Records Errors:</h4>
+  <br/>
+  <%= render 'file_download_button', log_path: @delete_records_path %>
+</div>

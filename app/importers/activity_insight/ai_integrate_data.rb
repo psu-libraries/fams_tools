@@ -1,19 +1,20 @@
 class IntegrateData
-  attr_accessor :auth, :xml_builder_enum, :target
+  attr_accessor :auth, :xml_enumerator, :target, :action
 
-  def initialize(xml_builder_obj, target)
+  def initialize(xml_enumerator, target, action)
     @auth = {:username => Rails.application.config_for(:activity_insight)["webservices"][:username],
             :password => Rails.application.config_for(:activity_insight)["webservices"][:password]}
-    @xml_builder_enum = xml_builder_obj.xmls_enumerator
+    @xml_enumerator = xml_enumerator
     @target = target.to_sym
+    @action = action.to_sym
   end
 
   def integrate
     errors = []
-    Rails.logger.info url(target)
-    xml_builder_enum.each do |xml|
+    Rails.logger.info url
+    xml_enumerator.each do |xml|
       Rails.logger.info xml
-      response = HTTParty.post url(target), :body => xml, :headers => {'Content-type' => 'text/xml'}, :basic_auth => auth, :timeout => 180
+      response = HTTParty.post url, :body => xml, :headers => {'Content-type' => 'text/xml'}, :basic_auth => auth, :timeout => 180
       if response.to_s.include? 'Error'
         osp_keys = Nokogiri::XML(xml).xpath("//OSPKEY").collect{|r| r.children.to_s}
         access_ids = Nokogiri::XML(xml).xpath("//Record").collect{|r| r.attr('username')}
@@ -30,12 +31,20 @@ class IntegrateData
 
   private
 
-  def url(target)
+  def url
     case target
     when :beta
-      return 'https://betawebservices.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University'
+      if action == :delete
+        'https://betawebservices.digitalmeasures.com/login/service/v4/SchemaData:delete/INDIVIDUAL-ACTIVITIES-University'
+      else
+        'https://betawebservices.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University'
+      end
     when :production
-      return 'https://webservices.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University'
+      if action == :delete
+        'https://webservices.digitalmeasures.com/login/service/v4/SchemaData:delete/INDIVIDUAL-ACTIVITIES-University'
+      else
+        'https://webservices.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University'
+      end
     end
   end
 end
