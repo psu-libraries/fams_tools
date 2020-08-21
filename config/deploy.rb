@@ -8,7 +8,7 @@ set :assets_role, [:web]
 set :application, 'ai-integration'
 
 #set :repo_url, "git@github.com:/psu-stewardship/#{fetch(:application)}.git"
-set :repo_url, "git@github.com:psu-stewardship/ai_integration.git"
+set :repo_url, "git@github.com:psu-stewardship/fams_tools.git"
 
 #set :repo_url, "git@git.psu.edu:devteam/rubytools.git"
 #https://git.psu.edu/devteam/vmdatabase.git

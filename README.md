@@ -1,6 +1,6 @@
-[![CircleCI](https://circleci.com/gh/psu-stewardship/ai_integration.svg?style=svg&circle-token=5c9a5398c9ab15e080b43393e0b3a04c96eff031)](https://circleci.com/gh/psu-stewardship/ai_integration)
+[![CircleCI](https://circleci.com/gh/psu-stewardship/fams_tools.svg?style=svg)](https://circleci.com/gh/psu-stewardship/fams_tools)
 
-# AI Integration (FAMS Tools)
+# FAMS Tools (AI Integration)
 
 This app parses data from faculty CVs, and integrates data into Activity Insight.  It also stores backups of the Activity Insight database.
 

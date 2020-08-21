@@ -7,4 +7,4 @@ down: ## un-run it
 exec: ## shell it
 	docker-compose exec web /bin/bash
 attach: ## attach it
-	docker attach ai_integration_web_1
+	docker attach fams_tools_web_1

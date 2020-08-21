@@ -22,7 +22,7 @@ services:
     - type: bind
       consistency: cached
       source: .
-      target: /ai_integration/
+      target: /fams_tools/
 
 volumes:
   ai-integration-data:

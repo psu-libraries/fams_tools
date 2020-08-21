@@ -1,7 +1,7 @@
 #!/bin/bash
 
 set -e
-rm -f /ai_integration/tmp/pids/server.pid
+rm -f /fams_tools/tmp/pids/server.pid
 
 rake db:create
 rake db:migrate
