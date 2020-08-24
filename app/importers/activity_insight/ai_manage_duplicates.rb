@@ -67,7 +67,7 @@ public
 class RemoveSystemDups
   attr_accessor :filepath, :ospkey_hash, :congrant_data, :duplicates_stored, :duplicates_final, :target, :url
 
-  def initialize(filepath, target)
+  def initialize(filepath = "#{Rails.root}/app/parsing_files/CONGRANT.csv", target)
     @filepath = filepath
     @ospkey_hash = {}
     @duplicates_stored = []

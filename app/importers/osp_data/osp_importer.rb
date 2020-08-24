@@ -3,7 +3,7 @@ require 'creek'
 class OspImporter
   attr_accessor :headers, :csv_obj, :pendnotfund
 
-  def initialize(osp_path = "#{Rails.root}/app/parsing_files/contract_grants.csv", backup_path = "#{Rails.root}/app/parsing_files/backup.csv")
+  def initialize(osp_path = "#{Rails.root}/app/parsing_files/contract_grants.csv", backup_path = "#{Rails.root}/app/parsing_files/CONGRANT.csv")
     @csv_obj = CSV.open(osp_path, encoding: "Windows-1252:UTF-8", force_quotes: true, quote_char: '"')
     @headers = @csv_obj.first
     @pendnotfund = find_converts(backup_path)
