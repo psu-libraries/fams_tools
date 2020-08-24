@@ -1,23 +1,18 @@
 require 'creek'
 
 class OspImporter
-  attr_accessor :headers, :xlsx_obj, :pendnotfund
+  attr_accessor :headers, :csv_obj, :pendnotfund
 
-  def initialize(osp_path = 'data/dmresults.xlsx', backup_path = 'data/CONGRANT-tabdel.txt')
-    @xlsx_obj = Creek::Book.new(osp_path).sheets[0].rows
-    @headers = @xlsx_obj.first
+  def initialize(osp_path = "#{Rails.root}/app/parsing_files/contract_grants.csv", backup_path = "#{Rails.root}/app/parsing_files/backup.csv")
+    @csv_obj = CSV.open(osp_path, encoding: "Windows-1252:UTF-8", force_quotes: true, quote_char: '"')
+    @headers = @csv_obj.first
     @pendnotfund = find_converts(backup_path)
   end
 
   #Run all local formatting methods then import to db
   def format_and_populate
-    counter = 0
-    xlsx_obj.each do |row|
-      if counter == 0
-        counter += 1
-        next
-      end
-      row = convert_xlsx_row_to_hash(row)
+    csv_obj.each do |row|
+      row = convert_csv_row_to_hash(row)
       format_date_fields(row)
       format_accessid_field(row)
       next unless is_user(row)
@@ -70,10 +65,10 @@ class OspImporter
   def write_results_to_xl(filename = 'data/dmresults-formatted.xls') 
     wb = Spreadsheet::Workbook.new filename
     sheet = wb.create_worksheet
-    xlsx_hash[0].each do |k, v|
+    csv_hash[0].each do |k, v|
       sheet.row(0).push(k)
     end
-    xlsx_hash.each_with_index do |row, index|
+    csv_hash.each_with_index do |row, index|
       row.each do |k, v|
         sheet.row(index+1).push(v)
       end
@@ -81,9 +76,8 @@ class OspImporter
     wb.write filename 
   end
 
-  def convert_xlsx_row_to_hash(row)
-    keys = headers.values
-    Hash[ keys.zip(row.values) ]
+  def convert_csv_row_to_hash(row)
+    Hash[ headers.zip(row) ]
   end
 
   def format_sponsor_type(row)
@@ -157,7 +151,7 @@ class OspImporter
     index = 0
     keys = []
     pendnotfund = []
-    CSV.foreach(backup_path, encoding: "ISO8859-1", col_sep: "\t") do |backup_row|
+    CSV.foreach(backup_path, encoding: "ISO8859-1:UTF-8", force_quotes: true, quote_char: '"', liberal_parsing: true) do |backup_row|
       if index == 0
         keys = backup_row
       else
