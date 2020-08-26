@@ -7,7 +7,7 @@ namespace :courses_taught do
     start = Time.now
     # Takes params hash -> params[:target] must be defined (:beta or :production)
     params = { target: :production }
-    LionpathIntegrateJob.perform_now(params, 'log/courses_errors.log', true)
+    LionpathIntegrateJob.perform_now(params, 'log/courses_errors.log', false)
     finish = Time.now
     puts(((finish - start)/60).to_s + ' mins')
   end

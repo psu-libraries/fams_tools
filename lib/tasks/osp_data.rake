@@ -1,27 +1,14 @@
-namespace :osp_data do
+namespace :contract_grants do
 
-  desc "Clean and filter data from dmresults.csv.
-        Write to xls.
-        Populate database with data."
-
-  task format_and_populate: :environment do
-    start = Time.now
-    my_populate = OspPopulateDB.new
-    my_populate.format_and_filter
-    my_populate.write
-    my_populate.populate
-    finish = Time.now
-    puts(((finish - start)/60).to_s + ' mins') 
-  end
-
-  desc "Integrate data into AI through WebServices."
+  desc "Integrate Contract Grant data."
 
   task integrate: :environment do
+    Rails.application.eager_load!
     start = Time.now
-    my_integrate = IntegrateData.new(OspXMLBuilder.new, :beta)
-    my_integrate.integrate
+    # Takes params hash -> params[:target] must be defined (:beta or :production)
+    params = { target: :beta }
+    LionpathIntegrateJob.perform_now(params, 'log/courses_errors.log', false)
     finish = Time.now
-    puts(((finish - start)/60).to_s + ' mins') 
+    puts(((finish - start)/60).to_s + ' mins')
   end
-
 end

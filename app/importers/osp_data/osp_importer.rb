@@ -11,7 +11,7 @@ class OspImporter
 
   #Run all local formatting methods then import to db
   def format_and_populate
-    csv_obj.each do |row|
+    csv_obj.each_with_index do |row|
       row = convert_csv_row_to_hash(row)
       format_date_fields(row)
       format_accessid_field(row)
@@ -32,11 +32,11 @@ class OspImporter
 
   def is_good_date(row)
     if (row['submitted'].blank?) && (row['awarded'].present?)
-      if (row['awarded'].split('-')[0].to_i >= 2011) && (row['awarded'].split('-')[0].to_i <= DateTime.now.year)
+      if (DateTime.strptime(row['awarded'], '%m/%d/%Y %T').year >= 2011) && (DateTime.strptime(row['awarded'], '%m/%d/%Y %T').year <= DateTime.now.year)
         return true
       end
-    else
-      if (row['submitted'].split('-')[0].to_i >= 2011) && (row['submitted'].split('-')[0].to_i <= DateTime.now.year)
+    elsif row['submitted'].present?
+      if (DateTime.strptime(row['submitted'], '%m/%d/%Y %T').year >= 2011) && (DateTime.strptime(row['submitted'], '%m/%d/%Y %T').year <= DateTime.now.year)
         return true
       end
     end
@@ -95,11 +95,11 @@ class OspImporter
   end
 
   def format_accessid_field(row)
-    if row['accessid'].to_s.include? ', '
-      unless (row['accessid'].to_s.split(' ')[3]) == (DateTime.now.year.to_s)
-        row['accessid'] = row['accessid'].to_s.split(' ')[2].downcase + row['accessid'].to_s.split(' ')[3][2..3]
+    if row['accessid'].to_s.include? '00:00:00'
+      unless DateTime.strptime(row['accessid'], '%m/%d/%Y %T').year == (DateTime.now.year)
+        row['accessid'] = DateTime.strptime(row['accessid'], '%m/%d/%Y %T').strftime('%b').downcase + DateTime.strptime(row['accessid'], '%m/%d/%Y %T').year.to_s[2..3]
       else
-        row['accessid'] = row['accessid'].to_s.split(' ')[2].downcase + row['accessid'].to_s.split(' ')[1].sub!(/^0+/, "")
+        row['accessid'] = DateTime.strptime(row['accessid'], '%m/%d/%Y %T').strftime('%b').downcase + DateTime.strptime(row['accessid'], '%m/%d/%Y %T').strftime('%-d')
       end
     end
   end
@@ -124,12 +124,6 @@ class OspImporter
     key_arr.each do |k|
       if row[k] == '/' || row[k] == '/  /'
         row[k] = ''
-      end
-      begin
-        date = DateTime.parse(row[k].to_s)
-        row[k] = date.strftime("%Y-%m-%d").to_s
-      rescue ArgumentError => e
-        #puts e
       end
     end
   end
@@ -179,16 +173,16 @@ class OspImporter
                                           attr.title = row['title']
                                           attr.sponsor = sponsor
                                           attr.status = row['status']
-                                          attr.submitted = row['submitted']
-                                          attr.awarded = row['awarded']
+                                          attr.submitted = DateTime.strptime(row['submitted'], '%m/%d/%Y %T') if row['submitted'].present?
+                                          attr.awarded = DateTime.strptime(row['awarded'], '%m/%d/%Y %T') if row['awarded'].present?
                                           attr.requested = row['requested']
                                           attr.funded = row['funded']
                                           attr.total_anticipated = row['totalanticipated']
-                                          attr.start_date = row['startdate']
-                                          attr.end_date = row['enddate']
+                                          attr.start_date = DateTime.strptime(row['startdate'], '%m/%d/%Y %T') if row['startdate'].present?
+                                          attr.end_date = DateTime.strptime(row['enddate'], '%m/%d/%Y %T') if row['enddate'].present?
                                           attr.grant_contract = row['grantcontract']
                                           attr.base_agreement = row['baseagreement']
-                                          attr.notfunded = row['notfunded']
+                                          attr.notfunded = DateTime.strptime(row['notfunded'], '%m/%d/%Y %T') if row['notfunded'].present?
                                           end
 
     faculty = Faculty.find_by(access_id: row['accessid'])

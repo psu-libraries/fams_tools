@@ -2,97 +2,75 @@ require 'importers/importers_helper'
 
 RSpec.describe OspImporter do
   
-  headers =  {"A1" => 'ospkey', "B1" => 'ordernumber', "C1" => 'title', "D1" => 'sponsor', "E1" => 'sponsortype', "F1" => 'parentsponsor', 
-              "G1" => 'accessid', "H1" => 'department', "I1" => 'role', "J1" => 'pctcredit', "K1" => 'status', "L1" => 'submitted', "M1" => 'awarded', 
-              "N1" => 'requested', "O1" => 'funded', "P1" => 'totalanticipated', "Q1" => 'startdate', "R1" => 'enddate', "S1" => 'totalstartdate',
-              "T1" => 'totalenddate', "U1" => 'grantcontract', "V1" => 'baseagreement', "W1" => 'agreementtype', "X1" => 'agreement', "Y1" => 'notfunded'}
+  let(:headers) do
+    ['ospkey', 'ordernumber', 'title', 'sponsor', 'sponsortype', 'parentsponsor',
+     'accessid', 'department', 'role', 'pctcredit', 'status', 'submitted', 'awarded',
+     'requested', 'funded', 'totalanticipated', 'startdate', 'enddate', 'totalstartdate',
+     'totalenddate', 'grantcontract', 'baseagreement', 'agreementtype', 'agreement', 'notfunded']
+  end
 
   let(:data_book1) do
     current_year = DateTime.now.year
     data_arr = []
-    data_arr << headers 
-    data_arr << {"A2" => 1, "B2" => 1, "C2" => 'Title &quot; &#39;', "D2" => 'X', "E2" => 'Associations, Institutes, Societies and Voluntary', "F2" => 'X',
-                 "G2" => 'abc123', "H2" => 'X', "I2" => 'Co-PI', "J2" => 1, "K2" => 'Awarded', "L2" => '/', "M2" => '/  /',
-                 "N2" => 2, "O2" => 1, "P2" => 1, "Q2" => 'Sun, 01 Jan 2017', "R2" => 'Wed, 12 Dec 2018', "S2" => 'X',
-                 "T2" => 'X', "U2" => nil, "V2" => 'X', "W2" => 'X', "X2" => 'X', "Y2" => 'Sun, 01 Feb 2015'}
-    data_arr << {"A3" => 3, "B3" => 1, "C3" => 'X', "D3" => 'X', "E3" => 'X', "F3" => 'X',
-                 "G3" => 'Sun, 01 Mar 1926', "H3" => 'X', "I3" => 'Faculty', "J3" => 1, "K3" => 'Pending Proposal', "L3" => 'X', "M3" => 'X',
-                 "N3" => 4, "O3" => 1, "P3" => 1, "Q3" => 'X', "R3" => 'X', "S3" => 'X',
-                 "T3" => 'X', "U3" => 'Grant', "V3" => 'X', "W3" => 'X', "X3" => 'X', "Y3" => '/  /'}
-    data_arr << {"A4" => 5, "B4" => 1, "C4" => 'X', "D4" => 'X', "E4" => 'X', "F4" => 'X',
-                 "G4" => "Tue, 02 Jan #{current_year}", "H4" => 'X', "I4" => 'Post Doctoral', "J4" => 1, "K4" => 'Awarded', "L4" => 'X', "M4" => 'X',
-                 "N4" => 6, "O4" => 1, "P4" => 1, "Q4" => 'Sun, 01 Jan 2017', "R4" => 'Wed, 12 Dec 2018', "S4" => 'X',
-                 "T4" => 'X', "U4" => 'Grant', "V4" => 'X', "W4" => 'X', "X4" => 'X', "Y4" => '/  /'}
-    data_arr << {"A5" => 7, "B5" => 1, "C5" => 'X', "D5" => 'X', "E5" => 'X', "F5" => 'X',
-                 "G5" => 'Tue, 02 Jan 2018', "H5" => 'X', "I5" => 'unknown', "J5" => 1, "K5" => 'Pending Award', "L5" => 'X', "M5" => 'X',
-                 "N5" => 8, "O5" => 1, "P5" => 1, "Q1" => 'Sun, 01 Jan 2017', "R5" => 'Wed, 12 Dec 2018', "S5" => 'X',
-                 "T5" => 'X', "U5" => 'Grant', "V5" => 'X', "W5" => 'X', "X5" => 'X', "Y5" => '/  /'}
+    data_arr << [1, 1, 'Title &quot; &#39;', '', 'Associations, Institutes, Societies and Voluntary', '', 'abc123', '',
+                 'Co-PI', 1, 'Awarded', '/', '/  /', 2, 1, 1, '01/01/2017 00:00:00', '12/12/2018 00:00:00', '', '',
+                 '', '', '', '', '02/01/2015 00:00:00']
+    data_arr << [3, 1, '', '', '', '', '03/01/2026 00:00:00', '', 'Faculty', 1, 'Pending Proposal', '', '',
+                 4, 1, 1, '', '', '', '', 'Grant', '', '', '', '/  /']
+    data_arr << [5, 1, '', '', '', '', "01/02/#{current_year.to_s} 00:00:00", '', 'Post Doctoral', 1, 'Awarded', '', '',
+                 6, 1, 1, '01/01/2017 00:00:00', '12/12/2018 00:00:00', '', '', 'Grant', '', '', '', '/  /']
+    data_arr << [7, 1, '', '', '', '', '01/02/2018 00:00:00', '', 'unknown', 1, 'Pending Award', '', '',
+                 8, 1, 1, '01/01/2017 00:00:00', '12/12/2018 00:00:00', '', '', 'Grant', '', '', '', '/  /']
     data_arr
   end
 
   let(:data_book2) do
     data_arr = []
-    data_arr << headers
-    data_arr << {"A2" => 1, "B2" => 1, "C2" => 'X', "D2" => 'X', "E2" => 'X', "F2" => 'X', "G2" => 'X', "H2" => 'X', "I2" => 'X', "J2" => 1, "K2" => 'X', "L2" => '2001-01-01',
-                "M2" => 'X', "N2" => 1, "O2" => 1, "P2" => 1, "Q2" => 'X', "R2" => 'X', "S2" => 'X', "T2" => 'X', "U2" => 'X', "V2" => 'X', "W2" => 'X', "X2" => 'X'}    
-    data_arr << {"A3" => 2, "B3" => 1, "C3" => 'X', "D3" => 'X', "E3" => 'X', "F3" => 'X', "G3" => 'X', "H3" => 'X', "I3" => 'X', "J3" => 1, "K3" => 'X', "L3" => '2013-02-01',
-                "M3" => 'X', "N3" => 1, "O3" => 1, "P3" => 1, "Q3" => 'X', "R3" => 'X', "S3" => 'X', "T3" => 'X', "U3" => 'X', "V3" => 'X', "W3" => 'X', "X3" => 'X'}
-    data_arr << {"A4" => 3, "B4" => 1, "C4" => 'X', "D4" => 'X', "E4" => 'X', "F4" => 'X', "G4" => 'X', "H4" => 'X', "I4" => 'X', "J4" => 1, "K4" => 'X', "L4" => "#{DateTime.now.year + 1}-03-01",
-                 "M4" => 'X', "N4" => 1, "O4" => 1, "P4" => 1, "Q4" => 'X', "R4" => 'X', "S4" => 'X', "T4" => 'X', "U4" => 'X', "V4" => 'X', "W4" => 'X', "X4" => 'X'}
-    data_arr << {"A5" => 4, "B5" => 1, "C5" => 'X', "D5" => 'X', "E5" => 'X', "F5" => 'X', "G5" => 'X', "H5" => 'X', "I5" => 'X', "J5" => 1, "K5" => 'X', "L5" => '1989-04-01',
-                "M5" => 'X', "N5" => 1, "O5" => 1, "P5" => 1, "Q5" => 'X', "R5" => 'X', "S5" => 'X', "T5" => 'X', "U5" => 'X', "V5" => 'X', "W5" => 'X', "X5" => 'X'}
-    data_arr << {"A6" => 5, "B6" => 1, "C6" => 'X', "D6" => 'X', "E6" => 'X', "F6" => 'X', "G6" => 'X', "H6" => 'X', "I6" => 'X', "J6" => 1, "K6" => 'X', "L6" => '',
-                 "M6" => '2013-02-01', "N6" => 1, "O6" => 1, "P6" => 1, "Q6" => 'X', "R6" => 'X', "S6" => 'X', "T6" => 'X', "U6" => 'X', "V6" => 'X', "W6" => 'X', "X6" => 'X'}
-    data_arr << {"A7" => 6, "B7" => 1, "C7" => 'X', "D7" => 'X', "E7" => 'X', "F7" => 'X', "G7" => 'X', "H7" => 'X', "I7" => 'X', "J7" => 1, "K7" => 'X', "L7" => '',
-                 "M7" => '', "N7" => 1, "O7" => 1, "P7" => 1, "Q7" => 'X', "R7" => 'X', "S7" => 'X', "T7" => 'X', "U7" => 'X', "V7" => 'X', "W7" => 'X', "X7" => 'X'}
+    data_arr << [1, 1, '', '', '', '', '', '', '', 1, '', '01/01/2001 00:00:00', '', 1, 1, 1, '', '', '', '', '', '', '', '']
+    data_arr << [2, 1, '', '', '', '', '', '', '', 1, '', '01/02/2013 00:00:00', '', 1, 1, 1, '', '', '', '', '', '', '', '']
+    data_arr << [3, 1, '', '', '', '', '', '', '', 1, '', "12/31/#{(DateTime.now.year + 1).to_s} 00:00:00",
+                 '', 1, 1, 1, '', '', '', '', '', '', '', '']
+    data_arr << [4, 1, '', '', '', '', '', '', '', 1, '', '01/03/1989 00:00:00', '', 1, 1, 1, '', '', '', '', '', '', '', '']
+    data_arr << [5, 1, '', '', '', '', '', '', '', 1, '', '',
+                 '01/02/2013 00:00:00', 1, 1, 1, '', '', '', '', '', '', '', '']
+    data_arr << [6, 1, '', '', '', '', '', '', '', 1, '', '',
+                 '', 1, 1, 1, '', '', '', '', '', '', '', '']
     data_arr
   end
 
   let(:data_book3) do
     data_arr = []
-    data_arr << headers
-    data_arr << {"A2" => 1, "B2" => 1, "C2" => 'X', "D2" => 'X', "E2" => 'X', "F2" => 'X', "G2" => 'zzz999', "H2" => 'X', "I2" => 'X', "J2" => 1,
-                 "K2" => 'X', "L2" => 'X', "M2" => 'X', "N2" => 1, "O2" => 1, "P2" => 1, "Q2" => 'X', "R2" => 'X', "S2" => 'X', "T2" => 'X', "U2" => 'X', "V2" => 'X', "W2" => 'X', "X2" => 'X'}    
-    data_arr << {"A3" => 2, "B3" => 1, "C3" => 'X', "D3" => 'X', "E3" => 'X', "F3" => 'X', "G3" => 'xxx111', "H3" => 'X', "I3" => 'X', "J3" => 1,
-                "K3" => 'X', "L3" => 'X', "M3" => 'X', "N3" => 1, "O3" => 1, "P3" => 1, "Q3" => 'X', "R3" => 'X', "S3" => 'X', "T3" => 'X', "U3" => 'X', "V3" => 'X', "W3" => 'X', "X3" => 'X'}
+    data_arr << [1, 1, '', '', '', '', 'zzz999', '', '', 1,
+                 '', '', '', 1, 1, 1, '', '', '', '', '', '', '', '']
+    data_arr << [2, 1, '', '', '', '', 'xxx111', '', '', 1, '', '', '', 1, 1, 1, '', '', '', '', '', '', '', '']
     data_arr
   end
 
   let(:data_book4) do
     data_arr = []
-    data_arr << headers
-    data_arr << {"A2" => 1, "B2" => 1, "C2" => 'X', "D2" => 'X', "E2" => 'X', "F2" => 'X', "G2" => 'X', "H2" => 'X', "I2" => 'X', "J2" => 1,
-                "K2" => 'Purged', "L2" => 'X', "M2" => 'X', "N2" => 1, "O2" => 1, "P2" => 1, "Q2" => 'X', "R2" => 'X', "S2" => 'X', "T2" => 'X', "U2" => 'X', "V2" => 'X', "W2" => 'X', "X2" => 'X'} 
-    data_arr << {"A3" => 2, "B3" => 1, "C3" => 'X', "D3" => 'X', "E3" => 'X', "F3" => 'X', "G3" => 'X', "H3" => 'X', "I3" => 'X', "J3" => 1,
-                "K3" => 'Awarded', "L3" => 'X', "M3" => 'X', "N3" => 1, "O3" => 1, "P3" => 1, "Q3" => 'X', "R3" => 'X', "S3" => 'X', "T3" => 'X', "U3" => 'X', "V3" => 'X', "W3" => 'X', "X3" => 'X'}
-    data_arr << {"A4" => 3, "B4" => 1, "C4" => 'X', "D4" => 'X', "E4" => 'X', "F4" => 'X', "G4" => 'X', "H4" => 'X', "I4" => 'X', "J4" => 1,
-                "K4" => 'Withdrawn', "L4" => 'X', "M4" => 'X', "N4" => 1, "O4" => 1, "P4" => 1, "Q4" => 'X', "R4" => 'X', "S4" => 'X', "T4" => 'X', "U4" => 'X', "V4" => 'X', "W4" => 'X', "X4" => 'X'}
-    data_arr << {"A5" => 123456, "B5" => 1, "C5" => 'X', "D5" => 'X', "E5" => 'X', "F5" => 'X', "G5" => 'X', "H5" => 'X', "I5" => 'X', "J5" => 1,
-                "K5" => 'Withdrawn', "L5" => 'X', "M5" => 'X', "N5" => 1, "O5" => 1, "P5" => 1, "Q5" => 'X', "R5" => 'X', "S5" => 'X', "T5" => 'X', "U5" => 'X', "V5" => 'X', "W5" => 'X', "X5" => 'X'}
-    data_arr << {"A6" => 193848, "B6" => 1, "C6" => 'X', "D6" => 'X', "E6" => 'X', "F6" => 'X', "G6" => 'X', "H6" => 'X', "I6" => 'X', "J6" => 1,
-                "K6" => 'Purged', "L6" => 'X', "M6" => 'X', "N6" => 1, "O6" => 1, "P6" => 1, "Q6" => 'X', "R6" => 'X', "S6" => 'X', "T6" => 'X', "U6" => 'X', "V6" => 'X', "W6" => 'X', "X6" => 'X'}
+    data_arr << [1, 1, '', '', '', '', '', '', '', 1, 'Purged', '', '', 1, 1, 1, '', '', '', '', '', '', '', '']
+    data_arr << [2, 1, '', '', '', '', '', '', '', 1, 'Awarded', '', '', 1, 1, 1, '', '', '', '', '', '', '', '']
+    data_arr << [3, 1, '', '', '', '', '', '', '', 1, 'Withdrawn', '', '', 1, 1, 1, '', '', '', '', '', '', '', '']
+    data_arr << [123456, 1, '', '', '', '', '', '', '', 1, 'Withdrawn', '', '', 1, 1, 1, '', '', '', '', '', '', '', '']
+    data_arr << [193848, 1, '', '', '', '', '', '', '', 1, 'Purged', '', '', 1, 1, 1, '', '', '', '', '', '', '', '']
     data_arr
   end
 
   let(:data_book5) do
     data_arr = []
-    arr_of_hashes = []
-    keys = headers.values
-    data_arr << headers.values
-    data_arr << [1234, 1, 'Cool Title', 'Cool Sponsor', 'Federal Agencies', 'X',
-                 'abc123', 'Department', 'Co-PI', 50, 'Pending', '2013-04-05',
-                 '/  /', 1, 1, 1, '', '', '', '', '', '', '', '', '2015-02-01']
-    data_arr << [4321, 1, 'Cooler Title', 'Cool Sponsor', 'Federal Agencies', 'X',
-                 'abc123', 'Department', 'Co-PI', 50, 'Pending', '2013-04-05',
+    data_arr << [1234, 1, 'Cool Title', 'Cool Sponsor', 'Federal Agencies', '',
+                 'abc123', 'Department', 'Co-PI', 50, 'Pending', '05/04/2013 00:00:00',
+                 '/  /', 1, 1, 1, '', '', '', '', '', '', '', '', '02/02/2015 00:00:00']
+    data_arr << [4321, 1, 'Cooler Title', 'Cool Sponsor', 'Federal Agencies', '',
+                 'abc123', 'Department', 'Co-PI', 50, 'Pending', '05/04/2013 00:00:00',
                  '/  /', 1, 1, 1, '', '', '', '', '', '', '', '', '']
-    data_arr << [1234, 1, 'Cool Title', 'Cool Sponsor', 'Federal Agencies', 'X',
-                 'xyz123', 'Department', 'Co-PI', 50, 'Pending', '2013-04-05',
-                 '/  /', 1, 1, 1, '', '', '', '', '', '', '', '', '2015-02-01']
-    data_arr << [1221, 1, 'Coolest Title', 'Not as Cool Sponsor', 'Universities and Colleges', 'X',
-                 'xyz123', 'Department', 'Co-PI', 50, 'Pending', '2013-04-05',
+    data_arr << [1234, 1, 'Cool Title', 'Cool Sponsor', 'Federal Agencies', '',
+                 'xyz123', 'Department', 'Co-PI', 50, 'Pending', '04/05/2013 00:00:00',
+                 '/  /', 1, 1, 1, '', '', '', '', '', '', '', '', '03/02/2015 00:00:00']
+    data_arr << [1221, 1, 'Coolest Title', 'Not as Cool Sponsor', 'Universities and Colleges', '',
+                 'xyz123', 'Department', 'Co-PI', 50, 'Pending', '04/05/2013 00:00:00',
                  '/  /', 1, 1, 1, '', '', '', '', '', '', '', '', '']
-    data_arr.each {|a| arr_of_hashes << Hash[ keys.zip(a) ] }
-    arr_of_hashes
+    data_arr
   end
 
   let(:fake_backup) do
@@ -117,6 +95,7 @@ RSpec.describe OspImporter do
     FactoryBot.create(:faculty, access_id: 'mar26')
     FactoryBot.create(:faculty, access_id: 'jan2')
     FactoryBot.create(:faculty, access_id: 'jan18')
+    allow_any_instance_of(OspImporter).to receive(:headers).and_return headers
   end
 
 
@@ -132,7 +111,7 @@ RSpec.describe OspImporter do
         should change 'Pending Award' and 'Pending Proposal' status to 'Pending'
         should remove start and end dates for any contract that was not 'Awarded'
         should convert sponsortype to appropriate drop down values" do
-      allow(Creek::Book).to receive_message_chain(:new, :sheets, :[], :rows).and_return(data_book1)
+      allow(CSV).to receive(:open).and_return(data_book1)
       allow(CSV).to receive(:foreach).and_yield(fake_backup[0]).and_yield(fake_backup[1]).and_yield(fake_backup[2])
       allow_any_instance_of(OspImporter).to receive(:is_user).and_return(true)
       allow_any_instance_of(OspImporter).to receive(:is_good_date).and_return(true)
@@ -166,7 +145,7 @@ RSpec.describe OspImporter do
   context "#is_good_date" do
 
     it "should remove rows with 'submitted' dates <= 2011" do
-      allow(Creek::Book).to receive_message_chain(:new, :sheets, :[], :rows).and_return(data_book2)
+      allow(CSV).to receive(:open).and_return(data_book2)
       allow(CSV).to receive(:foreach).and_yield(fake_backup[0]).and_yield(fake_backup[1]).and_yield(fake_backup[2])
       allow_any_instance_of(OspImporter).to receive(:is_proper_status).and_return(true)
       allow_any_instance_of(OspImporter).to receive(:is_user).and_return(true)
@@ -178,7 +157,7 @@ RSpec.describe OspImporter do
   context "#is_user" do
 
     it "should remove rows that contain non-active users" do
-      allow(Creek::Book).to receive_message_chain(:new, :sheets, :[], :rows).and_return(data_book3)
+      allow(CSV).to receive(:open).and_return(data_book3)
       allow(CSV).to receive(:foreach).and_yield(fake_backup[0]).and_yield(fake_backup[1]).and_yield(fake_backup[2])
       allow_any_instance_of(OspImporter).to receive(:is_proper_status).and_return(true)
       allow_any_instance_of(OspImporter).to receive(:is_good_date).and_return(true)
@@ -191,7 +170,7 @@ RSpec.describe OspImporter do
   context "#filter_by_status" do
 
     it "should remove rows with 'Purged' or 'Withdrawn' status" do
-      allow(Creek::Book).to receive_message_chain(:new, :sheets, :[], :rows).and_return(data_book4)
+      allow(CSV).to receive(:open).and_return(data_book4)
       allow(CSV).to receive(:foreach).and_yield(fake_backup[0]).and_yield(fake_backup[1]).and_yield(fake_backup[2])
       allow_any_instance_of(OspImporter).to receive(:is_good_date).and_return(true)
       allow_any_instance_of(OspImporter).to receive(:is_user).and_return(true)
@@ -205,7 +184,7 @@ RSpec.describe OspImporter do
 
   context '#populate_db_with_row' do
     it 'should populate the database with osp data' do
-      allow(Creek::Book).to receive_message_chain(:new, :sheets, :[], :rows).and_return(data_book5)
+      allow(CSV).to receive(:open).and_return(data_book5)
       allow(CSV).to receive(:foreach).and_yield(fake_backup[0]).and_yield(fake_backup[1]).and_yield(fake_backup[2])
       allow_any_instance_of(OspImporter).to receive(:is_user).and_return(true)
       allow_any_instance_of(OspImporter).to receive(:is_good_date).and_return(true)
@@ -215,9 +194,9 @@ RSpec.describe OspImporter do
       expect(Contract.all.count).to eq(3)
       expect(Faculty.all.count).to eq(6)
       expect(ContractFacultyLink.all.count).to eq(4)
-      expect(Faculty.find_by(:access_id => 'abc123').contract_faculty_links.all.count).to eq(2)
-      expect(Faculty.find_by(:access_id => 'abc123').contract_faculty_links.first.contract.sponsor.sponsor_name).to eq('Cool Sponsor')
-      expect(Contract.find_by(:osp_key => 1234).notfunded).to eq(Date.parse('Sun, 01 Feb 2015'))
+      expect(Faculty.find_by(access_id: 'abc123').contract_faculty_links.all.count).to eq(2)
+      expect(Faculty.find_by(access_id: 'abc123').contract_faculty_links.first.contract.sponsor.sponsor_name).to eq('Cool Sponsor')
+      expect(Contract.find_by(osp_key: 1234).notfunded).to eq(Date.parse('Sun, 02 Feb 2015'))
     end
   end
 end

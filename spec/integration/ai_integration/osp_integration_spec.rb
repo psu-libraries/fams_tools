@@ -25,8 +25,8 @@ describe "#osp_integrate" do
 
   context 'when Contract/Grant Integration is selected', type: :feature, js: true do
     before do
-      @contract_grants = fixture_file_upload('spec/fixtures/contract_grants.xlsx')
-      @congrant_backup = fixture_file_upload('spec/fixtures/congrant_backup.txt')
+      @contract_grants = fixture_file_upload('spec/fixtures/contract_grants.csv')
+      @congrant_backup = fixture_file_upload('spec/fixtures/congrant_backup.csv')
 
       stub_request(:post, "https://betawebservices.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University").
           with(
@@ -54,8 +54,8 @@ describe "#osp_integrate" do
       expect(logger).to receive(:error).exactly(4).times
       expect(page).to have_content("AI-Integration")
       within('#congrant') do
-        page.attach_file 'congrant_file', Rails.root.join('spec/fixtures/contract_grants.xlsx')
-        page.attach_file 'ai_backup_file', Rails.root.join('spec/fixtures/congrant_backup.txt')
+        page.attach_file 'congrant_file', Rails.root.join('spec/fixtures/contract_grants.csv')
+        page.attach_file 'ai_backup_file', Rails.root.join('spec/fixtures/congrant_backup.csv')
         page.fill_in 'passcode', :with => passcode
         click_on 'Beta'
       end

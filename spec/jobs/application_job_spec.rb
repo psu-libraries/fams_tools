@@ -42,11 +42,11 @@ RSpec.describe ApplicationJob do
   end
 
   context 'when running lionpath integration' do
-    it 'accepts _file_exits parameter and calls system' do
+    it 'accepts _user_uploaded parameter and calls system' do
       allow_any_instance_of(LionpathIntegrateJob).to receive(:`).and_return(true)
       allow_any_instance_of(LionpathIntegrateJob).to receive(:populate_course_data).and_return(true)
       allow_any_instance_of(LionpathIntegrateJob).to receive(:integrate_course_data).and_return([{}])
-      LionpathIntegrateJob.perform_now(params, 'log/courses_errors.log', true)
+      LionpathIntegrateJob.perform_now(params, 'log/courses_errors.log', false)
     end
   end
 
