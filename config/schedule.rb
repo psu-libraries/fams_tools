@@ -26,3 +26,10 @@ end
 every '0 0 1 2,7,10 *', roles: [:app] do
   rake 'courses_taught:integrate'
 end
+
+every '0 1 8-14 * *', roles: [:app] do
+  # This job should run on the second Monday of every month
+  return unless Date.today.strftime('%u').to_i == 1
+
+  rake 'contract_grants:integrate'
+end
