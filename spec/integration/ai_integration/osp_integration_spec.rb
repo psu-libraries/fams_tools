@@ -38,7 +38,7 @@ describe "#osp_integrate" do
 
       stub_request(:post, "https://betawebservices.digitalmeasures.com/login/service/v4/SchemaData:delete/INDIVIDUAL-ACTIVITIES-University").
           with(
-              body: "<?xml version=\"1.0\"?>\n<Data>\n  <CONGRANT/>\n</Data>\n",
+              body: "<?xml version=\"1.0\"?>\n<Data>\n  <CONGRANT>\n    <item id=\"1000000002\"/>\n    <item id=\"1000000002\"/>\n  </CONGRANT>\n</Data>\n",
               headers: {
                   'Content-Type'=>'text/xml'
               }).
