@@ -41,12 +41,22 @@ RSpec.describe ApplicationJob do
     end
   end
 
-  context 'when running lionpath integration' do
-    it 'accepts _user_uploaded parameter and calls system' do
+  context 'when running automated lionpath integration' do
+    it "accepts _user_uploaded parameter as 'false' and calls system" do
       allow_any_instance_of(LionpathIntegrateJob).to receive(:`).and_return(true)
       allow_any_instance_of(LionpathIntegrateJob).to receive(:populate_course_data).and_return(true)
       allow_any_instance_of(LionpathIntegrateJob).to receive(:integrate_course_data).and_return([{}])
       LionpathIntegrateJob.perform_now(params, 'log/courses_errors.log', false)
+    end
+  end
+
+  context 'when running automated contract/grants integration' do
+    it "accepts _user_uploaded parameter as 'false' and calls system" do
+      allow_any_instance_of(OspIntegrateJob).to receive(:`).and_return(true)
+      allow_any_instance_of(OspIntegrateJob).to receive(:populate_db).and_return(true)
+      allow_any_instance_of(OspIntegrateJob).to receive(:remove_dups).and_return(true)
+      allow_any_instance_of(OspIntegrateJob).to receive(:integrator).and_return([{}])
+      OspIntegrateJob.perform_now(params, 'log/osp_errors.log', false)
     end
   end
 
