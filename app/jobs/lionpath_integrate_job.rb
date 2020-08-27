@@ -1,9 +1,9 @@
 class LionpathIntegrateJob < ApplicationJob
-  # When using rake task, file_exist must = true
-  # This will use existing file 'app/parsing_files/courses_taught.csv'
+  # When using rake task, _user_uploaded must = false
+  # This will initiate the bash script to pull the necessary file
   # instead of uploaded file
-  def integrate(params, _file_exist = false)
-    f_path = create_tmp_file(params, _file_exist)
+  def integrate(params, _user_uploaded = true)
+    f_path = create_tmp_file(params, _user_uploaded)
     populate_course_data(f_path)
     errors = integrate_course_data(params[:target])
     File.delete(f_path) if File.exist?(f_path)
@@ -12,8 +12,8 @@ class LionpathIntegrateJob < ApplicationJob
 
   private
 
-  def create_tmp_file(params, file_exist)
-    if file_exist == false
+  def create_tmp_file(params, user_uploaded)
+    if user_uploaded == true
       f_name = params[:courses_file].original_filename
       f_path = File.join('app', 'parsing_files', f_name)
       File.open(f_path, 'wb') { |f| f.write(params[:courses_file].read) }

@@ -1,23 +1,18 @@
 require 'creek'
 
 class OspImporter
-  attr_accessor :headers, :xlsx_obj, :pendnotfund
+  attr_accessor :headers, :csv_obj, :pendnotfund
 
-  def initialize(osp_path = 'data/dmresults.xlsx', backup_path = 'data/CONGRANT-tabdel.txt')
-    @xlsx_obj = Creek::Book.new(osp_path).sheets[0].rows
-    @headers = @xlsx_obj.first
+  def initialize(osp_path = "#{Rails.root}/app/parsing_files/contract_grants.csv", backup_path = "#{Rails.root}/app/parsing_files/CONGRANT.csv")
+    @csv_obj = CSV.open(osp_path, encoding: "Windows-1252:UTF-8", force_quotes: true, quote_char: '"')
+    @headers = @csv_obj.first
     @pendnotfund = find_converts(backup_path)
   end
 
   #Run all local formatting methods then import to db
   def format_and_populate
-    counter = 0
-    xlsx_obj.each do |row|
-      if counter == 0
-        counter += 1
-        next
-      end
-      row = convert_xlsx_row_to_hash(row)
+    csv_obj.each_with_index do |row|
+      row = convert_csv_row_to_hash(row)
       format_date_fields(row)
       format_accessid_field(row)
       next unless is_user(row)
@@ -37,11 +32,11 @@ class OspImporter
 
   def is_good_date(row)
     if (row['submitted'].blank?) && (row['awarded'].present?)
-      if (row['awarded'].split('-')[0].to_i >= 2011) && (row['awarded'].split('-')[0].to_i <= DateTime.now.year)
+      if (DateTime.strptime(row['awarded'], '%m/%d/%Y %T').year >= 2011) && (DateTime.strptime(row['awarded'], '%m/%d/%Y %T').year <= DateTime.now.year)
         return true
       end
-    else
-      if (row['submitted'].split('-')[0].to_i >= 2011) && (row['submitted'].split('-')[0].to_i <= DateTime.now.year)
+    elsif row['submitted'].present?
+      if (DateTime.strptime(row['submitted'], '%m/%d/%Y %T').year >= 2011) && (DateTime.strptime(row['submitted'], '%m/%d/%Y %T').year <= DateTime.now.year)
         return true
       end
     end
@@ -67,23 +62,8 @@ class OspImporter
     end
   end
 
-  def write_results_to_xl(filename = 'data/dmresults-formatted.xls') 
-    wb = Spreadsheet::Workbook.new filename
-    sheet = wb.create_worksheet
-    xlsx_hash[0].each do |k, v|
-      sheet.row(0).push(k)
-    end
-    xlsx_hash.each_with_index do |row, index|
-      row.each do |k, v|
-        sheet.row(index+1).push(v)
-      end
-    end
-    wb.write filename 
-  end
-
-  def convert_xlsx_row_to_hash(row)
-    keys = headers.values
-    Hash[ keys.zip(row.values) ]
+  def convert_csv_row_to_hash(row)
+    Hash[ headers.zip(row) ]
   end
 
   def format_sponsor_type(row)
@@ -101,11 +81,11 @@ class OspImporter
   end
 
   def format_accessid_field(row)
-    if row['accessid'].to_s.include? ', '
-      unless (row['accessid'].to_s.split(' ')[3]) == (DateTime.now.year.to_s)
-        row['accessid'] = row['accessid'].to_s.split(' ')[2].downcase + row['accessid'].to_s.split(' ')[3][2..3]
+    if row['accessid'].to_s.include? '00:00:00'
+      unless DateTime.strptime(row['accessid'], '%m/%d/%Y %T').year == (DateTime.now.year)
+        row['accessid'] = DateTime.strptime(row['accessid'], '%m/%d/%Y %T').strftime('%b').downcase + DateTime.strptime(row['accessid'], '%m/%d/%Y %T').year.to_s[2..3]
       else
-        row['accessid'] = row['accessid'].to_s.split(' ')[2].downcase + row['accessid'].to_s.split(' ')[1].sub!(/^0+/, "")
+        row['accessid'] = DateTime.strptime(row['accessid'], '%m/%d/%Y %T').strftime('%b').downcase + DateTime.strptime(row['accessid'], '%m/%d/%Y %T').strftime('%-d')
       end
     end
   end
@@ -131,12 +111,6 @@ class OspImporter
       if row[k] == '/' || row[k] == '/  /'
         row[k] = ''
       end
-      begin
-        date = DateTime.parse(row[k].to_s)
-        row[k] = date.strftime("%Y-%m-%d").to_s
-      rescue ArgumentError => e
-        #puts e
-      end
     end
   end
 
@@ -157,7 +131,7 @@ class OspImporter
     index = 0
     keys = []
     pendnotfund = []
-    CSV.foreach(backup_path, encoding: "ISO8859-1", col_sep: "\t") do |backup_row|
+    CSV.foreach(backup_path, encoding: "ISO8859-1:UTF-8", force_quotes: true, quote_char: '"', liberal_parsing: true) do |backup_row|
       if index == 0
         keys = backup_row
       else
@@ -185,16 +159,16 @@ class OspImporter
                                           attr.title = row['title']
                                           attr.sponsor = sponsor
                                           attr.status = row['status']
-                                          attr.submitted = row['submitted']
-                                          attr.awarded = row['awarded']
+                                          attr.submitted = DateTime.strptime(row['submitted'], '%m/%d/%Y %T') if row['submitted'].present?
+                                          attr.awarded = DateTime.strptime(row['awarded'], '%m/%d/%Y %T') if row['awarded'].present?
                                           attr.requested = row['requested']
                                           attr.funded = row['funded']
                                           attr.total_anticipated = row['totalanticipated']
-                                          attr.start_date = row['startdate']
-                                          attr.end_date = row['enddate']
+                                          attr.start_date = DateTime.strptime(row['startdate'], '%m/%d/%Y %T') if row['startdate'].present?
+                                          attr.end_date = DateTime.strptime(row['enddate'], '%m/%d/%Y %T') if row['enddate'].present?
                                           attr.grant_contract = row['grantcontract']
                                           attr.base_agreement = row['baseagreement']
-                                          attr.notfunded = row['notfunded']
+                                          attr.notfunded = DateTime.strptime(row['notfunded'], '%m/%d/%Y %T') if row['notfunded'].present?
                                           end
 
     faculty = Faculty.find_by(access_id: row['accessid'])

@@ -17,10 +17,10 @@ class ApplicationJob < ActiveJob::Base
     delete_all_data
   end
 
-  def perform(params, log_path, _file_exist = false)
+  def perform(params, log_path, _user_uploaded = true)
     error_logger = Logger.new("public/#{log_path}")
     error_logger.info "#{name} to #{params[:target]} initiated at: #{DateTime.now}"
-    errors = integrate(params, _file_exist)
+    errors = integrate(params, _user_uploaded)
     error_logger.info "Errors for #{name} to #{params[:target]} at: #{DateTime.now}"
     errors.each do |error|
       error_logger.error "____________________________________________________"

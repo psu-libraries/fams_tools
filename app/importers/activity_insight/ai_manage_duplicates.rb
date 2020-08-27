@@ -67,7 +67,7 @@ public
 class RemoveSystemDups
   attr_accessor :filepath, :ospkey_hash, :congrant_data, :duplicates_stored, :duplicates_final, :target, :url
 
-  def initialize(filepath = 'data/CONGRANT-tabdel.txt', target)
+  def initialize(filepath = "#{Rails.root}/app/parsing_files/CONGRANT.csv", target)
     @filepath = filepath
     @ospkey_hash = {}
     @duplicates_stored = []
@@ -91,7 +91,7 @@ class RemoveSystemDups
   def csv_to_hashes(filepath)
     index = 0
     keys = []
-    CSV.foreach(filepath, encoding: "ISO8859-1", col_sep: "\t") do |row|
+    CSV.foreach(filepath, encoding: "ISO8859-1:UTF-8", force_quotes: true, quote_char: '"', liberal_parsing: true) do |row|
       if index == 0
         keys = row
       else
@@ -121,7 +121,7 @@ class RemoveSystemDups
         user_duplicates_hash[k] = v.select {|e| v.count(e) > 1}.uniq
       end
     end
-    CSV.foreach(filepath, encoding: "ISO8859-1", col_sep: "\t") do |row|
+    CSV.foreach(filepath, encoding: "ISO8859-1:UTF-8", force_quotes: true, quote_char: '"', liberal_parsing: true) do |row|
       if index == 0
         keys = row
       else

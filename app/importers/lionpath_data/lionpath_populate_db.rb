@@ -14,11 +14,6 @@ class LionPathPopulateDB
     lionpath_parser.remove_duplicates
   end
 
-  def write
-    lionpath_parser.write_results_to_xl
-    lionpath_parser.write_flagged_to_xl
-  end
-  
   def populate
     lionpath_parser.csv_hash.each do |row|
       begin
