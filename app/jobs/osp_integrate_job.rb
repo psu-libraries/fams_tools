@@ -6,7 +6,7 @@ class OspIntegrateJob < ApplicationJob
       backup_path = create_backup_file(params)
     else
       # Running bash script to grab dmresults.csv and CONGRANT.csv files
-      `#{Rails.root}/bin/contract-grants.sh #{dm_username} #{dm_password}`
+      `#{Rails.root}/bin/contract-grants.sh #{backups_username} #{backups_password}`
       f_path = File.join('app', 'parsing_files', 'contract_grants.csv')
       backup_path = File.join('app', 'parsing_files', 'CONGRANT.csv')
     end
@@ -53,11 +53,11 @@ class OspIntegrateJob < ApplicationJob
     File.delete(f_path) if File.exist?(f_path)
   end
 
-  def dm_username
+  def backups_username
     Rails.application.config_for(:activity_insight)["backups_service"][:username]
   end
 
-  def dm_password
+  def backups_password
     Rails.application.config_for(:activity_insight)["backups_service"][:password]
   end
 

@@ -1,4 +1,7 @@
 production:
+  main:
+    :username: "fake"
+    :password: "fake"
   webservices:
     :username: "fake"
     :password: "fake"
@@ -9,6 +12,9 @@ production:
     :key: "fake"
 
 development:
+  main:
+    :username: "fake"
+    :password: "fake"
   webservices:
     :username: "fake"
     :password: "fake"
@@ -19,6 +25,9 @@ development:
     :key: "fake"
 
 test:
+  main:
+    :username: "fake"
+    :password: "fake"
   webservices:
     :username: "fake"
     :password: "fake"

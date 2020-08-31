@@ -33,3 +33,7 @@ every '0 1 8-14 * *', roles: [:app] do
 
   rake 'contract_grants:integrate'
 end
+
+every '0 22 * * 0', roles: [:app] do
+  rake 'activity_insight:get_user_data'
+end

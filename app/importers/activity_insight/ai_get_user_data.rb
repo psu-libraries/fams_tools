@@ -3,7 +3,7 @@ require 'spreadsheet'
 class GetUserData
   attr_accessor :users_sheet, :users_hashed
 
-  def initialize(file_path = 'data/psu-users.xls')
+  def initialize(file_path = 'app/parsing_files/psu-users.xls')
     @users_sheet = Spreadsheet.open(file_path).worksheet(0)
     @users_hashed = []
   end
