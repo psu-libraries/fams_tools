@@ -19,7 +19,7 @@
 
 # Learn more: http://github.com/javan/whenever
 
-every '0 0 1 * *', roles: [:app] do
+every '0 7 1 * *', roles: [:app] do
   rake 'cron:download_backup'
 end
 

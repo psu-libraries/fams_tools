@@ -2,25 +2,10 @@
   <h1>FAMS Tools</h1>
 </div>
 
-
-
-<div class="container-fluid">
-  <h3>Setup</h3>
-  <ol>
-    <li>First, update the local database with the most recent user data from the <a href="https://www.digitalmeasures.com/login/psu/admin/security/management/user/downloadUsers.do?selectedUsers=345">psu-users.xls</a> file</li>
-  </ol>
-  <h4>Update User Data</h4>
-  <%= form_with :url => { :action => "update_ai_user_data" }, id: "psu-users" do |form| %>
-    <p> <%= label(:psu_users_file, text = "psu-users.xls File") %><%= form.file_field :psu_users_file %> </p>
-    <div class="row">
-    <div class="col-xs-1", style="padding:5px 5px;">
-      <p> <%= form.button "Update".html_safe, class:"btn btn-primary", type: :submit, :data => { disable_with: "<i class='fa fa-spinner fa-pulse'></i> Updating..." } %> </p>
-    </div>
-    </div>
-  <% end %>
+<div class="row">
+  <h1>Usage</h1>
 </div>
-
-<hr>
+<hr/>
 
 <div class="container">
   <h3>CV Parser</h3>
@@ -40,16 +25,18 @@
       <li>Click the links at the top to 'Download as xlsx' or 'Download as csv'</li>
     </ol>
   <h3>AI-Integration</h3>
-  <p>To begin integrating data into Activity Insight, first update the users database above.  Then click the "Integration" link in the navigation bar above.  You will then need to select an integration type from the dropdown and follow the directions below.</p>
+  <p>To begin running integrations, click the "Integration" tab in the nav bar above. You will then need to select an integration type from the dropdown and follow the directions below.</p>
   <ul>
     <li><h5>Contract/Grant Integration</h5></li>
     <ol>
-      <li>Download OSP data in csv format: <a href="https://service.sims.psu.edu/digitalmeasures/dmresults.csv">dmresults.csv</a></li>
-      <li>Convert dmresults.csv to an xlsx file</li>
+      <strong class="text-danger">This integration is fully automated.  It runs at 01:00 on the second Monday of each month.</br>
+      To run this integration with the GUI:</strong>
+      </br>
+      </br>
+      <li>Download OSP data from: <a href="https://service.sims.psu.edu/digitalmeasures/dmresults.csv">dmresults.csv</a></li>
       <li>From the integration screen, upload this file where it says "Osp data file"</li>
-      <li>Download a backup .zip from the <a href="https://webservices.digitalmeasures.com/login/service/v4/SchemaData:backup/INDIVIDUAL-ACTIVITIES-University">AI backup resource</a></li>
-      <li>Unzip and open the CONGRANT.csv file</li>
-      <li>Format the 'ID' column to a number with 0 decimal places and save the file as a tab-delimited text file</li>
+      <li>Download a backups .zip from the <a href="https://webservices.digitalmeasures.com/login/service/v4/SchemaData:backup/INDIVIDUAL-ACTIVITIES-University">AI backup resource</a></li>
+      <li>Unzip the downloaded file and find the CONGRANT.csv file within</li>
       <li>From the integration screen, upload this file where it says "Congrant backup file"</li>
       <li>Enter the passcode and click the button corresponding to the target environment you wish to integrate with</li>
     </ol>
