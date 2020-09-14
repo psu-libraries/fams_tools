@@ -19,6 +19,9 @@
 
 # Learn more: http://github.com/javan/whenever
 
+# This custom job will exit if it is not Monday.  Used for contract/grant integration
+job_type :monday_rake, "test $(date +%u) -eq 1 && cd :path && :environment_variable=:environment bundle exec rake :task --silent :output"
+
 every '0 7 1 * *', roles: [:app] do
   rake 'cron:download_backup'
 end
@@ -29,9 +32,7 @@ end
 
 every '0 1 8-14 * *', roles: [:app] do
   # This job should run on the second Monday of every month
-  return unless Date.today.strftime('%u').to_i == 1
-
-  rake 'contract_grants:integrate'
+  monday_rake 'contract_grants:integrate'
 end
 
 every '0 22 * * 0', roles: [:app] do
