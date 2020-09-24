@@ -22,7 +22,7 @@ class WorkOutputs
                tech translator unknown url].freeze
 
   PRES_HEADERS = ['USERNAME', 'TYPE', 'TITLE', 'NAME', 'LOCATION', ['DTM_START', 'DTD_START', 'DTY_START',
-                  'DTM_END', 'DTD_END', 'DTY_END'], 'edition', 'note', 'institution', 'pages', 'volume',
+                  'DTM_END', 'DTD_END', 'DTY_END'], 'edition', 'COMMENT', 'institution', 'pages', 'volume',
                   'journal', 'booktitle', 'doi', 'editors', 'isbn', 'publisher', 'retrieved',
                   'tech', 'translator', 'unknown', 'url'].freeze
 

@@ -171,7 +171,7 @@ class SpreadsheetOutput < WorkOutputs
   def remove_empty_cols(csv)
     csv = CSV.parse(csv, headers: true)
     headers.each do |header|
-      csv.delete(header) if csv[header].compact.first.blank?
+      csv.delete(header) if csv[header].reject { |s| s.nil? || s.strip.empty? }.blank?
     end
     csv
   end
