@@ -1,4 +1,6 @@
 [![CircleCI](https://circleci.com/gh/psu-stewardship/fams_tools.svg?style=svg)](https://circleci.com/gh/psu-stewardship/fams_tools)
+<a href="https://codeclimate.com/github/psu-stewardship/fams_tools/test_coverage"><img src="https://api.codeclimate.com/v1/badges/34639426df49a5ab0419/test_coverage" /></a>
+<a href="https://codeclimate.com/github/psu-stewardship/fams_tools/maintainability"><img src="https://api.codeclimate.com/v1/badges/34639426df49a5ab0419/maintainability" /></a>
 
 # FAMS Tools (AI Integration)
 
