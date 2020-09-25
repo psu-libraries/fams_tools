@@ -87,7 +87,7 @@ group :development, :test do
   # Ruby code linter
   gem 'rubocop', require: false
   # Code coverage
-  gem 'simplecov', require: false
+  gem 'simplecov', '~> 0.17.0'
 end
 
 group :development do
