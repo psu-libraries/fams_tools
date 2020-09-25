@@ -47,4 +47,3 @@ jobs:
             # Send report to Code Climate
             bin/cc-test-reporter format-coverage -t simplecov -o coverage/codeclimate.json coverage/.resultset.json &&
             bin/cc-test-reporter upload-coverage
-
