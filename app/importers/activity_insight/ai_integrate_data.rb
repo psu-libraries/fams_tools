@@ -10,7 +10,6 @@ class IntegrateData
   end
 
   def integrate
-    byebug
     errors = []
     Rails.logger.info url
     xml_enumerator.each do |xml|
