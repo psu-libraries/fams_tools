@@ -17,7 +17,10 @@ class OspXMLBuilder
       xml.Data {
         batch.each do |faculty|
           xml.Record('username' => faculty.access_id) {
+            done_link_ids = []
             faculty.contract_faculty_links.order("contract_id ASC").each do |link|
+              next if done_link_ids.include? link.id
+
               xml.CONGRANT {
                 xml.OSPKEY_ link.contract.osp_key, :access => "READ_ONLY"
                 xml.BASE_AGREE_ link.contract.base_agreement, :access => "READ_ONLY"
@@ -61,7 +64,7 @@ class OspXMLBuilder
                         xml.DTY_AWARD_
                       end
                     }
-                    amendment.destroy!
+                    done_link_ids << amendment.id
                   end
                 end
                 xml.CONGRANT_INVEST {
