@@ -25,33 +25,44 @@ class OspXMLBuilder
                 (link.contract.title.present?) ? xml.TITLE_(link.contract.title.gsub(/[^[:print:]]/,''), :access => "READ_ONLY") : nil
                 xml.SPONORG_ link.contract.sponsor.sponsor_name, :access => "READ_ONLY"
                 xml.AWARDORG_ link.contract.sponsor.sponsor_type, :access => "READ_ONLY"
-                ContractFacultyLink.joins(:contract)
-                    .where('contract_faculty_links.faculty_id = ? AND contracts.base_agreement = ? AND contracts.osp_key != ?',
-                           link.faculty_id, link.contract.base_agreement, link.contract.osp_key).order("contracts.osp_key ASC").each do |amendment|
-                  xml.AMENDMENT {
-                    xml.OSPKEY_ amendment.contract.osp_key, access: 'READ_ONLY'
-                    xml.AMOUNT_ amendment.contract.funded, access: 'READ_ONLY'
-                    xml.AMOUNT_ANTICIPATE_ amendment.contract.total_anticipated, access: 'READ_ONLY'
-                    begin
-                      xml.DTM_START_ Date.strptime(amendment.contract.start_date.to_s, '%Y-%m-%d').strftime('%B'), :access => "READ_ONLY"
-                      xml.DTD_START_ Date.strptime(amendment.contract.start_date.to_s, '%Y-%m-%d').strftime('%d'), :access => "READ_ONLY"
-                      xml.DTY_START_ Date.strptime(amendment.contract.start_date.to_s, '%Y-%m-%d').strftime('%Y'), :access => "READ_ONLY"
-                    rescue ArgumentError
-                      xml.DTM_START_
-                      xml.DTD_START_
-                      xml.DTY_START_
-                    end
-                    begin
-                      xml.DTM_END_ Date.strptime(amendment.contract.end_date.to_s, '%Y-%m-%d').strftime('%B'), :access => "READ_ONLY"
-                      xml.DTD_END_ Date.strptime(amendment.contract.end_date.to_s, '%Y-%m-%d').strftime('%d'), :access => "READ_ONLY"
-                      xml.DTY_END_ Date.strptime(amendment.contract.end_date.to_s, '%Y-%m-%d').strftime('%Y'), :access => "READ_ONLY"
-                    rescue ArgumentError
-                      xml.DTM_END_
-                      xml.DTD_END_
-                      xml.DTY_END_
-                    end
-                  }
-                  amendment.destroy!
+                if link.contract.base_agreement.present?
+                  ContractFacultyLink.joins(:contract)
+                      .where('contract_faculty_links.faculty_id = ? AND contracts.base_agreement = ? AND contracts.osp_key != ?',
+                             link.faculty_id, link.contract.base_agreement, link.contract.osp_key).order("contracts.osp_key ASC").each do |amendment|
+                    xml.AMENDMENT {
+                      xml.OSPKEY_ amendment.contract.osp_key, access: 'READ_ONLY'
+                      xml.AMOUNT_ amendment.contract.funded, access: 'READ_ONLY'
+                      xml.AMOUNT_ANTICIPATE_ amendment.contract.total_anticipated, access: 'READ_ONLY'
+                      begin
+                        xml.DTM_START_ Date.strptime(amendment.contract.start_date.to_s, '%Y-%m-%d').strftime('%B'), :access => "READ_ONLY"
+                        xml.DTD_START_ Date.strptime(amendment.contract.start_date.to_s, '%Y-%m-%d').strftime('%d'), :access => "READ_ONLY"
+                        xml.DTY_START_ Date.strptime(amendment.contract.start_date.to_s, '%Y-%m-%d').strftime('%Y'), :access => "READ_ONLY"
+                      rescue ArgumentError
+                        xml.DTM_START_
+                        xml.DTD_START_
+                        xml.DTY_START_
+                      end
+                      begin
+                        xml.DTM_END_ Date.strptime(amendment.contract.end_date.to_s, '%Y-%m-%d').strftime('%B'), :access => "READ_ONLY"
+                        xml.DTD_END_ Date.strptime(amendment.contract.end_date.to_s, '%Y-%m-%d').strftime('%d'), :access => "READ_ONLY"
+                        xml.DTY_END_ Date.strptime(amendment.contract.end_date.to_s, '%Y-%m-%d').strftime('%Y'), :access => "READ_ONLY"
+                      rescue ArgumentError
+                        xml.DTM_END_
+                        xml.DTD_END_
+                        xml.DTY_END_
+                      end
+                      begin
+                        xml.DTM_AWARD_ Date.strptime(link.contract.awarded.to_s, '%Y-%m-%d').strftime('%B'), :access => "READ_ONLY"
+                        xml.DTD_AWARD_ Date.strptime(link.contract.awarded.to_s, '%Y-%m-%d').strftime('%d'), :access => "READ_ONLY"
+                        xml.DTY_AWARD_ Date.strptime(link.contract.awarded.to_s, '%Y-%m-%d').strftime('%Y'), :access => "READ_ONLY"
+                      rescue ArgumentError
+                        xml.DTM_AWARD_
+                        xml.DTD_AWARD_
+                        xml.DTY_AWARD_
+                      end
+                    }
+                    amendment.destroy!
+                  end
                 end
                 xml.CONGRANT_INVEST {
                   xml.FACULTY_NAME_ faculty.user_id
@@ -62,27 +73,8 @@ class OspXMLBuilder
                   xml.ASSIGN_ link.pct_credit 
                 }
                 xml.AMOUNT_REQUEST_ link.contract.requested, :access => "READ_ONLY"
-                xml.AMOUNT_ link.contract.funded, :access => "READ_ONLY"
                 if college_list.include? faculty.college
                   xml.STATUS_ link.contract.status, :access => "READ_ONLY"
-                end
-                begin
-                  xml.DTM_SUB_ Date.strptime(link.contract.submitted.to_s, '%Y-%m-%d').strftime('%B'), :access => "READ_ONLY"
-                  xml.DTD_SUB_ Date.strptime(link.contract.submitted.to_s, '%Y-%m-%d').strftime('%d'), :access => "READ_ONLY"
-                  xml.DTY_SUB_ Date.strptime(link.contract.submitted.to_s, '%Y-%m-%d').strftime('%Y'), :access => "READ_ONLY"
-                rescue ArgumentError
-                  xml.DTM_SUB_
-                  xml.DTD_SUB_
-                  xml.DTY_SUB_
-                end
-                begin
-                  xml.DTM_AWARD_ Date.strptime(link.contract.awarded.to_s, '%Y-%m-%d').strftime('%B'), :access => "READ_ONLY"
-                  xml.DTD_AWARD_ Date.strptime(link.contract.awarded.to_s, '%Y-%m-%d').strftime('%d'), :access => "READ_ONLY"
-                  xml.DTY_AWARD_ Date.strptime(link.contract.awarded.to_s, '%Y-%m-%d').strftime('%Y'), :access => "READ_ONLY"
-                rescue ArgumentError
-                  xml.DTM_AWARD_
-                  xml.DTD_AWARD_
-                  xml.DTY_AWARD_
                 end
                 begin
                   xml.DTM_START_ Date.strptime(link.contract.start_date.to_s, '%Y-%m-%d').strftime('%B'), :access => "READ_ONLY"
@@ -101,6 +93,24 @@ class OspXMLBuilder
                   xml.DTM_END_
                   xml.DTD_END_
                   xml.DTY_END_
+                end
+                begin
+                  xml.DTM_SUB_ Date.strptime(link.contract.submitted.to_s, '%Y-%m-%d').strftime('%B'), :access => "READ_ONLY"
+                  xml.DTD_SUB_ Date.strptime(link.contract.submitted.to_s, '%Y-%m-%d').strftime('%d'), :access => "READ_ONLY"
+                  xml.DTY_SUB_ Date.strptime(link.contract.submitted.to_s, '%Y-%m-%d').strftime('%Y'), :access => "READ_ONLY"
+                rescue ArgumentError
+                  xml.DTM_SUB_
+                  xml.DTD_SUB_
+                  xml.DTY_SUB_
+                end
+                begin
+                  xml.DTM_AWARD_ Date.strptime(link.contract.awarded.to_s, '%Y-%m-%d').strftime('%B'), :access => "READ_ONLY"
+                  xml.DTD_AWARD_ Date.strptime(link.contract.awarded.to_s, '%Y-%m-%d').strftime('%d'), :access => "READ_ONLY"
+                  xml.DTY_AWARD_ Date.strptime(link.contract.awarded.to_s, '%Y-%m-%d').strftime('%Y'), :access => "READ_ONLY"
+                rescue ArgumentError
+                  xml.DTM_AWARD_
+                  xml.DTD_AWARD_
+                  xml.DTY_AWARD_
                 end
                 begin
                   xml.DTM_DECLINE_ Date.strptime(link.contract.notfunded.to_s, '%Y-%m-%d').strftime('%B'), :access => "READ_ONLY"
