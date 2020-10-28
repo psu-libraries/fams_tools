@@ -62,6 +62,39 @@
       <DTD_DECLINE/>
       <DTY_DECLINE/>
     </CONGRANT>
+    <CONGRANT>
+      <OSPKEY access="READ_ONLY">12348</OSPKEY>
+      <BASE_AGREE access="READ_ONLY">XYZ125</BASE_AGREE>
+      <TYPE access="READ_ONLY">Grant</TYPE>
+      <TITLE access="READ_ONLY">Title</TITLE>
+      <SPONORG access="READ_ONLY">Name4</SPONORG>
+      <AWARDORG access="READ_ONLY"/>
+      <CONGRANT_INVEST>
+        <FACULTY_NAME>123</FACULTY_NAME>
+        <FNAME>Test</FNAME>
+        <MNAME>Person</MNAME>
+        <LNAME>User</LNAME>
+        <ROLE>Principal Investigator</ROLE>
+        <ASSIGN>50</ASSIGN>
+      </CONGRANT_INVEST>
+      <AMOUNT_REQUEST access="READ_ONLY">1000</AMOUNT_REQUEST>
+      <STATUS access="READ_ONLY">Awarded</STATUS>
+      <DTM_START access="READ_ONLY">February</DTM_START>
+      <DTD_START access="READ_ONLY">01</DTD_START>
+      <DTY_START access="READ_ONLY">2015</DTY_START>
+      <DTM_END access="READ_ONLY">February</DTM_END>
+      <DTD_END access="READ_ONLY">01</DTD_END>
+      <DTY_END access="READ_ONLY">2017</DTY_END>
+      <DTM_SUB access="READ_ONLY">February</DTM_SUB>
+      <DTD_SUB access="READ_ONLY">01</DTD_SUB>
+      <DTY_SUB access="READ_ONLY">2015</DTY_SUB>
+      <DTM_AWARD access="READ_ONLY">March</DTM_AWARD>
+      <DTD_AWARD access="READ_ONLY">01</DTD_AWARD>
+      <DTY_AWARD access="READ_ONLY">2015</DTY_AWARD>
+      <DTM_DECLINE/>
+      <DTD_DECLINE/>
+      <DTY_DECLINE/>
+    </CONGRANT>
   </Record>
   <Record username="ddd111">
     <CONGRANT>

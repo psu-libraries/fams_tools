@@ -13,6 +13,7 @@ RSpec.describe OspXMLBuilder do
   let!(:link2) { FactoryBot.create(:contract_faculty_link, faculty: faculty1, contract: contract2)}
   let!(:link3) { FactoryBot.create(:contract_faculty_link, faculty: faculty1, contract: contract3)}
   let!(:link4) { FactoryBot.create(:contract_faculty_link, faculty: faculty2, contract: contract4)}
+  let!(:link5) { FactoryBot.create(:contract_faculty_link, faculty: faculty1, contract: contract4)}
 
   let(:xml_builder_obj) {described_class.new}
   let(:final_xml_output) { File.read(Rails.root.join('spec', 'fixtures', 'contract_grant_xml_build.xml')) }
