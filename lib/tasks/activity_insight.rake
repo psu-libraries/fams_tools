@@ -51,7 +51,21 @@ namespace :activity_insight do
     DeleteRecords.new(args[:resource], args[:target].to_sym).delete
     finish = Time.now
     puts(((finish - start)/60).to_s + ' mins')
-
   end
 
+  task delete_compounded_congrants: :environment do
+    start = Time.now
+    CSV.foreach(csv_path, headers: true) do |row|
+      batch = []
+      if row['ORIGINAL_SOURCE'] == 'IMPORT' && row['OSPKEY'].present? && row['BASE_AGREE'].present?
+        batch << row['ID']
+        if batch.length > 100
+          IntegrateData.new(batch, 'beta', :delete)
+          batch = []
+        end
+      end
+    end
+    finish = Time.now
+    puts(((finish - start)/60).to_s + ' mins')
+  end
 end

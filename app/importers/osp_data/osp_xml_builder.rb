@@ -31,7 +31,7 @@ class OspXMLBuilder
                 if link.contract.base_agreement.present?
                   ContractFacultyLink.joins(:contract)
                       .where('contract_faculty_links.faculty_id = ? AND contracts.base_agreement = ? AND contracts.osp_key != ?',
-                             link.faculty_id, link.contract.base_agreement, link.contract.osp_key).order("contracts.osp_key ASC").each do |amendment|
+                             link.faculty_id, link.contract.base_agreement, link.contract.osp_key).order("contracts.osp_key DESC").each do |amendment|
                     xml.AMENDMENT {
                       xml.OSPKEY_ amendment.contract.osp_key, access: 'READ_ONLY'
                       xml.AMOUNT_ amendment.contract.funded, access: 'READ_ONLY'
