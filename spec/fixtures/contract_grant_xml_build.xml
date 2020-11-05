@@ -9,7 +9,7 @@
       <SPONORG access="READ_ONLY">Name1</SPONORG>
       <AWARDORG access="READ_ONLY"/>
       <AMENDMENT>
-        <OSPKEY access="READ_ONLY">12346</OSPKEY>
+        <OSPKEY access="READ_ONLY">12347</OSPKEY>
         <AMOUNT access="READ_ONLY">500</AMOUNT>
         <AMOUNT_ANTICIPATE access="READ_ONLY">10000</AMOUNT_ANTICIPATE>
         <DTM_START access="READ_ONLY">February</DTM_START>
@@ -23,7 +23,7 @@
         <DTY_AWARD access="READ_ONLY">2015</DTY_AWARD>
       </AMENDMENT>
       <AMENDMENT>
-        <OSPKEY access="READ_ONLY">12347</OSPKEY>
+        <OSPKEY access="READ_ONLY">12346</OSPKEY>
         <AMOUNT access="READ_ONLY">500</AMOUNT>
         <AMOUNT_ANTICIPATE access="READ_ONLY">10000</AMOUNT_ANTICIPATE>
         <DTM_START access="READ_ONLY">February</DTM_START>
