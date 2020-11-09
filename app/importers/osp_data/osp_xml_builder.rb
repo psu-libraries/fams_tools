@@ -67,14 +67,16 @@ class OspXMLBuilder
                     done_link_ids << amendment.id
                   end
                 end
-                xml.CONGRANT_INVEST {
-                  xml.FACULTY_NAME_ faculty.user_id
-                  xml.FNAME_ faculty.f_name
-                  xml.MNAME_ faculty.m_name
-                  xml.LNAME faculty.l_name
-                  xml.ROLE_ link.role
-                  xml.ASSIGN_ link.pct_credit 
-                }
+                link.contract.contract_faculty_links.each do |contract_link|
+                  xml.CONGRANT_INVEST {
+                    xml.FACULTY_NAME_ contract_link.faculty.user_id
+                    xml.FNAME_ contract_link.faculty.f_name
+                    xml.MNAME_ contract_link.faculty.m_name
+                    xml.LNAME contract_link.faculty.l_name
+                    xml.ROLE_ contract_link.role
+                    xml.ASSIGN_ contract_link.pct_credit
+                  }
+                end
                 xml.AMOUNT_REQUEST_ link.contract.requested, :access => "READ_ONLY"
                 if college_list.include? faculty.college
                   xml.STATUS_ link.contract.status, :access => "READ_ONLY"
