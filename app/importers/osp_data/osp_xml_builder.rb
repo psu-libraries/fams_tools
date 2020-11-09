@@ -68,11 +68,12 @@ class OspXMLBuilder
                   end
                 end
                 link.contract.contract_faculty_links.each do |contract_link|
+                  linked_faculty = contract_link.faculty
                   xml.CONGRANT_INVEST {
-                    xml.FACULTY_NAME_ contract_link.faculty.user_id
-                    xml.FNAME_ contract_link.faculty.f_name
-                    xml.MNAME_ contract_link.faculty.m_name
-                    xml.LNAME contract_link.faculty.l_name
+                    xml.FACULTY_NAME_ linked_faculty.user_id
+                    xml.FNAME_ linked_faculty.f_name
+                    xml.MNAME_ linked_faculty.m_name
+                    xml.LNAME linked_faculty.l_name
                     xml.ROLE_ contract_link.role
                     xml.ASSIGN_ contract_link.pct_credit
                   }
