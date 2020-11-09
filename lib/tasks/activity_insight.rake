@@ -53,18 +53,24 @@ namespace :activity_insight do
     puts(((finish - start)/60).to_s + ' mins')
   end
 
-  task delete_compounded_congrants: :environment do
+  task :delete_compounded_congrants, [:csv_path, :target] do |task, args|
+    # require_relative '../../app/importers/activity_insight/delete_records'
+    # require_relative '../../app/importers/activity_insight/ai_integrate_data'
+    Rails.initialize!
+
     start = Time.now
-    CSV.foreach(csv_path, headers: true) do |row|
-      batch = []
-      if row['ORIGINAL_SOURCE'] == 'IMPORT' && row['OSPKEY'].present? && row['BASE_AGREE'].present?
-        batch << row['ID']
-        if batch.length > 100
-          IntegrateData.new(batch, 'beta', :delete)
-          batch = []
+    file_path = "#{Rails.root}/app/parsing_files/delete.csv"
+    File.delete(file_path) if File.exist?(file_path)
+    CSV.open(file_path, "wb") do |csv|
+      csv << ['ID']
+      CSV.foreach(args[:csv_path], headers: true, encoding: "ISO8859-1:UTF-8", force_quotes: true, quote_char: '"', liberal_parsing: true) do |row|
+        if (row['ORIGINAL_SOURCE'] == 'IMPORT') && (row['OSPKEY'].present?) && (row['BASE_AGREE'].present?)
+          csv << [row['ID']]
         end
       end
     end
+    DeleteRecords.new('CONGRANT', args[:target]).delete
+    File.delete(file_path) if File.exist?(file_path)
     finish = Time.now
     puts(((finish - start)/60).to_s + ' mins')
   end
