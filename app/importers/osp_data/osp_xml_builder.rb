@@ -28,6 +28,8 @@ class OspXMLBuilder
                 (link.contract.title.present?) ? xml.TITLE_(link.contract.title.gsub(/[^[:print:]]/,''), :access => "READ_ONLY") : nil
                 xml.SPONORG_ link.contract.sponsor.sponsor_name, :access => "READ_ONLY"
                 xml.AWARDORG_ link.contract.sponsor.sponsor_type, :access => "READ_ONLY"
+                xml.AMOUNT_ link.contract.funded, access: 'READ_ONLY'
+                xml.AMOUNT_ANTICIPATE_ link.contract.total_anticipated, access: 'READ_ONLY'
                 if link.contract.base_agreement.present?
                   ContractFacultyLink.joins(:contract)
                       .where('contract_faculty_links.faculty_id = ? AND contracts.base_agreement = ? AND contracts.osp_key != ?',
