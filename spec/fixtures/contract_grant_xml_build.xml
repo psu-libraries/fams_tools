@@ -8,6 +8,8 @@
       <TITLE access="READ_ONLY">Title</TITLE>
       <SPONORG access="READ_ONLY">Name1</SPONORG>
       <AWARDORG access="READ_ONLY"/>
+      <AMOUNT access="READ_ONLY">500</AMOUNT>
+      <AMOUNT_ANTICIPATE access="READ_ONLY">10000</AMOUNT_ANTICIPATE>
       <AMENDMENT>
         <OSPKEY access="READ_ONLY">12347</OSPKEY>
         <AMOUNT access="READ_ONLY">500</AMOUNT>
@@ -69,8 +71,18 @@
       <TITLE access="READ_ONLY">Title</TITLE>
       <SPONORG access="READ_ONLY">Name4</SPONORG>
       <AWARDORG access="READ_ONLY"/>
+      <AMOUNT access="READ_ONLY">500</AMOUNT>
+      <AMOUNT_ANTICIPATE access="READ_ONLY">10000</AMOUNT_ANTICIPATE>
       <CONGRANT_INVEST>
         <FACULTY_NAME>123</FACULTY_NAME>
+        <FNAME>Test</FNAME>
+        <MNAME>Person</MNAME>
+        <LNAME>User</LNAME>
+        <ROLE>Principal Investigator</ROLE>
+        <ASSIGN>50</ASSIGN>
+      </CONGRANT_INVEST>
+      <CONGRANT_INVEST>
+        <FACULTY_NAME>234</FACULTY_NAME>
         <FNAME>Test</FNAME>
         <MNAME>Person</MNAME>
         <LNAME>User</LNAME>
@@ -104,6 +116,16 @@
       <TITLE access="READ_ONLY">Title</TITLE>
       <SPONORG access="READ_ONLY">Name4</SPONORG>
       <AWARDORG access="READ_ONLY"/>
+      <AMOUNT access="READ_ONLY">500</AMOUNT>
+      <AMOUNT_ANTICIPATE access="READ_ONLY">10000</AMOUNT_ANTICIPATE>
+      <CONGRANT_INVEST>
+        <FACULTY_NAME>123</FACULTY_NAME>
+        <FNAME>Test</FNAME>
+        <MNAME>Person</MNAME>
+        <LNAME>User</LNAME>
+        <ROLE>Principal Investigator</ROLE>
+        <ASSIGN>50</ASSIGN>
+      </CONGRANT_INVEST>
       <CONGRANT_INVEST>
         <FACULTY_NAME>234</FACULTY_NAME>
         <FNAME>Test</FNAME>
