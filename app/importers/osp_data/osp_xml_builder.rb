@@ -71,16 +71,27 @@ class OspXMLBuilder
                     done_link_ids << amendment.id
                   end
                 end
-                contract.contract_faculty_links.each do |contract_link|
-                  linked_faculty = contract_link.faculty
+                if ["pending", "not funded"].include? contract.status.to_s.downcase
                   xml.CONGRANT_INVEST {
-                    xml.FACULTY_NAME_ linked_faculty.user_id
-                    xml.FNAME_ linked_faculty.f_name
-                    xml.MNAME_ linked_faculty.m_name
-                    xml.LNAME linked_faculty.l_name
-                    xml.ROLE_ contract_link.role
-                    xml.ASSIGN_ contract_link.pct_credit
+                    xml.FACULTY_NAME_ faculty.user_id
+                    xml.FNAME_ faculty.f_name
+                    xml.MNAME_ faculty.m_name
+                    xml.LNAME faculty.l_name
+                    xml.ROLE_ link.role
+                    xml.ASSIGN_ link.pct_credit
                   }
+                else
+                  contract.contract_faculty_links.each do |contract_link|
+                    linked_faculty = contract_link.faculty
+                    xml.CONGRANT_INVEST {
+                      xml.FACULTY_NAME_ linked_faculty.user_id
+                      xml.FNAME_ linked_faculty.f_name
+                      xml.MNAME_ linked_faculty.m_name
+                      xml.LNAME linked_faculty.l_name
+                      xml.ROLE_ contract_link.role
+                      xml.ASSIGN_ contract_link.pct_credit
+                    }
+                  end
                 end
                 xml.AMOUNT_REQUEST_ contract.requested, :access => "READ_ONLY"
                 if college_list.include? faculty.college
