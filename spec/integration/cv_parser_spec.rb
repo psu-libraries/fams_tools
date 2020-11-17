@@ -12,6 +12,7 @@ RSpec.describe PublicationListingsController do
         page.fill_in 'username', :with => 'ajk5603'
         page.select "Book", from: 'contype'
         page.fill_in 'citations', :with => '1. Billy, B.O.B., Francis, Y.O., & Vern, S.M. (2001). Computers: Are they smart?  Not as smart as me. Penn State University, College of Engineering.
+
 2. Billy, B.O.B., Francis, Y.O., & Vern, S.M. (2001). Computers: Are they smart?  Not as smart as me. Penn State University, College of Engineering.'
         click_on "Create Citation Spreadsheet"
       end
