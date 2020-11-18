@@ -54,8 +54,6 @@ namespace :activity_insight do
   end
 
   task :delete_compounded_congrants, [:csv_path, :target] do |task, args|
-    # require_relative '../../app/importers/activity_insight/delete_records'
-    # require_relative '../../app/importers/activity_insight/ai_integrate_data'
     Rails.initialize!
 
     start = Time.now
