@@ -49,7 +49,7 @@ class PublicationListingsController < ApplicationController
   end
 
   def citations
-    AnyStyle::Document.parse(params[:citations].to_s)
+    AnyStyle::Document.parse(params[:citations].to_s).collect { |n| n if n.present? }.compact
   end
 
   def work_attrs(citation, item, publication_listing)
@@ -76,7 +76,7 @@ class PublicationListingsController < ApplicationController
       translator: item.dig(:translator, 0),
       unknown: item.dig(:unknown, 0),
       url: item.dig(:url, 0),
-      citation: citation.first.to_s,
+      citation: citation.to_s,
       publication_listing: publication_listing
     }
   end
