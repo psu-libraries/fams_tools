@@ -1,8 +1,15 @@
 #!/bin/bash
 
-# Using SFTP connection with Lionpath host, pull all courses taught files
-sftp -P 22 -r -i ~/.ssh/id_rsa_lionpath_prod uldsrdc@prod-nfs.lionpath.psu.edu:/out/PE_RP_ACTIVITY_INSIGHT* app/parsing_files
+# Using SFTP connection with Lionpath host, pull 4 most recent files
+OUTPUT=$(sftp -P 22 -b stdnt_plan.bat -i ~/.ssh/id_rsa_lionpath_prod uldsrdc@prod-nfs.lionpath.psu.edu | head -6 | tail -4)
 
-# Single out the newest file, rename, and delete the old ones
-ls -t app/parsing_files/ | head -1 | xargs -I '{}' mv app/parsing_files/{} app/parsing_files/courses_taught.csv
-rm app/parsing_files/PE_RP_ACTIVITY_INSIGHT*
+# Single out the first PE_RP_ACTIVITY_INSIGHT and pull this down as app/parsing_files/courses_taught.csv
+for x in $OUTPUT
+do
+  echo $x
+  if [[ "$x" =~ "PE_RP_ACTIVITY_INSIGHT" ]]; then
+    echo "TRUE! $x"
+    sftp -P 22 -r -i ~/.ssh/id_rsa_lionpath_prod uldsrdc@prod-nfs.lionpath.psu.edu:/out/$x ./courses_taught.csv
+    break
+  fi
+done
