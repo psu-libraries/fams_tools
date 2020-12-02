@@ -8,8 +8,7 @@ for x in $OUTPUT
 do
   echo $x
   if [[ "$x" =~ "PE_RP_ACTIVITY_INSIGHT" ]]; then
-    echo "TRUE! $x"
-    sftp -P 22 -r -i ~/.ssh/id_rsa_lionpath_prod uldsrdc@prod-nfs.lionpath.psu.edu:/out/$x ./courses_taught.csv
+    sftp -P 22 -r -i ~/.ssh/id_rsa_lionpath_prod uldsrdc@prod-nfs.lionpath.psu.edu:/out/$x app/parsing_files/courses_taught.csv
     break
   fi
 done
