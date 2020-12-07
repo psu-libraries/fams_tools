@@ -2,144 +2,29 @@ require 'importers/importers_helper'
 
 RSpec.describe OspXMLBuilder do
 
-  let(:data_sets) do
-    [{'ospkey' => 123456, 'title' => 'Title', 'status' => 'Pending', 'submitted' => '2016-01-01',
-      'awarded' => '', 'requested' => 1000, 'funded' => '', 'totalanticipated' => '', 'startdate' => '',
-      'enddate' => '', 'grantcontract' => '', 'baseagreement' => '', 'accessid' => 'aaa111', 'f_name' => 'Bill',
-      'l_name' => 'Billy', 'm_name' => 'Billiam', 'sponsor' => 'Sponsor', 'sponsortype' => 'Big Sponsor',
-      'role' => 'Principal Investigator', 'pctcredit' => 100, 'userid' => 123, 'notfunded' => '2015-02-01'},
-      {'ospkey' => 654321, 'title' => 'Title', 'status' => 'Pending', 'submitted' => '2016-01-01',
-      'awarded' => '', 'requested' => 1000, 'funded' => '', 'totalanticipated' => '', 'startdate' => '',
-      'enddate' => '', 'grantcontract' => '', 'baseagreement' => '', 'accessid' => 'bbb222', 'f_name' => 'Bill',
-      'l_name' => 'Billy', 'm_name' => 'Billiam', 'sponsor' => 'Sponsor2', 'sponsortype' => 'Big Sponsor',
-      'role' => 'Principal Investigator', 'pctcredit' => 100, 'userid' => 321, 'notfunded' => '2015-02-01'}]
-  end
+  let!(:faculty1) { FactoryBot.create(:faculty, access_id: 'aaa111', user_id: 123) }
+  let!(:faculty2) { FactoryBot.create(:faculty, access_id: 'ddd111', user_id: 234) }
+  let!(:faculty3) { FactoryBot.create(:faculty, access_id: 'bbb222', user_id: 321) }
+  let!(:contract1) { FactoryBot.create(:contract, osp_key: 12345, base_agreement: 'XYZ123') }
+  let!(:contract2) { FactoryBot.create(:contract, osp_key: 12346, base_agreement: 'XYZ123') }
+  let!(:contract3) { FactoryBot.create(:contract, osp_key: 12347, base_agreement: 'XYZ123') }
+  let!(:contract4) { FactoryBot.create(:contract, osp_key: 12348, base_agreement: 'XYZ125') }
+  let!(:contract5) { FactoryBot.create(:contract, osp_key: 12349, status: "Pending") }
+  let!(:link1) { FactoryBot.create(:contract_faculty_link, faculty: faculty1, contract: contract1)}
+  let!(:link2) { FactoryBot.create(:contract_faculty_link, faculty: faculty1, contract: contract2)}
+  let!(:link3) { FactoryBot.create(:contract_faculty_link, faculty: faculty1, contract: contract3)}
+  let!(:link4) { FactoryBot.create(:contract_faculty_link, faculty: faculty2, contract: contract4)}
+  let!(:link5) { FactoryBot.create(:contract_faculty_link, faculty: faculty1, contract: contract4)}
+  let!(:link6) { FactoryBot.create(:contract_faculty_link, faculty: faculty2, contract: contract5)}
+  let!(:link7) { FactoryBot.create(:contract_faculty_link, faculty: faculty3, contract: contract5)}
 
-  let(:xml_builder_obj) {OspXMLBuilder.new}
+  let(:xml_builder_obj) {described_class.new}
+  let(:final_xml_output) { File.read(Rails.root.join('spec', 'fixtures', 'contract_grant_xml_build.xml')) }
 
   describe '#batched_osp_xml' do
     it 'should return an xml of CONGRANT records' do
-
-      Faculty.create(access_id:   'aaa111',
-                       user_id:   123,
-                        f_name:   'Bill',
-                        l_name:   'Billy',
-                        m_name:   'Billiam',
-                       college:   'EN')
-      Faculty.create(access_id:   'bbb222',
-                       user_id:   321,
-                        f_name:   'Bill',
-                        l_name:   'Billy',
-                        m_name:   'Billiam',
-                       college:   'EM')
-
-      data_sets.each do |row|
-        sponsor = Sponsor.create(sponsor_name: row['sponsor'],
-                                 sponsor_type: row['sponsortype'])
-
-        contract = Contract.create(osp_key:           row['ospkey'],
-                                   title:             row['title'],
-                                   sponsor:           sponsor,
-                                   status:            row['status'],
-                                   submitted:         row['submitted'],
-                                   awarded:           row['awarded'],
-                                   requested:         row['requested'],
-                                   funded:            row['funded'],
-                                   total_anticipated: row['totalanticipated'],
-                                   start_date:        row['startdate'],
-                                   end_date:          row['enddate'],
-                                   grant_contract:    row['grantcontract'],
-                                   base_agreement:    row['baseagreement'],
-                                   notfunded:         row['notfunded'])
-
-        faculty = Faculty.find_by(access_id: row['accessid'])
-
-        ContractFacultyLink.create(contract:   contract,
-                                   faculty:    faculty,
-                                   role:       row['role'],
-                                   pct_credit: row['pctcredit'])
-
-      end
-      expect(xml_builder_obj.xmls_enumerator.first).to eq(
-'<?xml version="1.0" encoding="UTF-8"?>
-<Data>
-  <Record username="aaa111">
-    <CONGRANT>
-      <OSPKEY access="READ_ONLY">123456</OSPKEY>
-      <BASE_AGREE access="READ_ONLY"/>
-      <TYPE access="READ_ONLY"/>
-      <TITLE access="READ_ONLY">Title</TITLE>
-      <SPONORG access="READ_ONLY">Sponsor</SPONORG>
-      <AWARDORG access="READ_ONLY">Big Sponsor</AWARDORG>
-      <CONGRANT_INVEST>
-        <FACULTY_NAME>123</FACULTY_NAME>
-        <FNAME>Bill</FNAME>
-        <MNAME>Billiam</MNAME>
-        <LNAME>Billy</LNAME>
-        <ROLE>Principal Investigator</ROLE>
-        <ASSIGN>100</ASSIGN>
-      </CONGRANT_INVEST>
-      <AMOUNT_REQUEST access="READ_ONLY">1000</AMOUNT_REQUEST>
-      <AMOUNT_ANTICIPATE access="READ_ONLY"/>
-      <AMOUNT access="READ_ONLY"/>
-      <STATUS access="READ_ONLY">Pending</STATUS>
-      <DTM_SUB access="READ_ONLY">January</DTM_SUB>
-      <DTD_SUB access="READ_ONLY">01</DTD_SUB>
-      <DTY_SUB access="READ_ONLY">2016</DTY_SUB>
-      <DTM_AWARD/>
-      <DTD_AWARD/>
-      <DTY_AWARD/>
-      <DTM_START/>
-      <DTD_START/>
-      <DTY_START/>
-      <DTM_END/>
-      <DTD_END/>
-      <DTY_END/>
-      <DTM_DECLINE access="READ_ONLY">February</DTM_DECLINE>
-      <DTD_DECLINE access="READ_ONLY">01</DTD_DECLINE>
-      <DTY_DECLINE access="READ_ONLY">2015</DTY_DECLINE>
-    </CONGRANT>
-  </Record>
-  <Record username="bbb222">
-    <CONGRANT>
-      <OSPKEY access="READ_ONLY">654321</OSPKEY>
-      <BASE_AGREE access="READ_ONLY"/>
-      <TYPE access="READ_ONLY"/>
-      <TITLE access="READ_ONLY">Title</TITLE>
-      <SPONORG access="READ_ONLY">Sponsor2</SPONORG>
-      <AWARDORG access="READ_ONLY">Big Sponsor</AWARDORG>
-      <CONGRANT_INVEST>
-        <FACULTY_NAME>321</FACULTY_NAME>
-        <FNAME>Bill</FNAME>
-        <MNAME>Billiam</MNAME>
-        <LNAME>Billy</LNAME>
-        <ROLE>Principal Investigator</ROLE>
-        <ASSIGN>100</ASSIGN>
-      </CONGRANT_INVEST>
-      <AMOUNT_REQUEST access="READ_ONLY">1000</AMOUNT_REQUEST>
-      <AMOUNT_ANTICIPATE access="READ_ONLY"/>
-      <AMOUNT access="READ_ONLY"/>
-      <STATUS access="READ_ONLY">Pending</STATUS>
-      <DTM_SUB access="READ_ONLY">January</DTM_SUB>
-      <DTD_SUB access="READ_ONLY">01</DTD_SUB>
-      <DTY_SUB access="READ_ONLY">2016</DTY_SUB>
-      <DTM_AWARD/>
-      <DTD_AWARD/>
-      <DTY_AWARD/>
-      <DTM_START/>
-      <DTD_START/>
-      <DTY_START/>
-      <DTM_END/>
-      <DTD_END/>
-      <DTY_END/>
-      <DTM_DECLINE access="READ_ONLY">February</DTM_DECLINE>
-      <DTD_DECLINE access="READ_ONLY">01</DTD_DECLINE>
-      <DTY_DECLINE access="READ_ONLY">2015</DTY_DECLINE>
-    </CONGRANT>
-  </Record>
-</Data>
-')
-        end
-      end
+      expect(xml_builder_obj.xmls_enumerator.first).to eq(final_xml_output)
     end
+  end
+end
 

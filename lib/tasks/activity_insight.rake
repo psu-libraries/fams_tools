@@ -51,7 +51,25 @@ namespace :activity_insight do
     DeleteRecords.new(args[:resource], args[:target].to_sym).delete
     finish = Time.now
     puts(((finish - start)/60).to_s + ' mins')
-
   end
 
+  task :delete_compounded_congrants, [:csv_path, :target] do |task, args|
+    Rails.initialize!
+
+    start = Time.now
+    file_path = "#{Rails.root}/app/parsing_files/delete.csv"
+    File.delete(file_path) if File.exist?(file_path)
+    CSV.open(file_path, "wb") do |csv|
+      csv << ['ID']
+      CSV.foreach(args[:csv_path], headers: true, encoding: "ISO8859-1:UTF-8", force_quotes: true, quote_char: '"', liberal_parsing: true) do |row|
+        if (row['ORIGINAL_SOURCE'] == 'IMPORT') && (row['OSPKEY'].present?) && (row['BASE_AGREE'].present?)
+          csv << [row['ID']]
+        end
+      end
+    end
+    DeleteRecords.new('CONGRANT', args[:target]).delete
+    File.delete(file_path) if File.exist?(file_path)
+    finish = Time.now
+    puts(((finish - start)/60).to_s + ' mins')
+  end
 end

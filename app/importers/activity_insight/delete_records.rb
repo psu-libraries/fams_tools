@@ -11,20 +11,24 @@ class DeleteRecords
   end
 
   def delete
-    builder = Nokogiri::XML::Builder.new do |xml|
+    xmls_array = []
+    CSV.foreach(csv_path, headers: true).to_a.in_groups_of(1000) do |batch|
+      builder = Nokogiri::XML::Builder.new do |xml|
       xml.Data {
         xml.send(resource.to_s) {
-          CSV.foreach(csv_path, headers: true) do |row|
-            if row.empty?
+          batch.each do |row|
+            if row.blank?
               next
             else
               xml.item( 'id' => row['ID'] )
             end
           end
+          }
         }
-      }
+      end
+      xmls_array << builder.to_xml
     end
-    request(builder.to_xml)
+    request(xmls_array)
   end
 
   private
@@ -33,8 +37,8 @@ class DeleteRecords
     "#{Rails.root}/app/parsing_files/delete.csv"
   end
 
-  def request(data)
-    integrator = IntegrateData.new([data], target, :delete)
+  def request(xmls_array)
+    integrator = IntegrateData.new(xmls_array, target, :delete)
     integrator.integrate
   end
 
