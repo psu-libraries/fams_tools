@@ -31,12 +31,25 @@ class OspXMLBuilder
                 xml.AWARDORG_ contract.sponsor.sponsor_type, :access => "READ_ONLY"
                 xml.AMOUNT_ contract.funded, access: 'READ_ONLY'
                 xml.AMOUNT_ANTICIPATE_ contract.total_anticipated, access: 'READ_ONLY'
+                updated_end_date = false
                 if contract.base_agreement.present?
                   ContractFacultyLink.joins(:contract)
                       .where('contract_faculty_links.faculty_id = ? AND contracts.base_agreement = ? AND contracts.osp_key != ?',
-                             link.faculty_id, contract.base_agreement, contract.osp_key).order("contracts.osp_key DESC").each do |amendment|
+                             link.faculty_id, contract.base_agreement, contract.osp_key).order("contracts.osp_key DESC").each_with_index do |amendment, index|
+                    amendment_contract = amendment.contract
+                    if index == 0
+                      updated_end_date = true
+                      begin
+                        xml.DTM_END_ Date.strptime(amendment_contract.end_date.to_s, '%Y-%m-%d').strftime('%B'), :access => "READ_ONLY"
+                        xml.DTD_END_ Date.strptime(amendment_contract.end_date.to_s, '%Y-%m-%d').strftime('%d'), :access => "READ_ONLY"
+                        xml.DTY_END_ Date.strptime(amendment_contract.end_date.to_s, '%Y-%m-%d').strftime('%Y'), :access => "READ_ONLY"
+                      rescue ArgumentError
+                        xml.DTM_END_
+                        xml.DTD_END_
+                        xml.DTY_END_
+                      end
+                    end
                     xml.AMENDMENT {
-                      amendment_contract = amendment.contract
                       xml.OSPKEY_ amendment_contract.osp_key, access: 'READ_ONLY'
                       xml.AMOUNT_ amendment_contract.funded, access: 'READ_ONLY'
                       xml.AMOUNT_ANTICIPATE_ amendment_contract.total_anticipated, access: 'READ_ONLY'
@@ -106,14 +119,16 @@ class OspXMLBuilder
                   xml.DTD_START_
                   xml.DTY_START_
                 end
-                begin
-                  xml.DTM_END_ Date.strptime(contract.end_date.to_s, '%Y-%m-%d').strftime('%B'), :access => "READ_ONLY"
-                  xml.DTD_END_ Date.strptime(contract.end_date.to_s, '%Y-%m-%d').strftime('%d'), :access => "READ_ONLY"
-                  xml.DTY_END_ Date.strptime(contract.end_date.to_s, '%Y-%m-%d').strftime('%Y'), :access => "READ_ONLY"
-                rescue ArgumentError
-                  xml.DTM_END_
-                  xml.DTD_END_
-                  xml.DTY_END_
+                unless updated_end_date
+                  begin
+                    xml.DTM_END_ Date.strptime(contract.end_date.to_s, '%Y-%m-%d').strftime('%B'), :access => "READ_ONLY"
+                    xml.DTD_END_ Date.strptime(contract.end_date.to_s, '%Y-%m-%d').strftime('%d'), :access => "READ_ONLY"
+                    xml.DTY_END_ Date.strptime(contract.end_date.to_s, '%Y-%m-%d').strftime('%Y'), :access => "READ_ONLY"
+                  rescue ArgumentError
+                    xml.DTM_END_
+                    xml.DTD_END_
+                    xml.DTY_END_
+                  end
                 end
                 begin
                   xml.DTM_SUB_ Date.strptime(contract.submitted.to_s, '%Y-%m-%d').strftime('%B'), :access => "READ_ONLY"
@@ -154,5 +169,4 @@ class OspXMLBuilder
   def college_list
     ['AG', 'ED', 'CA', 'LA', 'BK', 'SC', 'AA', 'UL', 'BA', 'BC', 'CM', 'LW', 'EM', 'GV', 'HH', 'IST', 'MD', 'NR', 'UC', 'AB', 'AL', 'UE', 'EN']
   end
-
 end
