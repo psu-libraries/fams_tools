@@ -10,6 +10,9 @@
       <AWARDORG access="READ_ONLY"/>
       <AMOUNT access="READ_ONLY">500</AMOUNT>
       <AMOUNT_ANTICIPATE access="READ_ONLY">10000</AMOUNT_ANTICIPATE>
+      <DTM_END access="READ_ONLY">February</DTM_END>
+      <DTD_END access="READ_ONLY">01</DTD_END>
+      <DTY_END access="READ_ONLY">2017</DTY_END>
       <AMENDMENT>
         <OSPKEY access="READ_ONLY">12347</OSPKEY>
         <AMOUNT access="READ_ONLY">500</AMOUNT>
@@ -51,9 +54,6 @@
       <DTM_START access="READ_ONLY">February</DTM_START>
       <DTD_START access="READ_ONLY">01</DTD_START>
       <DTY_START access="READ_ONLY">2015</DTY_START>
-      <DTM_END access="READ_ONLY">February</DTM_END>
-      <DTD_END access="READ_ONLY">01</DTD_END>
-      <DTY_END access="READ_ONLY">2017</DTY_END>
       <DTM_SUB access="READ_ONLY">February</DTM_SUB>
       <DTD_SUB access="READ_ONLY">01</DTD_SUB>
       <DTY_SUB access="READ_ONLY">2015</DTY_SUB>
