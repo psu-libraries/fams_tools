@@ -10,7 +10,7 @@ wget --save-cookies app/parsing_files/cookies.txt --keep-session-cookie --delete
 
 # Second curl to get psu-users.xls using cookies.txt with session info
 curl -b app/parsing_files/cookies.txt \
-'https://www.digitalmeasures.com/login/psu/admin/security/management/user/downloadUsers.do?selectedUsers=345' \
+'https://www.digitalmeasures.com/login/psu/admin/security/management/user/downloadUsers?selectedUsers=345' \
 >> app/parsing_files/psu-users.xls
 
 # Delete cookies.txt
