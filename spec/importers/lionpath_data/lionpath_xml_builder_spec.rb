@@ -4,12 +4,12 @@ RSpec.describe LionPathXMLBuilder do
 
   let(:data_sets) do
     [{'Term' => 'Spring', 'Calendar Year' => 2018, 'Course Short Description' => 'The Class', 'Course Long Description' => 'This is the class that a teacher teaches.',
-      'Acedemic Course ID' => 12345, 'Instructor Campus ID' => 'abc123', 'f_name' => 'Allen', 'l_name' => 'Carter', 'm_name' => 'Bob',
+      'Academic Course ID' => 12345, 'Instructor Campus ID' => 'abc123', 'f_name' => 'Allen', 'l_name' => 'Carter', 'm_name' => 'Bob',
       'Class Campus Code' => 'UP', 'Cross Listed Flag' => 'N', 'Subject Code' => 'MGMT', 'Course Number' => '001', 'Course Suffix' => 'B',
       'Class Section Code' => '001', 'Course Credits/Units' => 3, 'Current Enrollment' => 100, 'Instructor Mode' => 'In Person', 'Instructor Role' => 'Primary Instructor',
       'Course Component' => 'Lecture', 'XCourse CoursePre' => '', 'XCourse CourseNum' => '', 'XCourse CourseNum Suffix' => '', 'Instructor Load Factor' => 100},
      {'Term' => 'Spring', 'Calendar Year' => 2018, 'Course Short Description' => 'The Other Class', 'Course Long Description' => 'This is the class that students learn in.',
-      'Acedemic Course ID' => 54321, 'Instructor Campus ID' => 'cba321', 'f_name' => 'Carl', 'l_name' => 'Abraham', 'm_name' => 'Brett',
+      'Academic Course ID' => 54321, 'Instructor Campus ID' => 'cba321', 'f_name' => 'Carl', 'l_name' => 'Abraham', 'm_name' => 'Brett',
       'Class Campus Code' => 'UP', 'Cross Listed Flag' => 'N', 'Subject Code' => 'HIST', 'Course Number' => '100', 'Course Suffix' => 'A',
       'Class Section Code' => '002', 'Course Credits/Units' => 3, 'Current Enrollment' => 50, 'Instructor Mode' => 'In Person', 'Instructor Role' => 'Primary Instructor',
       'Course Component' => 'Lecture', 'XCourse CoursePre' => '', 'XCourse CourseNum' => '', 'XCourse CourseNum Suffix' => '', 'Instructor Load Factor' => 100}]
@@ -29,7 +29,8 @@ RSpec.describe LionPathXMLBuilder do
         faculty = Faculty.create(access_id: row['Instructor Campus ID'].downcase,
                                  f_name:    row['f_name'],
                                  l_name:    row['l_name'],
-                                 m_name:    row['m_name'])
+                                 m_name:    row['m_name'],
+                                 college: 'EN')
 
         Section.create(course:                 course,
                        faculty:                faculty,
@@ -49,6 +50,7 @@ RSpec.describe LionPathXMLBuilder do
                        xcourse_course_num:     row['XCourse CourseNum'],
                        xcourse_course_suf:     row['XCourse CourseNum Suffix'])
       end
+      FactoryBot.create :section, course: (FactoryBot.create :course), faculty: (FactoryBot.create :faculty, college: 'EE')
       expect(xml_builder_obj.xmls_enumerator.first).to eq(
 '<?xml version="1.0" encoding="UTF-8"?>
 <Data>
