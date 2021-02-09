@@ -21,10 +21,8 @@ class ImportGpaData
     data = []
     data_hashed = []
     gpa_data_book.each_with_index do |row, index|
-      next if index == 0
-
       values = []
-      if counter == 0
+      if index == 0
         row.each {|k,v| keys << v}
       else
         row.each {|k,v| values << v}
@@ -40,16 +38,16 @@ class ImportGpaData
     faculty = Faculty.find_by(access_id: row['Access ID'])
     return if faculty.blank? || faculty.college != 'LA'
 
-    gpa = Gpa.new({faculty: faculty}.merge!(gpa_data_attrs(row, faculty)))
+    gpa = Gpa.new({faculty: faculty}.merge!(gpa_data_attrs(row)))
 
     if gpa.persisted?
-      gpa.update_attributes!(gpa_data_attrs(row, faculty))
+      gpa.update_attributes!(gpa_data_attrs(row))
     else
       gpa.save!
     end
   end
 
-  def gpa_data_attrs(row, faculty)
+  def gpa_data_attrs(row)
     {
         course_number: course_number(row),
         semester: semester(row),
@@ -57,7 +55,7 @@ class ImportGpaData
         course_prefix: course_prefix(row),
         course_number_suffix: course_number_suffix(row),
         section_number: section_number(row),
-        campus: faculty.campus,
+        campus: row['Campus'],
         number_of_grades: row['N Grades'],
         course_gpa: row['Course GPA'],
         grade_dist_a: row['A'],
