@@ -38,7 +38,7 @@ RSpec.describe ImportGpaData do
       expect(Faculty.find_by(access_id: 'abc123').gpas.second.course_number).to eq '225'
       expect(Faculty.find_by(access_id: 'abc123').gpas.second.course_number_suffix).to eq nil
       expect(Faculty.find_by(access_id: 'abc123').gpas.second.section_number).to eq '23'
-      expect(Faculty.find_by(access_id: 'abc123').gpas.second.campus).to eq 'UP'
+      expect(Faculty.find_by(access_id: 'abc123').gpas.second.campus).to eq 'WC'
       expect(Faculty.find_by(access_id: 'abc123').gpas.second.number_of_grades).to eq 45
       expect(Faculty.find_by(access_id: 'abc123').gpas.second.course_gpa).to eq 3.1
       expect(Faculty.find_by(access_id: 'abc123').gpas.second.grade_dist_a).to eq 16

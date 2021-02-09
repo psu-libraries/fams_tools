@@ -43,19 +43,28 @@
     <li><h5>Courses Taught Integration</h5></li>
     <ol>
       <strong class="text-danger">This integration is fully automated.  It runs at 00:00 on July 1st, October 1st, and February 1st.</br>
-      If you are using iTwo to generate the file, you must use DM's manual import.</br>
       To run this integration with the GUI:</strong>
       </br>
       </br>
+      <strong>Pulling file from LionPATH file server:</strong>
+      <ul>
       <li>Use `sftp` to download the latest Courses Taught file from the Lionpath server to the Rubytools server</li>
       <li>Use `scp` to copy this file from the Rubytools server to a local machine</li>
+      </ul>
+      <strong>Pulling file from iTwo:</strong>
+      <ul>
+      <li>Pull data from iTwo as CSV and change the "Instruction Mode" header to "Instructor Mode"</li>
+      </ul>
+      <strong>Then:</strong>
+      </br>
+      </br>
       <li>From the integration screen, upload this file where it says "Courses taught data file"</li>
       <li>Enter the passcode and click the button corresponding to the target environment you wish to integrate with</li>
     </ol>
     <li><h5>GPA Data Integration</h5></li>
     <ol>
       <li>Download the latest GPA data.  This will be stored in box and obtained from the College of Liberal Arts.</li>
-      <li>Make sure the headers are formatted in the following way:<img src="gpa-headers.png" alt="headers example"></li>
+      <li>Make sure the headers and fields are formatted in the following way:<img src="gpa-headers.png" alt="headers example" width="1100" height="40"></li>
       <li>If the file is not already an xlsx, convert to xlsx.</li>
       <li>From the integration screen, upload this file where it says "Gpa data file"</li>
       <li>Enter the passcode and click the button corresponding to the target environment you wish to integrate with</li>
