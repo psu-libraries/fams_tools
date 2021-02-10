@@ -18,6 +18,7 @@ RSpec.describe GpaXmlBuilder do
       <TYY_TERM>#{DateTime.now.year}</TYY_TERM>
       <COURSEPRE>CRIM</COURSEPRE>
       <COURSENUM>1</COURSENUM>
+      <COURSENUM_SUFFIX/>
       <SECTION>001</SECTION>
       <CAMPUS>UP</CAMPUS>
       <NUMGRADES>15</NUMGRADES>
@@ -40,6 +41,7 @@ RSpec.describe GpaXmlBuilder do
       <TYY_TERM>#{DateTime.now.year}</TYY_TERM>
       <COURSEPRE>CRIM</COURSEPRE>
       <COURSENUM>2</COURSENUM>
+      <COURSENUM_SUFFIX/>
       <SECTION>001</SECTION>
       <CAMPUS>UP</CAMPUS>
       <NUMGRADES>15</NUMGRADES>
