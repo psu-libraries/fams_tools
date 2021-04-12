@@ -23,14 +23,14 @@ class OspXMLBuilder
 
               xml.CONGRANT {
                 contract = link.contract
-                xml.OSPKEY_ contract.osp_key, :access => "READ_ONLY"
-                xml.BASE_AGREE_ contract.base_agreement, :access => "READ_ONLY"
-                xml.TYPE_ contract.grant_contract, :access => "READ_ONLY"
+                xml.OSPKEY_ contract.osp_key, :access => "READ_ONLY" if contract.osp_key
+                xml.BASE_AGREE_ contract.base_agreement, :access => "READ_ONLY" if contract.base_agreement
+                xml.TYPE_ contract.grant_contract, :access => "READ_ONLY" if contract.grant_contract
                 (contract.title.present?) ? xml.TITLE_(link.contract.title.gsub(/[^[:print:]]/,''), :access => "READ_ONLY") : nil
-                xml.SPONORG_ contract.sponsor.sponsor_name, :access => "READ_ONLY"
-                xml.AWARDORG_ contract.sponsor.sponsor_type, :access => "READ_ONLY"
-                xml.AMOUNT_ contract.funded, access: 'READ_ONLY'
-                xml.AMOUNT_ANTICIPATE_ contract.total_anticipated, access: 'READ_ONLY'
+                xml.SPONORG_ contract.sponsor.sponsor_name, :access => "READ_ONLY" if contract.sponsor.sponsor_name
+                xml.AWARDORG_ contract.sponsor.sponsor_type, :access => "READ_ONLY" if contract.sponsor.sponsor_type
+                xml.AMOUNT_ contract.funded, access: 'READ_ONLY' if contract.funded
+                xml.AMOUNT_ANTICIPATE_ contract.total_anticipated, access: 'READ_ONLY' if contract.total_anticipated
                 updated_end_date = false
                 if contract.base_agreement.present?
                   ContractFacultyLink.joins(:contract)
@@ -39,46 +39,30 @@ class OspXMLBuilder
                     amendment_contract = amendment.contract
                     if index == 0
                       updated_end_date = true
-                      begin
+                      if amendment_contract.end_date
                         xml.DTM_END_ Date.strptime(amendment_contract.end_date.to_s, '%Y-%m-%d').strftime('%B'), :access => "READ_ONLY"
                         xml.DTD_END_ Date.strptime(amendment_contract.end_date.to_s, '%Y-%m-%d').strftime('%d'), :access => "READ_ONLY"
                         xml.DTY_END_ Date.strptime(amendment_contract.end_date.to_s, '%Y-%m-%d').strftime('%Y'), :access => "READ_ONLY"
-                      rescue ArgumentError
-                        xml.DTM_END_
-                        xml.DTD_END_
-                        xml.DTY_END_
                       end
                     end
                     xml.AMENDMENT {
-                      xml.OSPKEY_ amendment_contract.osp_key, access: 'READ_ONLY'
-                      xml.AMOUNT_ amendment_contract.funded, access: 'READ_ONLY'
-                      xml.AMOUNT_ANTICIPATE_ amendment_contract.total_anticipated, access: 'READ_ONLY'
-                      begin
+                      xml.OSPKEY_ amendment_contract.osp_key, access: 'READ_ONLY' if amendment_contract.osp_key
+                      xml.AMOUNT_ amendment_contract.funded, access: 'READ_ONLY' if amendment_contract.funded
+                      xml.AMOUNT_ANTICIPATE_ amendment_contract.total_anticipated, access: 'READ_ONLY' if amendment_contract.total_anticipated
+                      if amendment_contract.start_date
                         xml.DTM_START_ Date.strptime(amendment_contract.start_date.to_s, '%Y-%m-%d').strftime('%B'), :access => "READ_ONLY"
                         xml.DTD_START_ Date.strptime(amendment_contract.start_date.to_s, '%Y-%m-%d').strftime('%d'), :access => "READ_ONLY"
                         xml.DTY_START_ Date.strptime(amendment_contract.start_date.to_s, '%Y-%m-%d').strftime('%Y'), :access => "READ_ONLY"
-                      rescue ArgumentError
-                        xml.DTM_START_
-                        xml.DTD_START_
-                        xml.DTY_START_
                       end
-                      begin
+                      if amendment_contract.end_date
                         xml.DTM_END_ Date.strptime(amendment_contract.end_date.to_s, '%Y-%m-%d').strftime('%B'), :access => "READ_ONLY"
                         xml.DTD_END_ Date.strptime(amendment_contract.end_date.to_s, '%Y-%m-%d').strftime('%d'), :access => "READ_ONLY"
                         xml.DTY_END_ Date.strptime(amendment_contract.end_date.to_s, '%Y-%m-%d').strftime('%Y'), :access => "READ_ONLY"
-                      rescue ArgumentError
-                        xml.DTM_END_
-                        xml.DTD_END_
-                        xml.DTY_END_
                       end
-                      begin
+                      if amendment_contract.awarded
                         xml.DTM_AWARD_ Date.strptime(amendment_contract.awarded.to_s, '%Y-%m-%d').strftime('%B'), :access => "READ_ONLY"
                         xml.DTD_AWARD_ Date.strptime(amendment_contract.awarded.to_s, '%Y-%m-%d').strftime('%d'), :access => "READ_ONLY"
                         xml.DTY_AWARD_ Date.strptime(amendment_contract.awarded.to_s, '%Y-%m-%d').strftime('%Y'), :access => "READ_ONLY"
-                      rescue ArgumentError
-                        xml.DTM_AWARD_
-                        xml.DTD_AWARD_
-                        xml.DTY_AWARD_
                       end
                     }
                     done_link_ids << amendment.id
@@ -108,54 +92,34 @@ class OspXMLBuilder
                 end
                 xml.AMOUNT_REQUEST_ contract.requested, :access => "READ_ONLY"
                 if college_list.include? faculty.college
-                  xml.STATUS_ contract.status, :access => "READ_ONLY"
+                  xml.STATUS_ contract.status, :access => "READ_ONLY" if contract.status
                 end
-                begin
+                if contract.start_date
                   xml.DTM_START_ Date.strptime(contract.start_date.to_s, '%Y-%m-%d').strftime('%B'), :access => "READ_ONLY"
                   xml.DTD_START_ Date.strptime(contract.start_date.to_s, '%Y-%m-%d').strftime('%d'), :access => "READ_ONLY"
                   xml.DTY_START_ Date.strptime(contract.start_date.to_s, '%Y-%m-%d').strftime('%Y'), :access => "READ_ONLY"
-                rescue ArgumentError
-                  xml.DTM_START_
-                  xml.DTD_START_
-                  xml.DTY_START_
                 end
                 unless updated_end_date
-                  begin
+                  if contract.end_date
                     xml.DTM_END_ Date.strptime(contract.end_date.to_s, '%Y-%m-%d').strftime('%B'), :access => "READ_ONLY"
                     xml.DTD_END_ Date.strptime(contract.end_date.to_s, '%Y-%m-%d').strftime('%d'), :access => "READ_ONLY"
                     xml.DTY_END_ Date.strptime(contract.end_date.to_s, '%Y-%m-%d').strftime('%Y'), :access => "READ_ONLY"
-                  rescue ArgumentError
-                    xml.DTM_END_
-                    xml.DTD_END_
-                    xml.DTY_END_
                   end
                 end
-                begin
+                if contract.submitted
                   xml.DTM_SUB_ Date.strptime(contract.submitted.to_s, '%Y-%m-%d').strftime('%B'), :access => "READ_ONLY"
                   xml.DTD_SUB_ Date.strptime(contract.submitted.to_s, '%Y-%m-%d').strftime('%d'), :access => "READ_ONLY"
                   xml.DTY_SUB_ Date.strptime(contract.submitted.to_s, '%Y-%m-%d').strftime('%Y'), :access => "READ_ONLY"
-                rescue ArgumentError
-                  xml.DTM_SUB_
-                  xml.DTD_SUB_
-                  xml.DTY_SUB_
                 end
-                begin
+                if contract.awarded
                   xml.DTM_AWARD_ Date.strptime(contract.awarded.to_s, '%Y-%m-%d').strftime('%B'), :access => "READ_ONLY"
                   xml.DTD_AWARD_ Date.strptime(contract.awarded.to_s, '%Y-%m-%d').strftime('%d'), :access => "READ_ONLY"
                   xml.DTY_AWARD_ Date.strptime(contract.awarded.to_s, '%Y-%m-%d').strftime('%Y'), :access => "READ_ONLY"
-                rescue ArgumentError
-                  xml.DTM_AWARD_
-                  xml.DTD_AWARD_
-                  xml.DTY_AWARD_
                 end
-                begin
+                if contract.notfunded
                   xml.DTM_DECLINE_ Date.strptime(contract.notfunded.to_s, '%Y-%m-%d').strftime('%B'), :access => "READ_ONLY"
                   xml.DTD_DECLINE_ Date.strptime(contract.notfunded.to_s, '%Y-%m-%d').strftime('%d'), :access => "READ_ONLY"
                   xml.DTY_DECLINE_ Date.strptime(contract.notfunded.to_s, '%Y-%m-%d').strftime('%Y'), :access => "READ_ONLY"
-                rescue ArgumentError
-                  xml.DTM_DECLINE_
-                  xml.DTD_DECLINE_
-                  xml.DTY_DECLINE_
                 end
               }
             end

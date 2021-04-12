@@ -7,7 +7,6 @@
       <TYPE access="READ_ONLY">Grant</TYPE>
       <TITLE access="READ_ONLY">Title</TITLE>
       <SPONORG access="READ_ONLY">Name1</SPONORG>
-      <AWARDORG access="READ_ONLY"/>
       <AMOUNT access="READ_ONLY">500</AMOUNT>
       <AMOUNT_ANTICIPATE access="READ_ONLY">10000</AMOUNT_ANTICIPATE>
       <DTM_END access="READ_ONLY">February</DTM_END>
@@ -60,9 +59,6 @@
       <DTM_AWARD access="READ_ONLY">March</DTM_AWARD>
       <DTD_AWARD access="READ_ONLY">01</DTD_AWARD>
       <DTY_AWARD access="READ_ONLY">2015</DTY_AWARD>
-      <DTM_DECLINE/>
-      <DTD_DECLINE/>
-      <DTY_DECLINE/>
     </CONGRANT>
     <CONGRANT>
       <OSPKEY access="READ_ONLY">12348</OSPKEY>
@@ -70,7 +66,6 @@
       <TYPE access="READ_ONLY">Grant</TYPE>
       <TITLE access="READ_ONLY">Title</TITLE>
       <SPONORG access="READ_ONLY">Name4</SPONORG>
-      <AWARDORG access="READ_ONLY"/>
       <AMOUNT access="READ_ONLY">500</AMOUNT>
       <AMOUNT_ANTICIPATE access="READ_ONLY">10000</AMOUNT_ANTICIPATE>
       <CONGRANT_INVEST>
@@ -103,9 +98,6 @@
       <DTM_AWARD access="READ_ONLY">March</DTM_AWARD>
       <DTD_AWARD access="READ_ONLY">01</DTD_AWARD>
       <DTY_AWARD access="READ_ONLY">2015</DTY_AWARD>
-      <DTM_DECLINE/>
-      <DTD_DECLINE/>
-      <DTY_DECLINE/>
     </CONGRANT>
   </Record>
   <Record username="ddd111">
@@ -115,7 +107,6 @@
       <TYPE access="READ_ONLY">Grant</TYPE>
       <TITLE access="READ_ONLY">Title</TITLE>
       <SPONORG access="READ_ONLY">Name4</SPONORG>
-      <AWARDORG access="READ_ONLY"/>
       <AMOUNT access="READ_ONLY">500</AMOUNT>
       <AMOUNT_ANTICIPATE access="READ_ONLY">10000</AMOUNT_ANTICIPATE>
       <CONGRANT_INVEST>
@@ -148,9 +139,6 @@
       <DTM_AWARD access="READ_ONLY">March</DTM_AWARD>
       <DTD_AWARD access="READ_ONLY">01</DTD_AWARD>
       <DTY_AWARD access="READ_ONLY">2015</DTY_AWARD>
-      <DTM_DECLINE/>
-      <DTD_DECLINE/>
-      <DTY_DECLINE/>
     </CONGRANT>
     <CONGRANT>
       <OSPKEY access="READ_ONLY">12349</OSPKEY>
@@ -158,7 +146,6 @@
       <TYPE access="READ_ONLY">Grant</TYPE>
       <TITLE access="READ_ONLY">Title</TITLE>
       <SPONORG access="READ_ONLY">Name5</SPONORG>
-      <AWARDORG access="READ_ONLY"/>
       <AMOUNT access="READ_ONLY">500</AMOUNT>
       <AMOUNT_ANTICIPATE access="READ_ONLY">10000</AMOUNT_ANTICIPATE>
       <CONGRANT_INVEST>
@@ -183,9 +170,6 @@
       <DTM_AWARD access="READ_ONLY">March</DTM_AWARD>
       <DTD_AWARD access="READ_ONLY">01</DTD_AWARD>
       <DTY_AWARD access="READ_ONLY">2015</DTY_AWARD>
-      <DTM_DECLINE/>
-      <DTD_DECLINE/>
-      <DTY_DECLINE/>
     </CONGRANT>
   </Record>
   <Record username="bbb222">
@@ -195,7 +179,6 @@
       <TYPE access="READ_ONLY">Grant</TYPE>
       <TITLE access="READ_ONLY">Title</TITLE>
       <SPONORG access="READ_ONLY">Name5</SPONORG>
-      <AWARDORG access="READ_ONLY"/>
       <AMOUNT access="READ_ONLY">500</AMOUNT>
       <AMOUNT_ANTICIPATE access="READ_ONLY">10000</AMOUNT_ANTICIPATE>
       <CONGRANT_INVEST>
@@ -220,9 +203,6 @@
       <DTM_AWARD access="READ_ONLY">March</DTM_AWARD>
       <DTD_AWARD access="READ_ONLY">01</DTD_AWARD>
       <DTY_AWARD access="READ_ONLY">2015</DTY_AWARD>
-      <DTM_DECLINE/>
-      <DTD_DECLINE/>
-      <DTY_DECLINE/>
     </CONGRANT>
   </Record>
 </Data>
