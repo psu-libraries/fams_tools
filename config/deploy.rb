@@ -1,5 +1,5 @@
 # config valid for current version and patch releases of Capistrano
-lock "~> 3.11.0"
+lock "~> 3.16.0"
 
 # Set assets roles to occur on jobs as well as web
 set :assets_role, [:web]

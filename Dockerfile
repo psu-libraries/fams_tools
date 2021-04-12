@@ -9,7 +9,7 @@ RUN apt-get install unzip
 # Packages for webkit
 RUN apt-get install -y g++ qt5-default libqt5webkit5-dev gstreamer1.0-plugins-base gstreamer1.0-tools gstreamer1.0-x xvfb
 
-RUN gem install bundler --no-document -v '1.17.1'
+RUN gem install bundler --no-document -v '2.1.4'
 
 COPY Gemfile /fams_tools/Gemfile
 COPY Gemfile.lock /fams_tools/Gemfile.lock
