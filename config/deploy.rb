@@ -13,7 +13,7 @@ set :repo_url, "git@github.com:psu-stewardship/fams_tools.git"
 #set :repo_url, "git@git.psu.edu:devteam/rubytools.git"
 #https://git.psu.edu/devteam/vmdatabase.git
 
-set :branch, ENV["REVISION"] || ENV["BRANCH_NAME"] || "master"
+set :branch, ENV["REVISION"] || ENV["BRANCH_NAME"] || "main"
 
 # default user and deployment location
 set :user, "deploy"
