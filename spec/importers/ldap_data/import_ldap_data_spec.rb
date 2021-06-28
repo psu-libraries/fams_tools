@@ -17,7 +17,7 @@ RSpec.describe ImportLdapData do
       expect(pc1['postal_address']).to eq "W 313 Pattee Library$University Park, PA 16802 US"
       expect(pc1['telephone_number']).to eq nil
       expect(pc1['department']).to eq nil
-      expect(pc1['title']).to eq "Programmer/Analyst 2"
+      expect(pc1['title']).to eq "Programmer/Analyst 3"
       expect(pc1['ps_research']).to eq nil
       expect(pc1['ps_teaching']).to eq nil
       expect(pc1['ps_office_address']).to eq nil
