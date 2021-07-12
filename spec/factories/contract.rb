@@ -14,5 +14,8 @@ FactoryBot.define do
     base_agreement { 'XYZ123' }
     notfunded { '' }
     sequence(:sponsor) { |n| Sponsor.create sponsor_name: "Name#{n}"}
+    effort_academic { 0.15 }
+    effort_summer { 0.16 }
+    effort_calendar { 0.17 }
   end
 end

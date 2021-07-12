@@ -31,6 +31,9 @@ class OspXMLBuilder
                 xml.AWARDORG_ contract.sponsor.sponsor_type, :access => "READ_ONLY" if contract.sponsor.sponsor_type
                 xml.AMOUNT_ contract.funded, access: 'READ_ONLY' if contract.funded
                 xml.AMOUNT_ANTICIPATE_ contract.total_anticipated, access: 'READ_ONLY' if contract.total_anticipated
+                xml.ACADEMIC_ contract.effort_academic, access: 'READ_ONLY' if contract.total_anticipated
+                xml.SUMMER_ contract.effort_summer, access: 'READ_ONLY' if contract.total_anticipated
+                xml.CALENDAR_ contract.effort_calendar, access: 'READ_ONLY' if contract.total_anticipated
                 updated_end_date = false
                 if contract.base_agreement.present?
                   ContractFacultyLink.joins(:contract)

@@ -44,6 +44,9 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
     t.string "grant_contract"
     t.string "base_agreement"
     t.date "notfunded"
+    t.float "effort_academic"
+    t.float "effort_summer"
+    t.float "effort_calendar"
     t.index ["osp_key"], name: "index_contracts_on_osp_key", unique: true
     t.index ["sponsor_id"], name: "fk_rails_918599a14c"
   end
