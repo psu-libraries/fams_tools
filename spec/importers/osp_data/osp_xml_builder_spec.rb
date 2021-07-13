@@ -2,10 +2,10 @@ require 'importers/importers_helper'
 
 RSpec.describe OspXMLBuilder do
 
-  let!(:faculty1) { FactoryBot.create(:faculty, access_id: 'aaa111', user_id: 123) }
-  let!(:faculty2) { FactoryBot.create(:faculty, access_id: 'ddd111', user_id: 234) }
+  let!(:faculty1) { FactoryBot.create(:faculty, access_id: 'aaa111', user_id: 123, college: 'EM') }
+  let!(:faculty2) { FactoryBot.create(:faculty, access_id: 'ddd111', user_id: 234, college: 'IST') }
   let!(:faculty3) { FactoryBot.create(:faculty, access_id: 'bbb222', user_id: 321) }
-  let!(:contract1) { FactoryBot.create(:contract, osp_key: 12345, base_agreement: 'XYZ123') }
+  let!(:contract1) { FactoryBot.create(:contract, osp_key: 12345, base_agreement: 'XYZ123', effort_academic: 0) }
   let!(:contract2) { FactoryBot.create(:contract, osp_key: 12346, base_agreement: 'XYZ123') }
   let!(:contract3) { FactoryBot.create(:contract, osp_key: 12347, base_agreement: 'XYZ123') }
   let!(:contract4) { FactoryBot.create(:contract, osp_key: 12348, base_agreement: 'XYZ125') }

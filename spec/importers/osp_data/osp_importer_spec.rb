@@ -17,7 +17,7 @@ RSpec.describe OspImporter do
                  'Co-PI', 1, 'Awarded', '/', '/  /', 2, 1, 1, '01/01/2017 00:00:00', '12/12/2018 00:00:00', '', '',
                  '', '', '', '', '02/01/2015 00:00:00', 0.15, 0.16, 0.17]
     data_arr << [3, 1, '', '', '', '', '03/01/2026 00:00:00', '', 'Faculty', 1, 'Pending Proposal', '', '',
-                 4, 1, 1, '', '', '', '', 'Grant', '', '', '', '/  /', 0.15, 0.15, 0.15]
+                 4, 1, 1, '', '', '', '', 'Grant', '', '', '', '/  /', 0, 0, 0]
     data_arr << [5, 1, '', '', '', '', "01/02/#{current_year.to_s} 00:00:00", '', 'Post Doctoral', 1, 'Awarded', '', '',
                  6, 1, 1, '01/01/2017 00:00:00', '12/12/2018 00:00:00', '', '', 'Grant', '', '', '', '/  /', 0.15, 0.15, 0.15]
     data_arr << [7, 1, '', '', '', '', '01/02/2018 00:00:00', '', 'unknown', 1, 'Pending Award', '', '',
@@ -143,6 +143,9 @@ RSpec.describe OspImporter do
       expect(Contract.first.effort_academic).to eq(0.15)
       expect(Contract.first.effort_summer).to eq(0.16)
       expect(Contract.first.effort_calendar).to eq(0.17)
+      expect(Contract.second.effort_academic).to eq(0)
+      expect(Contract.second.effort_summer).to eq(0)
+      expect(Contract.second.effort_calendar).to eq(0)
     end
   end
 
