@@ -4,7 +4,7 @@ BACKUPS_PASSWORD=$2
 #!/bin/bash
 
 # Grab dmresults.csv from SIMS
-wget https://service.sims.psu.edu/digitalmeasures/dmresults.csv -O app/parsing_files/contract_grants.csv
+wget https://service.sims.psu.edu/digitalmeasures/dmresults_effort.csv -O app/parsing_files/contract_grants.csv
 
 # Grab CONGRANT.csv from Digital Measures
 wget --user $BACKUPS_USERNAME --password $BACKUPS_PASSWORD \

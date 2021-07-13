@@ -169,6 +169,9 @@ class OspImporter
                                           attr.grant_contract = row['grantcontract']
                                           attr.base_agreement = row['baseagreement']
                                           attr.notfunded = DateTime.strptime(row['notfunded'], '%m/%d/%Y %T') if row['notfunded'].present?
+                                          attr.effort_academic = row['effortacademic']
+                                          attr.effort_summer = row['effortsummer']
+                                          attr.effort_calendar = row['effortcalendar']
                                           end
 
     faculty = Faculty.find_by(access_id: row['accessid'])
