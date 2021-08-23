@@ -26,7 +26,7 @@ every '0 7 1 * *', roles: [:app] do
   rake 'cron:download_backup'
 end
 
-every '0 0 1 2,7,10 *', roles: [:app] do
+every '0 0 1 2,5,7,8,10,12 *', roles: [:app] do
   rake 'courses_taught:integrate'
 end
 
