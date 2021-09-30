@@ -32,9 +32,9 @@ class OspXMLBuilder
                 xml.AMOUNT_ contract.funded, access: 'READ_ONLY' if contract.funded
                 xml.AMOUNT_ANTICIPATE_ contract.total_anticipated, access: 'READ_ONLY' if contract.total_anticipated
                 if %w[EM IST MD SC UC UL].include?(faculty.college)
-                  xml.ACADEMIC_((contract.effort_academic * 100).to_i, access: 'READ_ONLY') if contract.effort_academic && !contract.effort_academic.zero?
-                  xml.SUMMER_((contract.effort_summer * 100).to_i, access: 'READ_ONLY') if contract.effort_summer && !contract.effort_summer.zero?
-                  xml.CALENDAR_((contract.effort_calendar * 100).to_i, access: 'READ_ONLY') if contract.effort_calendar && !contract.effort_calendar.zero?
+                  xml.ACADEMIC_(contract.effort_academic, access: 'READ_ONLY') if contract.effort_academic && !contract.effort_academic.zero?
+                  xml.SUMMER_(contract.effort_summer, access: 'READ_ONLY') if contract.effort_summer && !contract.effort_summer.zero?
+                  xml.CALENDAR_(contract.effort_calendar, access: 'READ_ONLY') if contract.effort_calendar && !contract.effort_calendar.zero?
                 end
                 updated_end_date = false
                 if contract.base_agreement.present?
