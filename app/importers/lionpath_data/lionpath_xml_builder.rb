@@ -4,7 +4,8 @@ class LionPathXMLBuilder
 
   def xmls_enumerator
     Enumerator.new do |i|
-      Faculty.joins(:sections).where("faculties.college <> 'EE'").group('id').find_in_batches(batch_size: 20) do |batch|
+      Faculty.joins(:sections).where("faculties.college <> 'EE' AND faculties.college <> 'SIA'")
+          .group('id').find_in_batches(batch_size: 20) do |batch|
         i << build_xml(batch)
       end
     end

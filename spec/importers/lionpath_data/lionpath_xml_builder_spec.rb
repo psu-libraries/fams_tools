@@ -51,6 +51,7 @@ RSpec.describe LionPathXMLBuilder do
                        xcourse_course_suf:     row['XCourse CourseNum Suffix'])
       end
       FactoryBot.create :section, course: (FactoryBot.create :course), faculty: (FactoryBot.create :faculty, college: 'EE')
+      FactoryBot.create :section, course: (FactoryBot.create :course), faculty: (FactoryBot.create :faculty, college: 'SIA')
       expect(xml_builder_obj.xmls_enumerator.first).to eq(
 '<?xml version="1.0" encoding="UTF-8"?>
 <Data>
