@@ -30,8 +30,8 @@ every '0 0 1 2,5,7,8,10,12 *', roles: [:app] do
   rake 'courses_taught:integrate'
 end
 
-every '0 1 8-14 * *', roles: [:app] do
-  # This job should run on the second Monday of every month
+every '0 1 8-14,22-28 * *', roles: [:app] do
+  # This job should run on the second and fourth Monday of every month
   monday_rake 'contract_grants:integrate'
 end
 
