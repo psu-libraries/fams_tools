@@ -19,8 +19,8 @@ class LionPathPopulateDB
       begin
         course = Course.create(term:                     row['Term'],
                                calendar_year:            row['Calendar Year'],
-                               course_short_description: row['Course Short Description'],
-                               course_long_description:  row['Course Long Description'],
+                               course_short_description: row['Course Short Description'].gsub(/[\u0001-\u001A]/ , ''),
+                               course_long_description:  row['Course Long Description'].gsub(/[\u0001-\u001A]/ , ''),
                                academic_course_id:       row['Academic Course ID'])
 
       rescue ActiveRecord::RecordNotUnique
