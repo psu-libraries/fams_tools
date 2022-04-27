@@ -72,4 +72,10 @@ namespace :activity_insight do
     finish = Time.now
     puts(((finish - start)/60).to_s + ' mins')
   end
+
+  task :get_s3_post_prints, [:csv_path, :target_dir] do |task, args|
+    CSV.foreach(args[:csv_path], headers: true, encoding: "ISO8859-1:UTF-8", force_quotes: true, quote_char: '"', liberal_parsing: true) do |row|
+      `wget --header 'X-API-Key: #{Rails.application.config_for(:activity_insight)['s3_bucket']['api_key']}' 'ai-s3-authorizer.k8s.libraries.psu.edu/api/v1/#{row['POST_FILE_1_DOC']}' -P '#{args[:target_dir]}'`
+    end
+  end
 end
