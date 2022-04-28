@@ -73,9 +73,14 @@ namespace :activity_insight do
     puts(((finish - start)/60).to_s + ' mins')
   end
 
+  desc "Uses post-print csv with paths to post-print files in S3 to pull those files and store them in a directory"
+
   task :get_s3_post_prints, [:csv_path, :target_dir] do |task, args|
+    errored_files = []
     CSV.foreach(args[:csv_path], headers: true, encoding: "ISO8859-1:UTF-8", force_quotes: true, quote_char: '"', liberal_parsing: true) do |row|
-      `wget --header 'X-API-Key: #{Rails.application.config_for(:activity_insight)['s3_bucket']['api_key']}' 'ai-s3-authorizer.k8s.libraries.psu.edu/api/v1/#{row['POST_FILE_1_DOC']}' -P '#{args[:target_dir]}'`
+      sys = system("wget --header 'X-API-Key: #{Rails.application.config_for(:activity_insight)['s3_bucket']['api_key']}' 'ai-s3-authorizer.k8s.libraries.psu.edu/api/v1/#{URI.escape(row['POST_FILE_1_DOC'])}' -P '#{args[:target_dir]}'")
+      errored_files << row['POST_FILE_1_DOC'] if sys == false
     end
+    puts errored_files
   end
 end
