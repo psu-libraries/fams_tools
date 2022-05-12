@@ -3,9 +3,10 @@ FROM ruby:2.7.3
 RUN mkdir /fams_tools
 WORKDIR /fams_tools
 
+RUN apt-get clean
 RUN apt-get update
-# For unzipping
-RUN apt-get install unzip
+# For zipping and unzipping
+RUN apt-get install -y zip unzip
 # Packages for webkit
 RUN apt-get install -y g++ qt5-default libqt5webkit5-dev gstreamer1.0-plugins-base gstreamer1.0-tools gstreamer1.0-x xvfb
 
