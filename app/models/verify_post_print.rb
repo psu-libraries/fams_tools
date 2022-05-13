@@ -20,31 +20,21 @@ class VerifyPostPrint
   # list of unacceptable producers
   NOT_PRODUCERS = ["iText"]
 
+  HEADINGS = ["File", "PDF File Status", "PDF Status Message", "PDF Verbose", "EXIF File Status",
+              "EXIF Status Message", "Journal Article Version", "EXIF Verbose"]
+
   def verify
-    puts "loop over directory"
     Dir.glob("#{directory_to_examine}/*.pdf").each_with_index do |file, file_index|
-
       if file_index == 0
-        headings = ["File", "PDF File Status", "PDF Status Message", "PDF Verbose", "EXIF File Status", "EXIF Status Message", "Journal Article Version", "EXIF Verbose"]
-        wr_sheet.insert_row( file_index, headings )
+        wr_sheet.insert_row( file_index, HEADINGS )
       else
-
         next if File.directory?(file) # skip the loop if the file is a directory
 
         base = File.basename(file)
         wr_sheet.row(file_index).insert 0, base
 
-        pdf_validation = {}
         pdf_validation = is_pdf_file_valid(file)
-        puts "PDF VALIDATION\n"
-        puts pdf_validation
-        puts "\n"
-
-        exif_validation = {}
         exif_validation = is_exif_valid(file)
-        puts "EXIF VALIDATION\n"
-        puts exif_validation
-        puts "\n"
 
         wr_sheet.row(file_index).insert 1, pdf_validation[:status]
         wr_sheet.row(file_index).insert 2, pdf_validation[:message]
@@ -54,28 +44,14 @@ class VerifyPostPrint
         wr_sheet.row(file_index).insert 5, exif_validation[:message]
         wr_sheet.row(file_index).insert 6, exif_validation[:verbose][:journal_article_version]
         wr_sheet.row(file_index).insert 7, exif_validation[:verbose].inspect
-
-        if pdf_validation[:status].nil? and exif_validation[:status].nil?
-          puts "Couldn't determine\n\n"
-        elsif pdf_validation[:status]
-          puts "Passed Check (pdf)\n\n"
-        elsif exif_validation[:status]
-          puts "Passed Check (exif)\n\n"
-        else
-          puts "Failed\n\n"
-        end
       end
-
     end
     wr_book.write save_spreadsheet_name
-    puts "Found #{@good_pdf} acceptable PDFs from PDF library"
-    puts "Found #{@good_exif} acceptable PDFs from EXIF library"
   end
 
   private
 
     def is_pdf_file_valid(file_path)
-
       validation = {}
       validation[:status] = nil
       validation[:message] = ""
@@ -89,7 +65,6 @@ class VerifyPostPrint
 
       PDF::Reader.open(file_path) do |reader|
         validation[:verbose] = reader.info
-        puts reader.info
         if reader.info.key? (:Subject)
           begin
             if NOT_SUBJECTS.any? { |s| reader.info[:Subject].include?(s) }
@@ -101,12 +76,13 @@ class VerifyPostPrint
             validation[:status] = false
             validation[:message] = "Couldn't read subject"
             return validation
-          rescue => e
+          rescue StandardError => e
             validation[:status] = false
             validation[:message] = "Couldn't read subject (Error)"
             return validation
           end
         end
+
         if reader.info.key? (:Creator) and reader.info[:Creator].is_a?(String)
           if POST_PRINT_CREATORS.any? { |s| reader.info[:Creator].include?(s) }
             @good_pdf += 1
@@ -120,7 +96,7 @@ class VerifyPostPrint
           end
         end
       end
-      return validation
+      validation
     end
 
     def is_exif_valid(file_path)
@@ -131,10 +107,8 @@ class VerifyPostPrint
 
       e = Exiftool.new(file_path)
 
-      puts "Exif:"
       h = e.to_hash
       validation[:verbose] = h
-      puts h[:journal_article_version]
       if !h[:journal_article_version].nil?
         # AM: accepted manuscript - pass
         if h[:journal_article_version].downcase == "am"
@@ -186,8 +160,7 @@ class VerifyPostPrint
           return validation
         end
       end
-
-      return validation
+      validation
     end
 
     def directory_to_examine
