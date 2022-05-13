@@ -9,6 +9,7 @@ class PostPrintAnalyzer
     clear_pp_files
     File.open(f_path, "wb") { |f| f.write(post_prints_csv.read) }
     get_post_prints
+    VerifyPostPrint.new.verify
     system("zip -9 -y -q -j #{analysis_directory}/post-print-analysis-#{DateTime.now.strftime('%FT%T').to_s}.zip #{post_prints_directory}/*")
     clear_pp_files
   end
@@ -20,6 +21,8 @@ class PostPrintAnalyzer
     def get_post_prints
       errored_files = []
       CSV.foreach(f_path, headers: true, encoding: "ISO8859-1:UTF-8", force_quotes: true, quote_char: '"', liberal_parsing: true) do |row|
+        next if row['POST_FILE_1_DOC'].blank?
+
         sys = system("wget --header 'X-API-Key: #{api_key}' 'ai-s3-authorizer.k8s.libraries.psu.edu/api/v1/#{URI.escape(row['POST_FILE_1_DOC'])}' -P '#{post_prints_directory}'")
         errored_files << row['POST_FILE_1_DOC'] if sys == false
       end

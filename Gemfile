@@ -69,6 +69,12 @@ gem 'bootstrap'
 # Jquery for dom manipulation
 gem 'jquery-rails'
 
+# PDF Reader
+gem 'pdf-reader'
+
+# ExifTool for parsing PDF metadata
+gem 'exiftool_vendored', '~> 12.33'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
