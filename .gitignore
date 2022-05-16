@@ -31,6 +31,7 @@ spec/examples.txt
 /data/*
 /app/parsing_files/*
 /app/post_prints/*
+/spec/fixtures/post_prints/*
 *.swp
 /config/activity_insight.yml
 /config/integration_passcode.yml

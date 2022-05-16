@@ -2,6 +2,7 @@ class PostPrintAnalyzer
 
   def initialize(post_prints_csv)
     @post_prints_csv = post_prints_csv
+    @errored_files = []
   end
 
   def analyze
@@ -16,10 +17,9 @@ class PostPrintAnalyzer
 
   private
 
-    attr_accessor :post_prints_csv
+    attr_accessor :post_prints_csv, :errored_files
 
     def get_post_prints
-      errored_files = []
       CSV.foreach(f_path, headers: true, encoding: "ISO8859-1:UTF-8", force_quotes: true, quote_char: '"', liberal_parsing: true) do |row|
         next if row['POST_FILE_1_DOC'].blank?
 
