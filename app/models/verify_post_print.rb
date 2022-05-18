@@ -65,7 +65,7 @@ class VerifyPostPrint
 
       PDF::Reader.open(file_path) do |reader|
         validation[:verbose] = reader.info
-        if reader.info.key? (:Subject)
+        if reader.info.key?(:Subject)
           begin
             if NOT_SUBJECTS.any? { |s| reader.info[:Subject].include?(s) }
               validation[:status] = false #good = false
@@ -105,9 +105,7 @@ class VerifyPostPrint
       validation[:message] = ""
       validation[:verbose] = ""
 
-      e = Exiftool.new(file_path)
-
-      h = e.to_hash
+      h = Exiftool.new(file_path).to_hash
       validation[:verbose] = h
       if !h[:journal_article_version].nil?
         # AM: accepted manuscript - pass
