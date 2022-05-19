@@ -41,6 +41,7 @@ class VerifyPostPrint
 
         wr_sheet.row(file_index).insert 3, exif_validation[:status]
         wr_sheet.row(file_index).insert 4, exif_validation[:message]
+        wr_sheet.row(file_index).insert 5, exif_validation[:journal_article_version]
       end
     end
     wr_book.write save_spreadsheet_name
@@ -106,18 +107,21 @@ class VerifyPostPrint
           @good_exif += 1
           validation[:status] = true
           validation[:message] = "accepted manuscript"
+          validation[:journal_article_version] = h[:journal_article_version]
           return validation
         end
         # P: proof - fail
         if h[:journal_article_version].downcase == "p"
           validation[:status] = false
           validation[:message] = "proof"
+          validation[:journal_article_version] = h[:journal_article_version]
           return validation
         end
         # VoR: version of record - fail
         if h[:journal_article_version].downcase == "vor"
           validation[:status] = false
           validation[:message] = "version of record"
+          validation[:journal_article_version] = h[:journal_article_version]
           return validation
         end
       end
