@@ -20,8 +20,8 @@ class VerifyPostPrint
   # list of unacceptable producers
   NOT_PRODUCERS = ["iText"]
 
-  HEADINGS = ["File", "PDF File Status", "PDF Status Message", "PDF Verbose", "EXIF File Status",
-              "EXIF Status Message", "Journal Article Version", "EXIF Verbose"]
+  HEADINGS = ["File", "PDF File Status", "PDF Status Message", "EXIF File Status",
+              "EXIF Status Message", "Journal Article Version"]
 
   def verify
     Dir.glob("#{directory_to_examine}/*.pdf").each_with_index do |file, file_index|
@@ -38,12 +38,9 @@ class VerifyPostPrint
 
         wr_sheet.row(file_index).insert 1, pdf_validation[:status]
         wr_sheet.row(file_index).insert 2, pdf_validation[:message]
-        wr_sheet.row(file_index).insert 3, pdf_validation[:verbose].inspect
 
-        wr_sheet.row(file_index).insert 4, exif_validation[:status]
-        wr_sheet.row(file_index).insert 5, exif_validation[:message]
-        wr_sheet.row(file_index).insert 6, exif_validation[:verbose][:journal_article_version]
-        wr_sheet.row(file_index).insert 7, exif_validation[:verbose].inspect
+        wr_sheet.row(file_index).insert 3, exif_validation[:status]
+        wr_sheet.row(file_index).insert 4, exif_validation[:message]
       end
     end
     wr_book.write save_spreadsheet_name
@@ -55,7 +52,6 @@ class VerifyPostPrint
       validation = {}
       validation[:status] = nil
       validation[:message] = ""
-      validation[:verbose] = ""
 
       if NOT_FILENAMES.any? { |s| file_path.include?(s) }
         validation[:status] = false
@@ -64,7 +60,6 @@ class VerifyPostPrint
       end
 
       PDF::Reader.open(file_path) do |reader|
-        validation[:verbose] = reader.info
         if reader.info.key?(:Subject)
           begin
             if NOT_SUBJECTS.any? { |s| reader.info[:Subject].include?(s) }
@@ -103,10 +98,8 @@ class VerifyPostPrint
       validation = {}
       validation[:status] = nil
       validation[:message] = ""
-      validation[:verbose] = ""
 
       h = Exiftool.new(file_path).to_hash
-      validation[:verbose] = h
       if !h[:journal_article_version].nil?
         # AM: accepted manuscript - pass
         if h[:journal_article_version].downcase == "am"

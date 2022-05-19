@@ -30,7 +30,7 @@ describe PostPrintAnalyzer do
       it 'writes error to File' do
         allow_any_instance_of(Kernel).to receive(:system).and_return(false)
         analyzer.analyze
-        expect(File.read("#{Rails.root}/spec/fixtures/post_prints/errors.txt")).to eq "abc123/intellcont/test.pdf"
+        expect(File.read("#{Rails.root}/spec/fixtures/post_prints/errors.txt")).to eq "abc123/intellcont/test.pdf\n"
       end
     end
   end
