@@ -1,0 +1,10 @@
+<br/>
+<% if @analysis_files.present? %>
+  <h3>
+    Last Analysis File
+  </h3>
+
+  <% @analysis_files.each do |file| %>
+    <p><%= link_to file.to_s, "post_prints/#{file}", download: file.to_s, target: '_blank' %></p>
+  <% end %>
+<% end %>

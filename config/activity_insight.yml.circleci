@@ -10,6 +10,8 @@ production:
     :password: "fake"
   metadata_db:
     :key: "fake"
+  s3_bucket:
+    api_key: "fake"
 
 development:
   main:
@@ -23,6 +25,8 @@ development:
     :password: "fake"
   metadata_db:
     :key: "fake"
+  s3_bucket:
+    api_key: "fake"
 
 test:
   main:
@@ -36,3 +40,5 @@ test:
     :password: "fake"
   metadata_db:
     :key: "fake"
+  s3_bucket:
+    api_key: "fake"

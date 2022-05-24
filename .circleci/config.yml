@@ -12,7 +12,8 @@ jobs:
             mv config/database.yml.circleci config/database.yml &&
             mv config/integration_passcode.yml.circleci config/integration_passcode.yml &&
             mkdir app/parsing_files &&
-            mkdir public/psu
+            mkdir spec/fixtures/post_prints &&
+            mkdir public/psu &&
             mkdir public/log
 
       - run:
