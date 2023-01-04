@@ -1,7 +1,5 @@
 #!/bin/bash
 
-sleep 1000
-
 set -e
 rm -f /fams_tools/tmp/pids/server.pid
 
