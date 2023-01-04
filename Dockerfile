@@ -14,7 +14,7 @@ RUN gem install bundler --no-document -v '2.1.4'
 
 COPY Gemfile /fams_tools/Gemfile
 COPY Gemfile.lock /fams_tools/Gemfile.lock
-RUN bundle update
+RUN bundle install
 COPY . /fams_tools
 
 COPY entrypoint.sh /usr/bin/
