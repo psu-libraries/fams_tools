@@ -2,17 +2,16 @@
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
 #
-# Note that this schema.rb definition is the authoritative source for your
-# database schema. If you need to create the application database on another
-# system, you should be using db:schema:load, not running all the migrations
-# from scratch. The latter is a flawed and unsustainable approach (the more migrations
-# you'll amass, the slower it'll run and the greater likelihood for issues).
+# This file is the source Rails uses to define your schema when running `bin/rails
+# db:schema:load`. When creating a new database, `bin/rails db:schema:load` tends to
+# be faster and is potentially less error prone than running all of your
+# migrations from scratch. Old migrations may fail to apply correctly if those
+# migrations use external dependencies or application code.
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018050314201234) do
-
-  create_table "authors", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+ActiveRecord::Schema[7.0].define(version: 2018050314201234) do
+  create_table "authors", charset: "utf8mb4", force: :cascade do |t|
     t.string "f_name"
     t.string "m_name"
     t.string "l_name"
@@ -20,7 +19,7 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
     t.index ["work_id"], name: "fk_rails_ef7807179c"
   end
 
-  create_table "contract_faculty_links", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+  create_table "contract_faculty_links", charset: "utf8mb4", force: :cascade do |t|
     t.string "role"
     t.integer "pct_credit"
     t.bigint "contract_id"
@@ -29,7 +28,7 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
     t.index ["faculty_id"], name: "fk_rails_7f7c136a9d"
   end
 
-  create_table "contracts", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+  create_table "contracts", charset: "utf8mb4", force: :cascade do |t|
     t.integer "osp_key"
     t.string "title"
     t.bigint "sponsor_id"
@@ -51,7 +50,7 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
     t.index ["sponsor_id"], name: "fk_rails_918599a14c"
   end
 
-  create_table "courses", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+  create_table "courses", charset: "utf8mb4", force: :cascade do |t|
     t.integer "academic_course_id"
     t.string "term"
     t.integer "calendar_year"
@@ -60,7 +59,7 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
     t.index ["academic_course_id", "term", "calendar_year"], name: "index_courses_on_academic_course_id_and_term_and_calendar_year", unique: true
   end
 
-  create_table "editors", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+  create_table "editors", charset: "utf8mb4", force: :cascade do |t|
     t.string "f_name"
     t.string "m_name"
     t.string "l_name"
@@ -68,19 +67,19 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
     t.index ["work_id"], name: "fk_rails_6c877ed7df"
   end
 
-  create_table "external_authors", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+  create_table "external_authors", charset: "utf8mb4", force: :cascade do |t|
     t.bigint "publication_id"
     t.string "f_name"
     t.string "m_name"
     t.string "l_name"
     t.string "role"
     t.string "extOrg"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["publication_id"], name: "fk_rails_eb03e1acd5"
   end
 
-  create_table "faculties", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+  create_table "faculties", charset: "utf8mb4", force: :cascade do |t|
     t.string "access_id"
     t.bigint "user_id"
     t.string "f_name"
@@ -91,7 +90,7 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
     t.index ["access_id"], name: "index_faculties_on_access_id", unique: true
   end
 
-  create_table "gpas", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+  create_table "gpas", charset: "utf8mb4", force: :cascade do |t|
     t.bigint "faculty_id"
     t.string "semester"
     t.integer "year"
@@ -114,20 +113,20 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
     t.integer "grade_dist_w"
     t.integer "grade_dist_ld"
     t.integer "grade_dist_other"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["faculty_id", "semester", "year", "course_prefix", "course_number", "course_number_suffix", "section_number", "campus"], name: "unique_key", unique: true, length: { semester: 50, course_prefix: 50, course_number_suffix: 50, campus: 50 }
     t.index ["faculty_id"], name: "index_gpas_on_faculty_id"
   end
 
-  create_table "integrations", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+  create_table "integrations", charset: "utf8mb4", force: :cascade do |t|
     t.string "process_type"
     t.boolean "is_active"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
   end
 
-  create_table "personal_contacts", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+  create_table "personal_contacts", charset: "utf8mb4", force: :cascade do |t|
     t.bigint "faculty_id", null: false
     t.string "telephone_number"
     t.string "postal_address"
@@ -139,14 +138,14 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
     t.string "facsimile_telephone_number"
     t.string "cn"
     t.string "mail"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.string "uid", null: false
     t.string "personal_web"
     t.index ["faculty_id"], name: "index_personal_contacts_on_faculty_id", unique: true
   end
 
-  create_table "presentation_contributors", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+  create_table "presentation_contributors", charset: "utf8mb4", force: :cascade do |t|
     t.bigint "presentation_id", null: false
     t.string "f_name"
     t.string "m_name"
@@ -154,7 +153,7 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
     t.index ["presentation_id"], name: "index_presentation_contributors_on_presentation_id"
   end
 
-  create_table "presentations", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+  create_table "presentations", charset: "utf8mb4", force: :cascade do |t|
     t.bigint "faculty_id", null: false
     t.string "title"
     t.string "dty_date"
@@ -164,26 +163,26 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
     t.index ["faculty_id"], name: "index_presentations_on_faculty_id"
   end
 
-  create_table "publication_faculty_links", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+  create_table "publication_faculty_links", charset: "utf8mb4", force: :cascade do |t|
     t.bigint "faculty_id"
     t.bigint "publication_id"
     t.string "category"
     t.string "dtm"
     t.string "status"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["faculty_id"], name: "fk_rails_6b4e572ec8"
     t.index ["publication_id"], name: "fk_rails_7abcf28acb"
   end
 
-  create_table "publication_listings", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+  create_table "publication_listings", charset: "utf8mb4", force: :cascade do |t|
     t.string "name"
     t.string "type"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
   end
 
-  create_table "publications", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+  create_table "publications", charset: "utf8mb4", force: :cascade do |t|
     t.string "pure_id"
     t.text "title"
     t.integer "volume"
@@ -196,8 +195,8 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
     t.string "page_range"
     t.integer "articleNumber"
     t.string "publisher"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.integer "edition"
     t.text "abstract"
     t.text "secondary_title"
@@ -213,7 +212,7 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
     t.index ["pure_ids", "ai_ids"], name: "index_publications_on_pure_ids_and_ai_ids", unique: true
   end
 
-  create_table "sections", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+  create_table "sections", charset: "utf8mb4", force: :cascade do |t|
     t.string "class_campus_code"
     t.string "cross_listed_flag"
     t.string "course_number"
@@ -235,13 +234,13 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
     t.index ["faculty_id", "course_id", "class_campus_code", "subject_code", "course_number", "course_suffix", "class_section_code", "course_component"], name: "pkey", unique: true, length: { class_campus_code: 50, subject_code: 50, course_suffix: 50, class_section_code: 50, course_component: 50 }
   end
 
-  create_table "sponsors", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+  create_table "sponsors", charset: "utf8mb4", force: :cascade do |t|
     t.string "sponsor_name"
     t.string "sponsor_type"
     t.index ["sponsor_name"], name: "index_sponsors_on_sponsor_name", unique: true
   end
 
-  create_table "works", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+  create_table "works", charset: "utf8mb4", force: :cascade do |t|
     t.bigint "publication_listing_id"
     t.text "title"
     t.string "journal"
@@ -264,8 +263,8 @@ ActiveRecord::Schema.define(version: 2018050314201234) do
     t.string "translator"
     t.string "unknown"
     t.string "url"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.string "username"
     t.string "date"
     t.text "citation"

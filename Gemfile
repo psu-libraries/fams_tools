@@ -9,8 +9,7 @@ end
 gem 'anystyle', '~> 1.3'
 
 # For manipulating and generating xlsx
-gem 'axlsx'
-gem 'axlsx_rails'
+gem 'caxlsx_rails'
 
 # Ldap library
 gem 'net-ldap'
@@ -25,27 +24,25 @@ gem 'bcrypt_pbkdf'
 # For scheduled tasks
 gem 'whenever'
 
-# Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 5.2.4'
+gem 'rails', '~> 7.0'
 # Use mysql as the database for Active Record
 # ActiveRecord only works with specific versions of mysql2.
-gem 'mysql2' , '< 0.5'
+gem 'mysql2' , '~> 0.5.4'
 
 # Use Puma as the app server
 gem 'puma', '~> 4.3'
 # Use SCSS for stylesheets
-gem 'sass-rails', '~> 5.0'
+gem 'sass-rails', '~> 6.0'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 # See https://github.com/rails/execjs#readme for more supported runtimes
 gem 'mini_racer'
-# gem 'therubyracer', platforms: :ruby
 
 # Dynamic nested forms for cv parser
 gem 'cocoon'
 
 # Use CoffeeScript for .coffee assets and views
-gem 'coffee-rails', '~> 4.2'
+gem 'coffee-rails', '~> 5.0'
 # Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
 gem 'turbolinks', '~> 5'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
@@ -55,7 +52,7 @@ gem 'jbuilder', '~> 2.5'
 gem 'spreadsheet'
 
 # Http client
-gem 'httparty'
+gem 'httparty', '~> 0.21'
 
 # Mocking outgoing requests
 gem 'webmock'
@@ -64,16 +61,19 @@ gem 'webmock'
 gem 'creek'
 
 # UX framework
-gem 'bootstrap'
+gem 'bootstrap', '~> 4.6'
 
 # Jquery for dom manipulation
-gem 'jquery-rails'
+gem 'jquery-rails', '~> 4.5.1'
 
 # PDF Reader
 gem 'pdf-reader'
 
 # ExifTool for parsing PDF metadata
 gem 'exiftool_vendored', '~> 12.33'
+
+# Needed for Ruby 3+
+gem 'webrick'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -83,7 +83,7 @@ group :development, :test do
   gem "capybara-webkit"
   gem 'headless'
   gem 'selenium-webdriver'
-  gem 'rspec-rails'
+  gem 'rspec-rails', '~> 6.0'
   gem 'shoulda-matchers', '4.0.0.rc1'
   gem 'rails-controller-testing'
   gem 'rspec-retry'
@@ -98,8 +98,8 @@ end
 
 group :development do
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
-  gem 'spring'
-  gem 'spring-watcher-listen', '~> 2.0.0'
+  gem 'spring', '~> 4'
+  gem 'spring-watcher-listen', '~> 2.1.0'
 
   # Use Capistrano for deployment
   gem 'capistrano', '~> 3.7', require: false
@@ -108,7 +108,7 @@ group :development do
   gem 'capistrano-rbenv', '~> 2.1', require: false
   gem 'capistrano-rbenv-install'
   gem 'capistrano-passenger'
-  gem 'web-console', '>= 3.3.0'
+  gem 'web-console', '~> 4.2'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
