@@ -1,7 +1,7 @@
 require 'pub_data/get_pub_data'
 
 #Import designed specifically for data from Metadata database.  
-class PubPopulateDB
+class PubData::PubPopulateDb
 
   def populate(pub_hash)
     pub_hash.each do |k, user_pubs|

@@ -1,6 +1,6 @@
 require 'importers/importers_helper'
 
-RSpec.describe OspXMLBuilder do
+RSpec.describe OspData::OspXmlBuilder do
 
   let!(:faculty1) { FactoryBot.create(:faculty, access_id: 'aaa111', user_id: 123, college: 'EM') }
   let!(:faculty2) { FactoryBot.create(:faculty, access_id: 'ddd111', user_id: 234, college: 'IST') }

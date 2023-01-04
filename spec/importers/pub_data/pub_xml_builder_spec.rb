@@ -1,6 +1,6 @@
 require 'importers/importers_helper'
 
-RSpec.describe PubXMLBuilder do
+RSpec.describe PubData::PubXmlBuilder do
 
   let(:data_sets) do
     hash = {
@@ -93,11 +93,11 @@ RSpec.describe PubXMLBuilder do
                    college:   'CA')
   end
 
-  let(:xml_builder_obj) {PubXMLBuilder.new}
+  let(:xml_builder_obj) {PubData::PubXmlBuilder.new}
 
   describe '#batched_pub_xml' do
     it 'should return an xml of INTELLCONT records' do
-      pub_populate_db_obj = PubPopulateDB.new
+      pub_populate_db_obj = PubData::PubPopulateDb.new
       pub_populate_db_obj.populate(data_sets)
 
       expect(xml_builder_obj.xmls_enumerator.first).to eq(

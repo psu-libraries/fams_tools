@@ -1,6 +1,6 @@
 require 'importers/importers_helper'
 
-RSpec.describe IntegrateData do
+RSpec.describe ActivityInsight::IntegrateData do
 
   let(:xml_arr) do
     return [
@@ -153,7 +153,7 @@ RSpec.describe IntegrateData do
 
   describe '#integrate' do
     it 'sends a POST request to DM Beta Webservices' do
-      osp_integrate_obj = IntegrateData.new(xml_arr, :beta, :post)
+      osp_integrate_obj = ActivityInsight::IntegrateData.new(xml_arr, :beta, :post)
       osp_integrate_obj.auth = {:username => 'Username', :password => 'Password'}
       stub_request(:post, "https://betawebservices.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University").
          with(
@@ -180,7 +180,7 @@ RSpec.describe IntegrateData do
 
   context 'when passing :delete to the third param' do
     it 'uses delete resource url' do
-      integrate_data = IntegrateData.new(xml_arr, :beta, :delete)
+      integrate_data = ActivityInsight::IntegrateData.new(xml_arr, :beta, :delete)
       expect(integrate_data.send(:url)).to eq 'https://betawebservices.digitalmeasures.com/login/service/v4/SchemaData:delete/INDIVIDUAL-ACTIVITIES-University'
     end
   end

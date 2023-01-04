@@ -1,6 +1,6 @@
 require 'importers/importers_helper'
 
-RSpec.describe ReturnSystemDups do
+RSpec.describe ActivityInsight::ReturnSystemDups do
 
   let(:xml) do
     [
@@ -200,7 +200,7 @@ RSpec.describe ReturnSystemDups do
     ]
   end
 
-  let(:return_dups_obj) {ReturnSystemDups.allocate}
+  let(:return_dups_obj) {ActivityInsight::ReturnSystemDups.allocate}
 
   describe "#call" do
     it "should return a list of ospkeys with duplicates" do
@@ -211,7 +211,7 @@ RSpec.describe ReturnSystemDups do
 
 end
 
-RSpec.describe RemoveSystemDups do
+RSpec.describe ActivityInsight::RemoveSystemDups do
   
   let(:data_book) do
     [['GROUP', 'USERNAME', 'USER_ID', 'SURVEY_ID', 'ID', 'WEB_APPEAR', 'OSPKEY', 'BASE_AGREE', 'TYPE',
@@ -226,7 +226,7 @@ RSpec.describe RemoveSystemDups do
      ['', 'zzz666', '', '', '9876543', '', '65432', '', '', 'Why Mock Datasets are Destroying the Country']]
   end
 
-  let(:remove_dups_beta) {RemoveSystemDups.new(:beta)}
+  let(:remove_dups_beta) {ActivityInsight::RemoveSystemDups.new(:beta)}
 
   describe "#call" do
     it "should identify duplicates and

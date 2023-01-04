@@ -1,9 +1,9 @@
 require 'lionpath_data/lionpath_parser'
 
-class LionPathPopulateDB
+class LionpathData::LionpathPopulateDb
   attr_accessor :lionpath_parser
 
-  def initialize(lionpath_parser_obj = LionPathParser.new)
+  def initialize(lionpath_parser_obj = LionpathData::LionpathParser.new)
     @lionpath_parser = lionpath_parser_obj
   end
 

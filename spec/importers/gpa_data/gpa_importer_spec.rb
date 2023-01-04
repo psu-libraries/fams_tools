@@ -1,7 +1,7 @@
 require 'importers/importers_helper'
 
-RSpec.describe ImportGpaData do
-  let(:gpa_parser_obj) { ImportGpaData.new 'spec/fixtures/gpa_data.xlsx' }
+RSpec.describe GpaData::ImportGpaData do
+  let(:gpa_parser_obj) { GpaData::ImportGpaData.new 'spec/fixtures/gpa_data.xlsx' }
 
   before do
     FactoryBot.create :faculty, access_id: 'abc123', college: 'LA'

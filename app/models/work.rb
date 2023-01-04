@@ -1,3 +1,5 @@
+require 'concerns/xlsx_output'
+
 class Work < ApplicationRecord
   belongs_to :publication_listing
   has_many :authors, dependent: :delete_all
@@ -10,6 +12,6 @@ class Work < ApplicationRecord
   end
 
   def self.to_xlsx(axlsx_workbook)
-    XLSXOutput.new(find_each).output(axlsx_workbook)
+    XlsxOutput.new(find_each).output(axlsx_workbook)
   end
 end

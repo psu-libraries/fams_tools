@@ -34,17 +34,17 @@ class OspIntegrateJob < ApplicationJob
   end
 
   def populate_db(f_path, backup_path)
-    my_populate = OspImporter.new(f_path, backup_path)
+    my_populate = OspData::OspImporter.new(f_path, backup_path)
     my_populate.format_and_populate
   end
 
   def remove_dups(backup_path, params)
-    my_remove_system_dups = RemoveSystemDups.new(backup_path, params[:target])
+    my_remove_system_dups = ActivityInsight::RemoveSystemDups.new(backup_path, params[:target])
     my_remove_system_dups.call
   end
 
   def integrator(params)
-    my_integrate = IntegrateData.new(OspXMLBuilder.new.xmls_enumerator, params[:target], :post)
+    my_integrate = ActivityInsight::IntegrateData.new(OspData::OspXmlBuilder.new.xmls_enumerator, params[:target], :post)
     my_integrate.integrate
   end
 

@@ -1,4 +1,4 @@
-class XLSXOutput < SpreadsheetOutput
+class XlsxOutput < SpreadsheetOutput
   def output(axlsx_workbook)
     csv = super
     csv = CSV.parse(csv.to_csv)

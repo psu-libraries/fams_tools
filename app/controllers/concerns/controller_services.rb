@@ -1,5 +1,3 @@
-require 'activity_insight/delete_records'
-
 module ControllerServices
   def integrator_view(integration_type)
     case integration_type
@@ -16,7 +14,7 @@ module ControllerServices
     when :personal_contact
       render partial: 'personal_contact'
     when :delete_records
-      @resources = DeleteRecords::RESOURCES.sort
+      @resources = ActivityInsight::DeleteRecords::RESOURCES.sort
       render partial: 'delete_records'
     else
       render partial: 'blank'

@@ -1,6 +1,6 @@
 require 'importers/importers_helper'
 
-RSpec.describe OspImporter do
+RSpec.describe OspData::OspImporter do
   
   let(:headers) do
     ['ospkey', 'ordernumber', 'title', 'sponsor', 'sponsortype', 'parentsponsor',
@@ -96,11 +96,11 @@ RSpec.describe OspImporter do
     FactoryBot.create(:faculty, access_id: 'mar26')
     FactoryBot.create(:faculty, access_id: 'jan2')
     FactoryBot.create(:faculty, access_id: 'jan18')
-    allow_any_instance_of(OspImporter).to receive(:headers).and_return headers
+    allow_any_instance_of(OspData::OspImporter).to receive(:headers).and_return headers
   end
 
 
-  let(:osp_parser_obj) {OspImporter.new}
+  let(:osp_parser_obj) {OspData::OspImporter.new}
 
   describe "#format_and_populate" do
     it "should convert nils to ' ' and 
@@ -114,9 +114,9 @@ RSpec.describe OspImporter do
         should convert sponsortype to appropriate drop down values" do
       allow(CSV).to receive(:open).and_return(data_book1)
       allow(CSV).to receive(:foreach).and_yield(fake_backup[0]).and_yield(fake_backup[1]).and_yield(fake_backup[2])
-      allow_any_instance_of(OspImporter).to receive(:is_user).and_return(true)
-      allow_any_instance_of(OspImporter).to receive(:is_good_date).and_return(true)
-      allow_any_instance_of(OspImporter).to receive(:is_proper_status).and_return(true)
+      allow_any_instance_of(OspData::OspImporter).to receive(:is_user).and_return(true)
+      allow_any_instance_of(OspData::OspImporter).to receive(:is_good_date).and_return(true)
+      allow_any_instance_of(OspData::OspImporter).to receive(:is_proper_status).and_return(true)
       osp_parser_obj.format_and_populate
       expect(Contract.first.grant_contract).to eq('')
       expect(Contract.first.title).to match(/Title " '/)
@@ -154,8 +154,8 @@ RSpec.describe OspImporter do
     it "should remove rows with 'submitted' dates <= 2011" do
       allow(CSV).to receive(:open).and_return(data_book2)
       allow(CSV).to receive(:foreach).and_yield(fake_backup[0]).and_yield(fake_backup[1]).and_yield(fake_backup[2])
-      allow_any_instance_of(OspImporter).to receive(:is_proper_status).and_return(true)
-      allow_any_instance_of(OspImporter).to receive(:is_user).and_return(true)
+      allow_any_instance_of(OspData::OspImporter).to receive(:is_proper_status).and_return(true)
+      allow_any_instance_of(OspData::OspImporter).to receive(:is_user).and_return(true)
       osp_parser_obj.format_and_populate
       expect(Contract.count).to eq(2)
     end
@@ -166,8 +166,8 @@ RSpec.describe OspImporter do
     it "should remove rows that contain non-active users" do
       allow(CSV).to receive(:open).and_return(data_book3)
       allow(CSV).to receive(:foreach).and_yield(fake_backup[0]).and_yield(fake_backup[1]).and_yield(fake_backup[2])
-      allow_any_instance_of(OspImporter).to receive(:is_proper_status).and_return(true)
-      allow_any_instance_of(OspImporter).to receive(:is_good_date).and_return(true)
+      allow_any_instance_of(OspData::OspImporter).to receive(:is_proper_status).and_return(true)
+      allow_any_instance_of(OspData::OspImporter).to receive(:is_good_date).and_return(true)
       osp_parser_obj.format_and_populate
       expect(Contract.count).to eq(1)
       expect(Contract.first.contract_faculty_links.first.faculty.access_id).to eq('zzz999')
@@ -179,8 +179,8 @@ RSpec.describe OspImporter do
     it "should remove rows with 'Purged' or 'Withdrawn' status" do
       allow(CSV).to receive(:open).and_return(data_book4)
       allow(CSV).to receive(:foreach).and_yield(fake_backup[0]).and_yield(fake_backup[1]).and_yield(fake_backup[2])
-      allow_any_instance_of(OspImporter).to receive(:is_good_date).and_return(true)
-      allow_any_instance_of(OspImporter).to receive(:is_user).and_return(true)
+      allow_any_instance_of(OspData::OspImporter).to receive(:is_good_date).and_return(true)
+      allow_any_instance_of(OspData::OspImporter).to receive(:is_user).and_return(true)
       osp_parser_obj.format_and_populate
       expect(Contract.count).to eq(3)
       expect(Contract.first.status).to eq('Awarded')
@@ -193,9 +193,9 @@ RSpec.describe OspImporter do
     it 'should populate the database with osp data' do
       allow(CSV).to receive(:open).and_return(data_book5)
       allow(CSV).to receive(:foreach).and_yield(fake_backup[0]).and_yield(fake_backup[1]).and_yield(fake_backup[2])
-      allow_any_instance_of(OspImporter).to receive(:is_user).and_return(true)
-      allow_any_instance_of(OspImporter).to receive(:is_good_date).and_return(true)
-      allow_any_instance_of(OspImporter).to receive(:is_proper_status).and_return(true)
+      allow_any_instance_of(OspData::OspImporter).to receive(:is_user).and_return(true)
+      allow_any_instance_of(OspData::OspImporter).to receive(:is_good_date).and_return(true)
+      allow_any_instance_of(OspData::OspImporter).to receive(:is_proper_status).and_return(true)
       osp_parser_obj.format_and_populate
       expect(Sponsor.all.count).to eq(2)
       expect(Contract.all.count).to eq(3)

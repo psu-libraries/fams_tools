@@ -1,9 +1,9 @@
 require 'importers/importers_helper'
 
-RSpec.describe LdapXmlBuilder do
+RSpec.describe LdapData::LdapXmlBuilder do
 
   let!(:personal_contact) { FactoryBot.create :personal_contact }
-  let(:xml_builder_obj) { LdapXmlBuilder.new }
+  let(:xml_builder_obj) { LdapData::LdapXmlBuilder.new }
 
   describe "#batched_ldap_xml" do
     it "should return an array of personal contact data xmls" do

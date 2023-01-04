@@ -1,6 +1,6 @@
 require 'creek'
 
-class ImportGpaData
+class GpaData::ImportGpaData
   attr_accessor :gpa_data_book
 
   def initialize(gpa_data_book)
@@ -41,7 +41,7 @@ class ImportGpaData
     gpa = Gpa.new({faculty: faculty}.merge!(gpa_data_attrs(row)))
 
     if gpa.persisted?
-      gpa.update_attributes!(gpa_data_attrs(row))
+      gpa.update!(gpa_data_attrs(row))
     else
       gpa.save!
     end

@@ -32,7 +32,7 @@ class LionpathIntegrateJob < ApplicationJob
   end
 
   def lionpath_populate_obj(f_path)
-    LionPathPopulateDB.new(LionPathParser.new(f_path))
+    LionpathData::LionpathPopulateDb.new(LionpathData::LionpathParser.new(f_path))
   end
 
   def integrate_course_data(target)
@@ -40,7 +40,7 @@ class LionpathIntegrateJob < ApplicationJob
   end
 
   def lionpath_integrate_obj(target)
-    IntegrateData.new(LionPathXMLBuilder.new.xmls_enumerator, target, :post)
+    ActivityInsight::IntegrateData.new(LionpathData::LionpathXmlBuilder.new.xmls_enumerator, target, :post)
   end
 
   def name

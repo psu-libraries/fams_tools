@@ -1,6 +1,6 @@
 require 'nokogiri'
   
-class PubXMLBuilder
+class PubData::PubXmlBuilder
 
   def xmls_enumerator
     Enumerator.new do |i|

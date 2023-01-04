@@ -2,7 +2,7 @@ class SpreadsheetOutput < WorkOutputs
   include OutputDates
 
   def output(*args)
-    csv = CSV.generate({ encoding: 'utf-8' }) do |csv|
+    csv = CSV.generate(encoding: 'utf-8') do |csv|
       csv << formatted_headers
       works.each do |item|
         csv << formatted_row(item)

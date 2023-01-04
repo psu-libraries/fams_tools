@@ -23,7 +23,7 @@ class PostPrintAnalyzer
       CSV.foreach(f_path, headers: true, encoding: "ISO8859-1:UTF-8", force_quotes: true, quote_char: '"', liberal_parsing: true) do |row|
         next if row['POST_FILE_1_DOC'].blank?
 
-        sys = system("wget --header 'X-API-Key: #{api_key}' 'ai-s3-authorizer.k8s.libraries.psu.edu/api/v1/#{URI.escape(row['POST_FILE_1_DOC'])}' -P '#{post_prints_directory}'")
+        sys = system("wget --header 'X-API-Key: #{api_key}' 'ai-s3-authorizer.k8s.libraries.psu.edu/api/v1/#{CGI.escape(row['POST_FILE_1_DOC'])}' -P '#{post_prints_directory}'")
         errored_files << (row['POST_FILE_1_DOC'] + "\n") if sys == false
       end
       File.open("#{post_prints_directory}/errors.txt", "wb") { |file| errored_files.each { |row| file << row } }

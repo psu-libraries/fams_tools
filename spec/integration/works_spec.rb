@@ -11,6 +11,7 @@ RSpec.describe 'Works page', type: :feature do
   describe "#show" do
     it 'displays works information' do
       visit "publication_listings/#{publication_listing.id}/works"
+      byebug
       expect(page).to have_content(publication_listing.name)
       expect(page).to have_content('Username')
       expect(page).to have_content('Container')

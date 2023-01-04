@@ -1,4 +1,4 @@
-class LdapXmlBuilder
+class LdapData::LdapXmlBuilder
 
   def xmls_enumerator
     Enumerator.new do |i|

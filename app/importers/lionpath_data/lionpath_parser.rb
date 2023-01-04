@@ -1,7 +1,7 @@
 require 'spreadsheet'
 require 'csv'
 
-class LionPathParser
+class LionpathData::LionpathParser
 
   attr_accessor :csv_hash, :active_users, :csv_object
 
