@@ -11,7 +11,6 @@ RSpec.describe 'Works page', type: :feature do
   describe "#show" do
     it 'displays works information' do
       visit "publication_listings/#{publication_listing.id}/works"
-      byebug
       expect(page).to have_content(publication_listing.name)
       expect(page).to have_content('Username')
       expect(page).to have_content('Container')
@@ -19,7 +18,8 @@ RSpec.describe 'Works page', type: :feature do
       expect(page).to have_xpath("//input[@value='#{work.authors.first.f_name}']")
       expect(page).to have_xpath("//input[@value='#{work.editors.first.f_name}']")
       expect(page).to have_content(work.title)
-      expect(page).to have_content(work.citation)
+      # .squish will reduce the string to how it will display on page w/ whitespace reduced to single space
+      expect(page).to have_content(work.citation.squish)
       expect(page).to have_link('Add Author')
       expect(page).to have_link('Add Editor')
       expect(page).to have_xpath("//i[@class='fa remove-nested fa-close']")
