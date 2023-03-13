@@ -1,6 +1,6 @@
 require 'net/ldap'
 
-class ImportLdapData
+class LdapData::ImportLdapData
   attr_accessor :all_faculty
 
   def initialize(all_faculty = Faculty.all)
@@ -27,7 +27,7 @@ class ImportLdapData
          PersonalContact.new({faculty: faculty}.merge!(personal_contact_attrs(entry)))
 
     if pc.persisted?
-      pc.update_attributes!(personal_contact_attrs(entry))
+      pc.update!(personal_contact_attrs(entry))
     else
       pc.save!
     end

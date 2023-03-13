@@ -1,7 +1,7 @@
 require 'importers/importers_helper'
 require 'spreadsheet'
 
-RSpec.describe LionPathParser do
+RSpec.describe LionpathData::LionpathParser do
 
   let(:headers) {['Instructor Campus ID', 'Term', 'Calendar Year', 'Class Campus Code', 'Course Short Description', 'Course Long Description',
                   'Academic Course ID', 'Cross Listed Flag', 'Subject Code', 'Catalog Number', 'Class Section Code', 'Course Credits/Units',
@@ -28,7 +28,7 @@ RSpec.describe LionPathParser do
   let(:line7) {['xxx111', 'Summer 2018', 2018, 'UP', 'Math', 'Lots of math.',
                 1111, 'N', 'MATH', '202D', '901D', 3, 25, 0, 'In Person', '', 'Primary Instructor']}
 
-  let(:lionpath_parser_obj) {LionPathParser.new}
+  let(:lionpath_parser_obj) {LionpathData::LionpathParser.new}
 
   before(:each) do
     Faculty.create(access_id: 'zzz999',

@@ -1,5 +1,5 @@
 require 'rails_helper'
-require_relative '../../app/importers/activity_insight/ai_integrate_data'
+require_relative '../../app/importers/activity_insight/integrate_data'
 require_relative '../../app/importers/lionpath_data/lionpath_populate_db'
 
 RSpec.describe ApplicationJob do

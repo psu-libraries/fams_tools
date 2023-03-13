@@ -1,6 +1,6 @@
 require 'nokogiri'
 
-class LionPathXMLBuilder
+class LionpathData::LionpathXmlBuilder
 
   def xmls_enumerator
     Enumerator.new do |i|

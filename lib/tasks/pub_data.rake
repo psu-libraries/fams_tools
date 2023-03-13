@@ -5,8 +5,8 @@ namespace :pub_data do
   task format_and_populate: :environment do
 
     start = Time.now
-    import_pubs = GetPubData.new
-    import_pubs.call(PubPopulateDB.new)
+    import_pubs = PubData::GetPubData.new
+    import_pubs.call(PubData::PubPopulateDb.new)
     finish = Time.now
     puts(((finish - start)/60).to_s + ' mins')
 
@@ -16,7 +16,7 @@ namespace :pub_data do
 
   task integrate: :environment do
     start = Time.now
-    my_integrate = IntegrateData.new(PubXMLBuilder.new)
+    my_integrate = ActivityInsight::IntegrateData.new(PubData::PubXMLBuilder.new)
     my_integrate.integrate
     finish = Time.now
     puts(((finish - start)/60).to_s + ' mins')

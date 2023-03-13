@@ -1,6 +1,6 @@
 require 'spreadsheet'
 
-class GetUserData
+class ActivityInsight::GetUserData
   attr_accessor :users_sheet, :users_hashed
 
   def initialize(file_path = 'app/parsing_files/psu-users.xls')
@@ -28,7 +28,7 @@ class GetUserData
       next if faculty.blank?
 
       if row['Enabled?'].downcase == 'yes' && row['Has Access to Manage Activities?'].downcase == 'yes'
-        faculty.update_attributes({
+        faculty.update({
           user_id:   row['User ID'],
           f_name:    row['First Name'],
           l_name:    row['Last Name'],

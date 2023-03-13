@@ -1,6 +1,6 @@
 require 'importers/importers_helper'
 
-RSpec.describe DeleteRecords do
+RSpec.describe ActivityInsight::DeleteRecords do
   subject(:delete_records) { described_class }
 
   let(:request_body) do
@@ -21,7 +21,7 @@ RSpec.describe DeleteRecords do
               }).
           to_return(status: 200, body: "", headers: {})
 
-      allow_any_instance_of(DeleteRecords).to receive(:csv_path).and_return("#{Rails.root}/spec/fixtures/delete.csv")
+      allow_any_instance_of(ActivityInsight::DeleteRecords).to receive(:csv_path).and_return("#{Rails.root}/spec/fixtures/delete.csv")
       object = delete_records.new('SCHTEACH', :beta)
       object.delete
     end
@@ -29,7 +29,7 @@ RSpec.describe DeleteRecords do
 
   context 'when invalid resource is given' do
     it 'raises InvalidResource error' do
-      expect { delete_records.new('BOGUS', :beta) }.to raise_error DeleteRecords::InvalidResource
+      expect { delete_records.new('BOGUS', :beta) }.to raise_error ActivityInsight::DeleteRecords::InvalidResource
     end
   end
 end

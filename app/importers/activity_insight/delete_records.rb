@@ -1,4 +1,4 @@
-class DeleteRecords
+class ActivityInsight::DeleteRecords
   class InvalidResource < StandardError; end
 
   RESOURCES = %w[CONGRANT SCHTEACH INTELLCONT PCI GRADE_DIST_GPA STUDENT_RATING].freeze
@@ -38,7 +38,7 @@ class DeleteRecords
   end
 
   def request(xmls_array)
-    integrator = IntegrateData.new(xmls_array, target, :delete)
+    integrator = ActivityInsight::IntegrateData.new(xmls_array, target, :delete)
     integrator.integrate
   end
 

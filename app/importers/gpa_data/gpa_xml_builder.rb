@@ -1,4 +1,4 @@
-class GpaXmlBuilder
+class GpaData::GpaXmlBuilder
 
   def xmls_enumerator
     Enumerator.new do |i|

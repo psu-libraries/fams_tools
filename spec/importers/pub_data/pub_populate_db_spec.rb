@@ -1,6 +1,6 @@
 require 'importers/importers_helper'
 
-RSpec.describe PubPopulateDB do
+RSpec.describe PubData::PubPopulateDb do
 
   let(:fake_data) do
     {"abc123"=>{"data"=>[{"pure_ids" => [ "1fj9184-j1ir-148" ], "activity_insight_ids" => [], "id"=>"123456", "type"=>"publication", "attributes"=>{"title"=>"Test 1", "secondary_title"=>"Second title", "journal_title"=>"Test Journal", "publication_type"=>"Academic Journal Article", "publisher"=>nil, "status"=>"Published", "volume"=>"1", "issue"=>"1", "edition"=>nil, "page_range"=>"1-2", "authors_et_al"=>nil, "abstract"=>nil, "citation_count"=>3, "published_on"=>"2008-01-01", "contributors"=>[{"first_name"=>"Alex", "middle_name"=>nil, "last_name"=>"Cornmeal"}], "tags"=>[{"name"=>"Tests", "rank"=>1}], "dtm"=>"January (1st Quarter/Winter)", "dty"=>"2008", "dtd"=>"1"}}, {"pure_ids" => [ "1fj9184-j1ir-147" ], "activity_insight_ids" => [], "id"=>"654321", "type"=>"publication", "attributes"=>{"title"=>"Test 2", "secondary_title"=>nil, "journal_title"=>"Another Test Journal", "publication_type"=>"Academic Journal Article", "publisher"=>nil, "status"=>"Published", "volume"=>"2", "issue"=>"2", "edition"=>nil, "page_range"=>"2-3", "authors_et_al"=>nil, "abstract"=>"<p>Test abstract.</p>", "citation_count"=>0, "published_on"=>"2017-04-01", "contributors"=>[{"first_name"=>"Alex", "middle_name"=>nil, "last_name"=>"Cornmeal"}], "tags"=>[{"name"=>"Tests", "rank"=>1}], "dtm"=>"April (2nd Quarter/Spring)", "dty"=>"2017", "dtd"=>"1"}}]}, "xyz321"=>{"data"=>[{"pure_ids" => [ "1fj9184-j1ir-149" ], "activity_insight_ids" => [], "id"=>"678901", "type"=>"publication", "attributes"=>{"title"=>"Test 3", "secondary_title"=>nil, "journal_title"=>"Yet Another Test Journal", "publication_type"=>"Academic Journal Article", "publisher"=>nil, "status"=>"Published", "volume"=>"3", "issue"=>"3", "edition"=>nil, "page_range"=>"3-4", "authors_et_al"=>nil, "abstract"=>"<p>Test abstract 2.</p>", "citation_count"=>6, "published_on"=>"2014-03-12", "contributors"=>[{"first_name"=>"Xavier", "middle_name"=>nil, "last_name"=>"Zimmerman"}], "tags"=>[{"name"=>"Tests", "rank"=>1}], "dtm"=>"March", "dty"=>"2014", "dtd"=>"12"}}]}}
@@ -20,7 +20,7 @@ RSpec.describe PubPopulateDB do
 
   end
 
-  let(:pub_populate) {PubPopulateDB.new}
+  let(:pub_populate) {PubData::PubPopulateDb.new}
 
   describe '#populate' do
     it 'should populate the database with pub data' do

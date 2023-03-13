@@ -1,6 +1,6 @@
 require 'nokogiri'
 
-class OspXMLBuilder
+class OspData::OspXmlBuilder
   #Chunks osp data into batches so we don't overload AI with records
   def xmls_enumerator
     Enumerator.new do |i|

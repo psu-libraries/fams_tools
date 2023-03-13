@@ -1,4 +1,4 @@
-class GetPubData
+class PubData::GetPubData
   class MDBError < StandardError; end
   attr_accessor :user_ids, :pub_json, :pub_hash
 

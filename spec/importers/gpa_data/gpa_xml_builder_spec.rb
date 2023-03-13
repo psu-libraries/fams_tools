@@ -1,6 +1,6 @@
 require 'importers/importers_helper'
 
-RSpec.describe GpaXmlBuilder do
+RSpec.describe GpaData::GpaXmlBuilder do
 
   let!(:faculty) { FactoryBot.create :faculty, college: 'LA' }
   let!(:gpa1) { FactoryBot.create :gpa, faculty: faculty }

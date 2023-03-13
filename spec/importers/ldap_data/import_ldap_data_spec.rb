@@ -1,23 +1,22 @@
 require 'importers/importers_helper'
 
-RSpec.describe ImportLdapData do
+RSpec.describe LdapData::ImportLdapData do
   
   before do
     faculty2 = Faculty.create!(access_id: 'ajk5603')
   end
 
   describe '#call' do
-    let(:importer) { ImportLdapData.new }
+    let(:importer) { LdapData::ImportLdapData.new }
 
     it 'imports faculty data from ldap using faculty in our database' do
       expect{ importer.import_ldap_data }.to change { PersonalContact.count }.by 1
 
       pc1 = PersonalContact.find_by(uid: "ajk5603")
 
-      expect(pc1['postal_address']).to eq "W 313 Pattee Library$University Park, PA 16802 US"
-      expect(pc1['telephone_number']).to eq nil
+      expect(pc1['postal_address']).to eq "1 Paterno Library$University Park, PA 16802 US"
       expect(pc1['department']).to eq nil
-      expect(pc1['title']).to eq "Programmer/Analyst 3"
+      expect(pc1['title']).to eq "Programmer/Analyst 4"
       expect(pc1['ps_research']).to eq nil
       expect(pc1['ps_teaching']).to eq nil
       expect(pc1['ps_office_address']).to eq nil

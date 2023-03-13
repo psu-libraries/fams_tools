@@ -1,6 +1,6 @@
 require 'importers/importers_helper'
 
-RSpec.describe GetUserData do
+RSpec.describe ActivityInsight::GetUserData do
 
   let!(:faculty1) { FactoryBot.create :faculty, access_id: 'xxx111' }
   
@@ -15,7 +15,7 @@ RSpec.describe GetUserData do
     sheet
   end
 
-  let(:get_user_data_obj) {GetUserData.new}
+  let(:get_user_data_obj) {ActivityInsight::GetUserData.new}
 
   describe '#call' do
     it 'should get user data' do

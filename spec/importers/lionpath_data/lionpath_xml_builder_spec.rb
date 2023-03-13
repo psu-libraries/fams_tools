@@ -1,6 +1,6 @@
 require 'importers/importers_helper'
 
-RSpec.describe LionPathXMLBuilder do
+RSpec.describe LionpathData::LionpathXmlBuilder do
 
   let(:data_sets) do
     [{'Term' => 'Spring', 'Calendar Year' => 2018, 'Course Short Description' => 'The Class', 'Course Long Description' => 'This is the class that a teacher teaches.',
@@ -15,7 +15,7 @@ RSpec.describe LionPathXMLBuilder do
       'Course Component' => 'Lecture', 'XCourse CoursePre' => '', 'XCourse CourseNum' => '', 'XCourse CourseNum Suffix' => '', 'Instructor Load Factor' => 100}]
   end
 
-  let(:xml_builder_obj) {LionPathXMLBuilder.new}
+  let(:xml_builder_obj) {LionpathData::LionpathXmlBuilder.new}
 
   describe '#batched_lionpath_xml' do
     it 'should return a list with an xml of SCHTEACH records' do

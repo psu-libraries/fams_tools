@@ -1,6 +1,6 @@
 require 'importers/importers_helper'
 
-RSpec.describe LionPathPopulateDB do
+RSpec.describe LionpathData::LionpathPopulateDb do
 
   headers = ['Instructor Campus ID', 'Term', 'Calendar Year', 'Class Campus Code', 'Course Short Description', 'Course Long Description',
              'Academic Course ID', 'Cross Listed Flag', 'Subject Code', 'Class Section Code', 'Course Credits/Units',
@@ -23,7 +23,7 @@ RSpec.describe LionPathPopulateDB do
     arr_of_hashes
   end
 
-  let(:lionpath_populate_db_obj) {LionPathPopulateDB.allocate}
+  let(:lionpath_populate_db_obj) {LionpathData::LionpathPopulateDb.allocate}
 
   before(:each) do
     Faculty.create(access_id: 'abc123',
@@ -45,7 +45,7 @@ RSpec.describe LionPathPopulateDB do
 
   describe '#populate' do
     it 'should populate the database with lionpath data' do
-      lionpath_populate_db_obj.lionpath_parser = LionPathParser.allocate
+      lionpath_populate_db_obj.lionpath_parser = LionpathData::LionpathParser.allocate
       lionpath_populate_db_obj.lionpath_parser.csv_hash = fake_sheet
       lionpath_populate_db_obj.populate
       expect(Course.all.count).to eq(3)

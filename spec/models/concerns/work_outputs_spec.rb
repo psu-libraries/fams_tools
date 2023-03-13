@@ -36,14 +36,14 @@ describe WorkOutputs do
     end
   end
 
-  describe '#XLSXOutput' do
+  describe '#XlsxOutput' do
     describe '#output' do
       context 'when publications' do
         let(:first_row_collect) {
-          XLSXOutput.new(works).output(Axlsx::Package.new.workbook).workbook.worksheets.first.rows.first.first.row.collect { |n| n.value }
+          XlsxOutput.new(works).output(Axlsx::Package.new.workbook).workbook.worksheets.first.rows.first.first.row.collect { |n| n.value }
         }
         let(:second_row_collect) {
-          XLSXOutput.new(works).output(Axlsx::Package.new.workbook).workbook.worksheets.first.rows.second.first.row.collect { |n| n.value }
+          XlsxOutput.new(works).output(Axlsx::Package.new.workbook).workbook.worksheets.first.rows.second.first.row.collect { |n| n.value }
         }
         it 'returns a properly formatted xlsx file' do
           expect(first_row_collect).to eq ["USERNAME", "TITLE", "VOLUME", "EDITION", "PAGENUM", "DTY_END", "DTM_END",
@@ -57,10 +57,10 @@ describe WorkOutputs do
       end
       context 'when presentations' do
         let(:first_row_collect) {
-          XLSXOutput.new(works2).output(Axlsx::Package.new.workbook).workbook.worksheets.first.rows.first.first.row.collect { |n| n.value }
+          XlsxOutput.new(works2).output(Axlsx::Package.new.workbook).workbook.worksheets.first.rows.first.first.row.collect { |n| n.value }
         }
         let(:second_row_collect) {
-          XLSXOutput.new(works2).output(Axlsx::Package.new.workbook).workbook.worksheets.first.rows.second.first.row.collect { |n| n.value }
+          XlsxOutput.new(works2).output(Axlsx::Package.new.workbook).workbook.worksheets.first.rows.second.first.row.collect { |n| n.value }
         }
         it 'returns a properly formatted xlsx file' do
           expect(first_row_collect).to eq ['USERNAME', 'TYPE', 'TITLE', 'NAME', 'LOCATION',  "DTM_START", "DTD_START",

@@ -37,7 +37,7 @@ class PublicationListingsController < ApplicationController
 
   def update
     @publication_listing = PublicationListing.find_by_id(params[:id])
-    @publication_listing.update_attributes(publication_listing_params)
+    @publication_listing.update(publication_listing_params)
     flash[:notice] = "Update Successful"
     redirect_to(publication_listing_works_path(@publication_listing))
   end

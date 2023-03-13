@@ -1,6 +1,6 @@
 require 'creek'
 
-class OspImporter
+class OspData::OspImporter
   attr_accessor :headers, :csv_obj, :pendnotfund
 
   def initialize(osp_path = "#{Rails.root}/app/parsing_files/contract_grants.csv", backup_path = "#{Rails.root}/app/parsing_files/CONGRANT.csv")

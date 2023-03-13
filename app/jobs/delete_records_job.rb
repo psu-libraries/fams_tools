@@ -4,7 +4,7 @@ class DeleteRecordsJob < ApplicationJob
     f_name = 'delete.csv'
     f_path = File.join('app', 'parsing_files', f_name)
     File.open(f_path, 'wb') { |f| f.write(params[:ids_file].read) }
-    delete_records = DeleteRecords.new(params[:resource], params[:target])
+    delete_records = ActivityInsight::DeleteRecords.new(params[:resource], params[:target])
     errors = delete_records.delete
     File.delete(f_path) if File.exist?(f_path)
     errors

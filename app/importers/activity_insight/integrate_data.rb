@@ -1,4 +1,4 @@
-class IntegrateData
+class ActivityInsight::IntegrateData
   attr_accessor :auth, :xml_enumerator, :target, :action
 
   def initialize(xml_enumerator, target, action)
