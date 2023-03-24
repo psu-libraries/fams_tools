@@ -19,12 +19,12 @@ RSpec.describe YearlyData::ImportYearlyData do
       expect(Faculty.find_by(access_id: 'abc123').yearlies.first.school).to eq 'School of Liberal Arts'
       expect(Faculty.find_by(access_id: 'abc123').yearlies.first.division).to eq 'Liberal Arts'
       expect(Faculty.find_by(access_id: 'abc123').yearlies.first.institute).to eq 'Institute'
-      expect(Faculty.find_by(access_id: 'abc123').yearlies.first.departments['admin_dept1']).to eq 'LA - Philosophy'
-      expect(Faculty.find_by(access_id: 'abc123').yearlies.first.departments['admin_dept1_other']).to eq 'Other 1'
-      expect(Faculty.find_by(access_id: 'abc123').yearlies.first.departments['admin_dept2']).to eq 'LA - English'
-      expect(Faculty.find_by(access_id: 'abc123').yearlies.first.departments['admin_dept2_other']).to eq 'Other 2'
-      expect(Faculty.find_by(access_id: 'abc123').yearlies.first.departments['admin_dept3']).to eq 'LA - African American Studies'
-      expect(Faculty.find_by(access_id: 'abc123').yearlies.first.departments['admin_dept3_other']).to eq 'Other 3'
+      expect(Faculty.find_by(access_id: 'abc123').yearlies.first.departments['ADMIN_DEP_1_DEP']).to eq 'LA - Philosophy'
+      expect(Faculty.find_by(access_id: 'abc123').yearlies.first.departments['ADMIN_DEP_1_DEP_OTHER']).to eq 'Other 1'
+      expect(Faculty.find_by(access_id: 'abc123').yearlies.first.departments['ADMIN_DEP_2_DEP']).to eq 'LA - English'
+      expect(Faculty.find_by(access_id: 'abc123').yearlies.first.departments['ADMIN_DEP_2_DEP_OTHER']).to eq 'Other 2'
+      expect(Faculty.find_by(access_id: 'abc123').yearlies.first.departments['ADMIN_DEP_3_DEP']).to eq 'LA - African American Studies'
+      expect(Faculty.find_by(access_id: 'abc123').yearlies.first.departments['ADMIN_DEP_3_DEP_OTHER']).to eq 'Other 3'
       expect(Faculty.find_by(access_id: 'abc123').yearlies.first.title).to eq 'Associate Professor of Philosophy'
       expect(Faculty.find_by(access_id: 'abc123').yearlies.first.rank).to eq 'Professor'
       expect(Faculty.find_by(access_id: 'abc123').yearlies.first.tenure).to eq 'Tenured'
@@ -40,12 +40,12 @@ RSpec.describe YearlyData::ImportYearlyData do
       expect(Faculty.find_by(access_id: 'def456').yearlies.first.school).to eq 'IST'
       expect(Faculty.find_by(access_id: 'def456').yearlies.first.division).to eq 'UC - Information Sciences and Technology'
       expect(Faculty.find_by(access_id: 'def456').yearlies.first.institute).to eq 'Institute'
-      expect(Faculty.find_by(access_id: 'def456').yearlies.first.departments['admin_dept1']).to eq 'UC - IST'
-      expect(Faculty.find_by(access_id: 'def456').yearlies.first.departments['admin_dept1_other']).to be_nil
-      expect(Faculty.find_by(access_id: 'def456').yearlies.first.departments['admin_dept2']).to eq 'UC - Mathematics'
-      expect(Faculty.find_by(access_id: 'def456').yearlies.first.departments['admin_dept2_other']).to be_nil
-      expect(Faculty.find_by(access_id: 'def456').yearlies.first.departments['admin_dept3']).to eq 'UC - Engineering'
-      expect(Faculty.find_by(access_id: 'def456').yearlies.first.departments['admin_dept3_other']).to be_nil
+      expect(Faculty.find_by(access_id: 'def456').yearlies.first.departments['ADMIN_DEP_1_DEP']).to eq 'UC - IST'
+      expect(Faculty.find_by(access_id: 'def456').yearlies.first.departments['ADMIN_DEP_1_DEP_OTHER']).to be_nil
+      expect(Faculty.find_by(access_id: 'def456').yearlies.first.departments['ADMIN_DEP_2_DEP']).to eq 'UC - Mathematics'
+      expect(Faculty.find_by(access_id: 'def456').yearlies.first.departments['ADMIN_DEP_2_DEP_OTHER']).to be_nil
+      expect(Faculty.find_by(access_id: 'def456').yearlies.first.departments['ADMIN_DEP_3_DEP']).to eq 'UC - Engineering'
+      expect(Faculty.find_by(access_id: 'def456').yearlies.first.departments['ADMIN_DEP_3_DEP_OTHER']).to be_nil
       expect(Faculty.find_by(access_id: 'def456').yearlies.first.title).to eq 'Assistant Professor of IST'
       expect(Faculty.find_by(access_id: 'def456').yearlies.first.rank).to eq 'Assistant Teaching Professor'
       expect(Faculty.find_by(access_id: 'def456').yearlies.first.tenure).to eq 'Non-Tenure Track'

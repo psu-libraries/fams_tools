@@ -12,12 +12,7 @@ describe Yearly, type: :model do
     it { is_expected.to have_db_column(:school).of_type(:string) }
     it { is_expected.to have_db_column(:division).of_type(:string) }
     it { is_expected.to have_db_column(:institute).of_type(:string) }
-    it { is_expected.to have_db_column(:admin_dept1).of_type(:string) }
-    it { is_expected.to have_db_column(:admin_dept1_other).of_type(:string) }
-    it { is_expected.to have_db_column(:admin_dept2).of_type(:string) }
-    it { is_expected.to have_db_column(:admin_dept2_other).of_type(:string) }
-    it { is_expected.to have_db_column(:admin_dept3).of_type(:string) }
-    it { is_expected.to have_db_column(:admin_dept3_other).of_type(:string) }
+    it { is_expected.to have_db_column(:departments).of_type(:text) }
     it { is_expected.to have_db_column(:title).of_type(:string) }
     it { is_expected.to have_db_column(:rank).of_type(:string) }
     it { is_expected.to have_db_column(:tenure).of_type(:string) }
