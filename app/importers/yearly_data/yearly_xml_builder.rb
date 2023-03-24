@@ -25,12 +25,24 @@ class YearlyData::YearlyXmlBuilder
                   xml.SCHOOL(yearly.school)
                   xml.DIVISION(yearly.division)
                   xml.INSTITUTE(yearly.institute)
-                  xml.ADMIN_DEP_1_DEP(yearly.admin_dept1)
-                  xml.ADMIN_DEP_1_DEP_OTHER(yearly.admin_dept1_other)
-                  xml.ADMIN_DEP_2_DEP(yearly.admin_dept2)
-                  xml.ADMIN_DEP_2_DEP_OTHER(yearly.admin_dept2_other)
-                  xml.ADMIN_DEP_3_DEP(yearly.admin_dept3)
-                  xml.ADMIN_DEP_3_DEP_OTHER(yearly.admin_dept3_other)
+                  6.times do |i|
+                    if yearly.departments.keys.any?{ |k| k.include?((i+1).to_s) }
+                      dep = nil 
+                      dep_other = nil 
+                      yearly.departments.keys.each do |key|
+                        dep = key if key.include?((i+1).to_s) && !key.include?('OTHER')
+                        dep_other = key if key.include?((i+1).to_s) && key.include?('OTHER')
+                      end
+                      if dep.present? || dep_other.present?
+                        xml.ADMIN_DEP{
+                          xml.DEP(yearly.departments[dep])
+                          xml.DEP_OTHER(yearly.departments[dep_other])
+                        }
+                      end
+                    else
+                      break
+                    end
+                  end
                   xml.TITLE(yearly.title)
                   xml.RANK(yearly.rank)
                   xml.TENURE(yearly.tenure)

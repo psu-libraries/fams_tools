@@ -1,0 +1,13 @@
+<div class="col-sm">
+  <%= form_with :url => { :action => "yearly_integrate" }, id: "yearly" do |form| %>
+    <p> <%= label(:yearly_file, text = "Yearly Data File") %><%= form.file_field :yearly_file, required: true %> </p>
+    <div class="row">
+      <%= render 'buttons_and_code', form: form %>
+    </div>
+  <% end %>
+</div>
+<div class="col-sm">
+  <h4>Yearly Integration Errors:</h4>
+  <br/>
+  <%= render 'file_download_button', log_path: @yearlies_log_path %>
+</div>

@@ -281,12 +281,6 @@ ActiveRecord::Schema[7.0].define(version: 2018050314201234) do
     t.string "school"
     t.string "division"
     t.string "institute"
-    t.string "admin_dept1"
-    t.string "admin_dept1_other"
-    t.string "admin_dept2"
-    t.string "admin_dept2_other"
-    t.string "admin_dept3"
-    t.string "admin_dept3_other"
     t.string "title"
     t.string "rank"
     t.string "tenure"
@@ -294,6 +288,7 @@ ActiveRecord::Schema[7.0].define(version: 2018050314201234) do
     t.string "graduate"
     t.string "time_status"
     t.string "hr_code"
+    t.text "departments", size: :long, collation: "utf8mb4_bin"
     t.index ["faculty_id"], name: "index_yearlies_on_faculty_id", unique: true
   end
 

@@ -5,7 +5,11 @@ RSpec.describe YearlyData::YearlyXmlBuilder do
   let!(:faculty1) { FactoryBot.create :faculty}
   let!(:faculty2) { FactoryBot.create :faculty, access_id: 'def123'}
   let!(:yearly1) { FactoryBot.create :yearly, faculty: faculty1 }
-  let!(:yearly2) { FactoryBot.create :yearly, faculty: faculty2, school: 'Other School', division: 'Other Division' }
+  let!(:yearly2) { FactoryBot.create :yearly, faculty: faculty2,
+    school: 'Other School',
+    division: 'Other Division',
+    departments: '{"ADMIN_DEP_1_DEP_OTHER":"Other 1",
+        "ADMIN_DEP_2_DEP":"Dept 2"}'} 
   let(:xml_builder_obj) { described_class.new }
 
   describe "#batched_yearly_xmls" do
@@ -23,12 +27,18 @@ RSpec.describe YearlyData::YearlyXmlBuilder do
       <SCHOOL>School</SCHOOL>
       <DIVISION>Division</DIVISION>
       <INSTITUTE>Institute</INSTITUTE>
-      <ADMIN_DEP_1_DEP>Dept 1</ADMIN_DEP_1_DEP>
-      <ADMIN_DEP_1_DEP_OTHER>Other 1</ADMIN_DEP_1_DEP_OTHER>
-      <ADMIN_DEP_2_DEP>Dept 2</ADMIN_DEP_2_DEP>
-      <ADMIN_DEP_2_DEP_OTHER>Other 2</ADMIN_DEP_2_DEP_OTHER>
-      <ADMIN_DEP_3_DEP>Dept 3</ADMIN_DEP_3_DEP>
-      <ADMIN_DEP_3_DEP_OTHER>Other 3</ADMIN_DEP_3_DEP_OTHER>
+      <ADMIN_DEP>
+        <DEP>Dept 1</DEP>
+        <DEP_OTHER>Other 1</DEP_OTHER>
+      </ADMIN_DEP>
+      <ADMIN_DEP>
+        <DEP>Dept 2</DEP>
+        <DEP_OTHER>Other 2</DEP_OTHER>
+      </ADMIN_DEP>
+      <ADMIN_DEP>
+        <DEP>Dept 3</DEP>
+        <DEP_OTHER>Other 3</DEP_OTHER>
+      </ADMIN_DEP>
       <TITLE>Associate</TITLE>
       <RANK>Professor</RANK>
       <TENURE>Tenured</TENURE>
@@ -48,12 +58,14 @@ RSpec.describe YearlyData::YearlyXmlBuilder do
       <SCHOOL>Other School</SCHOOL>
       <DIVISION>Other Division</DIVISION>
       <INSTITUTE>Institute</INSTITUTE>
-      <ADMIN_DEP_1_DEP>Dept 1</ADMIN_DEP_1_DEP>
-      <ADMIN_DEP_1_DEP_OTHER>Other 1</ADMIN_DEP_1_DEP_OTHER>
-      <ADMIN_DEP_2_DEP>Dept 2</ADMIN_DEP_2_DEP>
-      <ADMIN_DEP_2_DEP_OTHER>Other 2</ADMIN_DEP_2_DEP_OTHER>
-      <ADMIN_DEP_3_DEP>Dept 3</ADMIN_DEP_3_DEP>
-      <ADMIN_DEP_3_DEP_OTHER>Other 3</ADMIN_DEP_3_DEP_OTHER>
+      <ADMIN_DEP>
+        <DEP/>
+        <DEP_OTHER>Other 1</DEP_OTHER>
+      </ADMIN_DEP>
+      <ADMIN_DEP>
+        <DEP>Dept 2</DEP>
+        <DEP_OTHER/>
+      </ADMIN_DEP>
       <TITLE>Associate</TITLE>
       <RANK>Professor</RANK>
       <TENURE>Tenured</TENURE>

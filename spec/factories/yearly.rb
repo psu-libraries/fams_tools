@@ -9,12 +9,12 @@ FactoryBot.define do
       school { 'School' }
       division { 'Division' }
       institute { 'Institute' }
-      admin_dept1 { 'Dept 1' }
-      admin_dept1_other { 'Other 1' }
-      admin_dept2 { 'Dept 2' }
-      admin_dept2_other { 'Other 2' }
-      admin_dept3 { 'Dept 3' }
-      admin_dept3_other { 'Other 3' }
+      departments {'{"ADMIN_DEP_1_DEP":"Dept 1",
+        "ADMIN_DEP_1_DEP_OTHER":"Other 1",
+        "ADMIN_DEP_2_DEP":"Dept 2",
+        "ADMIN_DEP_2_DEP_OTHER":"Other 2",
+        "ADMIN_DEP_3_DEP":"Dept 3",
+        "ADMIN_DEP_3_DEP_OTHER":"Other 3"}'}
       title { 'Associate' }
       rank { 'Professor' }
       tenure { 'Tenured' }

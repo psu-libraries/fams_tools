@@ -68,5 +68,6 @@ class ApplicationJob < ActiveJob::Base
     Presentation.delete_all
     PresentationContributor.delete_all
     Gpa.delete_all
+    Yearly.delete_all
   end
 end

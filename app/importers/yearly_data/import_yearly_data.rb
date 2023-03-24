@@ -57,12 +57,7 @@ class YearlyData::ImportYearlyData
         school: row['SCHOOL'],
         division: row['DIVISION'],
         institute: row['INSTITUTE'],
-        admin_dept1: row['ADMIN_DEP_1_DEP'],
-        admin_dept1_other: row['ADMIN_DEP_1_DEP_OTHER'],
-        admin_dept2: row['ADMIN_DEP_2_DEP'],
-        admin_dept2_other: row['ADMIN_DEP_2_DEP_OTHER'],
-        admin_dept3: row['ADMIN_DEP_3_DEP'],
-        admin_dept3_other: row['ADMIN_DEP_3_DEP_OTHER'],
+        departments: departments(row),
         title: row['TITLE'],
         rank: row['RANK'],
         tenure: row['TENURE'],
@@ -71,5 +66,17 @@ class YearlyData::ImportYearlyData
         time_status: row['TIME_STATUS'],
         hr_code: row['HR_CODE']
     }
+  end
+
+  def departments(row)
+    json = {}
+    6.times do |i|
+        #byebug
+      next if i == 0
+      break if !row.has_key?("ADMIN_DEP_#{i}_DEP")
+      json["ADMIN_DEP_#{i}_DEP"] = row["ADMIN_DEP_#{i}_DEP"] if row["ADMIN_DEP_#{i}_DEP"] 
+      json["ADMIN_DEP_#{i}_DEP_OTHER"] = row["ADMIN_DEP_#{i}_DEP_OTHER"] if row["ADMIN_DEP_#{i}_DEP_OTHER"] 
+    end
+    json.to_json
   end
 end
