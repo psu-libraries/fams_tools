@@ -38,12 +38,13 @@ class YearlyData::ImportYearlyData
     faculty = Faculty.find_by(access_id: row['USERNAME'])
     return if faculty.blank?
 
-    yearly = Yearly.new({faculty: faculty}.merge!(yearly_data_attrs(row)))
+    yearly = Yearly.find_by(faculty_id: faculty.id)
 
-    if yearly.persisted?
+    if yearly.present?
       yearly.update!(yearly_data_attrs(row))
     else
-      yearly.save!
+      new_yearly = Yearly.new({faculty: faculty}.merge!(yearly_data_attrs(row)))
+      new_yearly.save!
     end
   end
 
