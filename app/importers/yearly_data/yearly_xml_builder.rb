@@ -14,6 +14,7 @@ class YearlyData::YearlyXmlBuilder
       builder = Nokogiri::XML::Builder.new(:encoding => 'UTF-8') do |xml|
         xml.Data {
           batch.each do |faculty|
+            departments_added = []
             xml.Record('username' => faculty.access_id) {
               faculty.yearlies.each do |yearly|
                 xml.ADMIN {
@@ -33,11 +34,13 @@ class YearlyData::YearlyXmlBuilder
                         dep = key if key.include?((i+1).to_s) && !key.include?('OTHER')
                         dep_other = key if key.include?((i+1).to_s) && key.include?('OTHER')
                       end
-                      if dep.present? || dep_other.present?
+                      if (dep.present? || dep_other.present?) && !(departments_added.include?(yearly.departments[dep]) || departments_added.include?(yearly.departments[dep_other]))
                         xml.ADMIN_DEP{
                           xml.DEP(yearly.departments[dep])
                           xml.DEP_OTHER(yearly.departments[dep_other])
                         }
+                        departments_added << yearly.departments[dep] unless dep.blank?
+                        departments_added << yearly.departments[dep_other] unless dep.blank?
                       end
                     else
                       break

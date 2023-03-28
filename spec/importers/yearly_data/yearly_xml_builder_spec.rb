@@ -9,7 +9,8 @@ RSpec.describe YearlyData::YearlyXmlBuilder do
     school: 'Other School',
     division: 'Other Division',
     departments: '{"ADMIN_DEP_1_DEP_OTHER":"Other 1",
-        "ADMIN_DEP_2_DEP":"Dept 2"}'} 
+        "ADMIN_DEP_2_DEP":"Dept 2",
+        "ADMIN_DEP_3_DEP":"Dept 2"}'} 
   let(:xml_builder_obj) { described_class.new }
 
   describe "#batched_yearly_xmls" do
