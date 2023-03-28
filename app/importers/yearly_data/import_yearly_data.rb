@@ -71,7 +71,6 @@ class YearlyData::ImportYearlyData
   def departments(row)
     json = {}
     6.times do |i|
-        #byebug
       next if i == 0
       break if !row.has_key?("ADMIN_DEP_#{i}_DEP")
       json["ADMIN_DEP_#{i}_DEP"] = row["ADMIN_DEP_#{i}_DEP"] if row["ADMIN_DEP_#{i}_DEP"] 
