@@ -271,6 +271,27 @@ ActiveRecord::Schema[7.0].define(version: 2018050314201234) do
     t.index ["publication_listing_id"], name: "index_works_on_publication_listing_id"
   end
 
+  create_table "yearlies", charset: "utf8mb4", force: :cascade do |t|
+    t.bigint "faculty_id"
+    t.string "academic_year"
+    t.string "campus"
+    t.string "campus_name"
+    t.string "college"
+    t.string "college_name"
+    t.string "school"
+    t.string "division"
+    t.string "institute"
+    t.string "title"
+    t.string "rank"
+    t.string "tenure"
+    t.string "endowed_position"
+    t.string "graduate"
+    t.string "time_status"
+    t.string "hr_code"
+    t.text "departments", size: :long, collation: "utf8mb4_bin"
+    t.index ["faculty_id"], name: "index_yearlies_on_faculty_id", unique: true
+  end
+
   add_foreign_key "authors", "works", on_delete: :cascade
   add_foreign_key "contract_faculty_links", "contracts"
   add_foreign_key "contract_faculty_links", "faculties"
@@ -286,4 +307,5 @@ ActiveRecord::Schema[7.0].define(version: 2018050314201234) do
   add_foreign_key "sections", "courses"
   add_foreign_key "sections", "faculties"
   add_foreign_key "works", "publication_listings", on_delete: :cascade
+  add_foreign_key "yearlies", "faculties"
 end

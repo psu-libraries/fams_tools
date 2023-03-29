@@ -7,6 +7,8 @@ module ControllerServices
       render partial: 'courses_taught'
     when :gpa
       render partial: 'gpa'
+    when :yearly
+      render partial: 'yearly'
     when :publications
       @colleges = Faculty.distinct.pluck(:college).reject(&:blank?).sort
       @colleges << 'All Colleges'

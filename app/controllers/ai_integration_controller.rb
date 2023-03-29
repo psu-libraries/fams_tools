@@ -2,7 +2,7 @@ class AiIntegrationController < ApplicationController
   rescue_from StandardError, with: :error_redirect if Rails.env == 'production'
 
   INTEGRATIONS = %i[osp_integrate lionpath_integrate gpa_integrate
-                    pub_integrate ldap_integrate delete_records].freeze
+                    yearly_integrate pub_integrate ldap_integrate delete_records].freeze
 
   skip_before_action :verify_authenticity_token, only: :render_integrator
   before_action :set_log_paths
@@ -23,6 +23,12 @@ class AiIntegrationController < ApplicationController
   def gpa_integrate
     start = Time.now
     GpaIntegrateJob.perform_now(params, @gpas_log_path)
+    finished(start)
+  end
+
+  def yearly_integrate
+    start = Time.now
+    YearlyIntegrateJob.perform_now(params, @yearlies_log_path)
     finished(start)
   end
 
@@ -53,6 +59,7 @@ class AiIntegrationController < ApplicationController
         'GPA Integration' => :gpa,
         'RMD Publications Integration' => :publications,
         'Personal & Contact Integration' => :personal_contact,
+        'Yearly Integration' => :yearly,
         'Delete Records' => :delete_records}
   end
 
@@ -66,6 +73,7 @@ class AiIntegrationController < ApplicationController
     @osp_log_path = Pathname.new('log/osp_errors.log')
     @courses_log_path = Pathname.new('log/courses_errors.log')
     @gpas_log_path = Pathname.new('log/gpa_errors.log')
+    @yearlies_log_path = Pathname.new('log/yearly_errors.log')
     @publications_log_path = Pathname.new('log/publications_errors.log')
     @ldap_log_path = Pathname.new('log/ldap_errors.log')
     @delete_records_path = Pathname.new('log/delete_records_errors.log')
