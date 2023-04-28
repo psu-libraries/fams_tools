@@ -109,3 +109,10 @@ namespace :rbenv_custom_ruby_cleanup do
   end
   after "deploy:finishing", "rbenv_custom_ruby_cleanup:purge_old_versions"
 end
+
+desc "Grab latest College of Medicine Data File"
+task :grab_com_data_file do
+  on roles(:web) do
+    execute 'bin/com-effort-quality.sh'
+  end
+end
