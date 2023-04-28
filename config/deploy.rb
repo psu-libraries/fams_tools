@@ -108,12 +108,12 @@ namespace :rbenv_custom_ruby_cleanup do
   after "deploy:finishing", "rbenv_custom_ruby_cleanup:purge_old_versions"
 end
 
-desc "Grab latest College of Medicine Data File"
-task :grab_com_data_file, [:rsa_key_path, :destination] do |task, args|
+desc "Grab latest College of Medicine Data Files"
+task :grab_com_data_files, [:rsa_key_path, :destination] do |task, args|
   on roles(:web) do
     destination = args[:destination] || '~/Downloads/'
     execute "cd #{release_path} && bin/com-effort-quality.sh"
-    info "Rsyncing file to local..."
+    info "Rsyncing files to local..."
     info "rsync -e 'ssh -p 1855 -i #{args[:rsa_key_path]}' deploy@#{host}:#{release_path}/app/parsing_files/ume_faculty_* #{destination}"
     `rsync -e 'ssh -p 1855 -i #{args[:rsa_key_path]}' deploy@#{host}:#{release_path}/app/parsing_files/ume_faculty_* #{destination}`
     info 'Done'
