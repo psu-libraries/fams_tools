@@ -86,8 +86,6 @@ set :keep_releases, 7
 # Default value for keep_releases is 5, setting to 7
 set :keep_releases, 7
 
-
-
 desc "Check that we can access everything"
 task :check_write_permissions do
   on roles(:all) do |host|
@@ -111,8 +109,14 @@ namespace :rbenv_custom_ruby_cleanup do
 end
 
 desc "Grab latest College of Medicine Data File"
-task :grab_com_data_file do
+task :grab_com_data_file, [:rsa_key_path, :destination] do |task, args|
   on roles(:web) do
-    execute 'bin/com-effort-quality.sh'
+    destination = args[:destination] || '~/Downloads/'
+    execute "cd #{release_path} && bin/com-effort-quality.sh"
+    info "Rsyncing file to local..."
+    info "rsync -e 'ssh -p 1855 -i #{args[:rsa_key_path]}' deploy@#{host}:#{release_path}/app/parsing_files/ume_faculty_* #{destination}"
+    `rsync -e 'ssh -p 1855 -i #{args[:rsa_key_path]}' deploy@#{host}:#{release_path}/app/parsing_files/ume_faculty_* #{destination}`
+    info 'Done'
+    execute "cd #{release_path}/app/parsing_files && rm ume_faculty_*"
   end
 end
