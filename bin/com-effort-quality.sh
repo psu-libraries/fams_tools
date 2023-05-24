@@ -15,7 +15,7 @@ do
     sftp -P 22 -r -i ~/.ssh/id_rsa_psu_health ftp_activityinsight@dmzftp.hmc.psu.edu:/$x app/parsing_files/ume_faculty_quality.csv
     let count++
   fi
-  if [ count == 2 ]; then
+  if [ "$count" == 2 ]; then
     break
   fi
 done
