@@ -83,5 +83,8 @@ The contract/grant data import runs on the second Monday of every month at 01:00
 ## Other Documentation
 
 * Setting up Capybara with Webkit in a Docker Container: https://sites.psu.edu/dltdocs/?p=4767
+* How to run COM data file pull example:
+
+    cap production grab_com_data_files['~/.ssh/id_rsa']
 
 

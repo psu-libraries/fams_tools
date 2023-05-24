@@ -39,3 +39,4 @@ spec/examples.txt
 /public/log
 /public/post_prints
 /coverage
+/vendor/bundle/**/*
