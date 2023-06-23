@@ -19,6 +19,17 @@ This app parses data from faculty CVs, and integrates data into Activity Insight
 
 ## Setup
 
+  Add the following untracked files/folders:
+  
+  * `config/database.yml` This will be similar to `config/database.yml.sample`  
+  * `config/activity_insight.yml`
+  * `config/integration_passcode.yml`
+  * `public/log`
+  * `public/post_prints`
+  * `public/psu`
+  * `app/parsing_files`
+  * `spec/fixtures/post_prints`
+  
   Docker build and compose dev env
   
     make build
