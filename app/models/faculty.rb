@@ -7,6 +7,5 @@ class Faculty < ApplicationRecord
   has_many :sections
   has_many :presentations
   has_one :personal_contact
-  has_many :gpas
   has_many :yearlies
 end

@@ -53,7 +53,7 @@ This app parses data from faculty CVs, and integrates data into Activity Insight
 
 ## Usage
 
-  * Integrations include Contract/Grants data (from OSP), Courses Taught data (from LionPath), Publication data (from Metadata DB), GPA data (from college of LA), and Personal & Contact Info (from LDAP).  The Delete Records integration takes a csv of records IDs and uses the delete resource to delete records in AI.  The app also stores Activity Insight database backups.  These backups are retrieved monthly.
+  * Integrations include Contract/Grants data (from OSP), Courses Taught data (from LionPath), Publication data (from Metadata DB), Yearly data (from Activity Insight), and Personal & Contact Info (from LDAP).  The Delete Records integration takes a csv of records IDs and uses the delete resource to delete records in AI.  The app also stores Activity Insight database backups.  These backups are retrieved monthly.
   
   * The Lionpath integration is fully automated and runs on a cron schedule.  Contract/Grants is also fully automated.  The rest must be run by using the GUI.  In order for the integrations to work, the faculties tables must be updated with current faculty.  This update process is automated and updates weekly.  The Usage instructions are on the homepage.
   
