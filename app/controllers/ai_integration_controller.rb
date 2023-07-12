@@ -2,7 +2,8 @@ class AiIntegrationController < ApplicationController
   rescue_from StandardError, with: :error_redirect if Rails.env == 'production'
 
   INTEGRATIONS = %i[osp_integrate lionpath_integrate gpa_integrate
-                    yearly_integrate pub_integrate ldap_integrate delete_records].freeze
+                    yearly_integrate pub_integrate ldap_integrate
+                    delete_records com_effort_integrate com_quality_integrate].freeze
 
   skip_before_action :verify_authenticity_token, only: :render_integrator
   before_action :set_log_paths
@@ -52,6 +53,18 @@ class AiIntegrationController < ApplicationController
     finished(start)
   end
 
+  def com_effort_integrate
+    start = Time.now
+    ComEffortIntegrateJob.perform_now(params, @com_effort_log_path)
+    finished(start)
+  end
+
+  def com_quality_integrate
+    start = Time.now
+    ComQualityIntegrateJob.perform_now(params, @com_quality_log_path)
+    finished(start)
+  end
+
   def index
     @integration_types =
       { 'Contract/Grant Integration' => :congrant,
@@ -60,7 +73,9 @@ class AiIntegrationController < ApplicationController
         'RMD Publications Integration' => :publications,
         'Personal & Contact Integration' => :personal_contact,
         'Yearly Integration' => :yearly,
-        'Delete Records' => :delete_records}
+        'Delete Records' => :delete_records,
+        'COM Effort Integration' => :com_effort,
+        'COM Quality Integration' => :com_quality}
   end
 
   def render_integrator
@@ -77,6 +92,8 @@ class AiIntegrationController < ApplicationController
     @publications_log_path = Pathname.new('log/publications_errors.log')
     @ldap_log_path = Pathname.new('log/ldap_errors.log')
     @delete_records_path = Pathname.new('log/delete_records_errors.log')
+    @com_effort_log_path = Pathname.new('log/com_effort_errors.log')
+    @com_quality_log_path = Pathname.new('log/com_quality_errors.log')
   end
 
   def confirm_passcode

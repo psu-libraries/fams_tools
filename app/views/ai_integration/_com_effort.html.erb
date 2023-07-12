@@ -1,0 +1,13 @@
+<div class="col-sm">
+  <%= form_with :url => { :action => "com_effort_integrate" }, id: "com_effort" do |form| %>
+    <p> <%= label(:com_effort_file, text = "COM Effort Data File") %><%= form.file_field :com_effort_file, required: true %> </p>
+    <div class="row">
+      <%= render 'buttons_and_code', form: form %>
+    </div>
+  <% end %>
+</div>
+<div class="col-sm">
+  <h4>COM Effort Integration Errors:</h4>
+  <br/>
+  <%= render 'file_download_button', log_path: @com_effort_log_path %>
+</div>

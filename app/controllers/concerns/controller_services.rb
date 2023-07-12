@@ -18,6 +18,10 @@ module ControllerServices
     when :delete_records
       @resources = ActivityInsight::DeleteRecords::RESOURCES.sort
       render partial: 'delete_records'
+    when :com_effort
+      render partial: 'com_effort'
+    when :com_quality
+      render partial: 'com_quality'
     else
       render partial: 'blank'
     end
