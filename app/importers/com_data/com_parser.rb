@@ -3,18 +3,12 @@ require 'csv'
 
 class ComData::ComParser
 
-  attr_accessor :csv_hash, :csv_object, :effort
+  attr_accessor :csv_hash, :csv_object
 
   def initialize(filepath)
-    @csv_object = CSV.read(filepath, encoding: 'ISO-8859-1:UTF-8', quote_char: nil, force_quotes: true)
+    @csv_object = CSV.read(filepath, encoding: 'ISO-8859-1:UTF-8', quote_char: '"')
     @csv_hash = convert_csv_to_hash(csv_object)
     @flagged = []
-    @effort = (filepath =~ /ume_faculty_effort/)
-    rename_csv_header unless @effort
-  end
-
-  def rename_csv_header
-    @csv_object[0][7] = 'EVENT_TYPE'
   end
 
   private

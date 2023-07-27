@@ -6,7 +6,9 @@ class Faculty < ApplicationRecord
   has_many :contract_faculty_links
   has_many :sections
   has_many :presentations
-  has_one :personal_contact
+  has_one  :personal_contact
   has_many :gpas
   has_many :yearlies
+  has_many :com_efforts
+  has_many :com_qualities
 end

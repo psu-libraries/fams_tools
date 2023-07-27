@@ -13,7 +13,7 @@ class ActivityInsight::GetUserData
     populate_active_users(users_hashed)
   end
 
-  private 
+  private
 
   def convert_xls_to_hash(users_sheet)
     keys = users_sheet.row(2)
@@ -34,7 +34,11 @@ class ActivityInsight::GetUserData
           l_name:    row['Last Name'],
           m_name:    row['Middle Name'],
           college:   row['College'],
-          campus:   row['Campus']})
+          campus:    row['Campus']})
+
+        if row['College'] == 'MD'
+          faculty.update({com_id:    row['Penn State Health Username']})
+        end
       else
         faculty.delete
       end

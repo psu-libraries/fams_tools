@@ -18,6 +18,7 @@ class ActivityInsight::IntegrateData
       if response.to_s.include? 'Error'
         osp_keys = Nokogiri::XML(xml).xpath("//OSPKEY").collect{|r| r.children.to_s}
         access_ids = Nokogiri::XML(xml).xpath("//Record").collect{|r| r.attr('username')}
+        access_ids = Nokogiri::XML(xml).xpath("//Record").collect{|r| r.attr('PennStateHealthUsername')} if access_ids.compact.empty?
         itr_errors = {}
         itr_errors[:response] = response.parsed_response
         itr_errors[:affected_faculty] = access_ids unless access_ids.empty?
