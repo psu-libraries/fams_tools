@@ -14,8 +14,7 @@ class ComQualityIntegrateJob < ApplicationJob
 
   def create_tmp_file(params, user_uploaded)
     if user_uploaded == true
-      f_name = params[:com_quality_file].original_filename
-      f_path = File.join('app', 'parsing_files', f_name)
+      f_path = File.join('app', 'parsing_files', 'ume_faculty_quality.csv')
       File.open(f_path, 'wb') { |f| f.write(params[:com_quality_file].read) }
       f_path
     else
