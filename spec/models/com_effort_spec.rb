@@ -12,11 +12,11 @@ describe ComEffort, type: :model do
     it { is_expected.to have_db_column(:event).of_type(:string) }
     it { is_expected.to have_db_column(:hours).of_type(:integer) }
 
-    #it { is_expected.to have_db_index([:academic_course_id, :term, :calendar_year]).unique(true) }
+    it { is_expected.to have_db_index([:com_id, :course, :event, :event_date]).unique(true) }
+    it { is_expected.to have_db_index([:faculty_id])}
   end
 
-  # describe 'associations' do
-  #   it { is_expected.to have_many(:faculties) }
-  #   it { is_expected.to have_many(:sections) }
-  # end
+  describe 'associations' do
+    it { is_expected.to belong_to(:faculty) }
+  end
 end
