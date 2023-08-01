@@ -18,7 +18,15 @@ RSpec.describe ComData::ComEffortXmlBuilder do
       'EVENT_TYPE' => 'Sm Grp Facilitation',
       'EVENT' => 'FTF REQ Various Rooms 10-12 PBL - EndoRepro PBL 1402 - Thyroid',
       'EVENT_DATE' => '6/26/97 9:45',
-      'UME_CALCULATED_TEACHING_WHILE_NON_BILLING_EFFORT__HRS_' => 7}
+      'UME_CALCULATED_TEACHING_WHILE_NON_BILLING_EFFORT__HRS_' => 7},
+      {'FACULTY_USERNAME' => 'notCOM',
+      'FACULTY_NAME' => 'Not MD',
+      'COURSE' => 'test',
+      'COURSE_YEAR' => '2022-2023',
+      'EVENT_TYPE' => 'Lacture',
+      'EVENT' => 'Test Event for employee not in College of Medicine',
+      'EVENT_DATE' => '1/1/23 9:00',
+      'UME_CALCULATED_TEACHING_WHILE_NON_BILLING_EFFORT__HRS_' => 1}
     ]
   end
 
@@ -27,7 +35,12 @@ RSpec.describe ComData::ComEffortXmlBuilder do
   describe '#build_xml_effort' do
     it 'should return a list with an xml of INSTRUCT_TAUGHT records' do
       data_sets.each do |row|
-        faculty = FactoryBot.create :faculty, com_id: row['FACULTY_USERNAME'], college: 'MD'
+        if row['FACULTY_USERNAME'] == 'notCOM'
+          faculty = FactoryBot.create :faculty, com_id: row['FACULTY_USERNAME'], college: 'IST'
+        else
+          faculty = FactoryBot.create :faculty, com_id: row['FACULTY_USERNAME'], college: 'MD'
+        end
+
         begin
           ComEffort.create( com_id:         row['FACULTY_USERNAME'],
                             course_year:    row['COURSE_YEAR'],

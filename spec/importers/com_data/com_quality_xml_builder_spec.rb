@@ -18,7 +18,15 @@ RSpec.describe ComData::ComQualityXmlBuilder do
       'EVALUATION_TYPE' => 'faculty',
       'UME_AVERAGE_RATING' => 5.0,
       'NUMBER_OF_EVALUATIONS' => 575,
-      'EVALUATION_NAME' => 'Sm Grp Facilitation'}
+      'EVALUATION_NAME' => 'Sm Grp Facilitation'},
+      {'FACULTY_USERNAME' => 'notCOM',
+      'FACULTY_NAME' => 'Not MD',
+      'COURSE' => 'test',
+      'COURSE_YEAR' => '2022-2023',
+      'EVALUATION_TYPE' => 'faculty',
+      'UME_AVERAGE_RATING' => 0.1,
+      'NUMBER_OF_EVALUATIONS' => 1855,
+      'EVALUATION_NAME' => 'Lecture'}
     ]
   end
 
@@ -27,7 +35,12 @@ RSpec.describe ComData::ComQualityXmlBuilder do
   describe '#build_xml_quality' do
     it 'should return a list with an xml of COURSE_EVAL records' do
       data_sets.each do |row|
-        faculty = FactoryBot.create :faculty, com_id: row['FACULTY_USERNAME'], college: 'MD'
+        if row['FACULTY_USERNAME'] == 'notCOM'
+          faculty = FactoryBot.create :faculty, com_id: row['FACULTY_USERNAME'], college: 'IST'
+        else
+          faculty = FactoryBot.create :faculty, com_id: row['FACULTY_USERNAME'], college: 'MD'
+        end
+
         begin
           ComQuality.create(com_id:           row['FACULTY_USERNAME'],
                             course_year:      row['COURSE_YEAR'],
