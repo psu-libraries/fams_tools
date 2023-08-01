@@ -34,7 +34,8 @@ class ActivityInsight::GetUserData
           l_name:    row['Last Name'],
           m_name:    row['Middle Name'],
           college:   row['College'],
-          campus:    row['Campus']})
+          campus:    row['Campus'],
+          com_id:    nil})
 
         if row['College'] == 'MD'
           faculty.update({com_id:    row['Penn State Health Username']})
