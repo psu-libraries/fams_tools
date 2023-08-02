@@ -123,35 +123,6 @@ ActiveRecord::Schema[7.0].define(version: 2018050314201234) do
     t.index ["access_id"], name: "index_faculties_on_access_id", unique: true
   end
 
-  create_table "gpas", charset: "utf8mb4", force: :cascade do |t|
-    t.bigint "faculty_id"
-    t.string "semester"
-    t.integer "year"
-    t.string "course_prefix"
-    t.string "course_number"
-    t.string "course_number_suffix"
-    t.string "section_number"
-    t.string "campus"
-    t.integer "number_of_grades"
-    t.float "course_gpa"
-    t.integer "grade_dist_a"
-    t.integer "grade_dist_a_minus"
-    t.integer "grade_dist_b_plus"
-    t.integer "grade_dist_b"
-    t.integer "grade_dist_b_minus"
-    t.integer "grade_dist_c_plus"
-    t.integer "grade_dist_c"
-    t.integer "grade_dist_d"
-    t.integer "grade_dist_f"
-    t.integer "grade_dist_w"
-    t.integer "grade_dist_ld"
-    t.integer "grade_dist_other"
-    t.datetime "created_at", precision: nil, null: false
-    t.datetime "updated_at", precision: nil, null: false
-    t.index ["faculty_id", "semester", "year", "course_prefix", "course_number", "course_number_suffix", "section_number", "campus"], name: "unique_key", unique: true, length: { semester: 50, course_prefix: 50, course_number_suffix: 50, campus: 50 }
-    t.index ["faculty_id"], name: "index_gpas_on_faculty_id"
-  end
-
   create_table "integrations", charset: "utf8mb4", force: :cascade do |t|
     t.string "process_type"
     t.boolean "is_active"
@@ -333,7 +304,6 @@ ActiveRecord::Schema[7.0].define(version: 2018050314201234) do
   add_foreign_key "contracts", "sponsors"
   add_foreign_key "editors", "works", on_delete: :cascade
   add_foreign_key "external_authors", "publications"
-  add_foreign_key "gpas", "faculties"
   add_foreign_key "personal_contacts", "faculties"
   add_foreign_key "presentation_contributors", "presentations", on_delete: :cascade
   add_foreign_key "presentations", "faculties", on_delete: :cascade

@@ -5,8 +5,6 @@ module ControllerServices
       render partial: 'congrant'
     when :courses_taught
       render partial: 'courses_taught'
-    when :gpa
-      render partial: 'gpa'
     when :yearly
       render partial: 'yearly'
     when :publications

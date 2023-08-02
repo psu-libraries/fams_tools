@@ -1,7 +1,7 @@
 class AiIntegrationController < ApplicationController
   rescue_from StandardError, with: :error_redirect if Rails.env == 'production'
 
-  INTEGRATIONS = %i[osp_integrate lionpath_integrate gpa_integrate
+  INTEGRATIONS = %i[osp_integrate lionpath_integrate
                     yearly_integrate pub_integrate ldap_integrate
                     delete_records com_effort_integrate com_quality_integrate].freeze
 
@@ -18,12 +18,6 @@ class AiIntegrationController < ApplicationController
   def lionpath_integrate
     start = Time.now
     LionpathIntegrateJob.perform_now(params, @courses_log_path)
-    finished(start)
-  end
-
-  def gpa_integrate
-    start = Time.now
-    GpaIntegrateJob.perform_now(params, @gpas_log_path)
     finished(start)
   end
 
@@ -69,7 +63,6 @@ class AiIntegrationController < ApplicationController
     @integration_types =
       { 'Contract/Grant Integration' => :congrant,
         'Courses Taught Integration' => :courses_taught,
-        'GPA Integration' => :gpa,
         'RMD Publications Integration' => :publications,
         'Personal & Contact Integration' => :personal_contact,
         'Yearly Integration' => :yearly,
@@ -87,7 +80,6 @@ class AiIntegrationController < ApplicationController
   def set_log_paths
     @osp_log_path = Pathname.new('log/osp_errors.log')
     @courses_log_path = Pathname.new('log/courses_errors.log')
-    @gpas_log_path = Pathname.new('log/gpa_errors.log')
     @yearlies_log_path = Pathname.new('log/yearly_errors.log')
     @publications_log_path = Pathname.new('log/publications_errors.log')
     @ldap_log_path = Pathname.new('log/ldap_errors.log')
