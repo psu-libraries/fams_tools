@@ -1,7 +1,5 @@
 class CreateComEfforts < ActiveRecord::Migration[7.0]
   def change
-    drop_table :com_efforts
-
     create_table :com_efforts do |t|
       t.timestamps
       t.string :com_id
