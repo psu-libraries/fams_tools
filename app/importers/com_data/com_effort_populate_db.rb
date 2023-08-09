@@ -9,7 +9,7 @@ class ComData::ComEffortPopulateDb
 
   def populate
     com_parser.csv_hash.each do |row|
-      faculty = Faculty.find_by(com_id: row['FACULTY_USERNAME'])
+      faculty = Faculty.find_by(com_id: row['FACULTY_USERNAME'].downcase)
       next if faculty.blank?
       begin
         ComEffort.create( com_id:         row['FACULTY_USERNAME'],
