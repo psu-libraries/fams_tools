@@ -72,21 +72,18 @@ describe "#com_effort_integrate" do
   private
 
   def effort_body
-    "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Data>\n  " +
-    "<Record PennStateHealthUsername=\"hgranger\">\n    <INSTRUCT_TAUGHT>\n      "+
-    "<COURSE_YEAR access=\"READ_ONLY\">1997-1998</COURSE_YEAR>\n      "+
+    "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Data>\n  <Record PennStateHealthUsername=\"hgranger\">\n    "+
+    "<INSTRUCT_TAUGHT>\n      <COURSE_YEAR access=\"READ_ONLY\">1997-1998</COURSE_YEAR>\n      "+
     "<COURSE_TITLE access=\"READ_ONLY\">Potions</COURSE_TITLE>\n      "+
     "<EVENT_TITLE access=\"READ_ONLY\">FTF REQ Various Rooms 10-12 PBL - EndoRepro PBL 1402 - Thyroid</EVENT_TITLE>\n      "+
     "<EVENT_TYPE access=\"READ_ONLY\">Sm Grp Facilitation</EVENT_TYPE>\n      "+
-    "<DTM_EVENT access=\"READ_ONLY\">June</DTM_EVENT>\n      <DTD_EVENT access=\"READ_ONLY\">26</DTD_EVENT>\n      "+
-    "<DTY_EVENT access=\"READ_ONLY\">97</DTY_EVENT>\n      <CAL_TEACH_HRS access=\"READ_ONLY\"/>\n    "+
-    "</INSTRUCT_TAUGHT>\n  </Record>\n  <Record PennStateHealthUsername=\"lskywalker\">\n    <INSTRUCT_TAUGHT>\n      "+
+    "<CAL_TEACH_HRS access=\"READ_ONLY\">7</CAL_TEACH_HRS>\n    </INSTRUCT_TAUGHT>\n  </Record>\n  "+
+    "<Record PennStateHealthUsername=\"lskywalker\">\n    <INSTRUCT_TAUGHT>\n      "+
     "<COURSE_YEAR access=\"READ_ONLY\">1976-1977</COURSE_YEAR>\n      "+
     "<COURSE_TITLE access=\"READ_ONLY\">the Force</COURSE_TITLE>\n      "+
     "<EVENT_TITLE access=\"READ_ONLY\">FTF REQ Various Rooms 10-12 PBL - EndoRepro PBL 1402 - Thyroid</EVENT_TITLE>\n      "+
-    "<EVENT_TYPE access=\"READ_ONLY\">Lecture</EVENT_TYPE>\n      <DTM_EVENT access=\"READ_ONLY\">May</DTM_EVENT>\n      "+
-    "<DTD_EVENT access=\"READ_ONLY\">25</DTD_EVENT>\n      <DTY_EVENT access=\"READ_ONLY\">77</DTY_EVENT>\n      "+
-    "<CAL_TEACH_HRS access=\"READ_ONLY\"/>\n    </INSTRUCT_TAUGHT>\n  </Record>\n</Data>\n"
+    "<EVENT_TYPE access=\"READ_ONLY\">Lecture</EVENT_TYPE>\n      <CAL_TEACH_HRS access=\"READ_ONLY\">2</CAL_TEACH_HRS>\n    "+
+    "</INSTRUCT_TAUGHT>\n  </Record>\n</Data>\n"
   end
 
   def error_message
