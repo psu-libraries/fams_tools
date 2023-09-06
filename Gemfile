@@ -80,7 +80,7 @@ group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   # Adds support for Capybara system testing and selenium driver
   gem 'capybara', '~> 3'
-  gem "capybara-webkit"
+  gem 'capybara-webkit'
   gem 'headless'
   gem 'selenium-webdriver'
   gem 'rspec-rails', '~> 6.0'
@@ -91,7 +91,9 @@ group :development, :test do
   # Audit gems for vulnerabilities
   gem 'bundle-audit'
   # Ruby code linter
-  gem 'rubocop', require: false
+  gem 'rubocop'
+  gem 'rubocop-rails'
+  gem 'rubocop-rspec'
   # Code coverage
   gem 'simplecov', '~> 0.17.0'
 end

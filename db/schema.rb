@@ -19,6 +19,37 @@ ActiveRecord::Schema[7.0].define(version: 2018050314201234) do
     t.index ["work_id"], name: "fk_rails_ef7807179c"
   end
 
+  create_table "com_efforts", charset: "utf8mb4", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "com_id"
+    t.string "course_year"
+    t.string "course"
+    t.string "event_type"
+    t.string "faculty_name"
+    t.string "event"
+    t.integer "hours"
+    t.bigint "faculty_id"
+    t.index ["com_id", "course", "event"], name: "index_com_efforts_on_com_id_and_course_and_event", unique: true, length: { course: 50, event: 50 }
+    t.index ["faculty_id"], name: "fk_rails_c1c0816923"
+  end
+
+  create_table "com_qualities", charset: "utf8mb4", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "com_id"
+    t.string "course_year"
+    t.string "course"
+    t.string "event_type"
+    t.string "faculty_name"
+    t.string "evaluation_type"
+    t.float "average_rating"
+    t.integer "num_evaluations"
+    t.bigint "faculty_id"
+    t.index ["com_id", "course", "course_year"], name: "index_com_qualities_on_com_id_and_course_and_course_year", unique: true
+    t.index ["faculty_id"], name: "fk_rails_5da34f5b2e"
+  end
+
   create_table "contract_faculty_links", charset: "utf8mb4", force: :cascade do |t|
     t.string "role"
     t.integer "pct_credit"
@@ -87,6 +118,7 @@ ActiveRecord::Schema[7.0].define(version: 2018050314201234) do
     t.string "m_name"
     t.string "college"
     t.string "campus"
+    t.string "com_id"
     t.index ["access_id"], name: "index_faculties_on_access_id", unique: true
   end
 
@@ -264,6 +296,8 @@ ActiveRecord::Schema[7.0].define(version: 2018050314201234) do
   end
 
   add_foreign_key "authors", "works", on_delete: :cascade
+  add_foreign_key "com_efforts", "faculties"
+  add_foreign_key "com_qualities", "faculties"
   add_foreign_key "contract_faculty_links", "contracts"
   add_foreign_key "contract_faculty_links", "faculties"
   add_foreign_key "contracts", "sponsors"
