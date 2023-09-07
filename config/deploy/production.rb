@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # Simple Role Syntax
 # ==================
 # Supports bulk-adding hosts to roles, the primary server in each group
@@ -14,7 +15,7 @@
 # This can be used to drop a more detailed server definition into the
 # server list. The second argument is a, or duck-types, Hash and is
 # used to set extended properties on the server.
-server 'rubytools.vmhost.psu.edu:1855', user: 'deploy', roles: %w(web app db), primary: true
+server 'rubytools.vmhost.psu.edu:1855', user: 'deploy', roles: %w[web app db], primary: true
 # server 'example.com', user: 'deploy', roles: %w{web app}, my_property: :my_value
 
 # Custom SSH Options

@@ -21,7 +21,11 @@ describe Section, type: :model do
     it { is_expected.to have_db_column(:faculty_id).of_type(:integer) }
 
     it { is_expected.to have_db_index(:course_id) }
-    it { is_expected.to have_db_index([:faculty_id, :course_id, :class_campus_code, :subject_code, :course_number, :course_suffix, :class_section_code, :course_component]).unique(true) }
+
+    it {
+      expect(subject).to have_db_index(%i[faculty_id course_id class_campus_code subject_code course_number course_suffix
+                                          class_section_code course_component]).unique(true)
+    }
   end
 
   describe 'associations' do
@@ -29,4 +33,3 @@ describe Section, type: :model do
     it { is_expected.to belong_to(:course) }
   end
 end
-

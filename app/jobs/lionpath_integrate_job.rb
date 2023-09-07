@@ -16,7 +16,7 @@ class LionpathIntegrateJob < ApplicationJob
     if user_uploaded == true
       f_name = params[:courses_file].original_filename
       f_path = File.join('app', 'parsing_files', f_name)
-      File.open(f_path, 'wb') { |f| f.write(params[:courses_file].read) }
+      File.binwrite(f_path, params[:courses_file].read)
       f_path
     else
       # Running bash script to grab lionpath files

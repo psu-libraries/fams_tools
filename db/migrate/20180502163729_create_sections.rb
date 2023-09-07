@@ -20,6 +20,7 @@ class CreateSections < ActiveRecord::Migration[5.1]
       t.bigint :faculty_id
     end
   end
+
   def down
     drop_table :sections
   end

@@ -1,5 +1,5 @@
 class AiIntegrationController < ApplicationController
-  rescue_from StandardError, with: :error_redirect if Rails.env == 'production'
+  rescue_from StandardError, with: :error_redirect if Rails.env.production?
 
   INTEGRATIONS = %i[osp_integrate lionpath_integrate
                     yearly_integrate pub_integrate ldap_integrate delete_records].freeze
@@ -53,7 +53,7 @@ class AiIntegrationController < ApplicationController
         'RMD Publications Integration' => :publications,
         'Personal & Contact Integration' => :personal_contact,
         'Yearly Integration' => :yearly,
-        'Delete Records' => :delete_records}
+        'Delete Records' => :delete_records }
   end
 
   def render_integrator

@@ -7,10 +7,10 @@ class CreateFaculties < ActiveRecord::Migration[5.1]
       t.string :l_name
       t.string :m_name
       t.string :college
-
     end
     add_index :faculties, :access_id, unique: true
   end
+
   def down
     drop_table :faculties
   end

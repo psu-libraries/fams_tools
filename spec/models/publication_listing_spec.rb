@@ -13,4 +13,3 @@ describe PublicationListing, type: :model do
     it { is_expected.to have_many(:works) }
   end
 end
-

@@ -24,6 +24,5 @@ class CreateYearlies < ActiveRecord::Migration[7.0]
       t.string :time_status
       t.string :hr_code
     end
-
   end
 end

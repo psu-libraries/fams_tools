@@ -7,7 +7,7 @@ class AiBackupsListingController < ApplicationController
 
   def collect_file_names
     filenames = []
-    Dir.foreach("#{Rails.root}/public/psu") do |item|
+    Dir.foreach("#{Rails.public_path.join('psu')}") do |item|
       next if ['.', '..'].include? item
 
       filenames << item

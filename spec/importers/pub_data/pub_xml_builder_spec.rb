@@ -1,107 +1,106 @@
 require 'importers/importers_helper'
 
 RSpec.describe PubData::PubXmlBuilder do
-
   let(:data_sets) do
     hash = {
-      'abc123' => 
-        { "data" => [{"pure_ids" => [ 'f89qu-fne8q-j98' ],
-                    "ai_ids" => [],
-                    "attributes" => {
-                    "title" => 'Title',
-                    "secondary_title" => "Second Title",
-                    "publication_type" => 'Type',
-                    "volume" => 34,
-                    "dty" => 2017,
-                    "dtm" => 'May',
-                    "dtd" => 22,
-                    "status" => 'Published',
-                    "contributors" => [{"first_name" => 'Billy',
-                                        "middle_name" => 'Bob',
-                                        "last_name" => 'Jenkins'}],
-                    "journal_title" => 'Journal Title',
-                    "page_range" => '42-43',
-                    "issue" => 35,
-                    "edition" => 2,
-                    "authors_et_al" => nil,
-                    "abstract" => "<p>Some abstract</p>",
-                    "citation_count" => 3}}]
-        },
+      'abc123' =>
+        { 'data' => [{ 'pure_ids' => ['f89qu-fne8q-j98'],
+                       'ai_ids' => [],
+                       'attributes' => {
+                         'title' => 'Title',
+                         'secondary_title' => 'Second Title',
+                         'publication_type' => 'Type',
+                         'volume' => 34,
+                         'dty' => 2017,
+                         'dtm' => 'May',
+                         'dtd' => 22,
+                         'status' => 'Published',
+                         'contributors' => [{ 'first_name' => 'Billy',
+                                              'middle_name' => 'Bob',
+                                              'last_name' => 'Jenkins' }],
+                         'journal_title' => 'Journal Title',
+                         'page_range' => '42-43',
+                         'issue' => 35,
+                         'edition' => 2,
+                         'authors_et_al' => nil,
+                         'abstract' => '<p>Some abstract</p>',
+                         'citation_count' => 3
+                       } }] },
 
-      'xyz123' => 
-        { "data" => [{"pure_ids" => [ 'f89qu-fne8q-j97' ],
-                    "ai_ids" => [],
-                    "attributes" => {
-                    "title" => 'Title 2',
-                    "secondary_title" => "Second Title 2",
-                    "publication_type" => 'Type 2',
-                    "volume" => 34,
-                    "dty" => 2018,
-                    "dtm" => 'June',
-                    "dtd" => 20,
-                    "status" => 'Published',
-                    "contributors" => [{"first_name" => 'Franck',
-                                        "middle_name" => 'Bob',
-                                        "last_name" => 'Frank'}],
-                    "journal_title" => 'Journal Title 2',
-                    "page_range" => '43-44',
-                    "issue" => 34,
-                    "edition" => 3,
-                    "authors_et_al" => nil,
-                    "abstract" => "<p>Some abstract</p>",
-                    "citation_count" => 4}},
+      'xyz123' =>
+        { 'data' => [{ 'pure_ids' => ['f89qu-fne8q-j97'],
+                       'ai_ids' => [],
+                       'attributes' => {
+                         'title' => 'Title 2',
+                         'secondary_title' => 'Second Title 2',
+                         'publication_type' => 'Type 2',
+                         'volume' => 34,
+                         'dty' => 2018,
+                         'dtm' => 'June',
+                         'dtd' => 20,
+                         'status' => 'Published',
+                         'contributors' => [{ 'first_name' => 'Franck',
+                                              'middle_name' => 'Bob',
+                                              'last_name' => 'Frank' }],
+                         'journal_title' => 'Journal Title 2',
+                         'page_range' => '43-44',
+                         'issue' => 34,
+                         'edition' => 3,
+                         'authors_et_al' => nil,
+                         'abstract' => '<p>Some abstract</p>',
+                         'citation_count' => 4
+                       } },
 
-                   {"pure_ids" => [ 'f89qu-fne8q-j95' ],
-                    "ai_ids" => [],
-                    "attributes" => {
-                    "title" => 'Title 3',
-                    "secondary_title" => "Second Title 3",
-                    "publication_type" => 'Type 3',
-                    "volume" => 33,
-                    "dty" => 2012,
-                    "dtm" => 'June',
-                    "dtd" => 21,
-                    "status" => 'Published',
-                    "contributors" => [{"first_name" => 'Franck',
-                                        "middle_name" => 'Franc',
-                                        "last_name" => 'Frank'}],
-                    "journal_title" => 'Journal Title 3',
-                    "page_range" => '43-47',
-                    "issue" => 31,
-                    "edition" => 2,
-                    "authors_et_al" => nil,
-                    "abstract" => "<p>Some abstract</p>",
-                    "citation_count" => 5}}]
-        }
+                     { 'pure_ids' => ['f89qu-fne8q-j95'],
+                       'ai_ids' => [],
+                       'attributes' => {
+                         'title' => 'Title 3',
+                         'secondary_title' => 'Second Title 3',
+                         'publication_type' => 'Type 3',
+                         'volume' => 33,
+                         'dty' => 2012,
+                         'dtm' => 'June',
+                         'dtd' => 21,
+                         'status' => 'Published',
+                         'contributors' => [{ 'first_name' => 'Franck',
+                                              'middle_name' => 'Franc',
+                                              'last_name' => 'Frank' }],
+                         'journal_title' => 'Journal Title 3',
+                         'page_range' => '43-47',
+                         'issue' => 31,
+                         'edition' => 2,
+                         'authors_et_al' => nil,
+                         'abstract' => '<p>Some abstract</p>',
+                         'citation_count' => 5
+                       } }] }
     }
 
     return hash
   end
+  let(:xml_builder_obj) { PubData::PubXmlBuilder.new }
 
-  before(:each) do
+  before do
     Faculty.create(access_id: 'abc123',
-                   user_id:   '123456',
-                   f_name:    'Allen',
-                   l_name:    'Bird',
-                   m_name:    'Cat',
-                   college:   'CA')
+                   user_id: '123456',
+                   f_name: 'Allen',
+                   l_name: 'Bird',
+                   m_name: 'Cat',
+                   college: 'CA')
     Faculty.create(access_id: 'xyz123',
-                   user_id:   '54321',
-                   f_name:    'Xylophone',
-                   l_name:    'Zebra',
-                   m_name:    'Yawn',
-                   college:   'CA')
+                   user_id: '54321',
+                   f_name: 'Xylophone',
+                   l_name: 'Zebra',
+                   m_name: 'Yawn',
+                   college: 'CA')
   end
 
-  let(:xml_builder_obj) {PubData::PubXmlBuilder.new}
-
   describe '#batched_pub_xml' do
-    it 'should return an xml of INTELLCONT records' do
+    it 'returns an xml of INTELLCONT records' do
       pub_populate_db_obj = PubData::PubPopulateDb.new
       pub_populate_db_obj.populate(data_sets)
 
       expect(xml_builder_obj.xmls_enumerator.first).to eq(
-'<?xml version="1.0" encoding="UTF-8"?>
+        '<?xml version="1.0" encoding="UTF-8"?>
 <Data>
   <Record username="abc123">
     <INTELLCONT>

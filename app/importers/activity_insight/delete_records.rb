@@ -14,17 +14,15 @@ class ActivityInsight::DeleteRecords
     xmls_array = []
     CSV.foreach(csv_path, headers: true).to_a.in_groups_of(1000) do |batch|
       builder = Nokogiri::XML::Builder.new do |xml|
-      xml.Data {
-        xml.send(resource.to_s) {
-          batch.each do |row|
-            if row.blank?
-              next
-            else
-              xml.item( 'id' => row['ID'] )
+        xml.Data do
+          xml.send(resource.to_s) do
+            batch.each do |row|
+              next if row.blank?
+
+              xml.item('id' => row['ID'])
             end
           end
-          }
-        }
+        end
       end
       xmls_array << builder.to_xml
     end
@@ -34,7 +32,7 @@ class ActivityInsight::DeleteRecords
   private
 
   def csv_path
-    "#{Rails.root}/app/parsing_files/delete.csv"
+    "#{Rails.root.join('app/parsing_files/delete.csv')}"
   end
 
   def request(xmls_array)

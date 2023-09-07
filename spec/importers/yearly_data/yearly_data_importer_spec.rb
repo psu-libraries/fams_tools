@@ -4,12 +4,12 @@ RSpec.describe YearlyData::ImportYearlyData do
   let(:yearly_parser_obj) { YearlyData::ImportYearlyData.new 'spec/fixtures/yearly_data.xlsx' }
 
   before do
-    FactoryBot.create :faculty, access_id: 'abc123', college: 'LA'
-    FactoryBot.create :faculty, access_id: 'def456'
+    FactoryBot.create(:faculty, access_id: 'abc123', college: 'LA')
+    FactoryBot.create(:faculty, access_id: 'def456')
   end
 
-  describe "#import" do
-    it "imports data from xlsx" do
+  describe '#import' do
+    it 'imports data from xlsx' do
       yearly_parser_obj.import
       expect(Faculty.find_by(access_id: 'abc123').yearlies.first.academic_year).to eq '2023-2024'
       expect(Faculty.find_by(access_id: 'abc123').yearlies.first.campus).to eq 'UP'
@@ -53,7 +53,6 @@ RSpec.describe YearlyData::ImportYearlyData do
       expect(Faculty.find_by(access_id: 'def456').yearlies.first.graduate).to eq 'No'
       expect(Faculty.find_by(access_id: 'def456').yearlies.first.time_status).to eq 'Part Time'
       expect(Faculty.find_by(access_id: 'def456').yearlies.first.hr_code).to be_nil
-
     end
   end
 end

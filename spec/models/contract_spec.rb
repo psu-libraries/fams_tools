@@ -28,5 +28,3 @@ describe Contract, type: :model do
     it { is_expected.to have_many(:contract_faculty_links) }
   end
 end
-
-

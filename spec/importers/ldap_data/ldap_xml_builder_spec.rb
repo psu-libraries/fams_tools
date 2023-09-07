@@ -1,14 +1,13 @@
 require 'importers/importers_helper'
 
 RSpec.describe LdapData::LdapXmlBuilder do
-
-  let!(:personal_contact) { FactoryBot.create :personal_contact }
+  let!(:personal_contact) { FactoryBot.create(:personal_contact) }
   let(:xml_builder_obj) { LdapData::LdapXmlBuilder.new }
 
-  describe "#batched_ldap_xml" do
-    it "should return an array of personal contact data xmls" do
+  describe '#batched_ldap_xml' do
+    it 'returns an array of personal contact data xmls' do
       expect(xml_builder_obj.xmls_enumerator.first).to eq(
-"<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+        "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
 <Data>
   <Record username=\"#{personal_contact.faculty.access_id}\">
     <PCI>
@@ -31,5 +30,4 @@ RSpec.describe LdapData::LdapXmlBuilder do
       )
     end
   end
-
 end

@@ -1,6 +1,5 @@
 namespace :contract_grants do
-
-  desc "Integrate Contract Grant data."
+  desc 'Integrate Contract Grant data.'
 
   task :integrate, [:target] => :environment do |_task, args|
     Rails.application.eager_load!
@@ -10,6 +9,6 @@ namespace :contract_grants do
     puts params
     OspIntegrateJob.perform_now(params, 'log/osp_errors.log', false)
     finish = Time.now
-    puts(((finish - start)/60).to_s + ' mins')
+    puts(((finish - start) / 60).to_s + ' mins')
   end
 end

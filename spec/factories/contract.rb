@@ -7,13 +7,13 @@ FactoryBot.define do
     awarded { '2015-03-01' }
     requested { 1000 }
     funded { 500 }
-    total_anticipated { 10000 }
+    total_anticipated { 10_000 }
     start_date { '2015-02-01' }
     end_date { '2017-02-01' }
     grant_contract { 'Grant' }
     base_agreement { 'XYZ123' }
     notfunded { '' }
-    sequence(:sponsor) { |n| Sponsor.create sponsor_name: "Name#{n}"}
+    sequence(:sponsor) { |n| Sponsor.create sponsor_name: "Name#{n}" }
     effort_academic { 0.15 }
     effort_summer { 0.16 }
     effort_calendar { 0.17 }
