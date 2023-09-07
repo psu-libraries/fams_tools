@@ -2,51 +2,60 @@ require 'importers/importers_helper'
 require 'spreadsheet'
 
 RSpec.describe LionpathData::LionpathParser do
+  let(:headers) do
+    ['Instructor Campus ID', 'Term', 'Calendar Year', 'Class Campus Code', 'Course Short Description', 'Course Long Description',
+     'Academic Course ID', 'Cross Listed Flag', 'Subject Code', 'Catalog Number', 'Class Section Code', 'Course Credits/Units',
+     'Current Enrollment', 'Instructor Load Factor', 'Instructor Mode', 'Course Component', 'Instructor Role']
+  end
 
-  let(:headers) {['Instructor Campus ID', 'Term', 'Calendar Year', 'Class Campus Code', 'Course Short Description', 'Course Long Description',
-                  'Academic Course ID', 'Cross Listed Flag', 'Subject Code', 'Catalog Number', 'Class Section Code', 'Course Credits/Units',
-                  'Current Enrollment', 'Instructor Load Factor', 'Instructor Mode', 'Course Component', 'Instructor Role']}
+  let(:line1) do
+    ['mar83', 'Spring 2018', 2018, 'UP', 'Math', 'Lots of math.',
+     9999, 'Y', 'MATH', 1, '01C', 3, 25, 100, 'Hybrid - Online & In Person', 'Lecture', 'Primary Instructor']
+  end
 
-  let(:line1) {['mar83', 'Spring 2018', 2018, 'UP', 'Math', 'Lots of math.',
-                9999, 'Y', 'MATH', 1, '01C', 3, 25, 100, 'Hybrid - Online & In Person', 'Lecture', 'Primary Instructor']}
+  let(:line2) do
+    ['mar6783', 'Spring 2018', 2018, 'UP', 'Math', 'Lots of math.',
+     2222, 'Y', 'MATH', '  77A ', 1, 3, 25, 100, 'In Person', 'Lecture', 'Secondary Instructor']
+  end
 
-  let(:line2) {['mar6783', 'Spring 2018', 2018, 'UP', 'Math', 'Lots of math.',
-                2222, 'Y', 'MATH', '  77A ', 1, 3, 25, 100, 'In Person', 'Lecture', 'Secondary Instructor']}
+  let(:line3) do
+    ['xxx111', 'Spring 2018', 2018, 'UP', 'Math', 'Lots of math.',
+     1111, 'N', 'MATH', '202D', '901D', 3, 25, 100, 'In Person', 'Lecture', 'Primary Instructor']
+  end
 
-  let(:line3) {['xxx111', 'Spring 2018', 2018, 'UP', 'Math', 'Lots of math.', 
-                1111, 'N', 'MATH', '202D', '901D', 3, 25, 100, 'In Person', 'Lecture', 'Primary Instructor']}
+  let(:line4) do
+    ['jan23', 'Spring 2018', 2018, 'UP', 'Math', 'Lots of math.',
+     1111, 'N', 'MATH', 20, 1, 3, 25, 100, 'In Person', 'Lecture', 'Secondary Instructor']
+  end
 
-  let(:line4) {['jan23', 'Spring 2018', 2018, 'UP', 'Math', 'Lots of math.',
-                1111, 'N', 'MATH', 20, 1, 3, 25, 100, 'In Person', 'Lecture', 'Secondary Instructor']}
+  let(:line5) do
+    ['zzz999', 'Spring 2018', 2018, 'UP', 'Math', 'Lots of math.',
+     1111, 'N', 'MATH', 20, 1, 3, 25, 100, 'In Person', 'Lecture', 'Primary Instructor']
+  end
 
-  let(:line5) {['zzz999', 'Spring 2018', 2018, 'UP', 'Math', 'Lots of math.', 
-                1111, 'N', 'MATH', 20, 1, 3, 25, 100, 'In Person', 'Lecture', 'Primary Instructor']}
+  let(:line6) do
+    ['mar83', 'Spring 2018', 2018, 'UP', 'Math', 'Lots of math.',
+     9999, 'Y', 'MATH', '77A', 1, 3, 25, 100, 'In Person', 'Online', 'Secondary Instructor']
+  end
 
-  let(:line6) {['mar83', 'Spring 2018', 2018, 'UP', 'Math', 'Lots of math.',
-                9999, 'Y', 'MATH', '77A', 1, 3, 25, 100, 'In Person', 'Online', 'Secondary Instructor']}
+  let(:line7) do
+    ['xxx111', 'Summer 2018', 2018, 'UP', 'Math', 'Lots of math.',
+     1111, 'N', 'MATH', '202D', '901D', 3, 25, 0, 'In Person', '', 'Primary Instructor']
+  end
 
-  let(:line7) {['xxx111', 'Summer 2018', 2018, 'UP', 'Math', 'Lots of math.',
-                1111, 'N', 'MATH', '202D', '901D', 3, 25, 0, 'In Person', '', 'Primary Instructor']}
+  let(:lionpath_parser_obj) { LionpathData::LionpathParser.new }
 
-  let(:lionpath_parser_obj) {LionpathData::LionpathParser.new}
-
-  before(:each) do
+  before do
     Faculty.create(access_id: 'zzz999',
-                   user_id:   '123',
-                   f_name:    'Bill',
-                   l_name:    'Bill',
-                   m_name:    'Bill')
+                   user_id: '123',
+                   f_name: 'Bill',
+                   l_name: 'Bill',
+                   m_name: 'Bill')
   end
 
   describe '#format' do
-    it 'should convert dates back into psuIDs and
-        should convert "Term" to just season and
-        should seperate "Catalog Number" into "Course Number" and "Course Suffix" and
-        should add leading zeroes to "Course Number" column and
-        should add leading zeroes to "Class Section Code" column and
-        should seperate "Course Suffix" from "Class Section Code" and
-        should add data to "XCourse CoursePre" "XCourse CourseNum" "XCourse CourseNum Suffix"' do
-      allow(CSV).to receive_message_chain(:read).and_return([headers, line1, line2, line3, line4, line5, line6, line7])
+    it 'converts dates back into psuIDs and should convert "Term" to just season and should seperate "Catalog Number" into "Course Number" and "Course Suffix" and should add leading zeroes to "Course Number" column and should add leading zeroes to "Class Section Code" column and should seperate "Course Suffix" from "Class Section Code" and should add data to "XCourse CoursePre" "XCourse CourseNum" "XCourse CourseNum Suffix"' do
+      allow(CSV).to receive(:read).and_return([headers, line1, line2, line3, line4, line5, line6, line7])
       lionpath_parser_obj.format
       lionpath_parser_obj.csv_hash[6].delete 'Instructor Mode'
       expect(lionpath_parser_obj.csv_hash[0]['Instructor Campus ID']).to eq('mar83')
@@ -78,8 +87,8 @@ RSpec.describe LionpathData::LionpathParser do
   end
 
   describe '#filter_by_user' do
-    it 'should filter lionpath data by AI user' do
-      allow(CSV).to receive_message_chain(:read).and_return([headers, line1, line2, line3, line4, line5, line6, line7])
+    it 'filters lionpath data by AI user' do
+      allow(CSV).to receive(:read).and_return([headers, line1, line2, line3, line4, line5, line6, line7])
       lionpath_parser_obj.format
       lionpath_parser_obj.filter_by_user
       expect(lionpath_parser_obj.csv_hash.count).to eq(1)
@@ -88,8 +97,8 @@ RSpec.describe LionpathData::LionpathParser do
   end
 
   describe '#remove_duplicates' do
-    it 'should remove records that are the same except for instructor_load_factor' do
-      allow(CSV).to receive_message_chain(:read).and_return([headers, line1, line2, line3, line4, line5, line6, line7])
+    it 'removes records that are the same except for instructor_load_factor' do
+      allow(CSV).to receive(:read).and_return([headers, line1, line2, line3, line4, line5, line6, line7])
       lionpath_parser_obj.format
       lionpath_parser_obj.remove_duplicates
       expect(lionpath_parser_obj.csv_hash.count).to eq(7)

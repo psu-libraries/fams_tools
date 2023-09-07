@@ -21,13 +21,13 @@ class WorkOutputs
                editors institution isbn location note publisher retrieved
                tech translator unknown url].freeze
 
-  PRES_HEADERS = ['USERNAME', 'TYPE', 'TITLE', 'NAME', 'LOCATION', ['DTM_START', 'DTD_START', 'DTY_START',
-                  'DTM_END', 'DTD_END', 'DTY_END'], 'edition', 'COMMENT', 'institution', 'pages', 'volume',
+  PRES_HEADERS = ['USERNAME', 'TYPE', 'TITLE', 'NAME', 'LOCATION', %w[DTM_START DTD_START DTY_START
+                                                                      DTM_END DTD_END DTY_END], 'edition', 'COMMENT', 'institution', 'pages', 'volume',
                   'journal', 'booktitle', 'doi', 'editors', 'isbn', 'publisher', 'retrieved',
                   'tech', 'translator', 'unknown', 'url'].freeze
 
   PUB_HEADERS = ['USERNAME', 'TITLE', 'journal', 'VOLUME', 'EDITION', 'PAGENUM',
-                 ['DTY_END', 'DTM_END', 'DTD_END'], 'booktitle', 'JOURNAL_NAME', 'CONTYPE',
+                 %w[DTY_END DTM_END DTD_END], 'booktitle', 'JOURNAL_NAME', 'CONTYPE',
                  'WEB_ADDRESS', 'EDITORS', 'INSTITUTION', 'ISBNISSN', 'PUBCTYST', 'COMMENT',
                  'PUBLISHER', 'retrieved', 'tech', 'translator', 'unknown', 'url'].freeze
 

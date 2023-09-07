@@ -1,7 +1,7 @@
 class SpreadsheetOutput < WorkOutputs
   include OutputDates
 
-  def output(*args)
+  def output(*_args)
     csv = CSV.generate(encoding: 'utf-8') do |csv|
       csv << formatted_headers
       works.each do |item|
@@ -69,9 +69,7 @@ class SpreadsheetOutput < WorkOutputs
 
   def formatted_headers
     headers_obj = headers
-    if workstype == 'presentations'
-      return formatted_pres_headers(headers_obj)
-    end
+    return formatted_pres_headers(headers_obj) if workstype == 'presentations'
 
     formatted_pub_headers(headers_obj)
   end
@@ -90,7 +88,7 @@ class SpreadsheetOutput < WorkOutputs
     elsif key == :date
       return formatted_date(split_date(item[key]))
     elsif key == :editors
-      return item.editors.collect{|e| "#{e.f_name} #{e.m_name} #{e.l_name}"}.join(', ')
+      return item.editors.collect { |e| "#{e.f_name} #{e.m_name} #{e.l_name}" }.join(', ')
     end
 
     return item[key]&.join(', ') if key == :editor
@@ -112,7 +110,7 @@ class SpreadsheetOutput < WorkOutputs
 
     return [year(date), month(date), day(date)] if date.instance_of?(Date)
 
-    [date, "", ""]
+    [date, '', '']
   end
 
   def split_date(date)
@@ -125,9 +123,9 @@ class SpreadsheetOutput < WorkOutputs
     end
 
     begin
-      return Date.parse(date.to_s)
+      Date.parse(date.to_s)
     rescue ArgumentError
-      return date.to_s
+      date.to_s
     end
   end
 
@@ -157,15 +155,11 @@ class SpreadsheetOutput < WorkOutputs
   end
 
   def match_length_author(row_item, item)
-    while row_item.length < longest
-      row_item.insert(header_length + item.authors.length, ['', '', '', ''])
-    end
+    row_item.insert(header_length + item.authors.length, ['', '', '', '']) while row_item.length < longest
   end
 
   def match_length(row_item)
-    while row_item.length < longest
-      row_item.insert(header_length, ['', '', '', ''])
-    end
+    row_item.insert(header_length, ['', '', '', '']) while row_item.length < longest
   end
 
   def remove_empty_cols(csv)

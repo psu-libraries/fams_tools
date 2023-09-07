@@ -2,8 +2,8 @@ class ActivityInsight::IntegrateData
   attr_accessor :auth, :xml_enumerator, :target, :action
 
   def initialize(xml_enumerator, target, action)
-    @auth = {:username => Rails.application.config_for(:activity_insight)["webservices"][:username],
-            :password => Rails.application.config_for(:activity_insight)["webservices"][:password]}
+    @auth = { username: Rails.application.config_for(:activity_insight)['webservices'][:username],
+              password: Rails.application.config_for(:activity_insight)['webservices'][:password] }
     @xml_enumerator = xml_enumerator
     @target = target.to_sym
     @action = action.to_sym
@@ -14,10 +14,11 @@ class ActivityInsight::IntegrateData
     Rails.logger.info url
     xml_enumerator.each do |xml|
       Rails.logger.info xml
-      response = HTTParty.post url, :body => xml, :headers => {'Content-type' => 'text/xml'}, :basic_auth => auth, :timeout => 180
+      response = HTTParty.post url, body: xml, headers: { 'Content-type' => 'text/xml' }, basic_auth: auth,
+                                    timeout: 180
       if response.to_s.include? 'Error'
-        osp_keys = Nokogiri::XML(xml).xpath("//OSPKEY").collect{|r| r.children.to_s}
-        access_ids = Nokogiri::XML(xml).xpath("//Record").collect{|r| r.attr('username')}
+        osp_keys = Nokogiri::XML(xml).xpath('//OSPKEY').collect { |r| r.children.to_s }
+        access_ids = Nokogiri::XML(xml).xpath('//Record').collect { |r| r.attr('username') }
         itr_errors = {}
         itr_errors[:response] = response.parsed_response
         itr_errors[:affected_faculty] = access_ids unless access_ids.empty?

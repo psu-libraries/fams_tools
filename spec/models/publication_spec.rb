@@ -27,7 +27,7 @@ describe Publication, type: :model do
     it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(null: false) }
     it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(null: false) }
 
-    it { is_expected.to have_db_index([:pure_ids, :ai_ids]).unique(true) }
+    it { is_expected.to have_db_index(%i[pure_ids ai_ids]).unique(true) }
   end
 
   describe 'associations' do

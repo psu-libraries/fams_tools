@@ -1,5 +1,4 @@
 class OspIntegrateJob < ApplicationJob
-
   def integrate(params, _user_uploaded = true)
     if _user_uploaded == true
       f_path = create_dmresults_file(params)
@@ -22,14 +21,14 @@ class OspIntegrateJob < ApplicationJob
   def create_dmresults_file(params)
     f_name = params[:congrant_file].original_filename
     f_path = File.join('app', 'parsing_files', f_name)
-    File.open(f_path, "wb") { |f| f.write(params[:congrant_file].read) }
+    File.binwrite(f_path, params[:congrant_file].read)
     f_path
   end
 
   def create_backup_file(params)
     backup_name = params[:ai_backup_file].original_filename
     backup_path = File.join('app', 'parsing_files', backup_name)
-    File.open(backup_path, "wb") { |f| f.write(params[:ai_backup_file].read) }
+    File.binwrite(backup_path, params[:ai_backup_file].read)
     backup_path
   end
 
@@ -44,7 +43,8 @@ class OspIntegrateJob < ApplicationJob
   end
 
   def integrator(params)
-    my_integrate = ActivityInsight::IntegrateData.new(OspData::OspXmlBuilder.new.xmls_enumerator, params[:target], :post)
+    my_integrate = ActivityInsight::IntegrateData.new(OspData::OspXmlBuilder.new.xmls_enumerator, params[:target],
+                                                      :post)
     my_integrate.integrate
   end
 
@@ -54,11 +54,11 @@ class OspIntegrateJob < ApplicationJob
   end
 
   def backups_username
-    Rails.application.config_for(:activity_insight)["backups_service"][:username]
+    Rails.application.config_for(:activity_insight)['backups_service'][:username]
   end
 
   def backups_password
-    Rails.application.config_for(:activity_insight)["backups_service"][:password]
+    Rails.application.config_for(:activity_insight)['backups_service'][:password]
   end
 
   def name

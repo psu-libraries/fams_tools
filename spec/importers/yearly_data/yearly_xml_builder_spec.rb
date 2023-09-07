@@ -1,22 +1,23 @@
 require 'importers/importers_helper'
 
 RSpec.describe YearlyData::YearlyXmlBuilder do
-
-  let!(:faculty1) { FactoryBot.create :faculty}
-  let!(:faculty2) { FactoryBot.create :faculty, access_id: 'def123'}
-  let!(:yearly1) { FactoryBot.create :yearly, faculty: faculty1 }
-  let!(:yearly2) { FactoryBot.create :yearly, faculty: faculty2,
-    school: 'Other School',
-    division: 'Other Division',
-    departments: '{"ADMIN_DEP_1_DEP_OTHER":"Other 1",
+  let!(:faculty1) { FactoryBot.create(:faculty) }
+  let!(:faculty2) { FactoryBot.create(:faculty, access_id: 'def123') }
+  let!(:yearly1) { FactoryBot.create(:yearly, faculty: faculty1) }
+  let!(:yearly2) do
+    FactoryBot.create(:yearly, faculty: faculty2,
+                               school: 'Other School',
+                               division: 'Other Division',
+                               departments: '{"ADMIN_DEP_1_DEP_OTHER":"Other 1",
         "ADMIN_DEP_2_DEP":"Dept 2",
-        "ADMIN_DEP_3_DEP":"Dept 2"}'} 
+        "ADMIN_DEP_3_DEP":"Dept 2"}')
+  end
   let(:xml_builder_obj) { described_class.new }
 
-  describe "#batched_yearly_xmls" do
-    it "should return an array of yearly data xmls" do
+  describe '#batched_yearly_xmls' do
+    it 'returns an array of yearly data xmls' do
       expect(xml_builder_obj.xmls_enumerator.first).to eq(
-"<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+        "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
 <Data>
   <Record username=\"#{faculty1.access_id}\">
     <ADMIN>
@@ -77,7 +78,8 @@ RSpec.describe YearlyData::YearlyXmlBuilder do
     </ADMIN>
   </Record>
 </Data>
-")
+"
+      )
     end
   end
 end

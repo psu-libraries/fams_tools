@@ -1,5 +1,5 @@
 # config valid for current version and patch releases of Capistrano
-lock "~> 3.17.1"
+lock '~> 3.17.1'
 
 # Set assets roles to occur on jobs as well as web
 set :assets_role, [:web]
@@ -7,23 +7,23 @@ set :assets_role, [:web]
 # application and repo settings
 set :application, 'ai-integration'
 
-#set :repo_url, "git@github.com:/psu-stewardship/#{fetch(:application)}.git"
-set :repo_url, "git@github.com:psu-stewardship/fams_tools.git"
+# set :repo_url, "git@github.com:/psu-stewardship/#{fetch(:application)}.git"
+set :repo_url, 'git@github.com:psu-stewardship/fams_tools.git'
 
-#set :repo_url, "git@git.psu.edu:devteam/rubytools.git"
-#https://git.psu.edu/devteam/vmdatabase.git
+# set :repo_url, "git@git.psu.edu:devteam/rubytools.git"
+# https://git.psu.edu/devteam/vmdatabase.git
 
-set :branch, ENV["REVISION"] || ENV["BRANCH_NAME"] || "main"
+set :branch, ENV['REVISION'] || ENV['BRANCH_NAME'] || 'main'
 
 # default user and deployment location
-set :user, "deploy"
+set :user, 'deploy'
 set :deploy_to, "/opt/heracles/deploy/#{fetch(:application)}"
 set :use_sudo, false
 
 # ssh key settings
 set :ssh_options, {
-#  keys: [File.join(ENV["HOME"], ".ssh", "id_deploy_rsa")],
-  keys: [File.join(ENV["HOME"], ".ssh", "id_rsa")],
+  #  keys: [File.join(ENV["HOME"], ".ssh", "id_deploy_rsa")],
+  keys: [File.join(ENV.fetch('HOME', nil), '.ssh', 'id_rsa')],
   forward_agent: true
 }
 
@@ -31,7 +31,7 @@ set :ssh_options, {
 set :rbenv_type, :user # or :system, depends on your rbenv setup
 set :rbenv_ruby, File.read(File.join(File.dirname(__FILE__), '..', '.ruby-version')).chomp # read from file above
 set :rbenv_prefix, "RBENV_ROOT=#{fetch(:rbenv_path)} RBENV_VERSION=#{fetch(:rbenv_ruby)} #{fetch(:rbenv_path)}/bin/rbenv exec" # rbenv settings
-set :rbenv_map_bins, %w(rake gem bundle ruby rails) # map the following bins
+set :rbenv_map_bins, %w[rake gem bundle ruby rails] # map the following bins
 set :rbenv_roles, :all # default value
 
 # set passenger to just the web servers
@@ -63,8 +63,8 @@ namespace :deploy do
       execute "mkdir #{release_path}/app/post_prints"
     end
   end
-  before "deploy:assets:precompile", "deploy:symlink_shared"
-  after "deploy:updated", "deploy:migrate"
+  before 'deploy:assets:precompile', 'deploy:symlink_shared'
+  after 'deploy:updated', 'deploy:migrate'
 end
 
 set :linked_dirs, fetch(:linked_dirs, []).push(
@@ -86,7 +86,7 @@ set :keep_releases, 7
 # Default value for keep_releases is 5, setting to 7
 set :keep_releases, 7
 
-desc "Check that we can access everything"
+desc 'Check that we can access everything'
 task :check_write_permissions do
   on roles(:all) do |host|
     if test("[ -w #{fetch(:deploy_to)} ]")
@@ -99,21 +99,21 @@ end
 
 # Used to keep x-1 instances of ruby on a machine.  Ex +4 leaves 3 versions on a machine.  +3 leaves 2 versions
 namespace :rbenv_custom_ruby_cleanup do
-  desc "Clean up old rbenv versions"
+  desc 'Clean up old rbenv versions'
   task :purge_old_versions do
     on roles(:web) do
       execute 'ls -dt ~deploy/.rbenv/versions/*/ | tail -n +3 | xargs rm -rf'
     end
   end
-  after "deploy:finishing", "rbenv_custom_ruby_cleanup:purge_old_versions"
+  after 'deploy:finishing', 'rbenv_custom_ruby_cleanup:purge_old_versions'
 end
 
-desc "Grab latest College of Medicine Data Files"
-task :grab_com_data_files, [:rsa_key_path, :destination] do |task, args|
+desc 'Grab latest College of Medicine Data Files'
+task :grab_com_data_files, [:rsa_key_path, :destination] do |_task, args|
   on roles(:web) do
     destination = args[:destination] || '~/Downloads/'
     execute "cd #{release_path} && bin/com-effort-quality.sh"
-    info "Rsyncing files to local..."
+    info 'Rsyncing files to local...'
     info "rsync -e 'ssh -p 1855 -i #{args[:rsa_key_path]}' deploy@#{host}:#{release_path}/app/parsing_files/ume_faculty_* #{destination}"
     `rsync -e 'ssh -p 1855 -i #{args[:rsa_key_path]}' deploy@#{host}:#{release_path}/app/parsing_files/ume_faculty_* #{destination}`
     info 'Done'

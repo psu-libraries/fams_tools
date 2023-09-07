@@ -15,15 +15,15 @@ require 'capistrano/deploy'
 #   https://github.com/capistrano/rails
 #
 # require 'capistrano/rvm'
-require 'capistrano/rbenv' #rbenv setup
-require 'capistrano/rails' #rails (includes bundler, rails/assets and rails/migrations)
-require "capistrano/scm/git"
+require 'capistrano/rbenv' # rbenv setup
+require 'capistrano/rails' # rails (includes bundler, rails/assets and rails/migrations)
+require 'capistrano/scm/git'
 install_plugin Capistrano::SCM::Git
 require 'capistrano/bundler'
 require 'capistrano/passenger'
-#require './lib/capistrano/submodule_strategy' #custom submodule strategy
-require 'capistrano/rbenv_install' #rbenv install plugin
-require "whenever/capistrano"
+# require './lib/capistrano/submodule_strategy' #custom submodule strategy
+require 'capistrano/rbenv_install' # rbenv install plugin
+require 'whenever/capistrano'
 
 # Makes Capistrano's output nicer to look at
 require 'airbrussh/capistrano'

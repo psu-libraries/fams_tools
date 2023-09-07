@@ -10,6 +10,5 @@ class ChangePublicationColumns < ActiveRecord::Migration[5.1]
     add_column :publications, :secondary_title, :string
     add_column :publications, :citation_count, :integer
     add_column :publications, :authors_et_al, :boolean
-
   end
 end

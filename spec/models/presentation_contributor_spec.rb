@@ -17,4 +17,3 @@ describe PresentationContributor, type: :model do
     it { is_expected.to validate_presence_of(:presentation_id) }
   end
 end
-

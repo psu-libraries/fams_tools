@@ -1,59 +1,60 @@
 require 'importers/importers_helper'
 
 RSpec.describe LionpathData::LionpathXmlBuilder do
-
   let(:data_sets) do
-    [{'Term' => 'Spring', 'Calendar Year' => 2018, 'Course Short Description' => 'The Class', 'Course Long Description' => 'This is the class that a teacher teaches.',
-      'Academic Course ID' => 12345, 'Instructor Campus ID' => 'abc123', 'f_name' => 'Allen', 'l_name' => 'Carter', 'm_name' => 'Bob',
-      'Class Campus Code' => 'UP', 'Cross Listed Flag' => 'N', 'Subject Code' => 'MGMT', 'Course Number' => '001', 'Course Suffix' => 'B',
-      'Class Section Code' => '001', 'Course Credits/Units' => 3, 'Current Enrollment' => 100, 'Instructor Mode' => 'In Person', 'Instructor Role' => 'Primary Instructor',
-      'Course Component' => 'Lecture', 'XCourse CoursePre' => '', 'XCourse CourseNum' => '', 'XCourse CourseNum Suffix' => '', 'Instructor Load Factor' => 100},
-     {'Term' => 'Spring', 'Calendar Year' => 2018, 'Course Short Description' => 'The Other Class', 'Course Long Description' => 'This is the class that students learn in.',
-      'Academic Course ID' => 54321, 'Instructor Campus ID' => 'cba321', 'f_name' => 'Carl', 'l_name' => 'Abraham', 'm_name' => 'Brett',
-      'Class Campus Code' => 'UP', 'Cross Listed Flag' => 'N', 'Subject Code' => 'HIST', 'Course Number' => '100', 'Course Suffix' => 'A',
-      'Class Section Code' => '002', 'Course Credits/Units' => 3, 'Current Enrollment' => 50, 'Instructor Mode' => 'In Person', 'Instructor Role' => 'Primary Instructor',
-      'Course Component' => 'Lecture', 'XCourse CoursePre' => '', 'XCourse CourseNum' => '', 'XCourse CourseNum Suffix' => '', 'Instructor Load Factor' => 100}]
+    [{ 'Term' => 'Spring', 'Calendar Year' => 2018, 'Course Short Description' => 'The Class', 'Course Long Description' => 'This is the class that a teacher teaches.',
+       'Academic Course ID' => 12_345, 'Instructor Campus ID' => 'abc123', 'f_name' => 'Allen', 'l_name' => 'Carter', 'm_name' => 'Bob',
+       'Class Campus Code' => 'UP', 'Cross Listed Flag' => 'N', 'Subject Code' => 'MGMT', 'Course Number' => '001', 'Course Suffix' => 'B',
+       'Class Section Code' => '001', 'Course Credits/Units' => 3, 'Current Enrollment' => 100, 'Instructor Mode' => 'In Person', 'Instructor Role' => 'Primary Instructor',
+       'Course Component' => 'Lecture', 'XCourse CoursePre' => '', 'XCourse CourseNum' => '', 'XCourse CourseNum Suffix' => '', 'Instructor Load Factor' => 100 },
+     { 'Term' => 'Spring', 'Calendar Year' => 2018, 'Course Short Description' => 'The Other Class', 'Course Long Description' => 'This is the class that students learn in.',
+       'Academic Course ID' => 54_321, 'Instructor Campus ID' => 'cba321', 'f_name' => 'Carl', 'l_name' => 'Abraham', 'm_name' => 'Brett',
+       'Class Campus Code' => 'UP', 'Cross Listed Flag' => 'N', 'Subject Code' => 'HIST', 'Course Number' => '100', 'Course Suffix' => 'A',
+       'Class Section Code' => '002', 'Course Credits/Units' => 3, 'Current Enrollment' => 50, 'Instructor Mode' => 'In Person', 'Instructor Role' => 'Primary Instructor',
+       'Course Component' => 'Lecture', 'XCourse CoursePre' => '', 'XCourse CourseNum' => '', 'XCourse CourseNum Suffix' => '', 'Instructor Load Factor' => 100 }]
   end
 
-  let(:xml_builder_obj) {LionpathData::LionpathXmlBuilder.new}
+  let(:xml_builder_obj) { LionpathData::LionpathXmlBuilder.new }
 
   describe '#batched_lionpath_xml' do
-    it 'should return a list with an xml of SCHTEACH records' do
+    it 'returns a list with an xml of SCHTEACH records' do
       data_sets.each do |row|
-        course = Course.create(term:                     row['Term'],
-                               calendar_year:            row['Calendar Year'],
+        course = Course.create(term: row['Term'],
+                               calendar_year: row['Calendar Year'],
                                course_short_description: row['Course Short Description'],
-                               course_long_description:  row['Course Long Description'],
-                               academic_course_id:       row['Academic Course ID'])
+                               course_long_description: row['Course Long Description'],
+                               academic_course_id: row['Academic Course ID'])
 
         faculty = Faculty.create(access_id: row['Instructor Campus ID'].downcase,
-                                 f_name:    row['f_name'],
-                                 l_name:    row['l_name'],
-                                 m_name:    row['m_name'],
+                                 f_name: row['f_name'],
+                                 l_name: row['l_name'],
+                                 m_name: row['m_name'],
                                  college: 'EN')
 
-        Section.create(course:                 course,
-                       faculty:                faculty,
-                       class_campus_code:      row['Class Campus Code'],
-                       cross_listed_flag:      row['Cross Listed Flag'],
-                       subject_code:           row['Subject Code'],
-                       course_number:          row['Course Number'],
-                       course_suffix:          row['Course Suffix'],
-                       class_section_code:     row['Class Section Code'],
-                       course_credits:         row['Course Credits/Units'],
-                       current_enrollment:     row['Current Enrollment'],
+        Section.create(course:,
+                       faculty:,
+                       class_campus_code: row['Class Campus Code'],
+                       cross_listed_flag: row['Cross Listed Flag'],
+                       subject_code: row['Subject Code'],
+                       course_number: row['Course Number'],
+                       course_suffix: row['Course Suffix'],
+                       class_section_code: row['Class Section Code'],
+                       course_credits: row['Course Credits/Units'],
+                       current_enrollment: row['Current Enrollment'],
                        instructor_load_factor: row['Instructor Load Factor'],
-                       instruction_mode:       row['Instructor Mode'],
-                       instructor_role:        row['Instructor Role'],
-                       course_component:       row['Course Component'],
-                       xcourse_course_pre:     row['XCourse CoursePre'],
-                       xcourse_course_num:     row['XCourse CourseNum'],
-                       xcourse_course_suf:     row['XCourse CourseNum Suffix'])
+                       instruction_mode: row['Instructor Mode'],
+                       instructor_role: row['Instructor Role'],
+                       course_component: row['Course Component'],
+                       xcourse_course_pre: row['XCourse CoursePre'],
+                       xcourse_course_num: row['XCourse CourseNum'],
+                       xcourse_course_suf: row['XCourse CourseNum Suffix'])
       end
-      FactoryBot.create :section, course: (FactoryBot.create :course), faculty: (FactoryBot.create :faculty, college: 'EE')
-      FactoryBot.create :section, course: (FactoryBot.create :course), faculty: (FactoryBot.create :faculty, college: 'SIA')
+      FactoryBot.create(:section, course: FactoryBot.create(:course),
+                                  faculty: FactoryBot.create(:faculty, college: 'EE'))
+      FactoryBot.create(:section, course: FactoryBot.create(:course),
+                                  faculty: FactoryBot.create(:faculty, college: 'SIA'))
       expect(xml_builder_obj.xmls_enumerator.first).to eq(
-'<?xml version="1.0" encoding="UTF-8"?>
+        '<?xml version="1.0" encoding="UTF-8"?>
 <Data>
   <Record username="abc123">
     <SCHTEACH>
@@ -102,6 +103,6 @@ RSpec.describe LionpathData::LionpathXmlBuilder do
 </Data>
 '
       )
-        end
-      end
     end
+  end
+end
