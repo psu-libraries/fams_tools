@@ -179,7 +179,7 @@ DateTime.strptime(row['accessid'],
                                           '%m/%d/%Y %T')
       end
       attr.grant_contract = row['grantcontract']
-      attr.base_agreement = row['baseagreement']
+      attr.base_agreement = row['baseagreement'].gsub("\u0000", '')
       if row['notfunded'].present?
         attr.notfunded = DateTime.strptime(row['notfunded'],
                                            '%m/%d/%Y %T')
