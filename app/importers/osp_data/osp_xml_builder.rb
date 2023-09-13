@@ -4,7 +4,7 @@ class OspData::OspXmlBuilder
   # Chunks osp data into batches so we don't overload AI with records
   def xmls_enumerator
     Enumerator.new do |i|
-      Faculty.joins(:contract_faculty_links).group('id').find_in_batches(batch_size: 20) do |batch|
+      Faculty.joins(:contract_faculty_links).group('id').find_in_batches(batch_size: 10) do |batch|
         i << build_xml(batch)
       end
     end
