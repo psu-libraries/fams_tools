@@ -17,9 +17,13 @@ class ActivityInsight::IntegrateData
       response = HTTParty.post url, body: xml, headers: { 'Content-type' => 'text/xml' }, basic_auth: auth,
                                     timeout: 180
       if response.to_s.include? 'Error'
-        osp_keys = Nokogiri::XML(xml).xpath("//OSPKEY").collect{|r| r.children.to_s}
-        access_ids = Nokogiri::XML(xml).xpath("//Record").collect{|r| r.attr('username')}
-        access_ids = Nokogiri::XML(xml).xpath("//Record").collect{|r| r.attr('PennStateHealthUsername')} if access_ids.compact.empty?
+        osp_keys = Nokogiri::XML(xml).xpath('//OSPKEY').collect { |r| r.children.to_s }
+        access_ids = Nokogiri::XML(xml).xpath('//Record').collect { |r| r.attr('username') }
+        if access_ids.compact.empty?
+          access_ids = Nokogiri::XML(xml).xpath('//Record').collect do |r|
+            r.attr('PennStateHealthUsername')
+          end
+        end
         itr_errors = {}
         itr_errors[:response] = response.parsed_response
         itr_errors[:affected_faculty] = access_ids unless access_ids.empty?

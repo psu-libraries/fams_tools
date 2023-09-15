@@ -12,23 +12,23 @@ class ComData::ComEffortPopulateDb
       faculty = Faculty.find_by(com_id: row['FACULTY_USERNAME'].downcase)
       next if faculty.blank?
 
+      date = row['EVENT_DATE'].split(' ').first
       begin
-        com_effort = ComEffort.find_or_initialize_by( com_id:         row['FACULTY_USERNAME'],
-                                                      course_year:    row['COURSE_YEAR'],
-                                                      course:         row['COURSE'],
-                                                      event_type:     row['EVENT_TYPE'],
-                                                      faculty_name:   row['FACULTY_NAME'],
-                                                      event:          row['EVENT'],
-                                                      faculty:        faculty)
+        com_effort = ComEffort.find_or_initialize_by(com_id: row['FACULTY_USERNAME'],
+                                                     course_year: row['COURSE_YEAR'],
+                                                     course: row['COURSE'],
+                                                     event_type: row['EVENT_TYPE'],
+                                                     faculty_name: row['FACULTY_NAME'],
+                                                     event: row['EVENT'],
+                                                     event_date: date,
+                                                     faculty:)
 
         com_effort.hours ||= 0
         com_effort.hours += row['UME_CALCULATED_TEACHING_WHILE_NON_BILLING_EFFORT__HRS_'].to_f
 
         com_effort.save!
-
       rescue ActiveRecord::RecordNotUnique
       end
     end
   end
-
 end

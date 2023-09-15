@@ -12,8 +12,8 @@ describe ComQuality, type: :model do
     it { is_expected.to have_db_column(:average_rating).of_type(:float) }
     it { is_expected.to have_db_column(:num_evaluations).of_type(:integer) }
 
-    it { is_expected.to have_db_index([:com_id, :course, :course_year]).unique(true) }
-    it { is_expected.to have_db_index([:faculty_id])}
+    it { is_expected.to have_db_index(%i[com_id course course_year]).unique(true) }
+    it { is_expected.to have_db_index([:faculty_id]) }
   end
 
   describe 'associations' do

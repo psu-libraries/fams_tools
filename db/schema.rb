@@ -30,7 +30,8 @@ ActiveRecord::Schema[7.0].define(version: 2018050314201234) do
     t.string "event"
     t.integer "hours"
     t.bigint "faculty_id"
-    t.index ["com_id", "course", "event"], name: "index_com_efforts_on_com_id_and_course_and_event", unique: true, length: { course: 50, event: 50 }
+    t.string "event_date"
+    t.index ["com_id", "course", "event", "event_date"], name: "index_com_efforts_on_com_id_and_course_and_event_and_event_date", unique: true, length: { course: 50, event: 50 }
     t.index ["faculty_id"], name: "fk_rails_c1c0816923"
   end
 

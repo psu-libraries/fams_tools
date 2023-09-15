@@ -11,6 +11,7 @@ class CreateComEfforts < ActiveRecord::Migration[7.0]
       t.string :event_date
       t.integer :hours
     end
-    add_index :com_efforts, ["com_id", "course", "event", "event_date"], :unique => true, length: {"course" => 50, "event" => 50}
+    add_index :com_efforts, %w[com_id course event event_date], unique: true,
+                                                                length: { 'course' => 50, 'event' => 50 }
   end
 end

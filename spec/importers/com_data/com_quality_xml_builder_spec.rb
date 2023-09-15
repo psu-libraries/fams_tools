@@ -1,61 +1,59 @@
 require 'importers/importers_helper'
 
 RSpec.describe ComData::ComQualityXmlBuilder do
-
   let(:data_sets) do
-    [{'FACULTY_USERNAME' => 'batman',
-      'FACULTY_NAME' => 'Wayne  Bruce',
-      'COURSE' => 'Endocrinology/Reproductive',
-      'COURSE_YEAR' => '1938-1939',
-      'EVALUATION_TYPE' => 'faculty',
-      'UME_AVERAGE_RATING' => 4.2,
-      'NUMBER_OF_EVALUATIONS' => 1939,
-      'EVALUATION_NAME' => 'Lecture'},
-      {'FACULTY_USERNAME' => 'spiderman',
-      'FACULTY_NAME' => 'Parker Peter',
-      'COURSE' => 'Swinging',
-      'COURSE_YEAR' => '1962-1963',
-      'EVALUATION_TYPE' => 'faculty',
-      'UME_AVERAGE_RATING' => 5.0,
-      'NUMBER_OF_EVALUATIONS' => 575,
-      'EVALUATION_NAME' => 'Sm Grp Facilitation'},
-      {'FACULTY_USERNAME' => 'notCOM',
-      'FACULTY_NAME' => 'Not MD',
-      'COURSE' => 'test',
-      'COURSE_YEAR' => '2022-2023',
-      'EVALUATION_TYPE' => 'faculty',
-      'UME_AVERAGE_RATING' => 0.1,
-      'NUMBER_OF_EVALUATIONS' => 1855,
-      'EVALUATION_NAME' => 'Lecture'}
-    ]
+    [{ 'FACULTY_USERNAME' => 'batman',
+       'FACULTY_NAME' => 'Wayne  Bruce',
+       'COURSE' => 'Endocrinology/Reproductive',
+       'COURSE_YEAR' => '1938-1939',
+       'EVALUATION_TYPE' => 'faculty',
+       'UME_AVERAGE_RATING' => 4.2,
+       'NUMBER_OF_EVALUATIONS' => 1939,
+       'EVALUATION_NAME' => 'Lecture' },
+     { 'FACULTY_USERNAME' => 'spiderman',
+       'FACULTY_NAME' => 'Parker Peter',
+       'COURSE' => 'Swinging',
+       'COURSE_YEAR' => '1962-1963',
+       'EVALUATION_TYPE' => 'faculty',
+       'UME_AVERAGE_RATING' => 5.0,
+       'NUMBER_OF_EVALUATIONS' => 575,
+       'EVALUATION_NAME' => 'Sm Grp Facilitation' },
+     { 'FACULTY_USERNAME' => 'notCOM',
+       'FACULTY_NAME' => 'Not MD',
+       'COURSE' => 'test',
+       'COURSE_YEAR' => '2022-2023',
+       'EVALUATION_TYPE' => 'faculty',
+       'UME_AVERAGE_RATING' => 0.1,
+       'NUMBER_OF_EVALUATIONS' => 1855,
+       'EVALUATION_NAME' => 'Lecture' }]
   end
 
-  let(:xml_builder_obj) {ComData::ComQualityXmlBuilder.new}
+  let(:xml_builder_obj) { ComData::ComQualityXmlBuilder.new }
 
   describe '#build_xml_quality' do
     it 'should return a list with an xml of COURSE_EVAL records' do
       data_sets.each do |row|
-        if row['FACULTY_USERNAME'] == 'notCOM'
-          faculty = FactoryBot.create :faculty, com_id: row['FACULTY_USERNAME'], college: 'IST'
-        else
-          faculty = FactoryBot.create :faculty, com_id: row['FACULTY_USERNAME'], college: 'MD'
-        end
+        faculty = if row['FACULTY_USERNAME'] == 'notCOM'
+                    FactoryBot.create :faculty, com_id: row['FACULTY_USERNAME'], college: 'IST'
+                  else
+                    FactoryBot.create :faculty, com_id: row['FACULTY_USERNAME'], college: 'MD'
+                  end
 
         begin
-          ComQuality.create(com_id:           row['FACULTY_USERNAME'],
-                            course_year:      row['COURSE_YEAR'],
-                            course:           row['COURSE'],
-                            event_type:       row['EVALUATION_NAME'],
-                            faculty_name:     row['FACULTY_NAME'],
-                            evaluation_type:  row['EVALUATION_TYPE'],
-                            average_rating:   row['UME_AVERAGE_RATING'],
-                            num_evaluations:  row['NUMBER_OF_EVALUATIONS'],
-                            faculty:          faculty)
-          rescue ActiveRecord::RecordNotUnique
+          ComQuality.create(com_id: row['FACULTY_USERNAME'],
+                            course_year: row['COURSE_YEAR'],
+                            course: row['COURSE'],
+                            event_type: row['EVALUATION_NAME'],
+                            faculty_name: row['FACULTY_NAME'],
+                            evaluation_type: row['EVALUATION_TYPE'],
+                            average_rating: row['UME_AVERAGE_RATING'],
+                            num_evaluations: row['NUMBER_OF_EVALUATIONS'],
+                            faculty:)
+        rescue ActiveRecord::RecordNotUnique
         end
       end
       expect(xml_builder_obj.xmls_enumerator_quality.first).to eq(
-'<?xml version="1.0" encoding="UTF-8"?>
+        '<?xml version="1.0" encoding="UTF-8"?>
 <Data>
   <Record PennStateHealthUsername="batman">
     <COURSE_EVAL>
@@ -78,7 +76,6 @@ RSpec.describe ComData::ComQualityXmlBuilder do
 </Data>
 '
       )
-
-      end
     end
+  end
 end

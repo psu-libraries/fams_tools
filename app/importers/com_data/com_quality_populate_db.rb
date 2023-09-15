@@ -11,19 +11,19 @@ class ComData::ComQualityPopulateDb
     com_parser.csv_hash.each do |row|
       faculty = Faculty.find_by(com_id: row['FACULTY_USERNAME'].downcase)
       next if faculty.blank?
+
       begin
-        ComQuality.create(com_id:           row['FACULTY_USERNAME'],
-                          course_year:      row['COURSE_YEAR'],
-                          course:           row['COURSE'],
-                          event_type:       row['EVALUATION_NAME'],
-                          faculty_name:     row['FACULTY_NAME'],
-                          evaluation_type:  row['EVALUATION_TYPE'],
-                          average_rating:   row['UME_AVERAGE_RATING'],
-                          num_evaluations:  row['NUMBER_OF_EVALUATIONS'],
-                          faculty:          faculty)
-        rescue ActiveRecord::RecordNotUnique
+        ComQuality.create(com_id: row['FACULTY_USERNAME'],
+                          course_year: row['COURSE_YEAR'],
+                          course: row['COURSE'],
+                          event_type: row['EVALUATION_NAME'],
+                          faculty_name: row['FACULTY_NAME'],
+                          evaluation_type: row['EVALUATION_TYPE'],
+                          average_rating: row['UME_AVERAGE_RATING'],
+                          num_evaluations: row['NUMBER_OF_EVALUATIONS'],
+                          faculty:)
+      rescue ActiveRecord::RecordNotUnique
       end
     end
   end
-
 end

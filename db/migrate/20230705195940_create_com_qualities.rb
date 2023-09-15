@@ -11,6 +11,6 @@ class CreateComQualities < ActiveRecord::Migration[7.0]
       t.float :average_rating
       t.integer :num_evaluations
     end
-    add_index :com_qualities, ["com_id", "course", "course_year"], :unique => true
+    add_index :com_qualities, %w[com_id course course_year], unique: true
   end
 end
