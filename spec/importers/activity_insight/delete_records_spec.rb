@@ -8,20 +8,22 @@ RSpec.describe ActivityInsight::DeleteRecords do
   end
 
   it 'has list of resources' do
-    expect(delete_records::RESOURCES).to eq ["CONGRANT", "SCHTEACH", "INTELLCONT", "PCI", "GRADE_DIST_GPA", "STUDENT_RATING"]
+    expect(delete_records::RESOURCES).to eq %w[CONGRANT SCHTEACH INTELLCONT PCI GRADE_DIST_GPA
+                                               STUDENT_RATING]
   end
 
   context 'when deleting SCHTEACH records in beta' do
     it 'generates an xml request to Digital Measures webservices' do
-      stub_request(:post, "https://betawebservices.digitalmeasures.com/login/service/v4/SchemaData:delete/INDIVIDUAL-ACTIVITIES-University").
-          with(
-              body: request_body,
-              headers: {
-                  'Content-Type'=>'text/xml'
-              }).
-          to_return(status: 200, body: "", headers: {})
+      stub_request(:post, 'https://betawebservices.digitalmeasures.com/login/service/v4/SchemaData:delete/INDIVIDUAL-ACTIVITIES-University')
+        .with(
+          body: request_body,
+          headers: {
+            'Content-Type' => 'text/xml'
+          }
+        )
+        .to_return(status: 200, body: '', headers: {})
 
-      allow_any_instance_of(ActivityInsight::DeleteRecords).to receive(:csv_path).and_return("#{Rails.root}/spec/fixtures/delete.csv")
+      allow_any_instance_of(ActivityInsight::DeleteRecords).to receive(:csv_path).and_return("#{Rails.root.join('spec/fixtures/delete.csv')}")
       object = delete_records.new('SCHTEACH', :beta)
       object.delete
     end

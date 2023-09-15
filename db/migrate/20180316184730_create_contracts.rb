@@ -15,10 +15,10 @@ class CreateContracts < ActiveRecord::Migration[5.1]
       t.string :grant_contract
       t.string :base_agreement
       t.date :notfunded
-
     end
     add_index :contracts, :osp_key, unique: true
   end
+
   def down
     drop_table :contracts
   end

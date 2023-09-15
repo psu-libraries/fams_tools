@@ -18,7 +18,7 @@ class ActivityInsight::GetUserData
   def convert_xls_to_hash(users_sheet)
     keys = users_sheet.row(2)
     users_sheet.drop(2).each do |row|
-      users_hashed << Hash[ keys.zip(row) ]
+      users_hashed << keys.zip(row).to_h
     end
   end
 
@@ -45,6 +45,4 @@ class ActivityInsight::GetUserData
       end
     end
   end
-
 end
-

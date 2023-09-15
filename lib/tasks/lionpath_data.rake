@@ -1,6 +1,5 @@
 namespace :courses_taught do
-
-  desc "Integrate Courses Taught data."
+  desc 'Integrate Courses Taught data.'
 
   task :integrate, [:target] => :environment do |_task, args|
     Rails.application.eager_load!
@@ -10,6 +9,6 @@ namespace :courses_taught do
     puts params
     LionpathIntegrateJob.perform_now(params, 'log/courses_errors.log', false)
     finish = Time.now
-    puts(((finish - start)/60).to_s + ' mins')
+    puts(((finish - start) / 60).to_s + ' mins')
   end
 end

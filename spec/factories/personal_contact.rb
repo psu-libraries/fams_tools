@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :personal_contact do
-    faculty { create :faculty }
+    faculty { create(:faculty) }
     uid { 'abc123' }
     telephone_number { '+1 123 456 7891' }
     postal_address { 'Test Address' }

@@ -9,7 +9,7 @@ describe Course, type: :model do
     it { is_expected.to have_db_column(:course_short_description).of_type(:string) }
     it { is_expected.to have_db_column(:course_long_description).of_type(:text) }
 
-    it { is_expected.to have_db_index([:academic_course_id, :term, :calendar_year]).unique(true) }
+    it { is_expected.to have_db_index(%i[academic_course_id term calendar_year]).unique(true) }
   end
 
   describe 'associations' do
@@ -17,4 +17,3 @@ describe Course, type: :model do
     it { is_expected.to have_many(:sections) }
   end
 end
-

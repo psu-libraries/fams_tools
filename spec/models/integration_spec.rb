@@ -9,7 +9,7 @@ describe Integration, type: :model do
 
   describe '#running?' do
     it 'checks if integration is_active' do
-      integration = FactoryBot.create :integration
+      integration = FactoryBot.create(:integration)
       expect(Integration.running?).to eq false
       integration.update_attribute :is_active, true
       expect(Integration.running?).to eq true
@@ -18,7 +18,7 @@ describe Integration, type: :model do
 
   describe '#start' do
     it 'changes is_active to true' do
-      integration = FactoryBot.create :integration
+      integration = FactoryBot.create(:integration)
       Integration.start
       expect(Integration.find(integration.id).is_active).to eq true
     end
@@ -26,7 +26,7 @@ describe Integration, type: :model do
 
   describe '#stop' do
     it 'changes is_active to false' do
-      integration = FactoryBot.create :integration
+      integration = FactoryBot.create(:integration)
       Integration.stop
       expect(Integration.find(integration.id).is_active).to eq false
     end

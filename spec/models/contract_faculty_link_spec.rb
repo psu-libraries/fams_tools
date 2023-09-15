@@ -9,7 +9,7 @@ describe ContractFacultyLink, type: :model do
     it { is_expected.to have_db_column(:faculty_id).of_type(:integer) }
 
     it { is_expected.to have_db_index(:faculty_id) }
-    it { is_expected.to have_db_index([:contract_id, :faculty_id]).unique(true) }
+    it { is_expected.to have_db_index(%i[contract_id faculty_id]).unique(true) }
   end
 
   describe 'associations' do

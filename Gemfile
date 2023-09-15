@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 git_source(:github) do |repo_name|
-  repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?("/")
+  repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?('/')
   "https://github.com/#{repo_name}.git"
 end
 
@@ -18,8 +18,8 @@ gem 'net-ldap'
 gem 'factory_bot'
 
 # For use of newer ssh keys
-gem 'ed25519'
 gem 'bcrypt_pbkdf'
+gem 'ed25519'
 
 # For scheduled tasks
 gem 'whenever'
@@ -27,7 +27,7 @@ gem 'whenever'
 gem 'rails', '~> 7.0'
 # Use mysql as the database for Active Record
 # ActiveRecord only works with specific versions of mysql2.
-gem 'mysql2' , '~> 0.5.4'
+gem 'mysql2', '~> 0.5.4'
 
 # Use Puma as the app server
 gem 'puma', '~> 4.3'
@@ -77,21 +77,23 @@ gem 'webrick'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
+  gem 'byebug', platforms: %i[mri mingw x64_mingw]
   # Adds support for Capybara system testing and selenium driver
   gem 'capybara', '~> 3'
-  gem "capybara-webkit"
-  gem 'headless'
-  gem 'selenium-webdriver'
-  gem 'rspec-rails', '~> 6.0'
-  gem 'shoulda-matchers', '4.0.0.rc1'
-  gem 'rails-controller-testing'
-  gem 'rspec-retry'
+  gem 'capybara-webkit'
   gem 'database_cleaner'
+  gem 'headless'
+  gem 'rails-controller-testing'
+  gem 'rspec-rails', '~> 6.0'
+  gem 'rspec-retry'
+  gem 'selenium-webdriver'
+  gem 'shoulda-matchers', '4.0.0.rc1'
   # Audit gems for vulnerabilities
   gem 'bundle-audit'
   # Ruby code linter
-  gem 'rubocop', require: false
+  gem 'rubocop'
+  gem 'rubocop-rails'
+  gem 'rubocop-rspec'
   # Code coverage
   gem 'simplecov', '~> 0.17.0'
 end
@@ -103,13 +105,13 @@ group :development do
 
   # Use Capistrano for deployment
   gem 'capistrano', '~> 3.7', require: false
-  gem 'capistrano-bundler', '~> 1.2',require: false
+  gem 'capistrano-bundler', '~> 1.2', require: false
+  gem 'capistrano-passenger'
   gem 'capistrano-rails', '~> 1.2', require: false
   gem 'capistrano-rbenv', '~> 2.1', require: false
   gem 'capistrano-rbenv-install'
-  gem 'capistrano-passenger'
   gem 'web-console', '~> 4.2'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]

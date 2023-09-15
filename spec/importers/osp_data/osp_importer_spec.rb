@@ -1,14 +1,14 @@
 require 'importers/importers_helper'
 
 RSpec.describe OspData::OspImporter do
-  
   let(:headers) do
-    ['ospkey', 'ordernumber', 'title', 'sponsor', 'sponsortype', 'parentsponsor',
-     'accessid', 'department', 'role', 'pctcredit', 'status', 'submitted', 'awarded',
-     'requested', 'funded', 'totalanticipated', 'startdate', 'enddate', 'totalstartdate',
-     'totalenddate', 'grantcontract', 'baseagreement', 'agreementtype', 'agreement', 'notfunded',
-     'effortacademic', 'effortsummer', 'effortcalendar']
+    %w[ospkey ordernumber title sponsor sponsortype parentsponsor
+       accessid department role pctcredit status submitted awarded
+       requested funded totalanticipated startdate enddate totalstartdate
+       totalenddate grantcontract baseagreement agreementtype agreement notfunded
+       effortacademic effortsummer effortcalendar]
   end
+  let(:osp_parser_obj) { OspData::OspImporter.new }
 
   let(:data_book1) do
     current_year = DateTime.now.year
@@ -18,7 +18,7 @@ RSpec.describe OspData::OspImporter do
                  '', '', '', '', '02/01/2015 00:00:00', 0.15, 0.16, 0.17]
     data_arr << [3, 1, '', '', '', '', '03/01/2026 00:00:00', '', 'Faculty', 1, 'Pending Proposal', '', '',
                  4, 1, 1, '', '', '', '', 'Grant', '', '', '', '/  /', 0, 0, 0]
-    data_arr << [5, 1, '', '', '', '', "01/02/#{current_year.to_s} 00:00:00", '', 'Post Doctoral', 1, 'Awarded', '', '',
+    data_arr << [5, 1, '', '', '', '', "01/02/#{current_year} 00:00:00", '', 'Post Doctoral', 1, 'Awarded', '', '',
                  6, 1, 1, '01/01/2017 00:00:00', '12/12/2018 00:00:00', '', '', 'Grant', '', '', '', '/  /', 0.15, 0.15, 0.15]
     data_arr << [7, 1, '', '', '', '', '01/02/2018 00:00:00', '', 'unknown', 1, 'Pending Award', '', '',
                  8, 1, 1, '01/01/2017 00:00:00', '12/12/2018 00:00:00', '', '', 'Grant', '', '', '', '/  /', 0.15, 0.15, 0.15]
@@ -27,11 +27,14 @@ RSpec.describe OspData::OspImporter do
 
   let(:data_book2) do
     data_arr = []
-    data_arr << [1, 1, '', '', '', '', '', '', '', 1, '', '01/01/2001 00:00:00', '', 1, 1, 1, '', '', '', '', '', '', '', '', '', 0.15, 0.15, 0.15]
-    data_arr << [2, 1, '', '', '', '', '', '', '', 1, '', '01/02/2013 00:00:00', '', 1, 1, 1, '', '', '', '', '', '', '', '', '', 0.15, 0.15, 0.15]
-    data_arr << [3, 1, '', '', '', '', '', '', '', 1, '', "12/31/#{(DateTime.now.year + 1).to_s} 00:00:00",
+    data_arr << [1, 1, '', '', '', '', '', '', '', 1, '', '01/01/2001 00:00:00', '', 1, 1, 1, '', '', '', '', '', '',
+                 '', '', '', 0.15, 0.15, 0.15]
+    data_arr << [2, 1, '', '', '', '', '', '', '', 1, '', '01/02/2013 00:00:00', '', 1, 1, 1, '', '', '', '', '', '',
+                 '', '', '', 0.15, 0.15, 0.15]
+    data_arr << [3, 1, '', '', '', '', '', '', '', 1, '', "12/31/#{DateTime.now.year + 1} 00:00:00",
                  '', 1, 1, 1, '', '', '', '', '', '', '', '', '', 0.15, 0.15, 0.15]
-    data_arr << [4, 1, '', '', '', '', '', '', '', 1, '', '01/03/1989 00:00:00', '', 1, 1, 1, '', '', '', '', '', '', '', '', '', 0.15, 0.15, 0.15]
+    data_arr << [4, 1, '', '', '', '', '', '', '', 1, '', '01/03/1989 00:00:00', '', 1, 1, 1, '', '', '', '', '', '',
+                 '', '', '', 0.15, 0.15, 0.15]
     data_arr << [5, 1, '', '', '', '', '', '', '', 1, '', '',
                  '01/02/2013 00:00:00', 1, 1, 1, '', '', '', '', '', '', '', '', '', 0.15, 0.15, 0.15]
     data_arr << [6, 1, '', '', '', '', '', '', '', 1, '', '',
@@ -43,17 +46,23 @@ RSpec.describe OspData::OspImporter do
     data_arr = []
     data_arr << [1, 1, '', '', '', '', 'zzz999', '', '', 1,
                  '', '', '', 1, 1, 1, '', '', '', '', '', '', '', '', '', 0.15, 0.15, 0.15]
-    data_arr << [2, 1, '', '', '', '', 'xxx111', '', '', 1, '', '', '', 1, 1, 1, '', '', '', '', '', '', '', '', '', 0.15, 0.15, 0.15]
+    data_arr << [2, 1, '', '', '', '', 'xxx111', '', '', 1, '', '', '', 1, 1, 1, '', '', '', '', '', '', '', '', '',
+                 0.15, 0.15, 0.15]
     data_arr
   end
 
   let(:data_book4) do
     data_arr = []
-    data_arr << [1, 1, '', '', '', '', '', '', '', 1, 'Purged', '', '', 1, 1, 1, '', '', '', '', '', '', '', '', '', 0.15, 0.15, 0.15]
-    data_arr << [2, 1, '', '', '', '', '', '', '', 1, 'Awarded', '', '', 1, 1, 1, '', '', '', '', '', '', '', '', '', 0.15, 0.15, 0.15]
-    data_arr << [3, 1, '', '', '', '', '', '', '', 1, 'Withdrawn', '', '', 1, 1, 1, '', '', '', '', '', '', '', '', '', 0.15, 0.15, 0.15]
-    data_arr << [123456, 1, '', '', '', '', '', '', '', 1, 'Withdrawn', '', '', 1, 1, 1, '', '', '', '', '', '', '', '', '', 0.15, 0.15, 0.15]
-    data_arr << [193848, 1, '', '', '', '', '', '', '', 1, 'Purged', '', '', 1, 1, 1, '', '', '', '', '', '', '', '', '', 0.15, 0.15, 0.15]
+    data_arr << [1, 1, '', '', '', '', '', '', '', 1, 'Purged', '', '', 1, 1, 1, '', '', '', '', '', '', '', '', '',
+                 0.15, 0.15, 0.15]
+    data_arr << [2, 1, '', '', '', '', '', '', '', 1, 'Awarded', '', '', 1, 1, 1, '', '', '', '', '', '', '', '', '',
+                 0.15, 0.15, 0.15]
+    data_arr << [3, 1, '', '', '', '', '', '', '', 1, 'Withdrawn', '', '', 1, 1, 1, '', '', '', '', '', '', '', '', '',
+                 0.15, 0.15, 0.15]
+    data_arr << [123_456, 1, '', '', '', '', '', '', '', 1, 'Withdrawn', '', '', 1, 1, 1, '', '', '', '', '', '', '',
+                 '', '', 0.15, 0.15, 0.15]
+    data_arr << [193_848, 1, '', '', '', '', '', '', '', 1, 'Purged', '', '', 1, 1, 1, '', '', '', '', '', '', '', '',
+                 '', 0.15, 0.15, 0.15]
     data_arr
   end
 
@@ -76,22 +85,22 @@ RSpec.describe OspData::OspImporter do
 
   let(:fake_backup) do
     data_arr = []
-    data_arr << ['OSPKEY', 'STATUS']
-    data_arr << [123456, 'Pending']
-    data_arr << [193848, 'Not Funded']
+    data_arr << %w[OSPKEY STATUS]
+    data_arr << [123_456, 'Pending']
+    data_arr << [193_848, 'Not Funded']
   end
 
-  before(:each) do
+  before do
     Faculty.create(access_id: 'zzz999',
-                   user_id:   '123',
-                   f_name:    'Bill',
-                   l_name:    'Bill',
-                   m_name:    'Bill')
+                   user_id: '123',
+                   f_name: 'Bill',
+                   l_name: 'Bill',
+                   m_name: 'Bill')
     Faculty.create(access_id: 'xyz123',
-                   user_id:   '54321',
-                   f_name:    'Xylophone',
-                   l_name:    'Zebra',
-                   m_name:    'Yawn')
+                   user_id: '54321',
+                   f_name: 'Xylophone',
+                   l_name: 'Zebra',
+                   m_name: 'Yawn')
     FactoryBot.create(:faculty, access_id: 'abc123')
     FactoryBot.create(:faculty, access_id: 'mar26')
     FactoryBot.create(:faculty, access_id: 'jan2')
@@ -99,19 +108,8 @@ RSpec.describe OspData::OspImporter do
     allow_any_instance_of(OspData::OspImporter).to receive(:headers).and_return headers
   end
 
-
-  let(:osp_parser_obj) {OspData::OspImporter.new}
-
-  describe "#format_and_populate" do
-    it "should convert nils to ' ' and 
-        should convert calendar dates to accessids in the 'accessid' column
-        should convert 'Co-PI' to 'Co-Principal Investigator', 'Faculty' to 'Core Faculty', 
-        should convert 'Post Doctoral' to 'Post Doctoral Associate', and 'unknown' to 'Unknown'
-        should remove time, '/', and '/ /' from date fields and 
-        should convert dates to be sql friendly
-        should change 'Pending Award' and 'Pending Proposal' status to 'Pending'
-        should remove start and end dates for any contract that was not 'Awarded'
-        should convert sponsortype to appropriate drop down values" do
+  describe '#format_and_populate' do
+    it "converts nils to ' ' and should convert calendar dates to accessids in the 'accessid' column should convert 'Co-PI' to 'Co-Principal Investigator', 'Faculty' to 'Core Faculty', should convert 'Post Doctoral' to 'Post Doctoral Associate', and 'unknown' to 'Unknown' should remove time, '/', and '/ /' from date fields and should convert dates to be sql friendly should change 'Pending Award' and 'Pending Proposal' status to 'Pending' should remove start and end dates for any contract that was not 'Awarded' should convert sponsortype to appropriate drop down values" do
       allow(CSV).to receive(:open).and_return(data_book1)
       allow(CSV).to receive(:foreach).and_yield(fake_backup[0]).and_yield(fake_backup[1]).and_yield(fake_backup[2])
       allow_any_instance_of(OspData::OspImporter).to receive(:is_user).and_return(true)
@@ -149,9 +147,8 @@ RSpec.describe OspData::OspImporter do
     end
   end
 
-  context "#is_good_date" do
-
-    it "should remove rows with 'submitted' dates <= 2011" do
+  describe '#is_good_date' do
+    it "removes rows with 'submitted' dates <= 2011" do
       allow(CSV).to receive(:open).and_return(data_book2)
       allow(CSV).to receive(:foreach).and_yield(fake_backup[0]).and_yield(fake_backup[1]).and_yield(fake_backup[2])
       allow_any_instance_of(OspData::OspImporter).to receive(:is_proper_status).and_return(true)
@@ -161,9 +158,8 @@ RSpec.describe OspData::OspImporter do
     end
   end
 
-  context "#is_user" do
-
-    it "should remove rows that contain non-active users" do
+  describe '#is_user' do
+    it 'removes rows that contain non-active users' do
       allow(CSV).to receive(:open).and_return(data_book3)
       allow(CSV).to receive(:foreach).and_yield(fake_backup[0]).and_yield(fake_backup[1]).and_yield(fake_backup[2])
       allow_any_instance_of(OspData::OspImporter).to receive(:is_proper_status).and_return(true)
@@ -174,9 +170,8 @@ RSpec.describe OspData::OspImporter do
     end
   end
 
-  context "#filter_by_status" do
-
-    it "should remove rows with 'Purged' or 'Withdrawn' status" do
+  describe '#filter_by_status' do
+    it "removes rows with 'Purged' or 'Withdrawn' status" do
       allow(CSV).to receive(:open).and_return(data_book4)
       allow(CSV).to receive(:foreach).and_yield(fake_backup[0]).and_yield(fake_backup[1]).and_yield(fake_backup[2])
       allow_any_instance_of(OspData::OspImporter).to receive(:is_good_date).and_return(true)
@@ -189,8 +184,8 @@ RSpec.describe OspData::OspImporter do
     end
   end
 
-  context '#populate_db_with_row' do
-    it 'should populate the database with osp data' do
+  describe '#populate_db_with_row' do
+    it 'populates the database with osp data' do
       allow(CSV).to receive(:open).and_return(data_book5)
       allow(CSV).to receive(:foreach).and_yield(fake_backup[0]).and_yield(fake_backup[1]).and_yield(fake_backup[2])
       allow_any_instance_of(OspData::OspImporter).to receive(:is_user).and_return(true)
@@ -207,4 +202,3 @@ RSpec.describe OspData::OspImporter do
     end
   end
 end
-

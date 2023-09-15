@@ -1,8 +1,7 @@
 require 'importers/importers_helper'
 
 RSpec.describe ActivityInsight::GetUserData do
-
-  let!(:faculty1) { FactoryBot.create :faculty, access_id: 'xxx111' }
+  let!(:faculty1) { FactoryBot.create(:faculty, access_id: 'xxx111') }
 
   let(:fake_book) do
     book = Spreadsheet::Workbook.new
@@ -15,12 +14,12 @@ RSpec.describe ActivityInsight::GetUserData do
     sheet
   end
 
-  let(:get_user_data_obj) {ActivityInsight::GetUserData.new}
+  let(:get_user_data_obj) { ActivityInsight::GetUserData.new }
 
   describe '#call' do
-    it 'should get user data' do
+    it 'gets user data' do
       expect(Faculty.find(faculty1.id)).to be_present
-      allow(Spreadsheet).to receive_message_chain(:open, :worksheet) {fake_book}
+      allow(Spreadsheet).to receive_message_chain(:open, :worksheet) { fake_book }
       get_user_data_obj.call
       expect(Faculty.all.count).to eq(1)
       expect(Faculty.find_by(access_id: 'zzz999').f_name).to eq('Bill')
@@ -29,5 +28,4 @@ RSpec.describe ActivityInsight::GetUserData do
       expect(Faculty.find_by(access_id: 'zzz999').com_id).to eq('abc1234')
     end
   end
-
 end

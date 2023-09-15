@@ -1,53 +1,52 @@
 require 'importers/importers_helper'
 
 RSpec.describe PubData::GetPubData do
-
-  before(:each) do
+  before do
     faculty1 = Faculty.create(access_id: 'xyz321',
-                             user_id:   '54321',
-                             f_name:    'Kyle',
-                             l_name:    'Hamburger',
-                             m_name:    'Greasy',
-                             college:   'CA')
+                              user_id: '54321',
+                              f_name: 'Kyle',
+                              l_name: 'Hamburger',
+                              m_name: 'Greasy',
+                              college: 'CA')
     faculty2 = Faculty.create(access_id: 'abc123',
-                             user_id:   '4321',
-                             f_name:    'George',
-                             l_name:    'Foreman',
-                             m_name:    'Grill',
-                             college:   'BK')
+                              user_id: '4321',
+                              f_name: 'George',
+                              l_name: 'Foreman',
+                              m_name: 'Grill',
+                              college: 'BK')
   end
 
-  let(:get_pub_data_obj) {PubData::GetPubData.new('All Colleges')}
+  let(:get_pub_data_obj) { PubData::GetPubData.new('All Colleges') }
 
   describe '#call' do
-    it 'should obtain publication data from Metadata Database' do
-
-      stub_request(:post, "https://metadata.libraries.psu.edu/v1/users/publications").
-          with(
-              body: "[\"abc123\", \"xyz321\"]",
-              headers: {
-                  'Accept'=>'application/json',
-                  'Content-Type'=>'application/json'
-              }).
-          to_return(status: 200, body: response, headers: {})
+    it 'obtains publication data from Metadata Database' do
+      stub_request(:post, 'https://metadata.libraries.psu.edu/v1/users/publications')
+        .with(
+          body: '["abc123", "xyz321"]',
+          headers: {
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json'
+          }
+        )
+        .to_return(status: 200, body: response, headers: {})
 
       get_pub_data_obj.call(PubData::PubPopulateDb.new)
-      expect(get_pub_data_obj.pub_hash['abc123']['data'][0]["attributes"]["status"]).to eq('Published')
-      expect(get_pub_data_obj.pub_hash['xyz321']['data'][0]["attributes"]["status"]).to eq('Published')
-      expect(get_pub_data_obj.pub_hash['abc123']['data'][0]["attributes"]["dtm"]).to eq('January (1st Quarter/Winter)')
-      expect(get_pub_data_obj.pub_hash['xyz321']['data'][0]["attributes"]["dtm"]).to eq('March')
-      expect(get_pub_data_obj.pub_hash['abc123']['data'][0]["attributes"]["dty"]).to eq(2008)
-      expect(get_pub_data_obj.pub_hash['abc123']['data'][0]["attributes"]["dtd"]).to eq(1)
-      expect(get_pub_data_obj.pub_hash['xyz321']['data'][0]["attributes"]["publication_type"]).to eq('Journal Article, Academic Journal')
-      expect(get_pub_data_obj.pub_hash['abc123']['data'][1]["attributes"]["publication_type"]).to eq('Journal Article, Academic Journal')
-      expect(get_pub_data_obj.pub_hash['abc123']['data'][0]["attributes"]["page_range"]).to eq('1-2')
+      expect(get_pub_data_obj.pub_hash['abc123']['data'][0]['attributes']['status']).to eq('Published')
+      expect(get_pub_data_obj.pub_hash['xyz321']['data'][0]['attributes']['status']).to eq('Published')
+      expect(get_pub_data_obj.pub_hash['abc123']['data'][0]['attributes']['dtm']).to eq('January (1st Quarter/Winter)')
+      expect(get_pub_data_obj.pub_hash['xyz321']['data'][0]['attributes']['dtm']).to eq('March')
+      expect(get_pub_data_obj.pub_hash['abc123']['data'][0]['attributes']['dty']).to eq(2008)
+      expect(get_pub_data_obj.pub_hash['abc123']['data'][0]['attributes']['dtd']).to eq(1)
+      expect(get_pub_data_obj.pub_hash['xyz321']['data'][0]['attributes']['publication_type']).to eq('Journal Article, Academic Journal')
+      expect(get_pub_data_obj.pub_hash['abc123']['data'][1]['attributes']['publication_type']).to eq('Journal Article, Academic Journal')
+      expect(get_pub_data_obj.pub_hash['abc123']['data'][0]['attributes']['page_range']).to eq('1-2')
     end
   end
 
   private
 
   def response
-'{
+    '{
   "abc123": {
     "data": [
       {
@@ -158,5 +157,4 @@ RSpec.describe PubData::GetPubData do
   }
 }'
   end
-
 end

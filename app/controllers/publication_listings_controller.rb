@@ -1,4 +1,8 @@
 class PublicationListingsController < ApplicationController
+  def index
+    @publication_listings = PublicationListing.all
+  end
+
   def create
     pl = PublicationListing.new(name: params[:citations_title])
     pl.save
@@ -23,23 +27,19 @@ class PublicationListingsController < ApplicationController
     redirect_to publication_listings_url
   end
 
+  def update
+    @publication_listing = PublicationListing.find_by_id(params[:id])
+    @publication_listing.update(publication_listing_params)
+    flash[:notice] = 'Update Successful'
+    redirect_to(publication_listing_works_path(@publication_listing))
+  end
+
   def destroy
     pl = PublicationListing.find(params[:publication_listing_id])
     pl.destroy
 
     flash[:notice] = 'Publication listing successfully deleted.'
     redirect_to publication_listings_path
-  end
-
-  def index
-    @publication_listings = PublicationListing.all
-  end
-
-  def update
-    @publication_listing = PublicationListing.find_by_id(params[:id])
-    @publication_listing.update(publication_listing_params)
-    flash[:notice] = "Update Successful"
-    redirect_to(publication_listing_works_path(@publication_listing))
   end
 
   private
@@ -49,7 +49,7 @@ class PublicationListingsController < ApplicationController
   end
 
   def citations
-    AnyStyle::Document.parse(params[:citations].to_s).collect { |n| n if n.present? }.compact
+    AnyStyle::Document.parse(params[:citations].to_s).collect { |n| n.presence }.compact
   end
 
   def work_attrs(citation, item, publication_listing)
@@ -77,7 +77,7 @@ class PublicationListingsController < ApplicationController
       unknown: item.dig(:unknown, 0),
       url: item.dig(:url, 0),
       citation: citation.to_s,
-      publication_listing: publication_listing
+      publication_listing:
     }
   end
 
@@ -98,7 +98,8 @@ class PublicationListingsController < ApplicationController
                                                                    :editor, :institution, :isbn, :location,
                                                                    :note, :publisher, :retrieved, :tech, :translator,
                                                                    :unknown, :url, :username, :date, :_destroy,
-                                                                   authors_attributes: [:id, :f_name, :m_name, :l_name, :_destroy],
-                                                                   editors_attributes: [:id, :f_name, :m_name, :l_name, :_destroy]])
+                                                                   { authors_attributes: %i[id f_name m_name l_name _destroy],
+                                                                     editors_attributes: %i[id f_name m_name l_name
+                                                                                            _destroy] }])
   end
 end

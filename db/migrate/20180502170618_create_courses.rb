@@ -6,11 +6,11 @@ class CreateCourses < ActiveRecord::Migration[5.1]
       t.integer :calendar_year
       t.string :course_short_description
       t.text :course_long_description
-
     end
     add_index :courses, :academic_course_id, unique: true
   end
+
   def down
-    drop_table :courses 
+    drop_table :courses
   end
 end

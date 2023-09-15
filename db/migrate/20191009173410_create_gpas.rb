@@ -27,6 +27,7 @@ class CreateGpas < ActiveRecord::Migration[5.1]
       t.timestamps
     end
 
-    add_index :gpas, ["faculty_id", "semester", "year", "course_prefix", "course_number", "course_number_suffix", "section_number", "campus"], :unique => true, :name => 'unique_key', length: { "semester" => 50, "course_prefix" => 50, "course_number_suffix" => 50, "campus" => 50 }
+    add_index :gpas,
+              %w[faculty_id semester year course_prefix course_number course_number_suffix section_number campus], unique: true, name: 'unique_key', length: { 'semester' => 50, 'course_prefix' => 50, 'course_number_suffix' => 50, 'campus' => 50 }
   end
 end

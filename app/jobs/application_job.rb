@@ -5,7 +5,7 @@ class ApplicationJob < ActiveJob::Base
   after_perform :integration_stop, :clear_tmp_files, :delete_all_data
 
   discard_on(StandardError) do |job, error|
-    raise error.class if error.class == ConcurrentJobsError
+    raise error.class if error.instance_of?(ConcurrentJobsError)
 
     job.clean_up
     raise error
@@ -23,7 +23,7 @@ class ApplicationJob < ActiveJob::Base
     errors = integrate(params, _user_uploaded)
     error_logger.info "Errors for #{name} to #{params[:target]} at: #{DateTime.now}"
     errors.each do |error|
-      error_logger.error "____________________________________________________"
+      error_logger.error '____________________________________________________'
       error_logger.error "Error: #{error[:response]}" if error[:response]
       error_logger.error "Affected Faculty: #{error[:affected_faculty]}" if error[:affected_faculty]
       error_logger.error "Affected OSPs: #{error[:affected_osps]}" if error[:affected_osps]
