@@ -45,7 +45,7 @@ USER fams
 COPY --chown=fams . /fams_tools
 CMD ["sleep", "infinity"]
 
-FROM base as prod
+FROM base as production
 COPY --chown=fams . /fams_tools
 RUN bundle exec rails assets:precompile
 
