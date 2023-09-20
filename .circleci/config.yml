@@ -5,6 +5,7 @@ orbs:
 
 jobs:
   publish:
+    executor: docker/docker
     steps:
       - setup_remote_docker
       - checkout
