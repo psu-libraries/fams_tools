@@ -20,9 +20,7 @@ jobs:
       - docker/push:
           image: library/fams-tools
           registry: harbor.k8s.libraries.psu.edu
-          use-buildkit: true
           tag: "$CIRCLE_SHA1"
-          extra_build_args: "--target=production"
   build:
     machine: true
     steps:
