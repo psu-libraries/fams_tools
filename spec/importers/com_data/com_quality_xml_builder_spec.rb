@@ -31,7 +31,7 @@ RSpec.describe ComData::ComQualityXmlBuilder do
   let(:xml_builder_obj) { ComData::ComQualityXmlBuilder.new }
 
   describe '#build_xml_quality' do
-    it 'should return a list with an xml of COURSE_EVAL records' do
+    it 'returns a list with an xml of COURSE_EVAL records' do
       data_sets.each do |row|
         faculty = if row['FACULTY_USERNAME'] == 'notCOM'
                     FactoryBot.create :faculty, com_id: row['FACULTY_USERNAME'], college: 'IST'

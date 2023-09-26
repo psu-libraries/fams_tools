@@ -11,7 +11,7 @@ RSpec.describe ComData::ComQualityPopulateDb do
     data_arr << ['batman', 'Wayne  Bruce', 'Endocrinology/Reproductive', '1938-1939', 'faculty', 4.2, 1939, 'Lecture']
     data_arr << ['spiderman', 'Parker  Peter', 'Swinging',  '1962-1963', 'faculty', 5.0, 575, 'Lecture']
     data_arr << ['spiderman', 'Parker  Peter', 'Climbing',  '2023-2024', 'faculty', 5.0, 575, 'Sm Grp Facilitation']
-    data_arr.each { |a| arr_of_hashes << Hash[keys.zip(a)] }
+    data_arr.each { |a| arr_of_hashes << keys.zip(a).to_h }
     arr_of_hashes
   end
 
@@ -36,7 +36,7 @@ RSpec.describe ComData::ComQualityPopulateDb do
   end
 
   describe '#populate' do
-    it 'should populate the database with com quality data' do
+    it 'populates the database with com quality data' do
       com_quality_populate_db_obj.com_parser = ComData::ComParser.allocate
       com_quality_populate_db_obj.com_parser.csv_hash = fake_sheet
       com_quality_populate_db_obj.populate

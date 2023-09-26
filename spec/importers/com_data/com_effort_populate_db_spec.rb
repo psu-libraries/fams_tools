@@ -16,7 +16,7 @@ RSpec.describe ComData::ComEffortPopulateDb do
                  'FTF REQ Various Rooms 10-12 PBL - EndoRepro PBL 1402 - Thyroid', '6/26/97 9:45', 7]
     data_arr << ['hgranger', 'Granger Hermione', 'Dark Arts', '2001-2002', 'Sm Grp Facilitation',
                  'FTF REQ Various Rooms 10-12 PBL - EndoRepro PBL 1402 - Thyroid', '11/1/01 12:00', 8]
-    data_arr.each { |a| arr_of_hashes << Hash[keys.zip(a)] }
+    data_arr.each { |a| arr_of_hashes << keys.zip(a).to_h }
     arr_of_hashes
   end
 
@@ -41,7 +41,7 @@ RSpec.describe ComData::ComEffortPopulateDb do
   end
 
   describe '#populate' do
-    it 'should populate the database with com effort data' do
+    it 'populates the database with com effort data' do
       com_effort_populate_db_obj.com_parser = ComData::ComParser.allocate
       com_effort_populate_db_obj.com_parser.csv_hash = fake_sheet
       com_effort_populate_db_obj.populate

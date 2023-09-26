@@ -20,12 +20,12 @@ describe '#com_quality_integrate' do
                    com_id: 'spiderman',
                    college: 'MD')
   end
-  let!(:integration) { FactoryBot.create :integration }
+  let!(:integration) { FactoryBot.create(:integration) }
   let(:passcode) do
     Rails.application.config_for(:integration_passcode)[:passcode]
   end
 
-  context 'when COM Quality Integration is selected', type: :feature, js: true do
+  context 'when COM Quality Integration is selected', js: true, type: :feature do
     before do
       stub_request(:post, 'https://betawebservices.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University')
         .with(

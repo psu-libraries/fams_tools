@@ -15,7 +15,7 @@ class ComEffortIntegrateJob < ApplicationJob
   def create_tmp_file(params, user_uploaded)
     if user_uploaded == true
       f_path = File.join('app', 'parsing_files', 'ume_faculty_effort.csv')
-      File.open(f_path, 'wb') { |f| f.write(params[:com_effort_file].read) }
+      File.binwrite(f_path, params[:com_effort_file].read)
       f_path
     else
       # Running bash script to grab Com files

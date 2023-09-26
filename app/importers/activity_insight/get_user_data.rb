@@ -29,17 +29,16 @@ class ActivityInsight::GetUserData
 
       if row['Enabled?'].downcase == 'yes' && row['Has Access to Manage Activities?'].downcase == 'yes'
         faculty.update({
-          user_id:   row['User ID'],
-          f_name:    row['First Name'],
-          l_name:    row['Last Name'],
-          m_name:    row['Middle Name'],
-          college:   row['College'],
-          campus:    row['Campus'],
-          com_id:    nil})
+                         user_id: row['User ID'],
+                         f_name: row['First Name'],
+                         l_name: row['Last Name'],
+                         m_name: row['Middle Name'],
+                         college: row['College'],
+                         campus: row['Campus'],
+                         com_id: nil
+                       })
 
-        if row['College'] == 'MD'
-          faculty.update({com_id:    row['Penn State Health Username']})
-        end
+        faculty.update({ com_id: row['Penn State Health Username'] }) if row['College'] == 'MD'
       else
         faculty.delete
       end
