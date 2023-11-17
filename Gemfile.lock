@@ -240,7 +240,7 @@ GEM
       ttfunk
     popper_js (1.16.1)
     public_suffix (5.0.1)
-    puma (4.3.12)
+    puma (5.6.7)
       nio4r (~> 2.0)
     racc (1.6.2)
     rack (2.2.6.4)
@@ -435,8 +435,8 @@ DEPENDENCIES
   mysql2 (~> 0.5.4)
   net-ldap
   pdf-reader
-  puma (~> 4.3)
-  rails (~> 7.0)
+  puma (~> 5.6)
+  rails (~> 7.0.0)
   rails-controller-testing
   rspec-rails (~> 6.0)
   rspec-retry
