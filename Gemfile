@@ -73,10 +73,12 @@ gem 'exiftool_vendored', '~> 12.33'
 # Needed for Ruby 3+
 gem 'webrick'
 
+# Pin date, racc, websocket-driver, and nio4r at these versions
+# or else they fail to bundle on the RedHat server
 gem 'date', '= 3.3.3'
+gem 'nio4r', '= 2.5.8'
 gem 'racc', '= 1.6.2'
 gem 'websocket-driver', '= 0.7.5'
-gem 'nio4r', '= 2.5.8'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -100,6 +102,8 @@ group :development, :test do
   # Code coverage
   gem 'simplecov', '~> 0.17.0'
   # Use Puma as the app server
+  # Since passenger is used in production this doesn't need to be
+  # installed on the RedHat server (it fails anyway)
   gem 'puma', '~> 5.6'
 end
 
