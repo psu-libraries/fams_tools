@@ -24,13 +24,13 @@ gem 'ed25519'
 # For scheduled tasks
 gem 'whenever'
 
-gem 'rails', '~> 7.0'
+gem 'rails', '~> 7.0.5.1'
 # Use mysql as the database for Active Record
 # ActiveRecord only works with specific versions of mysql2.
 gem 'mysql2', '~> 0.5.4'
 
 # Use Puma as the app server
-gem 'puma', '~> 4.3'
+gem 'puma', '~> 5.6'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 6.0'
 # Use Uglifier as compressor for JavaScript assets
