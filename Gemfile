@@ -75,6 +75,9 @@ gem 'exiftool_vendored', '~> 12.33'
 # Needed for Ruby 3+
 gem 'webrick'
 
+gem 'date', '= 3.3.3'
+gem 'racc', '= 1.6.2'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
