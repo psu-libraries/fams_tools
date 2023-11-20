@@ -29,8 +29,6 @@ gem 'rails', '~> 7.0.5.1'
 # ActiveRecord only works with specific versions of mysql2.
 gem 'mysql2', '~> 0.5.4'
 
-# Use Puma as the app server
-gem 'puma', '~> 5.6'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 6.0'
 # Use Uglifier as compressor for JavaScript assets
@@ -101,6 +99,8 @@ group :development, :test do
   gem 'rubocop-rspec'
   # Code coverage
   gem 'simplecov', '~> 0.17.0'
+  # Use Puma as the app server
+  gem 'puma', '~> 5.6'
 end
 
 group :development do
