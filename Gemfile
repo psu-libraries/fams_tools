@@ -24,13 +24,11 @@ gem 'ed25519'
 # For scheduled tasks
 gem 'whenever'
 
-gem 'rails', '~> 7.0'
+gem 'rails', '~> 7.0.5.1'
 # Use mysql as the database for Active Record
 # ActiveRecord only works with specific versions of mysql2.
 gem 'mysql2', '~> 0.5.4'
 
-# Use Puma as the app server
-gem 'puma', '~> 4.3'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 6.0'
 # Use Uglifier as compressor for JavaScript assets
@@ -75,6 +73,13 @@ gem 'exiftool_vendored', '~> 12.33'
 # Needed for Ruby 3+
 gem 'webrick'
 
+# Pin date, racc, websocket-driver, and nio4r at these versions
+# or else they fail to bundle on the RedHat server
+gem 'date', '= 3.3.3'
+gem 'nio4r', '= 2.5.8'
+gem 'racc', '= 1.6.2'
+gem 'websocket-driver', '= 0.7.5'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
@@ -96,6 +101,10 @@ group :development, :test do
   gem 'rubocop-rspec'
   # Code coverage
   gem 'simplecov', '~> 0.17.0'
+  # Use Puma as the app server
+  # Since passenger is used in production this doesn't need to be
+  # installed on the RedHat server (it fails anyway)
+  gem 'puma', '~> 5.6'
 end
 
 group :development do
