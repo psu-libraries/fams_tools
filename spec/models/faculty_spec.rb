@@ -23,5 +23,7 @@ describe Faculty, type: :model do
     it { is_expected.to have_many(:sections) }
     it { is_expected.to have_many(:courses) }
     it { is_expected.to have_many(:yearlies) }
+    it { is_expected.to have_many(:com_efforts) }
+    it { is_expected.to have_many(:com_qualities) }
   end
 end

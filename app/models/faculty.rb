@@ -8,4 +8,6 @@ class Faculty < ApplicationRecord
   has_many :presentations
   has_one :personal_contact
   has_many :yearlies
+  has_many :com_efforts
+  has_many :com_qualities
 end

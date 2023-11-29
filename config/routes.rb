@@ -9,6 +9,8 @@ Rails.application.routes.draw do
   post '/ai_integration/pub_integrate', to: 'ai_integration#pub_integrate'
   post '/ai_integration/ldap_integrate', to: 'ai_integration#ldap_integrate'
   post '/ai_integration/delete_records', to: 'ai_integration#delete_records'
+  post '/ai_integration/com_effort_integrate', to: 'ai_integration#com_effort_integrate'
+  post '/ai_integration/com_quality_integrate', to: 'ai_integration#com_quality_integrate'
   get '/ai_backups_listing', to: 'ai_backups_listing#index'
   get '/ai_backups_listing/download', to: 'ai_backups_listing#download'
   get '/post_prints', to: 'post_prints#index'

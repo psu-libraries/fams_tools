@@ -68,5 +68,7 @@ class ApplicationJob < ActiveJob::Base
     Presentation.delete_all
     PresentationContributor.delete_all
     Yearly.delete_all
+    ComEffort.delete_all
+    ComQuality.delete_all
   end
 end

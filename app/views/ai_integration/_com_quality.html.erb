@@ -1,0 +1,13 @@
+<div class="col-sm">
+  <%= form_with :url => { :action => "com_quality_integrate" }, id: "com_quality" do |form| %>
+    <p> <%= label(:com_quality_file, text = "COM Quality Data File") %><%= form.file_field :com_quality_file, required: true %> </p>
+    <div class="row">
+      <%= render 'buttons_and_code', form: form %>
+    </div>
+  <% end %>
+</div>
+<div class="col-sm">
+  <h4>COM Quality Integration Errors:</h4>
+  <br/>
+  <%= render 'file_download_button', log_path: @com_quality_log_path %>
+</div>
