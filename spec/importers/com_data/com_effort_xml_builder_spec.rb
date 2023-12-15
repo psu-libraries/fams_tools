@@ -9,7 +9,7 @@ RSpec.describe ComData::ComEffortXmlBuilder do
        'EVENT_TYPE' => 'Lecture',
        'EVENT' => 'FTF REQ Various Rooms 10-12 PBL - EndoRepro PBL 1402 - Thyroid',
        'EVENT_DATE' => '5/25/77',
-       'UME_CALCULATED_TEACHING_WHILE_NON_BILLING_EFFORT__HRS_' => 2 },
+       'UME_CALCULATED_TEACHING_WHILE_NON_BILLING_EFFORT__HRS_' => 2.5 },
      { 'FACULTY_USERNAME' => 'hgranger',
        'FACULTY_NAME' => 'Granger Hermione',
        'COURSE' => 'Potions',
@@ -17,7 +17,7 @@ RSpec.describe ComData::ComEffortXmlBuilder do
        'EVENT_TYPE' => 'Sm Grp Facilitation',
        'EVENT' => 'FTF REQ Various Rooms 10-12 PBL - EndoRepro PBL 1402 - Thyroid',
        'EVENT_DATE' => '6/26/97',
-       'UME_CALCULATED_TEACHING_WHILE_NON_BILLING_EFFORT__HRS_' => 7 },
+       'UME_CALCULATED_TEACHING_WHILE_NON_BILLING_EFFORT__HRS_' => 7.25 },
      { 'FACULTY_USERNAME' => 'notCOM',
        'FACULTY_NAME' => 'Not MD',
        'COURSE' => 'test',
@@ -61,7 +61,7 @@ RSpec.describe ComData::ComEffortXmlBuilder do
       <DTM_EVENT access="READ_ONLY">May</DTM_EVENT>
       <DTD_EVENT access="READ_ONLY">25</DTD_EVENT>
       <DTY_EVENT access="READ_ONLY">1977</DTY_EVENT>
-      <CAL_TEACH_HRS access="READ_ONLY">2</CAL_TEACH_HRS>
+      <CAL_TEACH_HRS access="READ_ONLY">2.5</CAL_TEACH_HRS>
     </INSTRUCT_TAUGHT>
   </Record>
   <Record PennStateHealthUsername="hgranger">
@@ -73,7 +73,7 @@ RSpec.describe ComData::ComEffortXmlBuilder do
       <DTM_EVENT access="READ_ONLY">June</DTM_EVENT>
       <DTD_EVENT access="READ_ONLY">26</DTD_EVENT>
       <DTY_EVENT access="READ_ONLY">1997</DTY_EVENT>
-      <CAL_TEACH_HRS access="READ_ONLY">7</CAL_TEACH_HRS>
+      <CAL_TEACH_HRS access="READ_ONLY">7.25</CAL_TEACH_HRS>
     </INSTRUCT_TAUGHT>
   </Record>
 </Data>

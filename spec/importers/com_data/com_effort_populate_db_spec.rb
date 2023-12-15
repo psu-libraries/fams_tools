@@ -9,7 +9,7 @@ RSpec.describe ComData::ComEffortPopulateDb do
     arr_of_hashes = []
     keys = headers
     data_arr << ['lskywalker', 'Skywalker Luke', 'the Force',  '1976-1977', 'Lecture',
-                 'FTF REQ Various Rooms 10-12 PBL - EndoRepro PBL 1402 - Thyroid', '5/25/77 10:00', 2]
+                 'FTF REQ Various Rooms 10-12 PBL - EndoRepro PBL 1402 - Thyroid', '5/25/77 10:00', 2.5]
     data_arr << ['lskywalker', 'Skywalker Luke', 'the Force',  '1976-1977', 'Lecture',
                  'FTF REQ Various Rooms 10-12 PBL - EndoRepro PBL 1402 - Thyroid', '5/25/77 1:00', 4]
     data_arr << ['hgranger', 'Granger Hermione', 'Potions', '1997-1998', 'Sm Grp Facilitation',
@@ -52,7 +52,7 @@ RSpec.describe ComData::ComEffortPopulateDb do
       expect(ComEffort.find_by(com_id: 'hgranger').hours).to eq(8)
       expect(ComEffort.find_by(com_id: 'hgranger').event_type).to eq('Sm Grp Facilitation')
       expect(ComEffort.find_by(com_id: 'hgranger').event).to eq('FTF REQ Various Rooms 10-12 PBL - EndoRepro PBL 1402 - Thyroid')
-      expect(ComEffort.find_by(com_id: 'lskywalker').hours).to eq(6)
+      expect(ComEffort.find_by(com_id: 'lskywalker').hours).to eq(6.5)
       expect(ComEffort.find_by(com_id: 'lskywalker').event_type).to eq('Lecture')
       expect(ComEffort.find_by(com_id: 'lskywalker').faculty).to eq(faculty2)
     end

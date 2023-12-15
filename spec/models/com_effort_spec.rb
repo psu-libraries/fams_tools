@@ -10,7 +10,7 @@ describe ComEffort, type: :model do
     it { is_expected.to have_db_column(:faculty_name).of_type(:string) }
     it { is_expected.to have_db_column(:event).of_type(:string) }
     it { is_expected.to have_db_column(:event).of_type(:string) }
-    it { is_expected.to have_db_column(:hours).of_type(:integer) }
+    it { is_expected.to have_db_column(:hours).of_type(:decimal) }
 
     it { is_expected.to have_db_index(%i[com_id course event event_date]).unique(true) }
     it { is_expected.to have_db_index([:faculty_id]) }
