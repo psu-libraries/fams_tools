@@ -79,14 +79,14 @@ describe '#com_effort_integrate' do
       "<EVENT_TITLE access=\"READ_ONLY\">FTF REQ Various Rooms 10-12 PBL - EndoRepro PBL 1402 - Thyroid</EVENT_TITLE>\n      " +
       "<EVENT_TYPE access=\"READ_ONLY\">Sm Grp Facilitation</EVENT_TYPE>\n      " +
       "<DTM_EVENT access=\"READ_ONLY\">June</DTM_EVENT>\n      <DTD_EVENT access=\"READ_ONLY\">26</DTD_EVENT>\n      " +
-      "<DTY_EVENT access=\"READ_ONLY\">1997</DTY_EVENT>\n      <CAL_TEACH_HRS access=\"READ_ONLY\">7</CAL_TEACH_HRS>\n    " +
+      "<DTY_EVENT access=\"READ_ONLY\">1997</DTY_EVENT>\n      <CAL_TEACH_HRS access=\"READ_ONLY\">7.0</CAL_TEACH_HRS>\n    " +
       "</INSTRUCT_TAUGHT>\n  </Record>\n  <Record PennStateHealthUsername=\"lskywalker\">\n    <INSTRUCT_TAUGHT>\n      " +
       "<COURSE_YEAR access=\"READ_ONLY\">1976-1977</COURSE_YEAR>\n      " +
       "<COURSE_TITLE access=\"READ_ONLY\">the Force</COURSE_TITLE>\n      " +
       "<EVENT_TITLE access=\"READ_ONLY\">FTF REQ Various Rooms 10-12 PBL - EndoRepro PBL 1402 - Thyroid</EVENT_TITLE>\n      " +
       "<EVENT_TYPE access=\"READ_ONLY\">Lecture</EVENT_TYPE>\n      <DTM_EVENT access=\"READ_ONLY\">May</DTM_EVENT>\n      " +
       "<DTD_EVENT access=\"READ_ONLY\">25</DTD_EVENT>\n      <DTY_EVENT access=\"READ_ONLY\">1977</DTY_EVENT>\n      " +
-      "<CAL_TEACH_HRS access=\"READ_ONLY\">2</CAL_TEACH_HRS>\n    </INSTRUCT_TAUGHT>\n  </Record>\n</Data>\n"
+      "<CAL_TEACH_HRS access=\"READ_ONLY\">2.0</CAL_TEACH_HRS>\n    </INSTRUCT_TAUGHT>\n  </Record>\n</Data>\n"
   end
 
   def error_message

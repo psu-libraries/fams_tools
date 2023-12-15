@@ -24,7 +24,7 @@ class ComData::ComEffortPopulateDb
                                                      faculty:)
 
         com_effort.hours ||= 0
-        com_effort.hours += row['UME_CALCULATED_TEACHING_WHILE_NON_BILLING_EFFORT__HRS_'].to_f
+        com_effort.hours += row['UME_CALCULATED_TEACHING_WHILE_NON_BILLING_EFFORT__HRS_'].to_d
 
         com_effort.save!
       rescue ActiveRecord::RecordNotUnique

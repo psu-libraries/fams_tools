@@ -9,13 +9,13 @@ RSpec.describe ComData::ComEffortPopulateDb do
     arr_of_hashes = []
     keys = headers
     data_arr << ['lskywalker', 'Skywalker Luke', 'the Force',  '1976-1977', 'Lecture',
-                 'FTF REQ Various Rooms 10-12 PBL - EndoRepro PBL 1402 - Thyroid', '5/25/77 10:00', 2]
+                 'FTF REQ Various Rooms 10-12 PBL - EndoRepro PBL 1402 - Thyroid', '5/25/1977 10:00', 2.5]
     data_arr << ['lskywalker', 'Skywalker Luke', 'the Force',  '1976-1977', 'Lecture',
-                 'FTF REQ Various Rooms 10-12 PBL - EndoRepro PBL 1402 - Thyroid', '5/25/77 1:00', 4]
+                 'FTF REQ Various Rooms 10-12 PBL - EndoRepro PBL 1402 - Thyroid', '5/25/1977 1:00', 4]
     data_arr << ['hgranger', 'Granger Hermione', 'Potions', '1997-1998', 'Sm Grp Facilitation',
-                 'FTF REQ Various Rooms 10-12 PBL - EndoRepro PBL 1402 - Thyroid', '6/26/97 9:45', 7]
+                 'FTF REQ Various Rooms 10-12 PBL - EndoRepro PBL 1402 - Thyroid', '6/26/1997 9:45', 7]
     data_arr << ['hgranger', 'Granger Hermione', 'Dark Arts', '2001-2002', 'Sm Grp Facilitation',
-                 'FTF REQ Various Rooms 10-12 PBL - EndoRepro PBL 1402 - Thyroid', '11/1/01 12:00', 8]
+                 'FTF REQ Various Rooms 10-12 PBL - EndoRepro PBL 1402 - Thyroid', '11/1/2001 12:00', 8]
     data_arr.each { |a| arr_of_hashes << keys.zip(a).to_h }
     arr_of_hashes
   end
@@ -52,7 +52,7 @@ RSpec.describe ComData::ComEffortPopulateDb do
       expect(ComEffort.find_by(com_id: 'hgranger').hours).to eq(8)
       expect(ComEffort.find_by(com_id: 'hgranger').event_type).to eq('Sm Grp Facilitation')
       expect(ComEffort.find_by(com_id: 'hgranger').event).to eq('FTF REQ Various Rooms 10-12 PBL - EndoRepro PBL 1402 - Thyroid')
-      expect(ComEffort.find_by(com_id: 'lskywalker').hours).to eq(6)
+      expect(ComEffort.find_by(com_id: 'lskywalker').hours).to eq(6.5)
       expect(ComEffort.find_by(com_id: 'lskywalker').event_type).to eq('Lecture')
       expect(ComEffort.find_by(com_id: 'lskywalker').faculty).to eq(faculty2)
     end

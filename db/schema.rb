@@ -28,7 +28,7 @@ ActiveRecord::Schema[7.0].define(version: 2018050314201234) do
     t.string "event_type"
     t.string "faculty_name"
     t.string "event"
-    t.integer "hours"
+    t.decimal "hours", precision: 10, scale: 2
     t.bigint "faculty_id"
     t.string "event_date"
     t.index ["com_id", "course", "event", "event_date"], name: "index_com_efforts_on_com_id_and_course_and_event_and_event_date", unique: true, length: { course: 50, event: 50 }
