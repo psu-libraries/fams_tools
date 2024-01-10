@@ -47,10 +47,10 @@ RSpec.describe LionpathData::LionpathPopulateDb do
       lionpath_populate_db_obj.lionpath_parser = LionpathData::LionpathParser.allocate
       lionpath_populate_db_obj.lionpath_parser.csv_hash = fake_sheet
       lionpath_populate_db_obj.populate
-      expect(Course.all.count).to eq(3)
-      expect(Faculty.all.count).to eq(3)
-      expect(Section.all.count).to eq(4)
-      expect(Faculty.find_by(access_id: 'abc123').sections.all.count).to eq(2)
+      expect(Course.count).to eq(3)
+      expect(Faculty.count).to eq(3)
+      expect(Section.count).to eq(4)
+      expect(Faculty.find_by(access_id: 'abc123').sections.count).to eq(2)
       expect(Faculty.find_by(access_id: 'ghi789').sections.first.course.academic_course_id).to eq(2222)
       expect(Faculty.find_by(access_id: 'ghi789').sections.first.instructor_role).to eq('Primary Instructor')
     end

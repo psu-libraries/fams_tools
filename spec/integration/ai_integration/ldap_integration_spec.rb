@@ -27,7 +27,7 @@ describe '#ldap_integrate' do
       .to_return(status: 200, body: 'Success', headers: {})
   end
 
-  context 'when Personal & Contact Integration is selected', js: true, type: :feature do
+  context 'when Personal & Contact Integration is selected', :js, type: :feature do
     it 'gets ldap data and sends data to activity insight' do
       visit ai_integration_path
       select('Personal & Contact Integration', from: 'label_integration_type').select_option

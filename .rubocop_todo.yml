@@ -206,8 +206,14 @@ RSpec/ExpectChange:
 # Include: **/*_spec*rb*, **/spec/**/*
 RSpec/FilePath:
   Exclude:
-    - 'spec/importers/activity_insight/ai_integrate_data_spec.rb'
-    - 'spec/importers/yearly_data/yearly_data_importer_spec.rb'
+    - 'spec/integration/ai_backups_page_spec.rb'
+    - 'spec/integration/ai_integration/error_redirect_spec.rb'
+    - 'spec/integration/ai_integration/integration_in_progress_spec.rb'
+    - 'spec/integration/cv_parser_spec.rb'
+    - 'spec/integration/main_spec.rb'
+
+RSpec/SpecFilePathFormat:
+  Exclude:
     - 'spec/integration/ai_backups_page_spec.rb'
     - 'spec/integration/ai_integration/error_redirect_spec.rb'
     - 'spec/integration/ai_integration/integration_in_progress_spec.rb'

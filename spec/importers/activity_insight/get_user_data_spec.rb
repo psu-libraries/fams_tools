@@ -21,7 +21,7 @@ RSpec.describe ActivityInsight::GetUserData do
       expect(Faculty.find(faculty1.id)).to be_present
       allow(Spreadsheet).to receive_message_chain(:open, :worksheet) { fake_book }
       get_user_data_obj.call
-      expect(Faculty.all.count).to eq(1)
+      expect(Faculty.count).to eq(1)
       expect(Faculty.find_by(access_id: 'zzz999').f_name).to eq('Bill')
       expect(Faculty.find_by(access_id: 'zzz999').college).to eq('MD')
       expect(Faculty.find_by(access_id: 'zzz999').campus).to eq('UP')

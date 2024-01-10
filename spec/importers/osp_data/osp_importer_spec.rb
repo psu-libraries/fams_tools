@@ -192,11 +192,11 @@ RSpec.describe OspData::OspImporter do
       allow_any_instance_of(OspData::OspImporter).to receive(:is_good_date).and_return(true)
       allow_any_instance_of(OspData::OspImporter).to receive(:is_proper_status).and_return(true)
       osp_parser_obj.format_and_populate
-      expect(Sponsor.all.count).to eq(2)
-      expect(Contract.all.count).to eq(3)
-      expect(Faculty.all.count).to eq(6)
-      expect(ContractFacultyLink.all.count).to eq(4)
-      expect(Faculty.find_by(access_id: 'abc123').contract_faculty_links.all.count).to eq(2)
+      expect(Sponsor.count).to eq(2)
+      expect(Contract.count).to eq(3)
+      expect(Faculty.count).to eq(6)
+      expect(ContractFacultyLink.count).to eq(4)
+      expect(Faculty.find_by(access_id: 'abc123').contract_faculty_links.count).to eq(2)
       expect(Faculty.find_by(access_id: 'abc123').contract_faculty_links.first.contract.sponsor.sponsor_name).to eq('Cool Sponsor')
       expect(Contract.find_by(osp_key: 1234).notfunded).to eq(Date.parse('Sun, 02 Feb 2015'))
     end

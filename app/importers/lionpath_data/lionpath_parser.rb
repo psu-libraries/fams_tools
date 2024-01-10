@@ -61,11 +61,11 @@ class LionpathData::LionpathParser
   def write_flagged_to_xl(filename = 'data/flagged_more_than_two.xls')
     wb = Spreadsheet::Workbook.new filename
     sheet = wb.create_worksheet
-    @flagged[0].each do |k, _v|
+    @flagged[0].each_key do |k|
       sheet.row(0).push(k)
     end
     @flagged.uniq.each_with_index do |row, index|
-      row.each do |_k, v|
+      row.each_value do |v|
         sheet.row(index + 1).push(v)
       end
     end

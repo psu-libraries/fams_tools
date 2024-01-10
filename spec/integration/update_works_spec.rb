@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'Updating works', js: true, type: :feature do
+RSpec.describe 'Updating works', :js, type: :feature do
   let!(:faculty) { FactoryBot.create(:faculty) }
   let!(:publication_listing) { FactoryBot.create(:publication_listing) }
   let!(:work) { FactoryBot.create(:work, publication_listing:) }
@@ -10,7 +10,7 @@ RSpec.describe 'Updating works', js: true, type: :feature do
   describe 'modifying and updating data' do
     it 'updates the data in db' do
       visit "publication_listings/#{publication_listing.id}/works"
-      click_link 'Add Author'
+      click_on 'Add Author'
       author_fields = all("input[name^='publication_listing[works_attributes][0][authors_attributes]']")
       author_fields[3].set('Test')
       author_fields[4].set('T.')
@@ -19,7 +19,7 @@ RSpec.describe 'Updating works', js: true, type: :feature do
       find_by_id('publication_listing_works_attributes_0_date').set('September 23-30, 2010')
       all("i[class='fa remove-nested fa-close']").last.trigger('click')
       find_by_id('publication_listing_works_attributes_0_isbn').set('1234567890')
-      click_button 'Update Works'
+      click_on 'Update Works'
       sleep 1
       expect(Author.count).to eq 2
       expect(Author.second.m_name).to eq 'T.'

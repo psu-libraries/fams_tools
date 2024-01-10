@@ -1,6 +1,6 @@
 require 'importers/importers_helper'
 
-RSpec.describe LdapData::ImportLdapData, ldap: true do
+RSpec.describe LdapData::ImportLdapData, :ldap do
   before do
     faculty2 = Faculty.create!(access_id: 'ajk5603')
   end

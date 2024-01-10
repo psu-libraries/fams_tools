@@ -23,7 +23,7 @@ describe '#pub_integrate' do
     Rails.application.config_for(:integration_passcode)[:passcode]
   end
 
-  context 'when RMD Publications Integration is selected', js: true, type: :feature do
+  context 'when RMD Publications Integration is selected', :js, type: :feature do
     before do
       @pubs = File.read('spec/fixtures/metadata_pub_json.json').to_s
 
