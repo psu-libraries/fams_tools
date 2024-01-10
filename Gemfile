@@ -24,7 +24,7 @@ gem 'ed25519'
 # For scheduled tasks
 gem 'whenever'
 
-gem 'rails', '~> 7.0.5.1'
+gem 'rails', '~> 7.0.7.1'
 # Use mysql as the database for Active Record
 # ActiveRecord only works with specific versions of mysql2.
 gem 'mysql2', '~> 0.5.4'
