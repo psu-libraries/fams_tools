@@ -53,7 +53,7 @@ set :format_options, command_output: false
 namespace :deploy do
   task :symlink_shared do
     desc 'set up the shared directory to have the symbolic links to the appropriate directories shared between servers'
-    puts release_path.to_s
+    puts release_path
     on roles(:web) do
       execute "ln -sf /rubytools/#{fetch(:application)}/config_#{fetch(:stage)}/#{fetch(:partner)}database.yml #{release_path}/config/database.yml"
       execute "ln -sf /rubytools/#{fetch(:application)}/config_#{fetch(:stage)}/#{fetch(:partner)}secrets.yml #{release_path}/config/secrets.yml"

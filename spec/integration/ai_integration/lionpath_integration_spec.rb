@@ -22,7 +22,7 @@ describe '#lionpath_integrate' do
     Rails.application.config_for(:integration_passcode)[:passcode]
   end
 
-  context 'when Courses Taught Integration is selected', js: true, type: :feature do
+  context 'when Courses Taught Integration is selected', :js, type: :feature do
     before do
       @courses = fixture_file_upload('spec/fixtures/schteach.csv')
 

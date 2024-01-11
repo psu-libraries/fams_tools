@@ -15,7 +15,7 @@ describe '#yearly_integrate' do
       .to_return(status: 200, body: '', headers: {})
   end
 
-  context 'when passcode is supplied and beta integration is clicked', js: true, type: :feature do
+  context 'when passcode is supplied and beta integration is clicked', :js, type: :feature do
     it 'integrates yearly data into AI beta' do
       visit ai_integration_path
       select('Yearly Integration', from: 'label_integration_type').select_option

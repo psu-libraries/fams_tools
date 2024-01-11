@@ -25,7 +25,7 @@ describe '#com_effort_integrate' do
     Rails.application.config_for(:integration_passcode)[:passcode]
   end
 
-  context 'when Com Effort Integration is selected', js: true, type: :feature do
+  context 'when Com Effort Integration is selected', :js, type: :feature do
     before do
       stub_request(:post, 'https://betawebservices.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University')
         .with(

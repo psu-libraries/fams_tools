@@ -40,7 +40,7 @@ RSpec.describe ComData::ComQualityPopulateDb do
       com_quality_populate_db_obj.com_parser = ComData::ComParser.allocate
       com_quality_populate_db_obj.com_parser.csv_hash = fake_sheet
       com_quality_populate_db_obj.populate
-      expect(ComQuality.all.count).to eq(3)
+      expect(ComQuality.count).to eq(3)
       expect(ComQuality.where(com_id: 'spiderman').count).to eq(2)
       expect(ComQuality.find_by(com_id: 'spiderman').course).to eq('Climbing')
       expect(ComQuality.find_by(com_id: 'batman').event_type).to eq('Lecture')

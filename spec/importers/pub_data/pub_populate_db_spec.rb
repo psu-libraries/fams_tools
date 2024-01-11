@@ -38,7 +38,7 @@ RSpec.describe PubData::PubPopulateDb do
 
       pub_populate.populate(fake_data)
 
-      expect(Publication.all.count).to eq(3)
+      expect(Publication.count).to eq(3)
       expect(Publication.first.title).to eq('Test 1')
       expect(Publication.first.pure_ids).to eq(['1fj9184-j1ir-148'])
       expect(Publication.first.volume).to eq(1)
@@ -53,7 +53,7 @@ RSpec.describe PubData::PubPopulateDb do
       expect(Publication.first.authors_et_al).to eq(nil)
       expect(Publication.first.ai_ids).to eq([])
       expect(Faculty.find_by(access_id: 'abc123').publication_faculty_links.first.publication.external_authors.first.f_name).to eq('Alex')
-      expect(Faculty.find_by(access_id: 'abc123').publication_faculty_links.first.publication.external_authors.all.count).to eq(1)
+      expect(Faculty.find_by(access_id: 'abc123').publication_faculty_links.first.publication.external_authors.count).to eq(1)
       expect(Publication.first.publication_faculty_links.first.category).to eq('Academic Journal Article')
       expect(Publication.first.publication_faculty_links.first.dtm).to eq('January (1st Quarter/Winter)')
       expect(Publication.first.publication_faculty_links.first.status).to eq('Published')

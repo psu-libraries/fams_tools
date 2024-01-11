@@ -46,7 +46,7 @@ RSpec.describe PublicationListingsController do
 
     it 'clicks link to delete publication listing' do
       visit publication_listings_path
-      expect { click_link '[Delete]' }.to change { PublicationListing.count }.by(-1)
+      expect { click_on '[Delete]' }.to change { PublicationListing.count }.by(-1)
       expect(page).to have_current_path(publication_listings_path)
     end
   end

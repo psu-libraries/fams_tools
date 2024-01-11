@@ -23,9 +23,9 @@ class YearlyData::ImportYearlyData
     yearly_data_book.each_with_index do |row, index|
       values = []
       if index == 0
-        row.each { |_k, v| keys << v }
+        row.each_value { |v| keys << v }
       else
-        row.each { |_k, v| values << v }
+        row.each_value { |v| values << v }
         data << values
       end
       counter += 1

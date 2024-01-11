@@ -45,7 +45,7 @@ RSpec.describe ComData::ComEffortPopulateDb do
       com_effort_populate_db_obj.com_parser = ComData::ComParser.allocate
       com_effort_populate_db_obj.com_parser.csv_hash = fake_sheet
       com_effort_populate_db_obj.populate
-      expect(ComEffort.all.count).to eq(3)
+      expect(ComEffort.count).to eq(3)
       expect(ComEffort.where(com_id: 'hgranger').count).to eq(2)
       expect(ComEffort.find_by(com_id: 'hgranger').course).to eq('Dark Arts')
       expect(ComEffort.find_by(com_id: 'hgranger').course_year).to eq('2001-2002')

@@ -23,7 +23,7 @@ describe '#osp_integrate' do
     Rails.application.config_for(:integration_passcode)[:passcode]
   end
 
-  context 'when Contract/Grant Integration is selected', js: true, type: :feature do
+  context 'when Contract/Grant Integration is selected', :js, type: :feature do
     before do
       @contract_grants = fixture_file_upload('spec/fixtures/contract_grants.csv')
       @congrant_backup = fixture_file_upload('spec/fixtures/congrant_backup.csv')
