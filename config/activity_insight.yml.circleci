@@ -12,6 +12,8 @@ production:
     :key: "fake"
   s3_bucket:
     api_key: "fake"
+  lp_sftp:
+    username: "fake"
 
 development:
   main:
@@ -27,6 +29,8 @@ development:
     :key: "fake"
   s3_bucket:
     api_key: "fake"
+  lp_sftp:
+    username: "fake"
 
 test:
   main:
@@ -42,3 +46,5 @@ test:
     :key: "fake"
   s3_bucket:
     api_key: "fake"
+  lp_sftp:
+    username: "fake"
