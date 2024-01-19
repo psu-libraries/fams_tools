@@ -34,7 +34,7 @@ gem 'sass-rails', '~> 6.0'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 # See https://github.com/rails/execjs#readme for more supported runtimes
-gem 'mini_racer'
+gem 'mini_racer', '=0.6.3'
 
 # Dynamic nested forms for cv parser
 gem 'cocoon'
