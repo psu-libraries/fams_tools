@@ -96,7 +96,7 @@ group :development, :test do
   # Audit gems for vulnerabilities
   gem 'bundle-audit'
   # Ruby code linter
-  gem 'rubocop'
+  gem 'rubocop', '= 1.42.0'
   gem 'rubocop-rails'
   gem 'rubocop-rspec'
   # Code coverage
