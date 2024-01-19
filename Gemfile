@@ -68,7 +68,7 @@ gem 'jquery-rails', '~> 4.5.1'
 gem 'pdf-reader'
 
 # ExifTool for parsing PDF metadata
-gem 'exiftool_vendored', '~> 12.33'
+gem 'exiftool_vendored', '= 12.52'
 
 # Needed for Ruby 3+
 gem 'webrick'
