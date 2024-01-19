@@ -168,7 +168,7 @@ GEM
       exiftool (>= 0.7.0)
     factory_bot (6.4.5)
       activesupport (>= 5.0.0)
-    ffi (1.16.3)
+    ffi (1.15.5)
     globalid (1.2.1)
       activesupport (>= 6.1)
     hashdiff (1.1.0)
