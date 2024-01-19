@@ -27,7 +27,7 @@ gem 'whenever'
 gem 'rails', '~> 7.0.7.1'
 # Use mysql as the database for Active Record
 # ActiveRecord only works with specific versions of mysql2.
-gem 'mysql2', '~> 0.5.5'
+gem 'mysql2', '= 0.5.4'
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 6.0'

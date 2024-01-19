@@ -212,7 +212,7 @@ GEM
     minitest (5.20.0)
     multi_xml (0.6.0)
     mutex_m (0.2.0)
-    mysql2 (0.5.5)
+    mysql2 (0.5.4)
     namae (1.1.1)
     net-imap (0.4.9.1)
       date
@@ -444,7 +444,7 @@ DEPENDENCIES
   jbuilder (~> 2.5)
   jquery-rails (~> 4.5.1)
   mini_racer
-  mysql2 (~> 0.5.5)
+  mysql2 (= 0.5.4)
   net-ldap
   nio4r (= 2.5.8)
   pdf-reader
