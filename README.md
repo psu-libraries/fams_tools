@@ -87,7 +87,7 @@ The contract/grant data import runs on the second Monday of every month at 01:00
 
   To run this locally, there is a setup.sh script that has been configured to run docker-compose, build the image locally and set up the services locally. This service will spin up a local mysql db and the ruby web application. 
   The dependencies for the script to work 
-  1. Set up your environment variables in a .env file (a .sample.env provided)
+  1. Set up your environment variables in a .env file (a .sample.env provided) - Check vault for pw: vault/secrets/secret/show/fams_tools
   2. Install docker and docker-compose
   3. Get the password for the database 
   *. To run the script: 
