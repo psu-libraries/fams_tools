@@ -39,3 +39,5 @@ spec/examples.txt
 /public/post_prints
 /coverage
 /vendor/bundle/**/*
+
+.env
