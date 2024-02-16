@@ -91,10 +91,7 @@ The contract/grant data import runs on the second Monday of every month at 01:00
   2. Install docker and docker-compose
   3. Get the password for the database 
   *. To run the script: 
-  ```
-  ./setup.sh 
-  
-  ```
+  `./local_setup.sh`
 
 ## Testing
   
