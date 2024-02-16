@@ -37,6 +37,7 @@ RUN gem install bundler --no-document -v '2.1.4'
 FROM base as app 
 # ENV RAILS_ENV=production # The startup script defaults to development, change to production if need be
 WORKDIR /app/fams_tools
+RUN chmod 775 /app
 COPY Gemfile Gemfile.lock /app/fams_tools/
 RUN bundle install
 
