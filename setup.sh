@@ -4,26 +4,26 @@
     # docker 
     # docker-compose 
 
+
 set -e
 
 docker_compose_setup() {
+    # check for the dependencies 
     if ! command -v docker-compose &> /dev/null && ! command -v docker &> /dev/null;
     then
         echo "-> docker-compose||docker could not be found, install first before proceeding"
         exit 1
     fi
-    
     echo "-> Cleaning up previous docker-compose builds:";
     yes | docker-compose rm; 
     docker-compose down -v; 
 
     echo "-> Running docker compose up, creating containers:";
     docker-compose up --build;
-
 }
 
+# Script entry point / start > 
 echo "-> FAMS TOOLS SCRIPT: ";
-
 while true; do
     read -p "-> Did you set up your environment variables(.env)? y/n: " yn;
     case $yn in
