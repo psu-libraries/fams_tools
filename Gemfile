@@ -83,8 +83,6 @@ gem 'nio4r', '= 2.5.8'
 gem 'racc', '= 1.6.2'
 gem 'websocket-driver', '= 0.7.5'
 
-gem 'simplecov-json', :require => false, :group => :test
-
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
@@ -105,7 +103,7 @@ group :development, :test do
   gem 'rubocop-rails'
   gem 'rubocop-rspec'
   # Code coveragee
-  gem 'simplecov', '~> 0.17.0'
+  gem 'simplecov', '~> 0.18.0'
   # Use Puma as the app server
   # Since passenger is used in production this doesn't need to be
   # installed on the RedHat server (it fails anyway)
