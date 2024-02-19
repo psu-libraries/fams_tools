@@ -65,7 +65,7 @@ jobs:
             # Run tests
             docker-compose exec web bundle exec rspec
             # Send report to Code Climate
-            bin/cc-test-reporter format-coverage -t simplecov -o codeclimate.json -p /app/fams_tools/ coverage/.resultset.json
+            bin/cc-test-reporter format-coverage -t simplecov -o codeclimate.json -p /app/fams_tools/coverage/.resultset.json
             bin/cc-test-reporter upload-coverage -i codeclimate.json
 
 workflows:
@@ -74,5 +74,7 @@ workflows:
     jobs:
     - build
     - publish:
+        requires:
+          - build
         context:
           - org-global
