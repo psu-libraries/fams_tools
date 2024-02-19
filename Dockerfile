@@ -80,6 +80,7 @@ COPY .rubocop.yml /app/fams_tools/
 COPY .ruby-version /app/fams_tools/
 
 RUN chown -R app /app/fams_tools/
+RUN chmod a+rwx -R /app
 RUN bundle exec rails assets:precompile --trace
 USER app
 CMD ["/app/fams_tools/bin/startup"]

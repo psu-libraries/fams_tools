@@ -58,6 +58,9 @@ gem 'webmock'
 # Stream xlsx files
 gem 'creek'
 
+# Dependency for bootstrap:
+gem 'popper_js', '~> 1.16.1'
+
 # UX framework
 gem 'bootstrap', '~> 4.6'
 
@@ -99,7 +102,7 @@ group :development, :test do
   gem 'rubocop', '= 1.42.0'
   gem 'rubocop-rails'
   gem 'rubocop-rspec'
-  # Code coverage
+  # Code coveragee
   gem 'simplecov', '~> 0.17.0'
   # Use Puma as the app server
   # Since passenger is used in production this doesn't need to be
