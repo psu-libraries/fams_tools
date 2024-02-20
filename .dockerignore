@@ -2,6 +2,7 @@ vendor/cache
 vendor/bundle
 .git
 .repos
+.cache
 public/psu
 public/log
 /log/*

@@ -59,6 +59,7 @@ RUN mkdir -p app/parsing_files
 RUN mkdir -p spec/fixtures/post_prints 
 RUN mkdir -p public/psu
 RUN mkdir -p public/log
+RUN bundle config set path 'vendor/bundle'
 
 COPY --chown=app . /app
 CMD ["/app/bin/startup"]
