@@ -34,6 +34,9 @@ FROM base as dev
 WORKDIR /app
 USER root
 
+RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
+    && echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list
+
 RUN apt-get update && apt-get install -y --no-install-recommends x11vnc \
     libsqlite3-dev \
     fluxbox \
@@ -52,9 +55,6 @@ RUN mkdir -p app/parsing_files
 RUN mkdir -p spec/fixtures/post_prints 
 RUN mkdir -p public/psu
 RUN mkdir -p public/log
-
-RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
-    && echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list
 
 COPY --chown=app . /app
 USER app
