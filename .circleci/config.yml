@@ -54,6 +54,7 @@ jobs:
       - run:
           name: "Rubocop"
           command: |
+            docker-compose exec web bundle
             docker-compose exec web bundle exec rubocop
       
       # - run:

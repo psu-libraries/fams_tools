@@ -51,13 +51,16 @@ RUN apt-get update && apt-get install -y --no-install-recommends x11vnc \
     && rm -rf /var/lib/apt/lists/* 
 
 # Debug : 
+USER app
+RUN mkdir -p log
+RUN mkdir -p tmp/pids
+RUN mkdir -p parsing_files
 RUN mkdir -p app/parsing_files
 RUN mkdir -p spec/fixtures/post_prints 
 RUN mkdir -p public/psu
 RUN mkdir -p public/log
 
 COPY --chown=app . /app
-USER app
 CMD ["/app/bin/startup"]
 
 # - - - - - - - - - - - -
