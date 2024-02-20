@@ -1,5 +1,5 @@
 FROM harbor.k8s.libraries.psu.edu/library/ruby-3.1.3-node-16:20231225 as base
-ARG UID=1001
+ARG UID=1000
 WORKDIR /app
 
 RUN useradd -u ${UID} app -d /app 
@@ -26,6 +26,7 @@ RUN apt-get install -y --no-install-recommends g++ \
 RUN gem install bundler --no-document -v '2.1.4'
 USER app 
 COPY --chown=app Gemfile Gemfile.lock /app/
+RUN bundle config set path 'vendor/bundle'
 RUN bundle install
 
 # - - - - - - - - - - - -
