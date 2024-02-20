@@ -52,6 +52,11 @@ jobs:
             docker-compose up -d
 
       - run:
+          name: "Bundle"
+          command: |
+            docker-compose exec web bundle
+
+      - run:
           name: "Rubocop"
           command: |
             docker-compose exec web bundle exec rubocop
