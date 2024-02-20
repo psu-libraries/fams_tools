@@ -30,6 +30,7 @@ RUN bundle install
 
 # - - - - - - - - - - - -
 FROM base as dev 
+WORKDIR /app
 
 RUN mkdir -p app/parsing_files
 RUN mkdir -p spec/fixtures/post_prints 
@@ -66,6 +67,8 @@ CMD ["/app/bin/startup"]
 
 FROM base as production
 WORKDIR /app
+
+RUN chown -R app /app
 RUN chmod a+rwx -R /app
 RUN chmod -R 775 /app
 COPY --chown=app . /app
