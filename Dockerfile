@@ -66,6 +66,8 @@ CMD ["/app/bin/startup"]
 
 FROM base as production
 WORKDIR /app
+RUN chmod a+rwx -R /app
+RUN chmod -R 775 /app
 COPY --chown=app . /app
 
 RUN RAILS_ENV=production bundle exec rails assets:precompile
