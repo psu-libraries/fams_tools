@@ -1,5 +1,5 @@
 FROM harbor.k8s.libraries.psu.edu/library/ruby-3.1.3-node-16:20231225 as base
-ARG UID=1000
+ARG UID=1001
 WORKDIR /app
 
 RUN useradd -u ${UID} app -d /app 
@@ -32,6 +32,7 @@ RUN bundle install
 # - - - - - - - - - - - -
 FROM base as dev 
 WORKDIR /app
+USER root
 
 RUN apt-get update && apt-get install -y --no-install-recommends x11vnc \
     libsqlite3-dev \
