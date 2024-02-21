@@ -3,7 +3,7 @@ services:
   db:
     environment:
       MYSQL_ROOT_PASSWORD: ai_integration
-    image: mariadb:10.3
+    image: mariadb:10.2
     ports:
     - "3306:3306"
     volumes:
