@@ -73,7 +73,7 @@ RUN chown -R app /app
 RUN chmod a+rwx -R /app
 RUN chmod -R 775 /app
 COPY --chown=app . /app
-
+ENV SECRET_KEY_BASE=1
 RUN RAILS_ENV=production bundle exec rails assets:precompile
 USER app 
 CMD ["/app/bin/startup"]
