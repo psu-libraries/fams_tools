@@ -22,12 +22,16 @@ RUN apt-get install -y --no-install-recommends g++ \
     qt5-default \
     && rm -rf /var/lib/apt/lists/* 
 
-# Look @scholarsphere and how it installs bundler, 
-RUN gem install bundler --no-document -v '2.1.4'
+# This is how scholarsphere does this: 
 USER app 
 COPY --chown=app Gemfile Gemfile.lock /app/
+# RUN gem install bundler --no-document -v '2.1.4'
+# in the event that bundler runs outside of docker, we get in sync with it's bundler version
+RUN gem install bundler -v "$(grep -A 1 "BUNDLED WITH" Gemfile.lock | tail -n 1)"
 RUN bundle config set path 'vendor/bundle'
-RUN bundle install
+RUN bundle install && \
+  rm -rf /app/.bundle/cache && \
+  rm -rf /app/vendor/bundle/ruby/*/cache
 
 # - - - - - - - - - - - -
 FROM base as dev 
@@ -73,7 +77,9 @@ RUN chown -R app /app
 RUN chmod a+rwx -R /app
 RUN chmod -R 775 /app
 COPY --chown=app . /app
-ENV SECRET_KEY_BASE=1
-RUN RAILS_ENV=production bundle exec rails assets:precompile
+
+RUN RAILS_ENV=production \
+    SECRET_KEY_BASE=rails_bogus_key \
+    bundle exec rails assets:precompile
 USER app 
 CMD ["/app/bin/startup"]
