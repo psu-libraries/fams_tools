@@ -9,10 +9,10 @@ export RAILS_ENV=test
 cp config/activity_insight.yml.circleci config/activity_insight.yml
 # cp config/databse.yml.circleci config/database.yml
 cp config/integration_passcode.yml.circleci config/integration_passcode.yml
-mkdir app/parsing_files
-mkdir spec/fixtures/post_prints
-mkdir public/psu
-mkdir public/log
+mkdir -p app/parsing_files
+mkdir -p spec/fixtures/post_prints
+mkdir -p public/psu
+mkdir -p public/log
 
 ## check bundle 
 bundle check || bundle 
