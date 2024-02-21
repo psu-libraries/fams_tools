@@ -11,6 +11,11 @@ development:
   <<: *default
   database: <%= ENV.fetch("MYSQL_DATABASE") { "ai_integration" } %>
 
+production:
+  <<: *default
+  database: <%= ENV.fetch("MYSQL_DATABASE") { "ai_integration" } %>
+
+
 test:
   <<: *default
   database: <%= ENV.fetch("MYSQL_DATABASE") { "ai_integration" } %>_test

@@ -26,17 +26,6 @@ jobs:
     steps:
       - checkout
       - run:
-          name: "Setup Files and Directories"
-          command: |
-            mv config/activity_insight.yml.circleci config/activity_insight.yml &&
-            mv config/database.yml.circleci config/database.yml &&
-            mv config/integration_passcode.yml.circleci config/integration_passcode.yml &&
-            mkdir app/parsing_files &&
-            mkdir spec/fixtures/post_prints &&
-            mkdir public/psu &&
-            mkdir public/log
-
-      - run:
           name: "Build Container"
           command: |
             docker-compose build
@@ -52,19 +41,9 @@ jobs:
             docker-compose up -d
 
       - run:
-          name: "Bundle"
+          name: "Rspec"
           command: |
-            docker-compose exec web bundle
-
-      - run:
-          name: "Rubocop"
-          command: |
-            docker-compose exec web bundle exec rubocop
-      
-      # - run:
-      #     name: "Rspec"
-      #     command: |
-      #       docker-compose exec web bundle exec rspec
+            docker-compose exec web /app/bin/ci-rspec
 
 workflows:
   version: 2
