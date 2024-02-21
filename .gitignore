@@ -6,6 +6,7 @@
 
 # Ignore bundler config.
 /.bundle
+!.bundle/config
 
 # Ignore the default SQLite database.
 /db/*.sqlite3
@@ -17,7 +18,6 @@
 !/log/.keep
 !/tmp/.keep
 config/secrets.yml
-config/database.yml
 spec/examples.txt
 
 /node_modules
@@ -40,3 +40,7 @@ spec/examples.txt
 /public/post_prints
 /coverage
 /vendor/bundle/**/*
+
+.env
+.cache
+.bash_history

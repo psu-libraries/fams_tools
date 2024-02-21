@@ -1,4 +1,4 @@
-version: '3.2'
+version: '3.3'
 services:
   db:
     environment:
@@ -10,8 +10,15 @@ services:
     - ai-integration-data:/var/lib/mysql
   web:
     environment:
+      # RAILS_ENV: production # The startup script defaults to development, change to production if need be
       MYSQL_HOST: db
-    build: .
+      MYSQL_PASSWORD: ai_integration 
+    build: 
+      args:
+        UID: "${UID:-1001}"
+      context: .
+      target: dev 
+      dockerfile: Dockerfile
     ports:
     - "3000:3000"
     depends_on:
@@ -22,7 +29,11 @@ services:
     - type: bind
       consistency: cached
       source: .
-      target: /fams_tools/
-
+      target: /app/
+networks:                                
+  default:                               
+    driver: bridge                       
+    driver_opts:                         
+      com.docker.network.driver.mtu: 1400
 volumes:
-  ai-integration-data:
+  ai-integration-data: {}

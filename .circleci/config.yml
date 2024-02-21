@@ -1,21 +1,30 @@
 version: 2.1
 
+orbs:
+  docker: circleci/docker@2.2.0
+
 jobs:
+  publish:
+    executor: docker/docker
+    steps:
+      - setup_remote_docker
+      - checkout
+      - docker/check:
+          registry: harbor.k8s.libraries.psu.edu
+      - docker/build:
+          image: library/fams-tools
+          registry: harbor.k8s.libraries.psu.edu
+          use-buildkit: true
+          tag: "$CIRCLE_SHA1"
+          extra_build_args: "--target=production"
+      - docker/push:
+          image: library/fams-tools
+          registry: harbor.k8s.libraries.psu.edu
+          tag: "$CIRCLE_SHA1"
   build:
     machine: true
     steps:
       - checkout
-      - run:
-          name: "Setup Files and Directories"
-          command: |
-            mv config/activity_insight.yml.circleci config/activity_insight.yml &&
-            mv config/database.yml.circleci config/database.yml &&
-            mv config/integration_passcode.yml.circleci config/integration_passcode.yml &&
-            mkdir app/parsing_files &&
-            mkdir spec/fixtures/post_prints &&
-            mkdir public/psu &&
-            mkdir public/log
-
       - run:
           name: "Build Container"
           command: |
@@ -32,18 +41,17 @@ jobs:
             docker-compose up -d
 
       - run:
-          name: "Rubocop"
-          command: |
-            docker-compose exec web bundle exec rubocop
-
-      - run:
           name: "Rspec"
           command: |
-            # download test reporter as a static binary
-            curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > bin/cc-test-reporter
-            chmod +x bin/cc-test-reporter
-            # Run tests
-            docker-compose exec web bundle exec rspec
-            # Send report to Code Climate
-            bin/cc-test-reporter format-coverage -t simplecov -o codeclimate.json -p /fams_tools coverage/.resultset.json
-            bin/cc-test-reporter upload-coverage -i codeclimate.json
+            docker-compose exec web /app/bin/ci-rspec
+
+workflows:
+  version: 2
+  fams:
+    jobs:
+    - build
+    - publish:
+        requires:
+          - build
+        context:
+          - org-global
