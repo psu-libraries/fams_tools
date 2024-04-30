@@ -7,7 +7,7 @@ fi
 
 if [ "${RAILS_ENV:-development}" != 'production' ]; then 
   bundle check || bundle
-  bundle exec rails db:create db:migrate
+  bundle exec rails db:create db:migrate db:seed
 fi
 
 rm -f /app/tmp/pids/server.pid
