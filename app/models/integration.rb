@@ -14,6 +14,6 @@ class Integration < ApplicationRecord
   end
 
   def self.seed
-    Integration.create(process_type: PROCESS_TYPE, is_active: 'false')
+    Integration.create(process_type: PROCESS_TYPE, is_active: 'false') unless Integration.count > 0
   end
 end

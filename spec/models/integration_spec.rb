@@ -39,6 +39,9 @@ describe Integration, type: :model do
       expect(Integration.count).to eq 1
       expect(Integration.first.process_type).to eq 'integration'
       expect(Integration.first.is_active).to eq false
+      # Is idempotent
+      Integration.seed
+      expect(Integration.count).to eq 1
     end
   end
 end
