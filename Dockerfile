@@ -12,6 +12,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends g++ \
     libqt5webkit5-dev \ 
     zip \
     unzip \
+    openssh-server \
     gstreamer1.0-plugins-base \
     gstreamer1.0-tools \
     gstreamer1.0-x \
