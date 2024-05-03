@@ -14,3 +14,4 @@ production:
     api_key: "<%= ENV.fetch('FAMS_S3_BUCKET_API_KEY') %>"
   lp_sftp:
     username: "<%= ENV.fetch('FAMS_LP_SFTP_USERNAME') %>"
+    host: "<%= ENV.fetch('FAMS_LP_SFTP_HOSTNAME') %>"
