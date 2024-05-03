@@ -14,7 +14,7 @@ production:
     api_key: "fake"
   lp_sftp:
     username: "fake"
-    sftphost: "fake"
+    host: "fake"
 
 development:
   main:
@@ -32,7 +32,7 @@ development:
     api_key: "fake"
   lp_sftp:
     username: "fake"
-    sftphost: "fake"
+    host: "fake"
 
 test:
   main:
@@ -50,4 +50,4 @@ test:
     api_key: "fake"
   lp_sftp:
     username: "fake"
-    sftphost: "fake"
+    host: "fake"
