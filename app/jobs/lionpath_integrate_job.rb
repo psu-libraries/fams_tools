@@ -22,7 +22,7 @@ class LionpathIntegrateJob < ApplicationJob
       # Running bash script to grab lionpath files
       username = Rails.application.config_for(:activity_insight)['lp_sftp'][:username]
       host = Rails.application.config_for(:activity_insight)['lp_sftp'][:host]
-      `LP_SFTP_USERNAME=#{username} LP_SFTP_HOSTNAME=#{host} #{Rails.root}/bin/courses-taught.sh`
+      `FAMS_LP_SFTP_USERNAME=#{username} FAMS_LP_SFTP_HOST=#{host} #{Rails.root}/bin/courses-taught.sh`
       File.join('app', 'parsing_files', 'courses_taught.csv')
     end
   end
