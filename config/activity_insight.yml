@@ -12,6 +12,6 @@ production:
     :key: "<%= ENV.fetch('FAMS_METADATA_DB_KEY') %>"
   s3_bucket:
     api_key: "<%= ENV.fetch('FAMS_S3_BUCKET_API_KEY') %>"
-  lp_sftp:
+  fams_lp_sftp:
     username: "<%= ENV.fetch('FAMS_LP_SFTP_USERNAME') %>"
     host: "<%= ENV.fetch('FAMS_LP_SFTP_HOSTNAME') %>"

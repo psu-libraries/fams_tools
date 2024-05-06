@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Get username from env variable
-USERNAME=${LP_SFTP_USERNAME}
-HOST=${LP_SFTP_HOST}
+USERNAME=${FAMS_LP_SFTP_USERNAME}
+HOST=${FAMS_LP_SFTP_HOST}
 
 # Using SFTP connection with Lionpath host to pull file names in order of most to least recent
 OUTPUT=$(sftp -P 22 -b bin/lp_sftp_newest.bat -i ~/.ssh/id_rsa_lionpath $USERNAME@$HOST)
