@@ -1,23 +1,54 @@
-FROM ruby:3.1.3
+FROM harbor.k8s.libraries.psu.edu/library/ruby-3.1.3-node-16:20231225 as base
+ARG UID=1001
+WORKDIR /app
 
-RUN mkdir /fams_tools
-WORKDIR /fams_tools
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-RUN apt-get clean
-RUN apt-get update
-# For zipping and unzipping
-RUN apt-get install -y zip unzip
-# Packages for webkit
-RUN apt-get install -y g++ libqt5webkit5-dev gstreamer1.0-plugins-base gstreamer1.0-tools gstreamer1.0-x xvfb
+RUN useradd -l -u ${UID} app -d /app && \
+  chown -R app /app
 
-RUN gem install bundler --no-document -v '2.1.4'
+# hadolint ignore=DL3008
+RUN apt-get update && apt-get install -y --no-install-recommends g++ \
+    libqt5webkit5-dev \ 
+    zip \
+    unzip \
+    openssh-server \
+    gstreamer1.0-plugins-base \
+    gstreamer1.0-tools \
+    gstreamer1.0-x \
+    libmariadb-dev \
+    libmariadbclient-dev \
+    xvfb \
+    qt5-default \
+    && rm -rf /var/lib/apt/lists/* 
 
-COPY Gemfile /fams_tools/Gemfile
-COPY Gemfile.lock /fams_tools/Gemfile.lock
-RUN bundle install
-COPY . /fams_tools
+USER app 
+COPY --chown=app Gemfile Gemfile.lock /app/
+COPY --chown=app .bundle/config /app/.bundle/config
+# in the event that bundler runs outside of docker, we get in sync with it's bundler version
+RUN gem install bundler -v "$(grep -A 1 "BUNDLED WITH" Gemfile.lock | tail -n 1)"
 
-COPY entrypoint.sh /usr/bin/
-RUN chmod +x /usr/bin/entrypoint.sh
-ENTRYPOINT ["entrypoint.sh"]
-EXPOSE 3000
+# - - - - - - - - - - - -
+FROM base as dev 
+WORKDIR /app
+USER app
+COPY --chown=app . /app
+CMD ["/app/bin/startup"]
+
+# - - - - - - - - - - - -
+FROM base as production
+WORKDIR /app
+
+COPY --chown=app . /app
+
+RUN bundle install --without development test && \
+  bundle clean && \
+  rm -rf /app/.bundle/cache && \
+  rm -rf /app/vendor/bundle/ruby/*/cache 
+
+RUN RAILS_ENV=production \
+    SECRET_KEY_BASE=rails_bogus_key \
+    bundle exec rails assets:precompile
+
+USER app 
+CMD ["/app/bin/startup"]

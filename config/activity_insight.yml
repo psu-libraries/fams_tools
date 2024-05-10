@@ -1,0 +1,17 @@
+production:
+  main:
+    :username: "<%= ENV.fetch('FAMS_MAIN_USERNAME') %>"
+    :password: "<%= ENV.fetch('FAMS_MAIN_PASSWORD') %>"
+  webservices:
+    :username: "<%= ENV.fetch('FAMS_WEBSERVICES_USERNAME') %>"
+    :password: "<%= ENV.fetch('FAMS_WEBSERVICES_PASSWORD') %>"
+  backups_service:
+    :username: "<%= ENV.fetch('FAMS_BACKUPS_SERVICE_USERNAME') %>"
+    :password: "<%= ENV.fetch('FAMS_BACKUPS_SERVICE_PASSWORD') %>"
+  metadata_db:
+    :key: "<%= ENV.fetch('FAMS_METADATA_DB_KEY') %>"
+  s3_bucket:
+    api_key: "<%= ENV.fetch('FAMS_S3_BUCKET_API_KEY') %>"
+  lp_sftp:
+    username: "<%= ENV.fetch('FAMS_LP_SFTP_USERNAME') %>"
+    host: "<%= ENV.fetch('FAMS_LP_SFTP_HOSTNAME') %>"

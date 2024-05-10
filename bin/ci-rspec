@@ -1,0 +1,28 @@
+#!/bin/bash
+# script to run rspec as CI would 
+
+set -e
+
+export RAILS_ENV=test
+
+# Setup app configuration and ensure directories
+cp config/activity_insight.yml.circleci config/activity_insight.yml
+# cp config/databse.yml.circleci config/database.yml
+cp config/integration_passcode.yml.circleci config/integration_passcode.yml
+mkdir -p app/parsing_files
+mkdir -p spec/fixtures/post_prints
+mkdir -p public/psu
+mkdir -p public/log
+
+## check bundle 
+bundle check || bundle 
+
+## setup databse 
+bundle exec rails db:create db:migrate
+
+
+## run rubocop
+bundle exec rubocop
+
+## run rspec 
+bundle exec rspec
