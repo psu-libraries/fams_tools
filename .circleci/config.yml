@@ -4,6 +4,38 @@ orbs:
   docker: circleci/docker@2.2.0
 
 jobs:
+  release:
+    docker:
+      - image: harbor.k8s.libraries.psu.edu/library/ci-utils:v4.0.0
+    environment:
+      REGISTRY_HOST: harbor.k8s.libraries.psu.edu
+      REGISTRY_REPO: library/fams-tools
+      GITHUB_USER: 'psu-stewardship-bot'
+      CONFIG_REPO: git@github.com:psu-libraries/fams-config.git
+    steps:
+      - add_ssh_keys
+      - run:
+          name: "Release"
+          command: |
+            /usr/local/bin/tag-image
+            ssh-keyscan github.com > ~/.ssh/known_hosts
+            git clone $CONFIG_REPO
+            cd fams-config
+            /usr/local/bin/pr-release clusters/prod/manifests/fams-tools/prod.yaml
+  deploy:
+    docker:
+      - image: harbor.k8s.libraries.psu.edu/library/ci-utils:v4.0.0
+    environment:
+      CONFIG_REPO: git@github.com:psu-libraries/fams-config.git
+    steps:
+      - add_ssh_keys
+      - run:
+          name: "Updating Config Repo"
+          command: |
+            ssh-keyscan github.com > ~/.ssh/known_hosts
+            git clone $CONFIG_REPO
+            cd fams-config
+            ./bin/generate_app
   publish:
     executor: docker/docker
     steps:
@@ -46,12 +78,32 @@ jobs:
             docker-compose exec web /app/bin/ci-rspec
 
 workflows:
-  version: 2
   fams:
     jobs:
+    - release:
+        context:
+          - org-global
+        name: "release image"
+        filters:
+          tags:
+            only:
+              - /^v\d+.\d+.\d+.*/
+          branches:
+            ignore:
+              - /.*/
     - build
     - publish:
         requires:
           - build
         context:
           - org-global
+    - deploy:
+        context:
+          - org-global
+        requires:
+          - publish
+        filters:
+          branches:
+            only:
+              - main
+              - /preview\/.*/
