@@ -5,7 +5,7 @@ namespace :com_effort do
     Rails.application.eager_load!
     start = Time.now
     # Takes params hash -> params[:target] must be defined (:beta or :production)
-    params = { target: :beta }
+    params = { target: (args[:target].blank? ? :production : args[:target].to_sym) }
     puts params
     ComEffortIntegrateJob.perform_now(params, 'log/com_effort_errors.log', false)
     finish = Time.now
