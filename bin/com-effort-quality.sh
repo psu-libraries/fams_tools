@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Using SFTP connection with COM SFTP host to pull file names in order of most to least recent
-OUTPUT=$(sftp -P 22 -o HostKeyAlgorithms=+ssh-dss -b bin/com_sftp_newest.bat -i ~/.ssh/id_rsa_psu_health ftp_activityinsight@dmzftp.hmc.psu.edu)
+OUTPUT=$(sftp -P 22 -o StrictHostKeyChecking=no -o HostKeyAlgorithms=+ssh-dss -b bin/com_sftp_newest.bat -i ~/.ssh/id_rsa_psu_health ftp_activityinsight@dmzftp.hmc.psu.edu)
 
 # Iterate over the above output and find the first "effort" and "quality" files, pull them, and break when two files have been pulled
 count=0
