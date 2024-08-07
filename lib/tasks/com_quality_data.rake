@@ -1,7 +1,7 @@
 namespace :com_quality do
   desc 'Integrate COM Quality data.'
 
-  task :integrate, [:target] => :environment do |_task, _args|
+  task :integrate, [:target] => :environment do |_task, args|
     Rails.application.eager_load!
     start = Time.now
     # Takes params hash -> params[:target] must be defined (:beta or :production)
