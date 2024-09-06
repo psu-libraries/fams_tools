@@ -42,3 +42,4 @@ spec/examples.txt
 .env
 .cache
 .bash_history
+.envrc

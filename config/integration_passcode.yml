@@ -1,2 +1,4 @@
 production:
   :passcode: "<%= ENV.fetch('FAMS_PASSCODE') %>"
+development:
+  :passcode: "<%= ENV.fetch('FAMS_PASSCODE') %>"
