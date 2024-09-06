@@ -124,7 +124,7 @@ class OspData::OspXmlBuilder
                   end
                 end
                 xml.AMOUNT_REQUEST_ contract.requested, access: 'READ_ONLY'
-                if college_list.include?(faculty.college) && contract.status
+                if contract.status
                   xml.STATUS_ contract.status, access: 'READ_ONLY'
                 end
                 if contract.start_date
@@ -168,10 +168,5 @@ class OspData::OspXmlBuilder
       end
     end
     builder.to_xml
-  end
-
-  def college_list
-    %w[AG ED CA LA BK SC AA UL BA BC CM LW EM GV HH IST MD NR UC
-       AB AL UE EN]
   end
 end
