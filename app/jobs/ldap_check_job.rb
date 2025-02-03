@@ -9,7 +9,7 @@ class LdapCheckJob < ApplicationJob
     uids = CSV.read(f_path, headers: true).map { |row| row['Username'] }
     data = pull_ldap_data(ldap_conn, uids)
     
-    headers = ['Username', 'Primary Affiliation']
+    headers = ['Username', 'Primary Affiliation', 'Title', 'Business Area', 'Campus']
     
     CSV.open('check_output.csv', 'wb') do |csv|
       csv << headers
@@ -17,7 +17,10 @@ class LdapCheckJob < ApplicationJob
       data.each do |entry|
         csv << [
           entry['uid'].first,
-          entry['eduPersonPrimaryAffiliation'].first
+          entry['eduPersonPrimaryAffiliation'].first,
+          entry['title'].first,
+          entry['psBusinessArea'].first,
+          entry['psCampus'].first
         ]
       end
     end
