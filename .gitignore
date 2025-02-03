@@ -44,3 +44,4 @@ spec/examples.txt
 .bash_history
 .envrc
 .irb_history
+check_output.csv
