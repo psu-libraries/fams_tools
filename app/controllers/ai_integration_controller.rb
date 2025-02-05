@@ -66,12 +66,6 @@ class AiIntegrationController < ApplicationController
     finished(start)
   end
 
-  def ldap_check
-    start = Time.now
-    LdapCheckJob.perform_now(params, @ldap_check_log_path)
-    finished(start)
-  end
-
   def index
     @integration_types =
       { 'Contract/Grant Integration' => :congrant,
@@ -81,8 +75,7 @@ class AiIntegrationController < ApplicationController
         'Yearly Integration' => :yearly,
         'Delete Records' => :delete_records,
         'COM Effort Integration' => :com_effort,
-        'COM Quality Integration' => :com_quality,
-        'LDAP Check' => :ldap_check }
+        'COM Quality Integration' => :com_quality}
   end
 
   def render_integrator

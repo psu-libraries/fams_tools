@@ -20,8 +20,6 @@ module ControllerServices
       render partial: 'com_effort'
     when :com_quality
       render partial: 'com_quality'
-    when :ldap_check
-      render partial: 'ldap_check'
     else
       render partial: 'blank'
     end
