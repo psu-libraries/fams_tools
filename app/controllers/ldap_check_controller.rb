@@ -5,9 +5,9 @@ class LdapCheckController < ApplicationController
   def create
     should_disable = params["ldap_should_disable"] == "1"
 
-    if should_disable && Integration.running?
-      return flash_error('Cannot disable AI users while integration is running.')
-    end
+    # if should_disable && Integration.running?
+    #   return flash_error('Cannot disable AI users while integration is running.')
+    # end
 
     uids = extract_usernames(params[:ldap_check_file])
 
@@ -19,7 +19,7 @@ class LdapCheckController < ApplicationController
 
     if should_disable
       uids_to_disable = entries
-        .filter { |entry| entry.['eduPersonPrimaryAffiliation'].first == 'MEMBER' }
+        .filter { |entry| entry['eduPersonPrimaryAffiliation'].first == 'MEMBER' }
         .map { |entry| entry.uid }
       
       output = generate_output(entries)
@@ -58,7 +58,7 @@ class LdapCheckController < ApplicationController
       port: ENV.fetch('CENTRAL_LDAP_PORT', '389')
     )
 
-    joined_filter = uids.map { |uid| Net::LDAP::Filter.eq("uid", uid) }.reduce(:|)
+    joined_filter = uids.map { |uid| Net::LDAP::Filter.eq('uid', uid) }.reduce(:|)
 
     conn.search(
       base: 'dc=psu,dc=edu',
@@ -68,7 +68,7 @@ class LdapCheckController < ApplicationController
 
   def generate_output(entries)
     headers = ['Username', 'Name', 'Primary Affiliation', 'Title', 'Department', 'Campus']
-    
+
     CSV.generate do |csv|
       csv << headers
       
