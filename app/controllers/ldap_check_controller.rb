@@ -5,10 +5,6 @@ class LdapCheckController < ApplicationController
   def create
     should_disable = params["ldap_should_disable"] == "1"
 
-    # if should_disable && Integration.running?
-    #   return flash_error('Cannot disable AI users while integration is running.')
-    # end
-
     uids = extract_usernames(params[:ldap_check_file])
 
     if uids.length == 0
@@ -20,9 +16,10 @@ class LdapCheckController < ApplicationController
     if should_disable
       uids_to_disable = entries
         .filter { |entry| entry['eduPersonPrimaryAffiliation'].first == 'MEMBER' }
-        .map { |entry| entry.uid }
+        .map { |entry| entry['uid'].first }
       
-      output = generate_output(entries)
+      disabled_uids = disable_ai_users(uids_to_disable)
+      output = generate_output(entries, disabled_uids)
     else
       output = generate_output(entries)
     end
@@ -50,6 +47,9 @@ class LdapCheckController < ApplicationController
   end
 
   def disable_ai_users(uids)
+    client = AiDisableClient.new
+
+      
   end
   
   def pull_ldap_data(uids)
@@ -66,21 +66,26 @@ class LdapCheckController < ApplicationController
     )
   end
 
-  def generate_output(entries)
+  def generate_output(entries, disabled_uids = nil)
     headers = ['Username', 'Name', 'Primary Affiliation', 'Title', 'Department', 'Campus']
+    headers.append('Disabled?') if disabled_uids.present?
 
     CSV.generate do |csv|
       csv << headers
       
       entries.each do |entry|
-        csv << [
-          entry['uid'].first,
+        uid = entry['uid'].first
+        row = [
+          uid,
           entry['displayName'].first,
           entry['eduPersonPrimaryAffiliation'].first,
           entry['title'].first,
           entry['psBusinessArea'].first,
           entry['psCampus'].first
         ]
+        row.append((disabled_uids.include? uid) ? 'yes' : 'no') if disabled_uids.present?
+        
+        csv << row
       end
     end
   end

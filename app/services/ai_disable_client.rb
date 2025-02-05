@@ -29,4 +29,7 @@ class AiDisableClient
     self.class.get("/User/USERNAME:#{uid}", @options)
   end
 
+  def enable_user(uid, value)
+    self.class.put("/User/USERNAME:#{uid}", @options.merge({body: "<User enabled=\"#{value}\"/>"}))
+  end
 end
