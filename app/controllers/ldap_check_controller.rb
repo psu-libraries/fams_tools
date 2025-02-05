@@ -3,17 +3,29 @@ class LdapCheckController < ApplicationController
   end
 
   def create
-    ldap = connect_to_central_ldap
+    should_disable = params["ldap_should_disable"] == "1"
 
-    uids = extract_uids(params[:ldap_check_file])
-
-    if uids.length == 0
-      flash[:error] = 'No usernames where found in uploaded CSV. Make sure you have a "Usernames" column.'
-      redirect_to ldap_check_path and return
+    if should_disable && Integration.running?
+      return flash_error('Cannot disable AI users while integration is running.')
     end
 
-    entries = pull_ldap_data(ldap, uids)
-    output = generate_output(entries)
+    uids = extract_usernames(params[:ldap_check_file])
+
+    if uids.length == 0
+      return flash_error('No usernames were found in uploaded CSV. Make sure there is a "Usernames" column.')
+    end
+
+    entries = pull_ldap_data(uids)
+
+    if should_disable
+      uids_to_disable = entries
+        .filter { |entry| entry.['eduPersonPrimaryAffiliation'].first == 'MEMBER' }
+        .map { |entry| entry.uid }
+      
+      output = generate_output(entries)
+    else
+      output = generate_output(entries)
+    end
 
     send_data(
       output,
@@ -25,20 +37,27 @@ class LdapCheckController < ApplicationController
 
   private
 
-  def connect_to_central_ldap
-    Net::LDAP.new(
-      host: ENV.fetch('CENTRAL_LDAP_HOST', 'test-dirapps.aset.psu.edu'),
-      port: ENV.fetch('CENTRAL_LDAP_PORT', '389')
-    )
+  def flash_error(msg)
+    flash[:error] = msg
+    redirect_to ldap_check_path
   end
 
-  def extract_uids(file)
+
+  def extract_usernames(file)
     CSV.parse(file.read, headers: true)
       .filter_map { |row| row['Username'] }
       
   end
+
+  def disable_ai_users(uids)
+  end
   
-  def pull_ldap_data(conn, uids)
+  def pull_ldap_data(uids)
+    conn = Net::LDAP.new(
+      host: ENV.fetch('CENTRAL_LDAP_HOST', 'test-dirapps.aset.psu.edu'),
+      port: ENV.fetch('CENTRAL_LDAP_PORT', '389')
+    )
+
     joined_filter = uids.map { |uid| Net::LDAP::Filter.eq("uid", uid) }.reduce(:|)
 
     conn.search(
