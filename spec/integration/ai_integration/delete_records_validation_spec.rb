@@ -16,7 +16,7 @@ describe '#delete_records_validation' do
         .to_return(status: 200, body: '', headers: {})
     end
 
-    it 'successfullies complete integration' do
+    it 'successfully completes integration' do
       visit ai_integration_path
       expect(page).to have_content('AI-Integration')
       select('Delete Records', from: 'label_integration_type').select_option
