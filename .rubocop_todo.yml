@@ -178,6 +178,7 @@ RSpec/DescribeClass:
     - 'spec/integration/ai_integration/osp_integration_spec.rb'
     - 'spec/integration/ai_integration/publications_integration_spec.rb'
     - 'spec/integration/ai_integration/yearly_integration_spec.rb'
+    - 'spec/integration/ai_integration/delete_records_validation_spec.rb'
 
 # Offense count: 44
 # This cop supports unsafe autocorrection (--autocorrect-all).
