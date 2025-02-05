@@ -1,0 +1,29 @@
+<div class="toolbar">
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <h1>LDAP Check</h1>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container main-content">
+  <%= form_with url: ldap_check_path, multipart: true, id: 'ldap-check-form' do |form| %>
+    <p>
+      <%= label(:ldap_check_file, text = "Usernames to check") %>
+      <%= form.file_field :ldap_check_file, required: true %>
+    </p>
+
+    <p>
+      <%= label(:ldap_should_disable, text = "Disable found users?") %>
+      <%= form.check_box :ldap_should_disable, 
+          data: { confirm: 'Are you sure you want to do this?' } %>
+    </p>
+
+    <div class="row">
+      <%= form.submit 'Check LDAP Data', class: 'btn btn-primary mt-3',
+                    data: { disable_with: false } %>
+    </div>
+  <% end %>
+</div>
