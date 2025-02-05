@@ -10,7 +10,8 @@ describe Faculty, type: :model do
     it { is_expected.to have_db_column(:l_name).of_type(:string) }
     it { is_expected.to have_db_column(:college).of_type(:string) }
     it { is_expected.to have_db_column(:campus).of_type(:string) }
-
+    it { is_expected.to have_db_column(:created_at).of_type(:datetime) }
+    it { is_expected.to have_db_column(:updated_at).of_type(:datetime) }
     it { is_expected.to have_db_index(:access_id).unique(true) }
   end
 
