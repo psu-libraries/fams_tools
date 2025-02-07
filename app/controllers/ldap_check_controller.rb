@@ -1,29 +1,26 @@
 class LdapCheckController < ApplicationController
-  def index
-  end
+  def index; end
 
   def create
-    should_disable = params["ldap_should_disable"] == "1"
+    should_disable = params['ldap_should_disable'] == '1'
 
     uids = extract_usernames(params[:ldap_check_file])
 
-    if uids.length == 0
-      return flash_error('No usernames were found in uploaded CSV. Make sure there is a "Usernames" column.')
-    end
+    return flash_error('No usernames were found in uploaded CSV. Make sure there is a "Usernames" column.') if uids.empty?
 
     entries = pull_ldap_data(uids)
 
     if should_disable
       uids_to_disable = entries
-        .filter { |entry| entry['eduPersonPrimaryAffiliation'].first == 'MEMBER' }
-        .map { |entry| entry['uid'].first }
-      
+                        .filter { |entry| entry['eduPersonPrimaryAffiliation'].first == 'MEMBER' }
+                        .map { |entry| entry['uid'].first }
+
       disabled_uids = disable_ai_users(uids_to_disable)
       output = generate_output(entries, disabled_uids)
     else
       output = generate_output(entries)
     end
-    
+
     send_data(
       output,
       filename: 'ldap_check_results.csv',
@@ -39,23 +36,21 @@ class LdapCheckController < ApplicationController
     redirect_to ldap_check_path
   end
 
-
   def extract_usernames(file)
     CSV.parse(file.read, headers: true)
-      .filter_map { |row| row['Username'] }
+       .filter_map { |row| row['Username'] }
   end
 
   def disable_ai_users(uids)
     client = AiDisableClient.new
 
     uids.each do |uid|
-      profile = client.user(uid)
       client.enable_user(uid, false)
     end
 
     uids
   end
-  
+
   def pull_ldap_data(uids)
     conn = Net::LDAP.new(
       host: ENV.fetch('CENTRAL_LDAP_HOST', 'test-dirapps.aset.psu.edu'),
@@ -76,7 +71,7 @@ class LdapCheckController < ApplicationController
 
     CSV.generate do |csv|
       csv << headers
-      
+
       entries.each do |entry|
         uid = entry['uid'].first
         row = [
@@ -87,8 +82,8 @@ class LdapCheckController < ApplicationController
           entry['psBusinessArea'].first,
           entry['psCampus'].first
         ]
-        row.append((disabled_uids.include? uid) ? 'yes' : 'no') if disabled_uids.present?
-        
+        row.append(disabled_uids.include?(uid) ? 'yes' : 'no') if disabled_uids.present?
+
         csv << row
       end
     end

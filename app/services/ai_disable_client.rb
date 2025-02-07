@@ -9,13 +9,13 @@ class AiDisableClient
   base_uri ENV.fetch('FAMS_WEBSERVICES_BASE_URI', 'https://betawebservices.digitalmeasures.com/login/service/v4')
 
   def initialize(
-    username = ENV['FAMS_WEBSERVICES_USERNAME'],
-    password = ENV['FAMS_WEBSERVICES_PASSWORD']
+    username = ENV.fetch('FAMS_WEBSERVICES_USERNAME', nil),
+    password = ENV.fetch('FAMS_WEBSERVICES_PASSWORD', nil)
   )
     @options = {
       basic_auth: {
-        username: username,
-        password: password
+        username:,
+        password:
       },
       headers: {
         'Accept' => 'text/xml',
@@ -24,12 +24,12 @@ class AiDisableClient
       timeout: 180
     }
   end
-  
+
   def user(uid)
     self.class.get("/User/USERNAME:#{uid}", @options)
   end
 
   def enable_user(uid, value)
-    self.class.put("/User/USERNAME:#{uid}", @options.merge({body: "<User enabled=\"#{value}\"/>"}))
+    self.class.put("/User/USERNAME:#{uid}", @options.merge({ body: "<User enabled=\"#{value}\"/>" }))
   end
 end

@@ -75,7 +75,7 @@ class AiIntegrationController < ApplicationController
         'Yearly Integration' => :yearly,
         'Delete Records' => :delete_records,
         'COM Effort Integration' => :com_effort,
-        'COM Quality Integration' => :com_quality}
+        'COM Quality Integration' => :com_quality }
   end
 
   def render_integrator
