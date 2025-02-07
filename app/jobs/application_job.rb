@@ -21,10 +21,6 @@ class ApplicationJob < ActiveJob::Base
     error_logger = Logger.new("public/#{log_path}")
     error_logger.info "#{name} to #{params[:target]} initiated at: #{DateTime.now}"
     errors = integrate(params, _user_uploaded)
-
-    # prevent null ref if no errors where returned
-    return if errors.nil?
-
     error_logger.info "Errors for #{name} to #{params[:target]} at: #{DateTime.now}"
     errors.each do |error|
       error_logger.error '____________________________________________________'
