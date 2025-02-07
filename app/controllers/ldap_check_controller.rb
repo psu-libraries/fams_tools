@@ -23,7 +23,7 @@ class LdapCheckController < ApplicationController
     else
       output = generate_output(entries)
     end
-
+    
     send_data(
       output,
       filename: 'ldap_check_results.csv',
@@ -43,13 +43,17 @@ class LdapCheckController < ApplicationController
   def extract_usernames(file)
     CSV.parse(file.read, headers: true)
       .filter_map { |row| row['Username'] }
-      
   end
 
   def disable_ai_users(uids)
     client = AiDisableClient.new
 
-      
+    uids.each do |uid|
+      profile = client.user(uid)
+      client.enable_user(uid, false)
+    end
+
+    uids
   end
   
   def pull_ldap_data(uids)
