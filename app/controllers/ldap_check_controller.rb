@@ -2,12 +2,13 @@ class LdapCheckController < ApplicationController
   def index; end
 
   def create
-    should_disable = params['ldap_should_disable'] == '1'
-    data = params['ldap_check_file']
+    should_disable = params[:ldap_should_disable] == '1'
+    data = params[:ldap_check_file]
     result = LdapCheck.new(data, should_disable).perform
 
     if result[:error]
-      flash_error(result[:error])
+      flash[:error] = result[:error]
+      redirect_to ldap_check_path
     else
       send_data(
         result[:output],
@@ -16,12 +17,5 @@ class LdapCheckController < ApplicationController
         disposition: 'attachment'
       )
     end
-  end
-
-  private
-
-  def flash_error(msg)
-    flash.now[:error] = msg
-    # redirect_to ldap_check_path
   end
 end
