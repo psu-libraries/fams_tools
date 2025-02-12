@@ -24,12 +24,12 @@ class LdapCheck
       output = generate_output(entries)
     end
 
-    { output: output }
+    { output: }
   end
 
   private
 
-  def extract_usernames()
+  def extract_usernames
     CSV.parse(@csv_data.read, headers: true)
        .filter_map { |row| row['Username'] }
   end

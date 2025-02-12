@@ -3,6 +3,7 @@ require 'rails_helper'
 RSpec.describe LdapCheck, type: :service do
   let(:should_disable) { true }
   let(:ldap_check) { LdapCheck.new(csv_data, should_disable) }
+  let(:ai_disable_client) { instance_double(AiDisableClient) }
   let(:mock_ldap_entries) do
     [
       { 'uid' => ['test123'], 'eduPersonPrimaryAffiliation' => ['MEMBER'], 'displayName' => ['Test User'], 'title' => ['Test Title'], 'psBusinessArea' => ['Test Dept'], 'psCampus' => ['Test Campus'] }
@@ -11,7 +12,8 @@ RSpec.describe LdapCheck, type: :service do
 
   before do
     allow(ldap_check).to receive(:pull_ldap_data).and_return(mock_ldap_entries)
-    allow_any_instance_of(AiDisableClient).to receive(:enable_user)
+    allow(AiDisableClient).to receive(:new).and_return(ai_disable_client)
+    allow(ai_disable_client).to receive(:enable_user)
   end
 
   describe '#perform' do

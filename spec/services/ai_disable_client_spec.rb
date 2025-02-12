@@ -10,11 +10,11 @@ RSpec.describe AiDisableClient do
 
   describe '#user' do
     let(:response_body) do
-      <<-XML
-<?xml version="1.0" encoding="UTF-8"?>
-<User>
-  <FirstName>redacted</FirstName>
-</User>
+      <<~XML
+        <?xml version="1.0" encoding="UTF-8"?>
+        <User>
+          <FirstName>redacted</FirstName>
+        </User>
       XML
     end
 
@@ -33,7 +33,7 @@ RSpec.describe AiDisableClient do
           .and_return(success_response)
 
         result = client.user(uid)
-        expect(result.body).to include("<FirstName>redacted</FirstName>")
+        expect(result.body).to include('<FirstName>redacted</FirstName>')
       end
     end
   end
@@ -50,7 +50,7 @@ RSpec.describe AiDisableClient do
 
       it 'sends a request to enable a user' do
         allow(described_class).to receive(:put)
-          .with("/User/USERNAME:#{uid}", hash_including(basic_auth: { username:, password: }, body: "<User enabled=\"true\"/>"))
+          .with("/User/USERNAME:#{uid}", hash_including(basic_auth: { username:, password: }, body: '<User enabled="true"/>'))
           .and_return(success_response)
 
         result = client.enable_user(uid, true)
@@ -59,7 +59,7 @@ RSpec.describe AiDisableClient do
 
       it 'sends a request to disable a user' do
         allow(described_class).to receive(:put)
-          .with("/User/USERNAME:#{uid}", hash_including(basic_auth: { username:, password: }, body: "<User enabled=\"false\"/>"))
+          .with("/User/USERNAME:#{uid}", hash_including(basic_auth: { username:, password: }, body: '<User enabled="false"/>'))
           .and_return(success_response)
 
         result = client.enable_user(uid, false)
