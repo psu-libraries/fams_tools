@@ -1,8 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe LdapCheck, type: :service do
-  fixtures :username, :bad_userames, :empty_usernames
-
   let(:should_disable) { true }
   let(:ldap_check) { LdapCheck.new(csv_data, should_disable) }
   let(:mock_ldap_entries) do
@@ -42,6 +40,18 @@ RSpec.describe LdapCheck, type: :service do
       it 'returns an error message' do
         result = ldap_check.perform
         expect(result[:error]).to eq('No usernames were found in uploaded CSV. Make sure there is a "Usernames" column.')
+      end
+    end
+
+    context 'when not disabling' do
+      let(:should_disable) { false }
+      let(:csv_data) { file_fixture('usernames.csv').open }
+
+      it 'returns output without disabled users column' do
+        result = ldap_check.perform
+        expect(result[:output]).to include('Username,Name,Primary Affiliation,Title,Department,Campus')
+        expect(result[:output]).to include('test123,Test User,MEMBER,Test Title,Test Dept,Test Campus')
+        expect(result[:output]).not_to include('Disabled?')
       end
     end
   end
