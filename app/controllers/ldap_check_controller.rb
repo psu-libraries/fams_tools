@@ -4,7 +4,7 @@ class LdapCheckController < ApplicationController
   def create
     should_disable = params[:ldap_should_disable] == '1'
     data = params[:ldap_check_file]
-    result = LdapCheck.new(data, should_disable).perform
+    result = LdapCheck.new.check(data, should_disable)
 
     if result[:error]
       flash[:error] = result[:error]

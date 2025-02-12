@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe LdapCheck, type: :service do
   let(:should_disable) { true }
-  let(:ldap_check) { LdapCheck.new(csv_data, should_disable) }
+  let(:ldap_check) { LdapCheck.new }
   let(:ai_disable_client) { instance_double(AiDisableClient) }
   let(:mock_ldap_entries) do
     [
@@ -16,12 +16,12 @@ RSpec.describe LdapCheck, type: :service do
     allow(ai_disable_client).to receive(:enable_user)
   end
 
-  describe '#perform' do
+  describe '#check' do
     context 'when CSV has valid usernames' do
       let(:csv_data) { file_fixture('usernames.csv').open }
 
       it 'returns output with disabled users' do
-        result = ldap_check.perform
+        result = ldap_check.check(csv_data, should_disable)
         expect(result[:output]).to include('Username,Name,Primary Affiliation,Title,Department,Campus,Disabled?')
         expect(result[:output]).to include('test123,Test User,MEMBER,Test Title,Test Dept,Test Campus,yes')
       end
@@ -31,29 +31,29 @@ RSpec.describe LdapCheck, type: :service do
       let(:csv_data) { file_fixture('empty_usernames.csv').open }
 
       it 'returns an error message' do
-        result = ldap_check.perform
+        result = ldap_check.check(csv_data, should_disable)
         expect(result[:error]).to eq('No usernames were found in uploaded CSV. Make sure there is a "Usernames" column.')
       end
     end
 
     context 'when CSV has a bad column' do
       let(:csv_data) { file_fixture('bad_userames.csv').open }
-
+~
       it 'returns an error message' do
-        result = ldap_check.perform
+        result = ldap_check.check(csv_data, should_disable)
         expect(result[:error]).to eq('No usernames were found in uploaded CSV. Make sure there is a "Usernames" column.')
       end
     end
 
-    context 'when not disabling' do
-      let(:should_disable) { false }
+    context 'when should_disable is false' do
       let(:csv_data) { file_fixture('usernames.csv').open }
+      let(:should_disable) { false }
 
-      it 'returns output without disabled users column' do
-        result = ldap_check.perform
-        expect(result[:output]).to include('Username,Name,Primary Affiliation,Title,Department,Campus')
-        expect(result[:output]).to include('test123,Test User,MEMBER,Test Title,Test Dept,Test Campus')
-        expect(result[:output]).not_to include('Disabled?')
+      it 'does not disable any users and returns output' do
+        result = ldap_check.check(csv_data, should_disable)
+        expect(result[:output]).to include('Username,Name,Primary Affiliation,Title,Department,Campus,Disabled?')
+        expect(result[:output]).to include('test123,Test User,MEMBER,Test Title,Test Dept,Test Campus,no')
+        expect(ai_disable_client).not_to have_received(:enable_user)
       end
     end
   end

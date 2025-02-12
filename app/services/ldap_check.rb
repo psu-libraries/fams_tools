@@ -1,47 +1,55 @@
 # frozen_string_literal: true
 
 class LdapCheck
-  def initialize(csv_data, should_disable)
-    @csv_data = csv_data
-    @should_disable = should_disable
+  def initialize(disable_client = AiDisableClient.new)
+    @disable_client = disable_client
   end
 
-  def perform
-    uids = extract_usernames
+  def check(data, should_disable)
+    uids = extract_usernames(data)
 
     return { error: 'No usernames were found in uploaded CSV. Make sure there is a "Usernames" column.' } if uids.empty?
 
     entries = pull_ldap_data(uids)
+    disabled_uids = find_disabled_users(entries)
 
-    if @should_disable
+    if should_disable
       uids_to_disable = entries
                         .filter { |entry| entry['eduPersonPrimaryAffiliation'].first == 'MEMBER' }
                         .map { |entry| entry['uid'].first }
 
-      disabled_uids = disable_ai_users(uids_to_disable)
-      output = generate_output(entries, disabled_uids)
-    else
-      output = generate_output(entries)
+      disabled_uids = disable_users(disabled_uids, uids_to_disable)
     end
+
+    output = generate_output(entries, disabled_uids)
 
     { output: }
   end
 
   private
 
-  def extract_usernames
-    CSV.parse(@csv_data.read, headers: true)
+  def extract_usernames(data)
+    CSV.parse(data.read, headers: true)
        .filter_map { |row| row['Username'] }
   end
 
-  def disable_ai_users(uids)
-    client = AiDisableClient.new
+  def find_disabled_users(entries)
+    entries.filter_map do |entry|
+      uid = entry['uid'].first
+      data = @disable_client.user(uid)['User']
+      uid if data['enabled'] == 'false'
+    end
+  end
 
+  def disable_users(disabled_uids, uids)
     uids.each do |uid|
-      client.enable_user(uid, false)
+      next if disabled_uids.include?(uid)
+
+      @disable_client.enable_user(uid, false)
+      disabled_uids.append(uid)
     end
 
-    uids
+    disabled_uids
   end
 
   def pull_ldap_data(uids)
@@ -58,26 +66,23 @@ class LdapCheck
     )
   end
 
-  def generate_output(entries, disabled_uids = nil)
-    headers = ['Username', 'Name', 'Primary Affiliation', 'Title', 'Department', 'Campus']
-    headers.append('Disabled?') if disabled_uids.present?
+  def generate_output(entries, disabled_uids)
+    headers = ['Username', 'Name', 'Primary Affiliation', 'Title', 'Department', 'Campus', 'Disabled?']
 
     CSV.generate do |csv|
       csv << headers
 
       entries.each do |entry|
         uid = entry['uid'].first
-        row = [
+        csv << [
           uid,
           entry['displayName'].first,
           entry['eduPersonPrimaryAffiliation'].first,
           entry['title'].first,
           entry['psBusinessArea'].first,
-          entry['psCampus'].first
+          entry['psCampus'].first,
+          disabled_uids.include?(uid) ? 'yes' : 'no'
         ]
-        row.append(disabled_uids.include?(uid) ? 'yes' : 'no') if disabled_uids.present?
-
-        csv << row
       end
     end
   end
