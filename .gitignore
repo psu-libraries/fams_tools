@@ -27,7 +27,6 @@ spec/examples.txt
 
 # Ignore other files
 /.idea
-/spec/fixtures/files/*
 /data/*
 /app/parsing_files/*
 /app/post_prints/*
@@ -44,4 +43,3 @@ spec/examples.txt
 .bash_history
 .envrc
 .irb_history
-check_output.csv
