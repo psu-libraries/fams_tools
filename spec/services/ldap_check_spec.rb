@@ -38,7 +38,7 @@ RSpec.describe LdapCheck, type: :service do
 
     context 'when CSV has a bad column' do
       let(:csv_data) { file_fixture('bad_userames.csv').open }
-~
+
       it 'returns an error message' do
         result = ldap_check.check(csv_data, should_disable)
         expect(result[:error]).to eq('No usernames were found in uploaded CSV. Make sure there is a "Usernames" column.')
@@ -53,7 +53,7 @@ RSpec.describe LdapCheck, type: :service do
         result = ldap_check.check(csv_data, should_disable)
         expect(result[:output]).to include('Username,Name,Primary Affiliation,Title,Department,Campus,Disabled?')
         expect(result[:output]).to include('test123,Test User,MEMBER,Test Title,Test Dept,Test Campus,no')
-        expect(ai_disable_client).not_to have_received(:enable_user)
+        expect(ai_disable_client).not_to receive(:enable_user)
       end
     end
   end
