@@ -89,4 +89,16 @@
     </ol>
   </ul>
   </br>
+  <h3>LDAP Check</h3>
+  <p>Pulls relevent user data from central LDAP. Optionally, disables LDAP members in Activity Insight. </p>
+  <ol>
+    <li>Upload a CSV with every username (ie abc123) that should be checked. They must be organized in an "Usernames" column.</li>
+    <li>Select whether or not members should be disabled.</li>
+    <li>Submit when ready. <b>It may take some time to process depending on the number of usernames.</b></li>
+    <li>Save ldap_check_results.csv to somewhere on your computer.</li>
+  </ol>
+  <p>
+    <b>Note:</b> the "Disabled?" header displays the user state <i>after</i> the user has been processed. 
+    This means members that where once enabled will be shown as disabled in the result CSV <i>if disabling was requested</i>.
+  </p>
 </div>
