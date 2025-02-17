@@ -154,6 +154,7 @@ RSpec/AnyInstance:
     - 'spec/integration/ai_integration/ldap_integration_spec.rb'
     - 'spec/jobs/application_job_spec.rb'
     - 'spec/models/post_print_analyzer_spec.rb'
+    - 'spec/controllers/ldap_check_controller_spec.rb'
 
 # Offense count: 49
 # This cop supports unsafe autocorrection (--autocorrect-all).
