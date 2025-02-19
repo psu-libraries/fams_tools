@@ -33,7 +33,7 @@ class OspData::OspImporter
   private
 
   def is_good_date(row)
-    if row['submitted'].blank? && row['awarded'].present?
+    if (row['submitted'].blank? || row['submitted'] == "/  /") && row['awarded'].present?
       if (DateTime.strptime(row['awarded'],
                             '%m/%d/%Y %T').year >= 2011) && (DateTime.strptime(row['awarded'],
                                                                                '%m/%d/%Y %T').year <= DateTime.now.year)
