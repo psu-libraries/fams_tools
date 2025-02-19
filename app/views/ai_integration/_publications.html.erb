@@ -2,6 +2,7 @@
   <%= form_with :url => { :action => "pub_integrate" }, id: "publications" do |form| %>
     <div class="row">
       <p>College: <%= form.select(:college, @colleges, {include_blank: "Select a college"}) %></p>
+      <p> Access ID: <%= form.text_field :access_id %></p>
     </div>
     <div class="row">
       <%= render 'buttons_and_code', form: form %>
