@@ -3,9 +3,9 @@ require 'rails_helper'
 RSpec.describe ErrorMailer, type: :mailer do
   describe '#error_email' do
     let(:integration_name) { 'TestIntegration' }
-    let(:log_path) { Rails.root.join('spec', 'fixtures', 'files', 'test_error.log') }
+    let(:log_path) { Rails.root.join('spec/fixtures/files/test_error.log') }
     let(:mail) { described_class.error_email(integration_name, log_path) }
-    let(:current_time) { DateTime.now.strftime("%B %d, %Y at %I:%M %p") }
+    let(:current_time) { DateTime.now.strftime('%B %d, %Y at %I:%M %p') }
 
     before do
       FileUtils.mkdir_p(File.dirname(log_path))
