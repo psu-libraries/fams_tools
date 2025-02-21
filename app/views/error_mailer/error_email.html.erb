@@ -1,23 +1,2 @@
-<div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
-  <h2 style="color: #d32f2f;">AI Integration Error Report</h2>
-  
   <p>On <%= @time %>, the AI Integration <strong><%= @integration %></strong> encountered an error.</p>
-
-  <% @errors.each do |error| %>
-    <div style="margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 4px; background-color: #f9f9f9;">
-      <% if error[:response] %>
-        <p style="margin: 10px 0;"><%= error[:response] %></p>
-      <% end %>
-      
-      <% if error[:affected_faculty] %>
-        <p style="margin: 10px 0;"><strong>Affected Faculty:</strong> <%= error[:affected_faculty] %></p>
-      <% end %>
-      
-      <% if error[:affected_osps] %>
-        <p style="margin: 10px 0;"><strong>Affected OSPs:</strong> <%= error[:affected_osps] %></p>
-      <% end %>
-    </div>
-  <% end %>
-
-  <p style="margin-top: 20px; font-style: italic;">The full error log is attached to this email.</p>
-</div>
+  <i>The full error log has been attached.<i>

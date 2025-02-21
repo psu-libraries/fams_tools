@@ -18,18 +18,29 @@ class ApplicationJob < ActiveJob::Base
   end
 
   def perform(params, log_path, _user_uploaded = true)
-    error_logger = Logger.new("public/#{log_path}")
+    log_path = "public/#{log_path}"
+    error_logger = Logger.new(log_path)
     error_logger.info "#{name} to #{params[:target]} initiated at: #{DateTime.now}"
-    errors = integrate(params, _user_uploaded)
 
-    ErrorMailer.error_email(name, "public/#{log_path}", errors).deliver_now if errors.length > 0
+    has_error = false
+    begin
+      errors = integrate(params, _user_uploaded)
+      has_error = errors.any?
 
-    error_logger.info "Errors for #{name} to #{params[:target]} at: #{DateTime.now}"
-    errors.each do |error|
-      error_logger.error '____________________________________________________'
-      error_logger.error "Error: #{error[:response]}" if error[:response]
-      error_logger.error "Affected Faculty: #{error[:affected_faculty]}" if error[:affected_faculty]
-      error_logger.error "Affected OSPs: #{error[:affected_osps]}" if error[:affected_osps]
+      error_logger.info "Errors for #{name} to #{params[:target]} at: #{DateTime.now}"
+      errors.each do |error|
+        error_logger.error '____________________________________________________'
+        error_logger.error "Error: #{error[:response]}" if error[:response]
+        error_logger.error "Affected Faculty: #{error[:affected_faculty]}" if error[:affected_faculty]
+        error_logger.error "Affected OSPs: #{error[:affected_osps]}" if error[:affected_osps]
+      end
+    rescue StandardError => e
+      has_error = true
+      error_logger.error "Thrown Error: #{e.message}"
+      error_logger.error e.backtrace.join("\n")
+      raise # we still want to handle the error elsewhere
+    ensure
+      ErrorMailer.error_email(name, log_path).deliver_now if has_error
     end
   end
 
