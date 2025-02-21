@@ -1,5 +1,5 @@
 class ErrorMailer < ApplicationMailer
-  default to: "bnb5508@psu.edu",
+  default to: %w(nmg110@psu.edu ljd149@psu.edu),
           from: "L-FAMS@LISTS.PSU.EDU"
 
   def error_email(name, log_path)

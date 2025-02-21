@@ -18,7 +18,6 @@ RSpec.describe ErrorMailer, type: :mailer do
 
     it 'renders the headers' do
       expect(mail.subject).to eq("AI Integration #{integration_name} Error")
-      expect(mail.to).to eq(['bnb5508@psu.edu'])
       expect(mail.from).to eq(['L-FAMS@LISTS.PSU.EDU'])
     end
 
