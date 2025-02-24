@@ -2,7 +2,7 @@ class PubData::GetPubData
   class MDBError < StandardError; end
   attr_accessor :user_ids, :pub_json, :pub_hash
 
-  def initialize()
+  def initialize
     @pub_json = []
     @pub_hash = []
   end
@@ -14,11 +14,11 @@ class PubData::GetPubData
       url = "https://metadata.libraries.psu.edu/v1/users/#{user}/publications"
       response = HTTParty.get(url, headers:, timeout: 200)
       @pub_json = response
-      if response.code == 200
-        json_to_hash(pub_json)
-        format(pub_hash, user)
-        pub_populate_obj.populate(pub_hash, user)
-      end
+      next unless response.code == 200
+
+      json_to_hash(pub_json)
+      format(pub_hash, user)
+      pub_populate_obj.populate(pub_hash, user)
     end
   end
 
@@ -43,12 +43,12 @@ class PubData::GetPubData
 
   def format_type(publication)
     pub_type = publication['attributes']['publication_type']
-    if ['Article', 'Review Article', 'Journal Article, Academic Journal', 
+    if ['Article', 'Review Article', 'Journal Article, Academic Journal',
         'Academic Journal Article', 'Professional Journal Article'].include?(pub_type)
       publication['attributes']['publication_type'] = 'Journal Article'
     elsif pub_type == 'In-house Journal Article'
       publication['attributes']['publication_type'] = 'Journal Article, In House'
-    elsif pub_type == 'Conference article'
+    elsif pub_type == 'Conference Article'
       publication['attributes']['publication_type'] = 'Conference Proceeding'
     elsif pub_type == 'Book/Film/Article Review'
       publication['attributes']['publication_type'] = 'Book Review'
@@ -56,12 +56,12 @@ class PubData::GetPubData
       publication['attributes']['publication_type'] = 'Book Chapter'
     elsif pub_type == 'Encyclopedia/Dictionary Entry'
       publication['attributes']['publication_type'] = 'Encyclopedia Entry'
-    else
+    elsif ['Comment/Debate', 'Editorial', 'Foreword/Postscript', 'Letter', 'Paper', 'Short Survey'].include?(pub_type)
       publication['attributes']['publication_type'] = 'Other'
     end
   end
-  
-  def format_month(publication, college)
+
+  def format_month(publication, _college)
     pub_date = publication['attributes']['published_on'].present? ? Date.parse(publication['attributes']['published_on']).strftime('%B') : nil
     # if college case is still needed
     publication['attributes']['dtm'] = pub_date
@@ -81,14 +81,14 @@ class PubData::GetPubData
 
   def format_year(publication)
     pub_year = publication['attributes']['published_on'].present? ? Date.parse(publication['attributes']['published_on']).strftime('%Y') : nil
-    if pub_year == nil
+    if pub_year.nil?
       publication['attributes']['dty'] = nil
     elsif pub_year.length > 4
       publication['attributes']['dty'] = pub_year[0..3].to_i
       pub_year = pub_year[0..3]
       publication['attributes']['dty'] = if (pub_year.to_i >= 1950) && (pub_year.to_i <= Date.current.year + 5)
-        pub_year.to_i
-      end
+                                           pub_year.to_i
+                                         end
     else
       publication['attributes']['dty'] = pub_year.to_i
     end
@@ -96,10 +96,10 @@ class PubData::GetPubData
 
   def format_day(publication)
     pub_day = publication['attributes']['published_on'].present? ? Date.parse(publication['attributes']['published_on']).strftime('%-d') : nil
-    if pub_day == nil
-      publication['attributes']['dtd'] = nil
-    else
-      publication['attributes']['dtd'] = pub_day.to_i
-    end
+    publication['attributes']['dtd'] = if pub_day.nil?
+                                         nil
+                                       else
+                                         pub_day.to_i
+                                       end
   end
 end

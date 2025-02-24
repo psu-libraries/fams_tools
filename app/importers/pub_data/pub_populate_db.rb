@@ -6,20 +6,22 @@ class PubData::PubPopulateDb
     faculty = Faculty.find_by(access_id: user_id)
     pub_hash['data'].each do |pub|
       next if pub['attributes']['activity_insight_ids'].present?
+
       publication = Publication.create(
-                                       title: pub['attributes']['title'],
-                                       # RMD has some bad data for volume, so error checking is needed
-                                       volume: pub['attributes']['volume'].to_i < 5000 ? pub['attributes']['volume'] : nil,
-                                       dty: pub['attributes']['dty'],
-                                       dtd: pub['attributes']['dtd'],
-                                       journal_title: pub['attributes']['journal_title'],
-                                       page_range: pub['attributes']['page_range'],
-                                       edition: pub['attributes']['edition'],
-                                       abstract: pub['attributes']['abstract'],
-                                       secondary_title: pub['attributes']['secondary_title'],
-                                       citation_count: pub['attributes']['citation_count'],
-                                       authors_et_al: pub['attributes']['authors_et_al'],
-                                       rmd_id: pub['id'])
+        title: pub['attributes']['title'],
+        # RMD has some bad data for volume, so error checking is needed
+        volume: pub['attributes']['volume'].to_i < 5000 ? pub['attributes']['volume'] : nil,
+        dty: pub['attributes']['dty'],
+        dtd: pub['attributes']['dtd'],
+        journal_title: pub['attributes']['journal_title'],
+        page_range: pub['attributes']['page_range'],
+        edition: pub['attributes']['edition'],
+        abstract: nil, # nil per Nicole's request
+        secondary_title: pub['attributes']['secondary_title'],
+        citation_count: nil, # nil per Nicole's request
+        authors_et_al: pub['attributes']['authors_et_al'],
+        rmd_id: pub['id']
+      )
 
       pub['attributes']['contributors'].each do |person|
         ExternalAuthor.create(publication:,

@@ -29,6 +29,7 @@ class AiIntegrationController < ApplicationController
 
   def pub_integrate
     raise StandardError, 'Must select a college or enter an access ID.' if params[:college].empty? && params[:access_id].empty?
+
     start = Time.now
     PubIntegrateJob.perform_now(params, @publications_log_path)
     finished(start)
