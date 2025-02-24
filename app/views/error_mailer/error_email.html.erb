@@ -1,2 +1,4 @@
   <p>On <%= @time %>, the AI Integration <strong><%= @integration %></strong> encountered an error.</p>
-  <i>The full error log has been attached.<i>
+  <% if @has_log %>
+    <i>The full error log has been attached.</i>
+  <% end %>
