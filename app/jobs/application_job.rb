@@ -25,7 +25,7 @@ class ApplicationJob < ActiveJob::Base
     has_error = false
     begin
       errors = integrate(params, _user_uploaded)
-      has_error = errors.any?
+      has_error = errors&.any? && !(errors.size == 1 && errors[0].empty?)
 
       error_logger.info "Errors for #{name} to #{params[:target]} at: #{DateTime.now}"
       errors.each do |error|
@@ -34,6 +34,8 @@ class ApplicationJob < ActiveJob::Base
         error_logger.error "Affected Faculty: #{error[:affected_faculty]}" if error[:affected_faculty]
         error_logger.error "Affected OSPs: #{error[:affected_osps]}" if error[:affected_osps]
       end
+    rescue ConcurrentJobsError
+      raise # concurrent jobs shouldn't be logged
     rescue StandardError => e
       has_error = true
       error_logger.error "Thrown Error: #{e.message}"
