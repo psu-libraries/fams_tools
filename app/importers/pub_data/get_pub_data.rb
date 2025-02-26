@@ -28,7 +28,7 @@ class PubData::GetPubData
     college = Faculty.find_by(access_id: user_id).college
     pub_hash['data'].each do |publication|
       format_type(publication)
-      format_month(publication, college)
+      format_month(publication)
       format_status(publication, college)
       format_year(publication)
       format_day(publication)
@@ -61,14 +61,12 @@ class PubData::GetPubData
     end
   end
 
-  def format_month(publication, _college)
+  def format_month(publication)
     pub_date = publication['attributes']['published_on'].present? ? Date.parse(publication['attributes']['published_on']).strftime('%B') : nil
-    # if college case is still needed
     publication['attributes']['dtm'] = pub_date
   end
 
   def format_status(publication, college)
-    # if college case is still needed
     case college
     when 'AG', 'CA', 'LA', 'BK', 'SC', 'AA', 'BC', 'LW', 'EM', 'EN', 'GV', 'IST', 'MD', 'NR', 'UC', 'AB', 'AL', 'HH', 'BA', 'ED', 'UL', 'CM', 'UE'
       if publication['attributes']['status'] =~ %r{Accepted/In press.*}
