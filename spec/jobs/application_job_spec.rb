@@ -22,6 +22,7 @@ RSpec.describe ApplicationJob do
       allow_any_instance_of(OspIntegrateJob).to receive(:integrate).and_raise error
       allow_any_instance_of(OspIntegrateJob).to receive(:clean_up).and_return true
       expect { OspIntegrateJob.perform_now(params, '/log/path') }.to raise_error StandardError
+      expect(Integration.running?).to eq true
       expect(ActionMailer::Base.deliveries.count).to eq(1)
     end
   end
