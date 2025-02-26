@@ -88,7 +88,7 @@ class PubData::PubXmlBuilder
                     author.l_name.present? ? xml.LNAME_(author.l_name, access: 'READ_ONLY') : nil
                   end
                 end
-                link.publication.pure_ids.present? ? xml.PURE_ID_(link.publication.pure_ids) : nil
+                link.publication.rmd_id.present? ? xml.RMD_ID_(link.publication.rmd_id) : nil
               end
             end
           end

@@ -1,0 +1,42 @@
+{
+    "data": [
+      {
+        "id": "2222",
+        "type": "publication",
+        "attributes": {
+          "title": "Title2",
+          "secondary_title": "Secondary Title2",
+          "journal_title": "Another Journal",
+          "publication_type": "Academic Journal Article",
+          "publisher": null,
+          "status": "Published",
+          "volume": "2",
+          "issue": "2",
+          "edition": null,
+          "page_range": "200-250",
+          "authors_et_al": null,
+          "abstract": "This is an abstract.",
+          "citation_count": 1,
+          "published_on": "2016-01-12",
+          "contributors": [
+            {
+              "first_name": "Larry J.",
+              "middle_name": null,
+              "last_name": "Smith"
+            }
+          ],
+          "tags": [
+            {
+              "name": "Tag",
+              "rank": 3
+            }
+          ],
+          "pure_ids": [
+            "ytrewq12345"
+          ],
+          "activity_insight_ids": []
+        }
+      }
+    ]
+  }
+
