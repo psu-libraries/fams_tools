@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  docker: circleci/docker@2.2.0
+  docker: circleci/docker@2.8.2
 
 jobs:
   release:
@@ -37,7 +37,8 @@ jobs:
             cd fams-config
             ./bin/generate_app
   publish:
-    executor: docker/docker
+    executor: 
+      name: docker/docker
     steps:
       - setup_remote_docker
       - checkout
@@ -54,7 +55,8 @@ jobs:
           registry: harbor.k8s.libraries.psu.edu
           tag: "$CIRCLE_SHA1"
   build:
-    machine: true
+    machine:
+      image: ubuntu-2404:current
     steps:
       - checkout
       - run:
