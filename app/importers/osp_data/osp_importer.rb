@@ -57,7 +57,7 @@ class OspData::OspImporter
   end
 
   def is_proper_status(row)
-    if row['status'] == 'Purged' || row['status'] == 'Withdrawn'
+    if %w[Purged Withdrawn].include?(row['status'])
       return true if pendnotfund.include? row['ospkey']
 
       false
@@ -111,12 +111,12 @@ DateTime.strptime(row['accessid'],
   def format_date_fields(row)
     key_arr = %w[submitted awarded startdate enddate notfunded]
     key_arr.each do |k|
-      row[k] = '' if row[k] == '/' || row[k] == '/  /'
+      row[k] = '' if ['/', '/  /'].include?(row[k])
     end
   end
 
   def format_pending(row)
-    return unless row['status'] == 'Pending Proposal' || row['status'] == 'Pending Award'
+    return unless ['Pending Proposal', 'Pending Award'].include?(row['status'])
 
     row['status'] = 'Pending'
   end
@@ -138,7 +138,7 @@ DateTime.strptime(row['accessid'],
         keys = backup_row
       else
         hashed = keys.zip(backup_row).to_h
-        pendnotfund << hashed['OSPKEY'] if hashed['STATUS'] == 'Pending' || hashed['STATUS'] == 'Not Funded'
+        pendnotfund << hashed['OSPKEY'] if ['Pending', 'Not Funded'].include?(hashed['STATUS'])
       end
       index += 1
     end

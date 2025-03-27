@@ -38,7 +38,9 @@ describe '#ldap_integrate' do
       expect(page).to have_content('AI-Integration')
       within('#personal_contacts') do
         page.fill_in 'passcode', with: passcode
-        click_on 'Beta'
+        page.accept_alert 'Are you sure you want to integrate into beta?' do
+          click_on 'Beta'
+        end
       end
       expect(page).to have_content('Integration completed')
     end
@@ -48,7 +50,9 @@ describe '#ldap_integrate' do
       select('Personal & Contact Integration', from: 'label_integration_type').select_option
       expect(page).to have_content('AI-Integration')
       within('#personal_contacts') do
-        click_on 'Beta'
+        page.accept_alert 'Are you sure you want to integrate into beta?' do
+          click_on 'Beta'
+        end
       end
       expect(page).to have_content('Wrong Passcode')
     end

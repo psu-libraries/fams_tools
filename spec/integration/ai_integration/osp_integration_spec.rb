@@ -59,7 +59,9 @@ describe '#osp_integrate' do
         page.attach_file 'congrant_file', Rails.root.join('spec/fixtures/contract_grants.csv')
         page.attach_file 'ai_backup_file', Rails.root.join('spec/fixtures/congrant_backup.csv')
         page.fill_in 'passcode', with: passcode
-        click_on 'Beta'
+        page.accept_alert 'Are you sure you want to integrate into beta?' do
+          click_on 'Beta'
+        end
       end
       expect(page).to have_content('Integration completed')
     end
@@ -69,7 +71,11 @@ describe '#osp_integrate' do
       select('Contract/Grant', from: 'label_integration_type').select_option
       expect(page).to have_content('AI-Integration')
       within('#congrant') do
-        click_on 'Beta'
+        page.attach_file 'congrant_file', Rails.root.join('spec/fixtures/contract_grants.csv')
+        page.attach_file 'ai_backup_file', Rails.root.join('spec/fixtures/congrant_backup.csv')
+        page.accept_alert 'Are you sure you want to integrate into beta?' do
+          click_on 'Beta'
+        end
       end
       expect(page).to have_content('Wrong Passcode')
     end

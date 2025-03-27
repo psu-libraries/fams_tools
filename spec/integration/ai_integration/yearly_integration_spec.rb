@@ -19,7 +19,6 @@ describe '#yearly_integrate' do
     it 'integrates yearly data into AI beta' do
       visit ai_integration_path
       select('Yearly Integration', from: 'label_integration_type').select_option
-      puts page.driver.console_messages
       logger = double('logger')
       allow(Logger).to receive(:new).and_return(logger)
       expect(logger).to receive(:info).with(/initiated at:|Errors for Yearly/).twice
@@ -28,7 +27,9 @@ describe '#yearly_integrate' do
       within('#yearly') do
         page.attach_file 'yearly_file', Rails.root.join('spec/fixtures/yearly_data.xlsx')
         page.fill_in 'passcode', with: passcode
-        click_on 'Beta'
+        page.accept_alert 'Are you sure you want to integrate into beta?' do
+          click_on 'Beta'
+        end
       end
       expect(page).to have_content('Integration completed')
     end
@@ -38,7 +39,9 @@ describe '#yearly_integrate' do
       select('Yearly Integration', from: 'label_integration_type').select_option
       within('#yearly') do
         page.attach_file 'yearly_file', Rails.root.join('spec/fixtures/yearly_data.xlsx')
-        click_on 'Beta'
+        page.accept_alert 'Are you sure you want to integrate into beta?' do
+          click_on 'Beta'
+        end
       end
       expect(page).to have_content('Wrong Passcode')
     end
