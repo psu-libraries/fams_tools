@@ -1,5 +1,3 @@
-require 'creek'
-
 class OspData::OspImporter
   attr_accessor :headers, :csv_obj, :pendnotfund
 

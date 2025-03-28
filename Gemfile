@@ -55,11 +55,6 @@ gem 'httparty', '~> 0.21'
 # Mocking outgoing requests
 gem 'webmock'
 
-# Stream xlsx files
-gem 'creek'
-# gem 'rubyXL'
-gem 'roo'
-
 # UX framework
 gem 'bootstrap', '~> 4.6'
 
