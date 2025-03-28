@@ -24,7 +24,9 @@ describe '#delete_records_validation' do
         page.fill_in 'resource', with: 'CONGRANT'
         page.attach_file 'ids_file', Rails.root.join('spec/fixtures/delete.csv')
         page.fill_in 'passcode', with: passcode
-        click_on 'Beta'
+        page.accept_alert 'Are you sure you want to integrate into beta?' do
+          click_on 'Beta'
+        end
       end
       expect(page).to have_content('Integration completed in')
     end
@@ -39,7 +41,9 @@ describe '#delete_records_validation' do
         page.fill_in 'resource', with: 'a'
         page.attach_file 'ids_file', Rails.root.join('spec/fixtures/delete.csv')
         page.fill_in 'passcode', with: passcode
-        click_on 'Beta'
+        page.accept_alert 'Are you sure you want to integrate into beta?' do
+          click_on 'Beta'
+        end
       end
       expect(page).to have_content('Invalid Resource')
     end

@@ -24,13 +24,13 @@ gem 'ed25519'
 # For scheduled tasks
 gem 'whenever'
 
-gem 'rails', '~> 7.0.8.1'
+gem 'rails', '~> 7.2'
 # Use mysql as the database for Active Record
 # ActiveRecord only works with specific versions of mysql2.
 gem 'mysql2', '= 0.5.4'
 
 # Use SCSS for stylesheets
-gem 'sass-rails', '~> 6.0'
+gem 'sass-rails'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 # See https://github.com/rails/execjs#readme for more supported runtimes
@@ -55,9 +55,6 @@ gem 'httparty', '~> 0.21'
 # Mocking outgoing requests
 gem 'webmock'
 
-# Stream xlsx files
-gem 'creek'
-
 # UX framework
 gem 'bootstrap', '~> 4.6'
 
@@ -71,12 +68,13 @@ gem 'pdf-reader'
 gem 'exiftool_vendored', '= 12.52'
 
 # Needed for Ruby 3+
+gem 'csv'
 gem 'webrick'
 
 # Pin date, racc, websocket-driver, and nio4r at these versions
 # or else they fail to bundle on the RedHat server
 gem 'date', '= 3.3.3'
-gem 'nio4r', '= 2.5.8'
+gem 'nio4r'
 gem 'racc', '= 1.6.2'
 gem 'websocket-driver', '= 0.7.5'
 
@@ -85,18 +83,18 @@ group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
   # Adds support for Capybara system testing and selenium driver
   gem 'capybara', '~> 3'
-  gem 'capybara-webkit'
   gem 'database_cleaner'
   gem 'headless'
   gem 'rails-controller-testing'
   gem 'rspec-rails', '~> 6.0'
   gem 'rspec-retry'
+  gem 'selenium'
   gem 'selenium-webdriver'
   gem 'shoulda-matchers', '4.0.0.rc1'
   # Audit gems for vulnerabilities
   gem 'bundle-audit'
   # Ruby code linter
-  gem 'rubocop', '= 1.42.0'
+  gem 'rubocop'
   gem 'rubocop-rails'
   gem 'rubocop-rspec'
   # Code coverage
@@ -104,7 +102,7 @@ group :development, :test do
   # Use Puma as the app server
   # Since passenger is used in production this doesn't need to be
   # installed on the RedHat server (it fails anyway)
-  gem 'puma', '~> 5.6'
+  gem 'puma'
 end
 
 group :development do

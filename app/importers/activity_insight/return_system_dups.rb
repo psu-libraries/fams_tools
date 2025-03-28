@@ -26,11 +26,9 @@ class ActivityInsight::ReturnSystemDups
   end
 
   def noko_xml(responses)
-    xml_arr = []
-    responses.each do |response|
-      xml_arr << Nokogiri::XML.parse(response.to_s)
+    responses.map do |response|
+      Nokogiri::XML.parse(response.to_s)
     end
-    xml_arr
   end
 
   def xml_to_hash(xml_arr)
@@ -51,10 +49,7 @@ class ActivityInsight::ReturnSystemDups
 
   def put_duplicates(congrant_hash)
     congrant_hash.each do |k, v|
-      ospkeys = []
-      v.each do |congrant|
-        ospkeys << congrant[1]
-      end
+      ospkeys = v.pluck(1)
       puts k
       puts ospkeys.select { |e| ospkeys.count(e) > 1 }.uniq
     end

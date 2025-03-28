@@ -6,7 +6,6 @@ RSpec.describe ComData::ComEffortPopulateDb do
 
   let(:fake_sheet) do
     data_arr = []
-    arr_of_hashes = []
     keys = headers
     data_arr << ['lskywalker', 'Skywalker Luke', 'the Force',  '1976-1977', 'Lecture',
                  'FTF REQ Various Rooms 10-12 PBL - EndoRepro PBL 1402 - Thyroid', '5/25/1977 10:00', 2.5]
@@ -16,8 +15,7 @@ RSpec.describe ComData::ComEffortPopulateDb do
                  'FTF REQ Various Rooms 10-12 PBL - EndoRepro PBL 1402 - Thyroid', '6/26/1997 9:45', 7]
     data_arr << ['hgranger', 'Granger Hermione', 'Dark Arts', '2001-2002', 'Sm Grp Facilitation',
                  'FTF REQ Various Rooms 10-12 PBL - EndoRepro PBL 1402 - Thyroid', '11/1/2001 12:00', 8]
-    data_arr.each { |a| arr_of_hashes << keys.zip(a).to_h }
-    arr_of_hashes
+    data_arr.map { |a| keys.zip(a).to_h }
   end
 
   let(:com_effort_populate_db_obj) { ComData::ComEffortPopulateDb.allocate }

@@ -17,7 +17,7 @@ RSpec.describe 'Updating works', :js, type: :feature do
       author_fields[5].set('Tester')
       find_by_id('publication_listing_works_attributes_0_title').set('New Title')
       find_by_id('publication_listing_works_attributes_0_date').set('September 23-30, 2010')
-      all("i[class='fa remove-nested fa-close']").last.trigger('click')
+      all("i[class='fa remove-nested fa-close']").last.click
       find_by_id('publication_listing_works_attributes_0_isbn').set('1234567890')
       click_on 'Update Works'
       sleep 1

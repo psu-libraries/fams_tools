@@ -40,7 +40,7 @@ describe '#com_effort_integrate' do
         .to_return(status: 200, body: error_message, headers: {})
     end
 
-    it 'takes COM Effort file, parses, and send data to activity insight' do
+    it 'takes COM Effort file, parses, and sends data to activity insight' do
       visit ai_integration_path
       select('COM Effort Integration', from: 'label_integration_type').select_option
       logger = double('logger')
@@ -54,8 +54,11 @@ describe '#com_effort_integrate' do
         page.attach_file 'com_effort_file', Rails.root.join('spec/fixtures/ume_faculty_effort.csv')
         sleep 1
         page.fill_in 'passcode', with: passcode
-        click_on 'Beta'
+        page.accept_alert 'Are you sure you want to integrate into beta?' do
+          click_on 'Beta'
+        end
       end
+
       expect(page).to have_content('Integration completed')
     end
 
@@ -64,7 +67,11 @@ describe '#com_effort_integrate' do
       select('COM Effort Integration', from: 'label_integration_type').select_option
       expect(page).to have_content('AI-Integration')
       within('#com_effort') do
-        click_on 'Beta'
+        page.attach_file 'com_effort_file', Rails.root.join('spec/fixtures/ume_faculty_effort.csv')
+        sleep 1
+        page.accept_alert 'Are you sure you want to integrate into beta?' do
+          click_on 'Beta'
+        end
       end
       expect(page).to have_content('Wrong Passcode')
     end

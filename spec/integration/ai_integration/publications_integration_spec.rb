@@ -67,7 +67,9 @@ describe '#pub_integrate' do
       within('#publications') do
         page.fill_in 'passcode', with: passcode
         find("select[name='college']").find(:option, 'All Colleges').select_option
-        click_on 'Beta'
+        page.accept_alert 'Are you sure you want to integrate into beta?' do
+          click_on 'Beta'
+        end
       end
       expect(page).to have_content('Integration completed')
     end
@@ -83,7 +85,9 @@ describe '#pub_integrate' do
       within('#publications') do
         page.fill_in 'passcode', with: passcode
         fill_in 'access_id', with: 'ljs123'
-        click_on 'Beta'
+        page.accept_alert 'Are you sure you want to integrate into beta?' do
+          click_on 'Beta'
+        end
       end
       expect(page).to have_content('Integration completed')
     end
@@ -93,7 +97,9 @@ describe '#pub_integrate' do
       select('RMD Publications Integration', from: 'label_integration_type').select_option
       expect(page).to have_content('AI-Integration')
       within('#publications') do
-        click_on 'Beta'
+        page.accept_alert 'Are you sure you want to integrate into beta?' do
+          click_on 'Beta'
+        end
       end
       expect(page).to have_content('Wrong Passcode')
     end

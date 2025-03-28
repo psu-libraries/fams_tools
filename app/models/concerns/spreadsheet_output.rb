@@ -75,9 +75,8 @@ class SpreadsheetOutput < WorkOutputs
   end
 
   def row(item)
-    row_arr = []
-    @header_map.each do |key|
-      row_arr << row_assign(item, key)
+    row_arr = @header_map.map do |key|
+      row_assign(item, key)
     end
     row_arr.flatten
   end

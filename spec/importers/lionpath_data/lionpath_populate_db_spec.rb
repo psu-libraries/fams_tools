@@ -8,7 +8,6 @@ RSpec.describe LionpathData::LionpathPopulateDb do
 
   let(:fake_sheet) do
     data_arr = []
-    arr_of_hashes = []
     keys = headers
     data_arr << ['abc123', 'Spring', 2018, 'UP', 'Computer Stuff', 'Fun things that you can do with a computer that are fun.',
                  9999, 'N', 'CMPSC', 0o01, 3, 25, 100, 'Hybrid - Online & In Person', 'Lecture', 'Primary Instructor', 200, '', '', '']
@@ -18,8 +17,7 @@ RSpec.describe LionpathData::LionpathPopulateDb do
                  1111, 'N', 'FDSC', 0o01, 3, 30, 100, 'In Person', 'Lecture', 'Primary Instructor', 100, '', '', '']
     data_arr << ['ghi789', 'Spring', 2018, 'UP', 'Bioinformatics', 'High Throughput Sequencing of Globulandus microRNAs.',
                  2222, 'N', 'BIOTC', 0o01, 3, 12, 100, 'In Person', 'Lecture', 'Primary Instructor', 110, '', '', '']
-    data_arr.each { |a| arr_of_hashes << keys.zip(a).to_h }
-    arr_of_hashes
+    data_arr.map { |a| keys.zip(a).to_h }
   end
 
   let(:lionpath_populate_db_obj) { LionpathData::LionpathPopulateDb.allocate }
