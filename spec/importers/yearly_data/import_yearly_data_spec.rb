@@ -1,7 +1,7 @@
 require 'importers/importers_helper'
 
 RSpec.describe YearlyData::ImportYearlyData do
-  let(:yearly_parser_obj) { YearlyData::ImportYearlyData.new 'spec/fixtures/yearly_data.xlsx' }
+  let(:yearly_parser_obj) { YearlyData::ImportYearlyData.new 'spec/fixtures/yearly_data.csv' }
 
   before do
     FactoryBot.create(:faculty, access_id: 'abc123', college: 'LA')

@@ -1,37 +1,22 @@
-require 'creek'
-
 class YearlyData::ImportYearlyData
-  attr_accessor :yearly_data_book
+  attr_accessor :yearly_data_book, :headers
 
   def initialize(yearly_data_book)
-    @yearly_data_book = Creek::Book.new(yearly_data_book).sheets[0].rows
+    @yearly_data_book = CSV.open(yearly_data_book, encoding: 'Windows-1252:UTF-8', force_quotes: true, quote_char: '"')
+    @headers = @yearly_data_book.first.map! { |h| h.gsub(/[\uFEFF\xEF\xBB\xBFï»¿]/, '') }
   end
 
   def import
-    convert_xlsx_to_hash(@yearly_data_book).each do |row|
+    @yearly_data_book.each do |row|
+      row = convert_csv_to_hash(row)
       populate_db(row)
     end
   end
 
   private
 
-  def convert_xlsx_to_hash(yearly_data_book)
-    counter = 0
-    keys = []
-    data = []
-    data_hashed = []
-    yearly_data_book.each_with_index do |row, index|
-      values = []
-      if index == 0
-        row.each_value { |v| keys << v }
-      else
-        row.each_value { |v| values << v }
-        data << values
-      end
-      counter += 1
-    end
-    data.each { |a| data_hashed << keys.zip(a).to_h }
-    data_hashed
+  def convert_csv_to_hash(row)
+    headers.zip(row).to_h
   end
 
   def populate_db(row)

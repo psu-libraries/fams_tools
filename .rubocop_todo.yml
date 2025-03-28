@@ -305,6 +305,8 @@ RSpec/NoExpectationExample:
 RSpec/PendingWithoutReason:
   Exclude:
     - 'spec/integration/ai_integration/error_redirect_spec.rb'
+    - 'spec/models/concerns/work_outputs_spec.rb'
+    - 'spec/integration/works_spec.rb'
 
 # Offense count: 22
 # This cop supports unsafe autocorrection (--autocorrect-all).
