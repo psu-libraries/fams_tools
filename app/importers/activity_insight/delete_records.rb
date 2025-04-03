@@ -1,10 +1,13 @@
 class ActivityInsight::DeleteRecords
   class InvalidResource < StandardError; end
 
-  RESOURCES = %w[CONGRANT SCHTEACH INTELLCONT PCI GRADE_DIST_GPA STUDENT_RATING].freeze
+  RESOURCES = %w[CONGRANT SCHTEACH INTELLCONT ADMIN EDUCATION PASTHIST ADMIN_ASSIGNMENTS AWARDHONOR
+                 FACDEV INSTRUCT_TAUGHT OCTEACH NCTEACH COURSE_EVAL ACADVISE COURSES CRIA DSL SPONSOR_REPORT
+                 PERFORM_EXHIBIT PRESENT INTELLPROP MEMBER SERVICE_INTERNAL SERVICE_EXTERNAL NIH_BIOSKETCH
+                 BIOSKETCH NSF_SUPPORT STUDENT_RATING].freeze
 
   def initialize(resource, target)
-    raise InvalidResource unless RESOURCES.include? resource.to_s
+    raise InvalidResource, 'Invalid Resource' unless RESOURCES.include? resource.to_s
 
     @resource = resource
     @target = target

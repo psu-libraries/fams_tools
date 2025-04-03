@@ -1,0 +1,42 @@
+
+  {
+    "data": [
+      {
+        "id": "1111",
+        "type": "publication",
+        "attributes": {
+          "title": "Title1",
+          "secondary_title": "Secondary Title1",
+          "journal_title": "Journal",
+          "publication_type": "Academic Journal Article",
+          "publisher": null,
+          "status": "Published",
+          "volume": "1",
+          "issue": "1",
+          "edition": null,
+          "page_range": "400-450",
+          "authors_et_al": null,
+          "abstract": "This is an abstract.",
+          "citation_count": 1,
+          "published_on": "2012-01-12",
+          "contributors": [
+            {
+              "first_name": "Abraham J.",
+              "middle_name": null,
+              "last_name": "Lincoln"
+            }
+          ],
+          "tags": [
+            {
+              "name": "Tag",
+              "rank": 3
+            }
+          ],
+          "pure_ids": [
+            "qwerty54321"
+          ],
+          "activity_insight_ids": []
+        }
+      }
+    ]
+  }

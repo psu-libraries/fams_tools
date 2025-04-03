@@ -20,4 +20,6 @@ Rails.application.routes.draw do
     get '/destroy', to: 'publication_listings#destroy'
     post '/update', to: 'publication_listings#update'
   end
+  get 'ldap_check', to: 'ldap_check#index'
+  post 'ldap_check', to: 'ldap_check#create'
 end

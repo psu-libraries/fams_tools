@@ -8,8 +8,10 @@ RSpec.describe ActivityInsight::DeleteRecords do
   end
 
   it 'has list of resources' do
-    expect(delete_records::RESOURCES).to eq %w[CONGRANT SCHTEACH INTELLCONT PCI GRADE_DIST_GPA
-                                               STUDENT_RATING]
+    expect(delete_records::RESOURCES).to eq %w[CONGRANT SCHTEACH INTELLCONT ADMIN EDUCATION
+                                               PASTHIST ADMIN_ASSIGNMENTS AWARDHONOR FACDEV INSTRUCT_TAUGHT OCTEACH NCTEACH COURSE_EVAL ACADVISE COURSES CRIA DSL SPONSOR_REPORT
+                                               PERFORM_EXHIBIT PRESENT INTELLPROP MEMBER SERVICE_INTERNAL SERVICE_EXTERNAL NIH_BIOSKETCH
+                                               BIOSKETCH NSF_SUPPORT STUDENT_RATING]
   end
 
   context 'when deleting SCHTEACH records in beta' do

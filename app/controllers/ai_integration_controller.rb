@@ -28,7 +28,7 @@ class AiIntegrationController < ApplicationController
   end
 
   def pub_integrate
-    raise StandardError, 'Must select a college.' if params[:college].empty?
+    raise StandardError, 'Must select a college or enter an access ID.' if params[:college].empty? && params[:access_id].empty?
 
     start = Time.now
     PubIntegrateJob.perform_now(params, @publications_log_path)
@@ -45,6 +45,9 @@ class AiIntegrationController < ApplicationController
     start = Time.now
     DeleteRecordsJob.perform_now(params, @delete_records_path)
     finished(start)
+  rescue ActivityInsight::DeleteRecords::InvalidResource => e
+    flash[:alert] = e.message
+    redirect_to ai_integration_path
   end
 
   def com_effort_integrate

@@ -6,7 +6,7 @@ class CreateUserService
   require 'rake'
 
   def create_user
-    api_url = ENV.fetch('FAMS_AI_CREATE_USER_API')  # Ensure this points to the correct API endpoint
+    api_url = ENV.fetch('FAMS_WEBSERVICES_BASE_URI')  # Ensure this points to the correct API endpoint
     username = ENV.fetch('FAMS_WEBSERVICES_USERNAME')
     password = ENV.fetch('FAMS_WEBSERVICES_PASSWORD')
 
@@ -61,7 +61,7 @@ class CreateUserService
   end
 
   def send_request(url, xml_data, username, password)
-    uri = URI.parse(url)
+    uri = URI.parse(url + '/User')
     request = Net::HTTP::Post.new(uri)
     request.basic_auth(username, password)
     request.content_type = 'application/xml'

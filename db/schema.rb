@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2018050314201234) do
+ActiveRecord::Schema[7.0].define(version: 2025_02_17_205946) do
   create_table "authors", charset: "utf8mb4", force: :cascade do |t|
     t.string "f_name"
     t.string "m_name"
@@ -120,6 +120,8 @@ ActiveRecord::Schema[7.0].define(version: 2018050314201234) do
     t.string "college"
     t.string "campus"
     t.string "com_id"
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["access_id"], name: "index_faculties_on_access_id", unique: true
   end
 
@@ -187,7 +189,6 @@ ActiveRecord::Schema[7.0].define(version: 2018050314201234) do
   end
 
   create_table "publications", charset: "utf8mb4", force: :cascade do |t|
-    t.string "pure_id"
     t.text "title"
     t.integer "volume"
     t.integer "dty"
@@ -206,14 +207,12 @@ ActiveRecord::Schema[7.0].define(version: 2018050314201234) do
     t.text "secondary_title"
     t.integer "citation_count"
     t.boolean "authors_et_al"
-    t.string "ai_ids"
-    t.string "pure_ids"
     t.string "web_address"
     t.text "editors"
     t.string "institution"
     t.string "isbnissn"
     t.string "pubctyst"
-    t.index ["pure_ids", "ai_ids"], name: "index_publications_on_pure_ids_and_ai_ids", unique: true
+    t.bigint "rmd_id"
   end
 
   create_table "sections", charset: "utf8mb4", force: :cascade do |t|
