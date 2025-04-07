@@ -6,7 +6,7 @@ orbs:
 jobs:
   release:
     docker:
-      - image: harbor.k8s.libraries.psu.edu/library/ci-utils:v4.0.2
+      - image: harbor.k8s.libraries.psu.edu/library/ci-utils:v4.0.4
     environment:
       REGISTRY_HOST: harbor.k8s.libraries.psu.edu
       REGISTRY_REPO: library/fams-tools
@@ -24,7 +24,7 @@ jobs:
             /usr/local/bin/pr-release clusters/prod/manifests/fams_tools/prod.yaml
   deploy:
     docker:
-      - image: harbor.k8s.libraries.psu.edu/library/ci-utils:v4.0.2
+      - image: harbor.k8s.libraries.psu.edu/library/ci-utils:v4.0.4
     environment:
       CONFIG_REPO: git@github.com:psu-libraries/fams-config.git
     steps:
