@@ -50,6 +50,7 @@ RSpec.describe ComData::ComEffortPopulateDb do
       expect(ComEffort.find_by(com_id: 'hgranger').hours).to eq(8)
       expect(ComEffort.find_by(com_id: 'hgranger').event_type).to eq('Sm Grp Facilitation')
       expect(ComEffort.find_by(com_id: 'hgranger').event).to eq('FTF REQ Various Rooms 10-12 PBL - EndoRepro PBL 1402 - Thyroid')
+      expect(ComEffort.find_by(com_id: 'hgranger').event_date).to eq('11/1/2001')
       expect(ComEffort.find_by(com_id: 'lskywalker').hours).to eq(6.5)
       expect(ComEffort.find_by(com_id: 'lskywalker').event_type).to eq('Lecture')
       expect(ComEffort.find_by(com_id: 'lskywalker').faculty).to eq(faculty2)

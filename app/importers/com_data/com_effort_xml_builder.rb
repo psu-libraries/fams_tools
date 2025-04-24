@@ -18,7 +18,7 @@ class ComData::ComEffortXmlBuilder
         batch.each do |faculty|
           xml.Record('PennStateHealthUsername' => faculty.com_id) do
             faculty.com_efforts.each do |com_effort|
-              event_date = Date.strptime(com_effort.event_date, '%m/%d/%y')
+              event_date = Date.strptime(com_effort.event_date, '%m/%d/%Y')
               xml.INSTRUCT_TAUGHT do
                 xml.COURSE_YEAR_ com_effort.course_year, access: 'READ_ONLY'
                 xml.COURSE_TITLE_ com_effort.course, access: 'READ_ONLY'
