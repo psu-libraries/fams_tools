@@ -3,11 +3,11 @@ require 'integration/integrations_helper'
 describe '#create_users_integrate' do
   let!(:integration) { FactoryBot.create(:integration) }
   let(:passcode) { Rails.application.config_for(:integration_passcode)[:passcode] }
-  
+
   context 'when uploading a CSV file with no errors', :js, type: :feature do
     before do
       ENV['FAMS_WEBSERVICES_BASE_URI'] ||= 'https://betawebservices.digitalmeasures.com/login/service/v4'
-      
+
       stub_request(:post, 'https://betawebservices.digitalmeasures.com/login/service/v4/User')
         .with(
           body: "<User PSUIDFacultyOnly='123456789' username='txt124'><FirstName>Smith</FirstName><LastName>John</LastName><Email>txt124@psu.edu</Email><ShibbolethAuthentication/></User>",
