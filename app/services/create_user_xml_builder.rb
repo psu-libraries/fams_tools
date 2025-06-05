@@ -1,9 +1,9 @@
 require 'rexml/document'
 
-class CreateUserXmlBuilder
-  def create_user_xml(row)
+module CreateUserXmlBuilder
+  def self.create_user_xml(row)
     doc = REXML::Document.new
-    user = doc.add_element('User', { 'username' => row['Username'].strip })
+    user = doc.add_element('User', { 'username' => row['Username'].strip, 'PSUIDFacultyOnly' => row['PSU ID# (Faculty Only)'].to_s.strip })
 
     user.add_element('FirstName').text = row['First Name'].strip
     user.add_element('LastName').text = row['Last Name'].strip
@@ -24,7 +24,7 @@ class CreateUserXmlBuilder
     final_xml
   end
 
-  def insert_metadata_xml(row)
+  def self.insert_metadata_xml(row)
     doc = REXML::Document.new
 
     # Outer layer to add user to schema
@@ -34,7 +34,7 @@ class CreateUserXmlBuilder
     admin = activities.add_element('ADMIN')
 
     # Metadata
-    admin.add_element('AC_YEAR').text = '2025-2026'
+    admin.add_element('AC_YEAR').text = "#{Time.current.year}-#{Time.current.year + 1}"
     admin_dep = admin.add_element('ADMIN_DEP')
     admin_dep.add_element('DEP').text = row['Department'].strip unless row['Department'].to_s.strip.empty?
     admin.add_element('CAMPUS').text = row['Campus'].strip
@@ -72,7 +72,7 @@ class CreateUserXmlBuilder
     final_xml
   end
 
-  def add_faculty_group_xml(row)
+  def self.add_faculty_group_xml(row)
     doc = REXML::Document.new
     return nil if row['Security'] != 'Faculty'
 

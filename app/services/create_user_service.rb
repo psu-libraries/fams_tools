@@ -8,22 +8,21 @@ class CreateUserService
   end
 
   def create_user
-    api_uri = 'https://betawebservices.digitalmeasures.com/login/service/v4' # Ensure this points to the correct API endpoint
+    api_uri = ENV.fetch('FAMS_WEBSERVICES_BASE_URI', 'https://betawebservices.digitalmeasures.com/login/service/v4') # Ensure this points to the correct API endpoint
     username = ENV.fetch('FAMS_WEBSERVICES_USERNAME')
     password = ENV.fetch('FAMS_WEBSERVICES_PASSWORD')
 
     CSV.foreach(csv_path, headers: true) do |row|
       current_user = row['Username'].strip
-      xml_builder = CreateUserXmlBuilder.new
-      user_xml = xml_builder.create_user_xml(row)
+      user_xml = CreateUserXmlBuilder.create_user_xml(row)
       response1 = send_request(api_uri + '/User', user_xml, username, password)
       log_error(response1)
 
-      metadata_xml = xml_builder.insert_metadata_xml(row)
+      metadata_xml = CreateUserXmlBuilder.insert_metadata_xml(row)
       response2 = send_request(api_uri + "/UserSchema/USERNAME:#{current_user}", metadata_xml, username, password)
       log_error(response2)
 
-      faculty_xml = xml_builder.add_faculty_group_xml(row)
+      faculty_xml = CreateUserXmlBuilder.add_faculty_group_xml(row)
       if faculty_xml
         response3 = send_request(api_uri + "/UserRole/USERNAME:#{current_user}", faculty_xml, username, password)
         log_error(response3)
