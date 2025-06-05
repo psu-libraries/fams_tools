@@ -68,7 +68,9 @@ describe '#create_users_integrate' do
       within('#create_users') do
         page.attach_file 'create_users_file', Rails.root.join('spec/fixtures/create_user.csv')
         page.fill_in 'passcode', with: passcode
-        click_on 'Beta'
+        page.accept_alert 'Are you sure you want to integrate into beta?' do
+          click_on 'Beta'
+        end
       end
       expect(page).to have_content('Integration completed in')
     end
