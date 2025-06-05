@@ -1,4 +1,4 @@
-FROM harbor.k8s.libraries.psu.edu/library/ruby-3.1.3-node-16:20231225 as base
+FROM harbor.k8s.libraries.psu.edu/library/ruby-3.4.1-node-22:20250131 as base
 ARG UID=1001
 WORKDIR /app
 
@@ -17,10 +17,25 @@ RUN apt-get update && apt-get install -y --no-install-recommends g++ \
     gstreamer1.0-tools \
     gstreamer1.0-x \
     libmariadb-dev \
-    libmariadbclient-dev \
     xvfb \
-    qt5-default \
+    qtbase5-dev \
+    curl \
+    jq \
     && rm -rf /var/lib/apt/lists/* 
+
+RUN apt-get update && apt-get install -y google-chrome-stable
+
+RUN CHROME_VERSION=$(google-chrome --version | grep -oP '\d+\.\d+\.\d+') && \
+    MAJOR_VERSION=$(echo $CHROME_VERSION | cut -d. -f1) && \
+    LATEST_DRIVER=$(curl -sS https://googlechromelabs.github.io/chrome-for-testing/LATEST_RELEASE_${MAJOR_VERSION}) && \
+    if [ -z "$LATEST_DRIVER" ]; then \
+      LATEST_DRIVER=$(curl -sS https://googlechromelabs.github.io/chrome-for-testing/LATEST_RELEASE); \
+    fi && \
+    wget -q "https://storage.googleapis.com/chrome-for-testing-public/${LATEST_DRIVER}/linux64/chromedriver-linux64.zip" && \
+    unzip chromedriver-linux64.zip && \
+    mv chromedriver-linux64/chromedriver /usr/local/bin/chromedriver && \
+    chmod +x /usr/local/bin/chromedriver && \
+    rm -rf chromedriver-linux64.zip chromedriver-linux64
 
 USER app 
 COPY --chown=app Gemfile Gemfile.lock /app/

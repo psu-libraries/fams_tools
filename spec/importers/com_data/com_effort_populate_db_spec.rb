@@ -6,7 +6,6 @@ RSpec.describe ComData::ComEffortPopulateDb do
 
   let(:fake_sheet) do
     data_arr = []
-    arr_of_hashes = []
     keys = headers
     data_arr << ['lskywalker', 'Skywalker Luke', 'the Force',  '1976-1977', 'Lecture',
                  'FTF REQ Various Rooms 10-12 PBL - EndoRepro PBL 1402 - Thyroid', '5/25/1977 10:00', 2.5]
@@ -16,8 +15,7 @@ RSpec.describe ComData::ComEffortPopulateDb do
                  'FTF REQ Various Rooms 10-12 PBL - EndoRepro PBL 1402 - Thyroid', '6/26/1997 9:45', 7]
     data_arr << ['hgranger', 'Granger Hermione', 'Dark Arts', '2001-2002', 'Sm Grp Facilitation',
                  'FTF REQ Various Rooms 10-12 PBL - EndoRepro PBL 1402 - Thyroid', '11/1/2001 12:00', 8]
-    data_arr.each { |a| arr_of_hashes << keys.zip(a).to_h }
-    arr_of_hashes
+    data_arr.map { |a| keys.zip(a).to_h }
   end
 
   let(:com_effort_populate_db_obj) { ComData::ComEffortPopulateDb.allocate }
@@ -52,6 +50,7 @@ RSpec.describe ComData::ComEffortPopulateDb do
       expect(ComEffort.find_by(com_id: 'hgranger').hours).to eq(8)
       expect(ComEffort.find_by(com_id: 'hgranger').event_type).to eq('Sm Grp Facilitation')
       expect(ComEffort.find_by(com_id: 'hgranger').event).to eq('FTF REQ Various Rooms 10-12 PBL - EndoRepro PBL 1402 - Thyroid')
+      expect(ComEffort.find_by(com_id: 'hgranger').event_date).to eq('11/1/2001')
       expect(ComEffort.find_by(com_id: 'lskywalker').hours).to eq(6.5)
       expect(ComEffort.find_by(com_id: 'lskywalker').event_type).to eq('Lecture')
       expect(ComEffort.find_by(com_id: 'lskywalker').faculty).to eq(faculty2)

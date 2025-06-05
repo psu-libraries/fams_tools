@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_02_17_205946) do
+ActiveRecord::Schema[7.2].define(version: 2025_02_17_205946) do
   create_table "authors", charset: "utf8mb4", force: :cascade do |t|
     t.string "f_name"
     t.string "m_name"
@@ -120,8 +120,8 @@ ActiveRecord::Schema[7.0].define(version: 2025_02_17_205946) do
     t.string "college"
     t.string "campus"
     t.string "com_id"
-    t.datetime "created_at", precision: nil, null: false
-    t.datetime "updated_at", precision: nil, null: false
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.index ["access_id"], name: "index_faculties_on_access_id", unique: true
   end
 

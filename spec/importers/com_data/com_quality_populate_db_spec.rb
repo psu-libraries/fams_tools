@@ -6,13 +6,11 @@ RSpec.describe ComData::ComQualityPopulateDb do
 
   let(:fake_sheet) do
     data_arr = []
-    arr_of_hashes = []
     keys = headers
     data_arr << ['batman', 'Wayne  Bruce', 'Endocrinology/Reproductive', '1938-1939', 'faculty', 4.2, 1939, 'Lecture']
     data_arr << ['spiderman', 'Parker  Peter', 'Swinging',  '1962-1963', 'faculty', 5.0, 575, 'Lecture']
     data_arr << ['spiderman', 'Parker  Peter', 'Climbing',  '2023-2024', 'faculty', 5.0, 575, 'Sm Grp Facilitation']
-    data_arr.each { |a| arr_of_hashes << keys.zip(a).to_h }
-    arr_of_hashes
+    data_arr.map { |a| keys.zip(a).to_h }
   end
 
   let(:com_quality_populate_db_obj) { ComData::ComQualityPopulateDb.allocate }

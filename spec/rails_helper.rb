@@ -2,6 +2,8 @@
 require 'spec_helper'
 require 'headless'
 require 'database_cleaner'
+require 'rack'
+require 'rack/handler/puma'
 
 abort('The Rails environment is running in production mode!') if Rails.env.production?
 # Add additional requires below this line. Rails is not loaded until this point!
@@ -62,12 +64,17 @@ Shoulda::Matchers.configure do |config|
   end
 end
 
-# Capybara configurations
-Capybara.javascript_driver = :webkit
-headless = Headless.new
-headless.start
-at_exit { headless.stop }
+Capybara.register_driver :chrome_headless do |app|
+  Capybara::Selenium::Driver.new(
+    app,
+    browser: :chrome,
+    options: Selenium::WebDriver::Chrome::Options.new(
+      args: %w[no-sandbox headless disable-gpu disable-dev-shm-usage]
+    )
+  )
+end
 
-Capybara::Webkit.configure do |config|
-  config.block_unknown_urls
+# Capybara
+Capybara.configure do |config|
+  config.javascript_driver = :chrome_headless # This is slower
 end

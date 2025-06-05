@@ -54,7 +54,9 @@ describe '#com_quality_integrate' do
         page.attach_file 'com_quality_file', Rails.root.join('spec/fixtures/ume_faculty_quality.csv')
         sleep 1
         page.fill_in 'passcode', with: passcode
-        click_on 'Beta'
+        page.accept_alert 'Are you sure you want to integrate into beta?' do
+          click_on 'Beta'
+        end
       end
       expect(page).to have_content('Integration completed')
     end
@@ -64,7 +66,11 @@ describe '#com_quality_integrate' do
       select('COM Quality Integration', from: 'label_integration_type').select_option
       expect(page).to have_content('AI-Integration')
       within('#com_quality') do
-        click_on 'Beta'
+        page.attach_file 'com_quality_file', Rails.root.join('spec/fixtures/ume_faculty_quality.csv')
+        sleep 1
+        page.accept_alert 'Are you sure you want to integrate into beta?' do
+          click_on 'Beta'
+        end
       end
       expect(page).to have_content('Wrong Passcode')
     end
