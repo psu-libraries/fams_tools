@@ -64,6 +64,7 @@ class AiIntegrationController < ApplicationController
 
   def create_users_integrate
     start = Time.now
+    CreateUsersIntegrateJob.perform_now(params, @create_users_log_path)
     finished(start)
   end
 
