@@ -1,11 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe CreateUserXmlBuilder do
-
   describe '.create_user_xml' do
-    let(:user) { CSV::Row.new(['Last Name',	'First Name',	'Middle Name/Initial',	'Email',	'Username',	'PSU ID# (Faculty Only)',	'Authentication'],
-                            ['John', 'Smith', '', 'txt124@psu.edu', 'txt124', '123456789', 'Shibboleth'])}
-    
+    let(:user) do
+      CSV::Row.new(['Last Name',	'First Name',	'Middle Name/Initial',	'Email',	'Username',	'PSU ID# (Faculty Only)',	'Authentication'],
+                   ['John', 'Smith', '', 'txt124@psu.edu', 'txt124', '123456789', 'Shibboleth'])
+    end
+
     context 'when creating a user' do
       it 'generates an xml' do
         output = CreateUserXmlBuilder.create_user_xml(user)
@@ -15,8 +16,10 @@ RSpec.describe CreateUserXmlBuilder do
   end
 
   describe '.insert_metadata_xml' do
-    let(:metadata) {CSV::Row.new(['College',	'College_Name',	'Campus',	'Campus_Name',	'Department',	'Division',	'School',	'Institute'],
-                                 ['UL',	'University Libraries',	'UP',	'University Park',	'UL - Libraries Strategic Technologies',	'', '', ''])}
+    let(:metadata) do
+      CSV::Row.new(%w[College College_Name Campus Campus_Name Department Division School Institute],
+                   ['UL',	'University Libraries',	'UP',	'University Park',	'UL - Libraries Strategic Technologies',	'', '', ''])
+    end
 
     context 'when extracting metadata from a CSV' do
       it 'generates an xml for user attributes' do
@@ -25,7 +28,7 @@ RSpec.describe CreateUserXmlBuilder do
       end
     end
   end
-    
+
   describe '.add_faculty_group_xml' do
     let(:faculty_row) { CSV::Row.new(['Security'], ['Faculty']) }
     let(:non_faculty_row) { CSV::Row.new(['Security'], ['']) }
@@ -40,7 +43,7 @@ RSpec.describe CreateUserXmlBuilder do
     context 'when user is not a faculty member' do
       it 'outputs nil' do
         output = CreateUserXmlBuilder.add_faculty_group_xml(non_faculty_row)
-        expect(output).to eq(nil)
+        expect(output).to be_nil
       end
     end
   end
