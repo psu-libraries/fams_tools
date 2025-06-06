@@ -53,6 +53,7 @@ Lint/NonAtomicFileOperation:
     - 'app/jobs/lionpath_integrate_job.rb'
     - 'app/jobs/osp_integrate_job.rb'
     - 'app/jobs/yearly_integrate_job.rb'
+    - 'app/jobs/create_users_integrate_job.rb'
     - 'lib/tasks/activity_insight.rake'
     - 'spec/integration/ai_backups_page_spec.rb'
 
@@ -192,6 +193,8 @@ RSpec/DescribeClass:
     - 'spec/integration/ai_integration/osp_integration_spec.rb'
     - 'spec/integration/ai_integration/publications_integration_spec.rb'
     - 'spec/integration/ai_integration/yearly_integration_spec.rb'
+    - 'spec/integration/ai_integration/delete_records_validation_spec.rb'
+    - 'spec/integration/ai_integration/create_users_integration_spec.rb'
 
 # Offense count: 48
 # This cop supports unsafe autocorrection (--autocorrect-all).
@@ -651,6 +654,7 @@ Style/OptionalBooleanParameter:
     - 'app/jobs/osp_integrate_job.rb'
     - 'app/jobs/pub_integrate_job.rb'
     - 'app/jobs/yearly_integrate_job.rb'
+    - 'app/jobs/create_users_integrate_job.rb'
 
 # Offense count: 1
 # This cop supports unsafe autocorrection (--autocorrect-all).

@@ -1,0 +1,13 @@
+<div class="col-sm">
+  <%= form_with :url => { :action => "create_users_integrate" }, id: "create_users" do |form| %>
+    <p> <%= label(:create_users_file, text = "Create Users CSV File") %><%= form.file_field :create_users_file, required: true %> </p>
+    <div class="row">
+      <%= render 'buttons_and_code', form: form %>
+    </div>
+  <% end %>
+</div>
+<div class="col-sm">
+  <h4>Create Users Integration Errors:</h4>
+  <br/>
+  <%= render 'file_download_button', log_path: @create_users_log_path %>
+</div>

@@ -3,7 +3,7 @@ class AiIntegrationController < ApplicationController
 
   INTEGRATIONS = %i[osp_integrate lionpath_integrate
                     yearly_integrate pub_integrate ldap_integrate
-                    delete_records com_effort_integrate com_quality_integrate].freeze
+                    delete_records com_effort_integrate com_quality_integrate create_users_integrate].freeze
 
   skip_before_action :verify_authenticity_token, only: :render_integrator
   before_action :set_log_paths
@@ -62,6 +62,12 @@ class AiIntegrationController < ApplicationController
     finished(start)
   end
 
+  def create_users_integrate
+    start = Time.now
+    CreateUsersIntegrateJob.perform_now(params, @create_users_log_path)
+    finished(start)
+  end
+
   def index
     @integration_types =
       { 'Contract/Grant Integration' => :congrant,
@@ -71,7 +77,8 @@ class AiIntegrationController < ApplicationController
         'Yearly Integration' => :yearly,
         'Delete Records' => :delete_records,
         'COM Effort Integration' => :com_effort,
-        'COM Quality Integration' => :com_quality }
+        'COM Quality Integration' => :com_quality,
+        'Create Users Integration' => :create_users }
   end
 
   def render_integrator
@@ -89,6 +96,7 @@ class AiIntegrationController < ApplicationController
     @delete_records_path = Pathname.new('log/delete_records_errors.log')
     @com_effort_log_path = Pathname.new('log/com_effort_errors.log')
     @com_quality_log_path = Pathname.new('log/com_quality_errors.log')
+    @create_users_log_path = Pathname.new('log/create_users_errors.log')
   end
 
   def confirm_passcode

@@ -20,6 +20,8 @@ module ControllerServices
       render partial: 'com_effort'
     when :com_quality
       render partial: 'com_quality'
+    when :create_users
+      render partial: 'create_users'
     else
       render partial: 'blank'
     end
