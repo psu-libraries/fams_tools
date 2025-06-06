@@ -6,7 +6,8 @@ describe '#create_users_integrate' do
 
   context 'when uploading a CSV file with no errors', :js, type: :feature do
     before do
-      ENV['FAMS_WEBSERVICES_BASE_URI'] = 'https://betawebservices.digitalmeasures.com/login/service/v4'
+      allow(ENV).to receive(:fetch).and_call_original
+      allow(ENV).to receive(:fetch).with('FAMS_WEBSERVICES_BASE_URI', anything).and_return('https://betawebservices.digitalmeasures.com/login/service/v4')
 
       stub_request(:post, 'https://betawebservices.digitalmeasures.com/login/service/v4/User')
         .with(
