@@ -75,7 +75,7 @@ describe '#create_users_integrate' do
           click_on 'Beta'
         end
       end
-      expect(page).to have_content('Integration completed in')
+      expect(page).to have_content('Integration added to queue.')
     end
   end
 end

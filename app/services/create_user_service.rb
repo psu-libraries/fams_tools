@@ -28,6 +28,7 @@ class CreateUserService
         log_error(response3)
       end
     end
+    FileUtils.rm_f(csv_path)
     @errors
   end
 
@@ -51,6 +52,6 @@ class CreateUserService
   end
 
   def csv_path
-    Rails.root.join('app/parsing_files/upload.csv').to_s
+    'app/parsing_files/create_user.csv'
   end
 end
