@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe CreateUserService do
-  let(:service) { described_class.new }
+  let(:service) { described_class.new('beta') }
 
   let(:csv_row) do
     CSV::Row.new(
