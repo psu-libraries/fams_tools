@@ -1,7 +1,6 @@
 class CreateUsersIntegrateJob < ApplicationJob
   def integrate(params, _user_uploaded = true)
-    errors = CreateUserService.new(params['target']).create_user
-    errors
+    CreateUserService.new(params['target']).create_user
   end
 
   private
