@@ -63,9 +63,12 @@ class AiIntegrationController < ApplicationController
   end
 
   def create_users_integrate
-    start = Time.now
-    CreateUsersIntegrateJob.perform_now(params, @create_users_log_path)
-    finished(start)
+    f_path = 'app/parsing_files/create_user.csv'
+    File.binwrite(f_path, params[:create_users_file].read)
+    safe_params = { target: params['target'] }
+    CreateUsersIntegrateJob.perform_later(safe_params, @create_users_log_path.to_s)
+    flash[:notice] = 'Integration added to queue.'
+    redirect_to ai_integration_path
   end
 
   def index

@@ -39,6 +39,9 @@ gem 'mini_racer', '=0.6.3'
 # Dynamic nested forms for cv parser
 gem 'cocoon'
 
+# Background job processing
+gem 'sidekiq'
+
 # Use CoffeeScript for .coffee assets and views
 gem 'coffee-rails', '~> 5.0'
 # Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks

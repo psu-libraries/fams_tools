@@ -21,7 +21,7 @@ RSpec.describe CreateUserService do
   end
   let(:success_response) { instance_double(HTTParty::Response, parsed_response: 'Success', to_s: 'Success') }
   let(:error_response)   { instance_double(HTTParty::Response, parsed_response: 'Error: Something failed', to_s: 'Error: Something failed') }
-  let(:csv_path) { Rails.root.join('app/parsing_files/upload.csv').to_s }
+  let(:csv_path) { 'app/parsing_files/create_user.csv' }
 
   before do
     allow(CSV).to receive(:foreach).with(csv_path, headers: true).and_yield(csv_row)

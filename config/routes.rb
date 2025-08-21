@@ -1,4 +1,8 @@
+require 'sidekiq/web'
+
 Rails.application.routes.draw do
+  mount Sidekiq::Web => '/sidekiq'
+
   root to: 'main#index'
   post '/main/update_ai_user_data', to: 'main#update_ai_user_data'
   get '/ai_integration', to: 'ai_integration#index'

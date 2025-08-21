@@ -1,7 +1,7 @@
 class ApplicationJob < ActiveJob::Base
   class ConcurrentJobsError < StandardError; end
 
-  before_perform :prevent_concurrent_jobs, :integration_start, :clear_tmp_files, :delete_all_data
+  before_perform :prevent_concurrent_jobs, :integration_start, :delete_all_data
   after_perform :integration_stop, :clear_tmp_files, :delete_all_data
 
   discard_on(StandardError) do |job, error|
