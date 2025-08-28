@@ -1,4 +1,4 @@
-FROM harbor.k8s.libraries.psu.edu/library/ruby-3.4.1-node-22:20250131 as base
+FROM harbor.k8s.libraries.psu.edu/library/ruby-3.4.1-node-22:20250825 as base
 ARG UID=1001
 WORKDIR /app
 
@@ -9,7 +9,7 @@ RUN useradd -l -u ${UID} app -d /app && \
 
 # hadolint ignore=DL3008
 RUN apt-get update && apt-get install -y --no-install-recommends g++ \
-    libqt5webkit5-dev \ 
+    libqt5webkit5-dev \
     zip \
     unzip \
     openssh-server \
@@ -21,7 +21,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends g++ \
     qtbase5-dev \
     curl \
     jq \
-    && rm -rf /var/lib/apt/lists/* 
+    && rm -rf /var/lib/apt/lists/*
 
 RUN apt-get update && apt-get install -y google-chrome-stable
 
@@ -37,14 +37,14 @@ RUN CHROME_VERSION=$(google-chrome --version | grep -oP '\d+\.\d+\.\d+') && \
     chmod +x /usr/local/bin/chromedriver && \
     rm -rf chromedriver-linux64.zip chromedriver-linux64
 
-USER app 
+USER app
 COPY --chown=app Gemfile Gemfile.lock /app/
 COPY --chown=app .bundle/config /app/.bundle/config
 # in the event that bundler runs outside of docker, we get in sync with it's bundler version
 RUN gem install bundler -v "$(grep -A 1 "BUNDLED WITH" Gemfile.lock | tail -n 1)"
 
 # - - - - - - - - - - - -
-FROM base as dev 
+FROM base as dev
 WORKDIR /app
 USER app
 COPY --chown=app . /app
@@ -59,11 +59,11 @@ COPY --chown=app . /app
 RUN bundle install --without development test && \
   bundle clean && \
   rm -rf /app/.bundle/cache && \
-  rm -rf /app/vendor/bundle/ruby/*/cache 
+  rm -rf /app/vendor/bundle/ruby/*/cache
 
 RUN RAILS_ENV=production \
     SECRET_KEY_BASE=rails_bogus_key \
     bundle exec rails assets:precompile
 
-USER app 
+USER app
 CMD ["/app/bin/startup"]
