@@ -1,25 +1,18 @@
 class ActivityInsightCommitteeJob < ApplicationJob
+  # Called with the params hash from the controller, just like it has been done 9n PubIntegrateJob
+  def integrate(params, _user_uploaded = true)
+    target = params[:target]                        
 
-  def integrate(target)
-    builder = CommitteeData::CommitteeXmlBuilder.new
+    builder   = CommitteeData::CommitteeXmlBuilder.new
+    xml_enum  = builder.xmls_enumerator
 
-    enumerator = builder.xmls_enumerator
-    errors = integrate_committee_data(enumerator, target)
-
-    errors
+    integrator = ActivityInsight::IntegrateData.new(xml_enum, target, :post)
+    integrator.integrate
   end
 
   private
-  def integrate_committee_data(xml_enum, target)
-    committee_integrator_obj(xml_enum, target).integrate
-  end
-
-  def committee_integrator_obj(xml_enum, target)
-    # ActivityInsight::gitIntegrateData.new(<xml_enum>, target, :post)
-    ActivityInsight::IntegrateData.new(xml_enum, target, :post)
-  end
 
   def name
-    "Committee Membership Integration"
+    'Committee Membership Integration'
   end
 end
