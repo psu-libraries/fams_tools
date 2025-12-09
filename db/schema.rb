@@ -53,7 +53,9 @@ ActiveRecord::Schema[7.2].define(version: 2025_12_05_172036) do
 
   create_table "committees", charset: "utf8mb4", force: :cascade do |t|
     t.bigint "faculty_id", null: false
-    t.string "student_name"
+    t.string "student_fname"
+    t.string "student_mname"
+    t.string "student_lname"
     t.string "role"
     t.string "thesis_title"
     t.string "degree_type"

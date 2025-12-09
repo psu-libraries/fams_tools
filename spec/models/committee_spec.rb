@@ -6,7 +6,9 @@ RSpec.describe Committee, type: :model do
   end
 
   describe 'database columns' do
-    it { is_expected.to have_db_column(:student_name).of_type(:string) }
+    it { is_expected.to have_db_column(:student_fname).of_type(:string) }
+    it { is_expected.to have_db_column(:student_mname).of_type(:string) }
+    it { is_expected.to have_db_column(:student_lname).of_type(:string) }
     it { is_expected.to have_db_column(:role).of_type(:string) }
     it { is_expected.to have_db_column(:thesis_title).of_type(:string) }
     it { is_expected.to have_db_column(:degree_type).of_type(:string) }
