@@ -1,7 +1,6 @@
 class ActivityInsightCommitteeJob < ApplicationJob
-  # Called with the params hash from the controller, just like it has been done 9n PubIntegrateJob
-  def integrate(params, _user_uploaded = true)
-    target = params[:target]                        
+  def integrate(params, _user_uploaded: true)
+    target = params[:target]
 
     builder   = CommitteeData::CommitteeXmlBuilder.new
     xml_enum  = builder.xmls_enumerator

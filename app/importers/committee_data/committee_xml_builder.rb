@@ -6,7 +6,7 @@ class CommitteeData::CommitteeXmlBuilder
       Faculty.includes(:committees)
              .joins(:committees)
              .distinct
-             .find_in_batches(batch_size: 20) do |batch|
+             .find_in_batches(batch_size: 8) do |batch|
         i << build_xml(batch)
       end
     end
