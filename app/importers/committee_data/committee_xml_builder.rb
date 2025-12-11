@@ -18,23 +18,50 @@ class CommitteeData::CommitteeXmlBuilder
     builder = Nokogiri::XML::Builder.new(encoding: 'UTF-8') do |xml|
       xml.Data do
         batch.each do |faculty|
-          next if faculty.committees.empty?
+          committees = faculty.committees
+          next if committees.empty?
 
-          xml.Record('username' => faculty.access_id) do
-            faculty.committees.each do |committee|
-              xml.COMMITTEE do
-                xml.STUDENT_FNAME_ committee.student_fname
-                xml.STUDENT_MNAME_ committee.student_mname
-                xml.STUDENT_LNAME_ committee.student_lname
-                xml.ROLE_          committee.role
-                xml.THESIS_TITLE_  committee.thesis_title
-                xml.DEGREE_TYPE_   committee.degree_type
+          xml.Record(username: faculty.access_id) do
+            committees.each do |committee|
+              xml.DSL do
+                
+                xml.ROLE       committee.role
+                xml.ROLE_OTHER ''              # TODO: add column later if needed
+                xml.TYPE       ''              # e.g. "Other"
+                xml.TYPE_OTHER ''              # e.g. "Team Support"
+                xml.COMPSTAGE  ''              # e.g. "Completed"
+
+                # Student info block – one per committee for now
+                xml.DSL_STUDENT do
+                  xml.FNAME committee.student_fname
+                  xml.LNAME committee.student_lname
+                  xml.DEG   committee.degree_type
+                  xml.TITLE committee.thesis_title
+                  xml.MAJOR ''
+                  xml.DTM_GRAD ''
+                  xml.DTD_GRAD ''
+                  xml.DTY_GRAD ''
+                end
+
+                xml.COURSEPRE ''
+                xml.COURSENUM ''
+                xml.CHOURS    ''
+                xml.DTM_START ''
+                xml.DTD_START ''
+                xml.DTY_START ''
+                xml.DTM_END   ''
+                xml.DTD_END   ''
+                xml.DTY_END   ''
+
+                xml.ABSTRACT ''
+                xml.DETAILS  ''
               end
             end
           end
         end
       end
     end
+
     builder.to_xml
   end
 end
