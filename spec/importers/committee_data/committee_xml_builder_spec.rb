@@ -1,38 +1,37 @@
-require 'rails_helper'
+require 'importers/importers_helper'
 
 RSpec.describe CommitteeData::CommitteeXmlBuilder do
+  let(:xml_builder_obj) { described_class.new }
   describe '#xmls_enumerator' do
-    let!(:faculty) do
-      Faculty.create!(access_id: 'test123')
-    end
+    it 'returns an xml of DSL records' do
+      faculty = FactoryBot.create(:faculty, access_id: 'test123')
 
-    let!(:committee) do
       Committee.create!(
         faculty: faculty,
-        student_fname: 'Peter',
-        student_lname: 'Parker',
-        role: 'friendly neighbourhood spiderman',
-        thesis_title: 'cook Green Goblin',
-        degree_type: 'full time hero'
+        student_fname: 'Test',
+        student_lname: 'User',
+        role: 'Mentor',
+        thesis_title: 'Test Title',
+        degree_type: 'PhD'    
       )
-    end
 
-    it 'builds DSL XML from committee records' do
-      builder = described_class.new
-      xml = builder.xmls_enumerator.first
-
-      doc = Nokogiri::XML(xml)
-
-      record = doc.at_xpath('//Record')
-      expect(record['username']).to eq('test123')
-
-      expect(doc.at_xpath('//DSL/ROLE').text).to eq('Mentor')
-
-      student = doc.at_xpath('//DSL_STUDENT')
-      expect(student.at_xpath('FNAME').text).to eq('Test')
-      expect(student.at_xpath('LNAME').text).to eq('User')
-      expect(student.at_xpath('DEG').text).to eq('PhD')
-      expect(student.at_xpath('TITLE').text).to eq('Test Title')
-    end
+      expect(xml_builder_obj.xmls_enumerator.first).to eq(
+        '<?xml version="1.0" encoding="UTF-8"?>
+<Data>
+  <Record username="test123">
+    <DSL>
+      <ROLE>Mentor</ROLE>
+      <DSL_STUDENT>
+        <FNAME>Test</FNAME>
+        <LNAME>User</LNAME>
+        <DEG>PhD</DEG>
+        <TITLE>Test Title</TITLE>
+      </DSL_STUDENT>
+    </DSL>
+  </Record>
+</Data>
+'
+     )
   end
+end
 end
