@@ -2,6 +2,7 @@ require 'importers/importers_helper'
 
 RSpec.describe CommitteeData::CommitteeXmlBuilder do
   let(:xml_builder_obj) { described_class.new }
+
   describe '#xmls_enumerator' do
     it 'returns an xml of DSL records' do
       faculty = FactoryBot.create(:faculty, access_id: 'test123')
@@ -12,7 +13,7 @@ RSpec.describe CommitteeData::CommitteeXmlBuilder do
         student_lname: 'User',
         role: 'Mentor',
         thesis_title: 'Test Title',
-        degree_type: 'PhD'    
+        degree_type: 'PhD'
       )
 
       expect(xml_builder_obj.xmls_enumerator.first).to eq(
@@ -31,7 +32,7 @@ RSpec.describe CommitteeData::CommitteeXmlBuilder do
   </Record>
 </Data>
 '
-     )
+      )
+    end
   end
-end
 end
