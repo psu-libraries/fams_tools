@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_02_17_205946) do
+ActiveRecord::Schema[7.2].define(version: 2025_12_05_172036) do
   create_table "authors", charset: "utf8mb4", force: :cascade do |t|
     t.string "f_name"
     t.string "m_name"
@@ -49,6 +49,19 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_17_205946) do
     t.bigint "faculty_id"
     t.index ["com_id", "course", "course_year"], name: "index_com_qualities_on_com_id_and_course_and_course_year", unique: true
     t.index ["faculty_id"], name: "fk_rails_5da34f5b2e"
+  end
+
+  create_table "committees", charset: "utf8mb4", force: :cascade do |t|
+    t.bigint "faculty_id", null: false
+    t.string "student_fname"
+    t.string "student_mname"
+    t.string "student_lname"
+    t.string "role"
+    t.string "thesis_title"
+    t.string "degree_type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["faculty_id"], name: "index_committees_on_faculty_id"
   end
 
   create_table "contract_faculty_links", charset: "utf8mb4", force: :cascade do |t|
@@ -298,6 +311,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_17_205946) do
   add_foreign_key "authors", "works", on_delete: :cascade
   add_foreign_key "com_efforts", "faculties"
   add_foreign_key "com_qualities", "faculties"
+  add_foreign_key "committees", "faculties"
   add_foreign_key "contract_faculty_links", "contracts"
   add_foreign_key "contract_faculty_links", "faculties"
   add_foreign_key "contracts", "sponsors"

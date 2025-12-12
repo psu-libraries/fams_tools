@@ -10,4 +10,5 @@ class Faculty < ApplicationRecord
   has_many :yearlies
   has_many :com_efforts
   has_many :com_qualities
+  has_many :committees, dependent: :destroy
 end
