@@ -31,13 +31,13 @@ class CommitteeData::CommitteeXmlBuilder
                   xml.LNAME committee.student_lname
                   xml.DEG committee.degree_type
                   xml.TITLE committee.thesis_title
+                end
               end
             end
           end
         end
       end
     end
-  end 
     builder.to_xml
   end
 end
