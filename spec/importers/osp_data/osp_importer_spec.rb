@@ -9,14 +9,14 @@ RSpec.describe OspData::OspImporter do
        effortacademic effortsummer effortcalendar]
   end
   let(:osp_parser_obj) { OspData::OspImporter.new }
+  let(:current_year) { DateTime.now.year }
 
   let(:data_book1) do
-    current_year = DateTime.now.year
     data_arr = []
     data_arr << [1, 1, 'Title &quot; &#39;', '', 'Associations, Institutes, Societies and Voluntary', '', 'abc123', '',
                  'Co-PI', 1, 'Awarded', '/', '/  /', 2, 1, 1, '01/01/2017 00:00:00', '12/12/2018 00:00:00', '', '',
                  '', '', '', '', '02/01/2015 00:00:00', 0.15, 0.16, 0.17]
-    data_arr << [3, 1, '', '', '', '', '03/01/2026 00:00:00', '', 'Faculty', 1, 'Pending Proposal', '', '',
+    data_arr << [3, 1, '', '', '', '', "03/01/#{current_year + 1} 00:00:00", '', 'Faculty', 1, 'Pending Proposal', '', '',
                  4, 1, 1, '', '', '', '', 'Grant', '', '', '', '/  /', 0, 0, 0]
     data_arr << [5, 1, '', '', '', '', "01/02/#{current_year} 00:00:00", '', 'Post Doctoral', 1, 'Awarded', '', '',
                  6, 1, 1, '01/01/2017 00:00:00', '12/12/2018 00:00:00', '', '', 'Grant', '', '', '', '/  /', 0.15, 0.15, 0.15]
@@ -102,7 +102,7 @@ RSpec.describe OspData::OspImporter do
                    l_name: 'Zebra',
                    m_name: 'Yawn')
     FactoryBot.create(:faculty, access_id: 'abc123')
-    FactoryBot.create(:faculty, access_id: 'mar26')
+    FactoryBot.create(:faculty, access_id: "mar#{(current_year + 1).to_s[2..3]}")
     FactoryBot.create(:faculty, access_id: 'jan2')
     FactoryBot.create(:faculty, access_id: 'jan18')
     allow_any_instance_of(OspData::OspImporter).to receive(:headers).and_return headers
@@ -121,7 +121,7 @@ RSpec.describe OspData::OspImporter do
       expect(Contract.first.sponsor.sponsor_type).to eq('Associations, Institutes, Societies and Voluntary Health Agencies')
       expect(Contract.second.grant_contract).to eq('Grant')
       expect(Contract.first.contract_faculty_links.first.faculty.access_id).to eq('abc123')
-      expect(Contract.second.contract_faculty_links.first.faculty.access_id).to eq('mar26')
+      expect(Contract.second.contract_faculty_links.first.faculty.access_id).to eq("mar#{(current_year + 1).to_s[2..3]}")
       expect(Contract.third.contract_faculty_links.first.faculty.access_id).to eq('jan2')
       expect(Contract.first.contract_faculty_links.first.role).to eq('Co-Principal Investigator')
       expect(Contract.second.contract_faculty_links.first.role).to eq('Core Faculty')
