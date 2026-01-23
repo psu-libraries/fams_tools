@@ -9,8 +9,7 @@ RUN useradd -l -u ${UID} app -d /app && \
 
 # hadolint ignore=DL3008
 # Yarn repo key has expired; remove the source to keep apt-get update working.
-RUN rm -f /etc/apt/sources.list.d/yarn.list && \
-    apt-get update && apt-get install -y --no-install-recommends g++ \
+RUN apt-get update && apt-get install -y --no-install-recommends g++ \
     libqt5webkit5-dev \
     zip \
     unzip \
