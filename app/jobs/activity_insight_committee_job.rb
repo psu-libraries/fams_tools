@@ -1,5 +1,5 @@
 class ActivityInsightCommitteeJob < ApplicationJob
-  def integrate(params, _user_uploaded: true)
+  def integrate(params)
     target = params[:target]
 
     builder   = CommitteeData::CommitteeXmlBuilder.new
