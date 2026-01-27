@@ -43,3 +43,4 @@ spec/examples.txt
 .bash_history
 .envrc
 .irb_history
+.DS_Store
