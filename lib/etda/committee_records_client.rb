@@ -1,6 +1,9 @@
 require 'httparty'
 module Etda
   class CommitteeRecordsClient
+
+    class CommitteeRecordsClientError < StandardError;end 
+    
     def faculty_committees(access_id)
       response = HTTParty.post(
         "#{@base_url}/api/v1/committee_records/faculty_committees",
@@ -9,8 +12,10 @@ module Etda
       )
 
       handle_response(response)
+    
+    # Tells us the error with committe records client with the error itself
     rescue StandardError => e
-      { success: false, error: e.message }
+      raise CommitteeRecordsClientError.new(e.message)
     end
 
     private
@@ -42,12 +47,11 @@ module Etda
           success: true,
           data: response.parsed_response
         }
+        
       else
-        {
-          success: false,
-          error: response.parsed_response['error'] || 'Unknown error',
-          status: response.code
-        }
+    
+        raise CommitteeRecordsClientError.new(response.parsed_response['error'] || 'Unknown error')
+          
       end
     end
   end
