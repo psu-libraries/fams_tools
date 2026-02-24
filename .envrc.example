@@ -2,4 +2,4 @@
 # Copy this file to .envrc and replace with actual values
 
 export ETDA_API_URL="http://localhost:3000"
-export ETDA_API_TOKEN="your_token_here"
+export ETDA_API_TOKEN="generate_a_token_in_ETDA_console"
