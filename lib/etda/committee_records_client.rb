@@ -1,3 +1,4 @@
+require './lib/etda/committee_records_client'
 require 'httparty'
 module Etda
   class CommitteeRecordsClient
@@ -6,7 +7,7 @@ module Etda
     
     def faculty_committees(access_id)
       response = HTTParty.post(
-        "#{@base_url}/api/v1/committee_records/faculty_committees",
+        "#{base_url}/api/v1/committee_records/faculty_committees",
         headers: headers,
         body: body(access_id)
       )
@@ -30,7 +31,7 @@ module Etda
 
     def headers
       {
-        'Authorization' => "Bearer #{@token}",
+        'Authorization' => "Bearer #{api_token}",
         'Content-Type' => 'application/json'
       }
     end
