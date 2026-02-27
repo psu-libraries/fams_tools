@@ -31,7 +31,7 @@ module Etda
 
     def headers
       {
-        'Authorization' => "Bearer #{api_token}",
+        'X-API-KEY' => api_token,
         'Content-Type' => 'application/json'
       }
     end
