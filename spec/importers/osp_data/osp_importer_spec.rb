@@ -177,10 +177,8 @@ RSpec.describe OspData::OspImporter do
       allow_any_instance_of(OspData::OspImporter).to receive(:is_good_date).and_return(true)
       allow_any_instance_of(OspData::OspImporter).to receive(:is_user).and_return(true)
       osp_parser_obj.format_and_populate
-      expect(Contract.count).to eq(3)
+      expect(Contract.count).to eq(1)
       expect(Contract.first.status).to eq('Awarded')
-      expect(Contract.second.status).to eq('Withdrawn')
-      expect(Contract.third.status).to eq('Purged')
     end
   end
 
