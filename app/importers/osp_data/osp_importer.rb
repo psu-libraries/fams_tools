@@ -55,14 +55,8 @@ class OspData::OspImporter
   end
 
   def is_proper_status(row)
-    if %w[Purged Withdrawn].include?(row['status'])
-      return true if pendnotfund.include? row['ospkey']
-
-      false
-
-    else
+    return false if ["Not Funded", "Purged", "Withdrawn"].include?(row['status']) 
       true
-    end
   end
 
   def convert_csv_row_to_hash(row)
@@ -136,7 +130,7 @@ DateTime.strptime(row['accessid'],
         keys = backup_row
       else
         hashed = keys.zip(backup_row).to_h
-        pendnotfund << hashed['OSPKEY'] if ['Pending', 'Not Funded'].include?(hashed['STATUS'])
+        pendnotfund << hashed['OSPKEY'] if ['Pending', 'Not Funded'].include?(hashed['STATUS'])   
       end
       index += 1
     end
