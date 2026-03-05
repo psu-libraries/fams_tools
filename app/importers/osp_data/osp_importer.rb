@@ -56,6 +56,7 @@ class OspData::OspImporter
 
   def is_proper_status(row)
     return false if ['Not Funded', 'Purged', 'Withdrawn'].include?(row['status'])
+
     true
   end
 
@@ -147,51 +148,31 @@ DateTime.strptime(row['accessid'],
       attr.sponsor_type = row['sponsortype']
     end
 
-    contract = Contract.find_or_initialize_by(osp_key: row['ospkey']) 
+    contract = Contract.find_or_initialize_by(osp_key: row['ospkey'])
 
     should_update_contract = contract.new_record? || (contract.status == 'Pending' && row['status'] == 'Awarded')
 
     if should_update_contract
-     contract.title = row['title']
-     contract.sponsor = sponsor
-     contract.status = row['status']
-     
-     contract.submitted = if row['submitted'].present?
-       DateTime.strptime(row['submitted'], '%m/%d/%Y %T')
-     else
-       nil
-     end
-     contract.awarded = if row['awarded'].present?
-       DateTime.strptime(row['awarded'], '%m/%d/%Y %T')
-     else
-       nil
-     end
-     contract.requested = row['requested']
-     contract.funded = row['funded']
-     contract.total_anticipated = row['totalanticipated']
-     contract.start_date = if row['startdate'].present?
-        DateTime.strptime(row['startdate'], '%m/%d/%Y %T')
-     else
-       nil
-     end
-     contract.end_date = if row['enddate'].present?
-       DateTime.strptime(row['enddate'],'%m/%d/%Y %T')
-     else
-       nil
-     end
-     contract.grant_contract = row['grantcontract']
-     contract.base_agreement = row['baseagreement'].to_s.gsub("\u0000", '')
-     contract.notfunded = if row['notfunded'].present?
-       DateTime.strptime(row['notfunded'], '%m/%d/%Y %T')
-     else
-       nil
-     end
-     contract.effort_academic = row['effortacademic']
-     contract.effort_summer = row['effortsummer']
-     contract.effort_calendar = row['effortcalendar']
-     contract.save!
+      contract.title = row['title']
+      contract.sponsor = sponsor
+      contract.status = row['status']
+
+      contract.submitted = (DateTime.strptime(row['submitted'], '%m/%d/%Y %T') if row['submitted'].present?)
+      contract.awarded = (DateTime.strptime(row['awarded'], '%m/%d/%Y %T') if row['awarded'].present?)
+      contract.requested = row['requested']
+      contract.funded = row['funded']
+      contract.total_anticipated = row['totalanticipated']
+      contract.start_date = (DateTime.strptime(row['startdate'], '%m/%d/%Y %T') if row['startdate'].present?)
+      contract.end_date = (DateTime.strptime(row['enddate'], '%m/%d/%Y %T') if row['enddate'].present?)
+      contract.grant_contract = row['grantcontract']
+      contract.base_agreement = row['baseagreement'].to_s.gsub("\u0000", '')
+      contract.notfunded = (DateTime.strptime(row['notfunded'], '%m/%d/%Y %T') if row['notfunded'].present?)
+      contract.effort_academic = row['effortacademic']
+      contract.effort_summer = row['effortsummer']
+      contract.effort_calendar = row['effortcalendar']
+      contract.save!
     end
-    
+
     faculty = Faculty.find_by(access_id: row['accessid'])
 
     begin

@@ -199,52 +199,53 @@ RSpec.describe OspData::OspImporter do
       expect(Contract.find_by(osp_key: 1234).notfunded).to eq(Date.parse('Sun, 02 Feb 2015'))
     end
   end
+
   describe 'ticket 133 behavior' do
-   it 'updates an existing Pending contract to Awarded when the same ospkey appears later as Awarded' do
-     data_arr = []
- 
-     # contract as Pending
-     data_arr << [9999, 1, 'Test Title', 'Test Sponsor', 'Federal Agencies', '',
-                  'abc123', 'Department', 'Co-PI', 50, 'Pending Proposal', '05/04/2013 00:00:00',
-                  '', 1, 1, 1, '', '', '', '', '', '', '', '', '', '', 0.15, 0.15, 0.15]
- 
-     # same ospkey, now Awarded with dates
-     data_arr << [9999, 1, 'Test Title', 'Test Sponsor', 'Federal Agencies', '',
-                  'abc123', 'Department', 'Co-PI', 50, 'Awarded', '05/04/2013 00:00:00',
-                  '05/05/2013 00:00:00', 1, 1, 1, '01/01/2017 00:00:00', '12/12/2018 00:00:00', '', '',
-                  'Grant', '', '', '', '', '', 0.15, 0.15, 0.15]
- 
-     allow(CSV).to receive(:open).and_return(data_arr)
-     allow(CSV).to receive(:foreach).and_yield(fake_backup[0]).and_yield(fake_backup[1]).and_yield(fake_backup[2])
- 
-     allow_any_instance_of(OspData::OspImporter).to receive(:is_user).and_return(true)
-     allow_any_instance_of(OspData::OspImporter).to receive(:is_good_date).and_return(true)
- 
-     osp_parser_obj.format_and_populate
- 
-     contract = Contract.find_by(osp_key: 9999)
-     expect(contract).to be_present
-     expect(contract.status).to eq('Awarded')
-     expect(contract.awarded).to eq(Date.parse('Tue, 05 May 2013'))
-     expect(contract.start_date).to eq(Date.parse('Sun, 01 Jan 2017'))
-     expect(contract.end_date).to eq(Date.parse('Wed, 12 Dec 2018'))
+    it 'updates an existing Pending contract to Awarded when the same ospkey appears later as Awarded' do
+      data_arr = []
+
+      # contract as Pending
+      data_arr << [9999, 1, 'Test Title', 'Test Sponsor', 'Federal Agencies', '',
+                   'abc123', 'Department', 'Co-PI', 50, 'Pending Proposal', '05/04/2013 00:00:00',
+                   '', 1, 1, 1, '', '', '', '', '', '', '', '', '', '', 0.15, 0.15, 0.15]
+
+      # same ospkey, now Awarded with dates
+      data_arr << [9999, 1, 'Test Title', 'Test Sponsor', 'Federal Agencies', '',
+                   'abc123', 'Department', 'Co-PI', 50, 'Awarded', '05/04/2013 00:00:00',
+                   '05/05/2013 00:00:00', 1, 1, 1, '01/01/2017 00:00:00', '12/12/2018 00:00:00', '', '',
+                   'Grant', '', '', '', '', '', 0.15, 0.15, 0.15]
+
+      allow(CSV).to receive(:open).and_return(data_arr)
+      allow(CSV).to receive(:foreach).and_yield(fake_backup[0]).and_yield(fake_backup[1]).and_yield(fake_backup[2])
+
+      allow_any_instance_of(OspData::OspImporter).to receive(:is_user).and_return(true)
+      allow_any_instance_of(OspData::OspImporter).to receive(:is_good_date).and_return(true)
+
+      osp_parser_obj.format_and_populate
+
+      contract = Contract.find_by(osp_key: 9999)
+      expect(contract).to be_present
+      expect(contract.status).to eq('Awarded')
+      expect(contract.awarded).to eq(Date.parse('Tue, 05 May 2013'))
+      expect(contract.start_date).to eq(Date.parse('Sun, 01 Jan 2017'))
+      expect(contract.end_date).to eq(Date.parse('Wed, 12 Dec 2018'))
     end
   end
 
-  describe '#is_proper_status' do 
-   it 'returns false for Not Funded, Purged, and Withdrawn' do
-     importer = OspData::OspImporter.allocate
- 
-     expect(importer.send(:is_proper_status, { 'status' => 'Not Funded' })).to be false
-     expect(importer.send(:is_proper_status, { 'status' => 'Purged' })).to be false
-     expect(importer.send(:is_proper_status, { 'status' => 'Withdrawn' })).to be false
-   end
- 
-   it 'returns true for valid statuses' do
-     importer = OspData::OspImporter.allocate
- 
-     expect(importer.send(:is_proper_status, { 'status' => 'Awarded' })).to be true
-     expect(importer.send(:is_proper_status, { 'status' => 'Pending' })).to be true
-   end
+  describe '#is_proper_status' do
+    it 'returns false for Not Funded, Purged, and Withdrawn' do
+      importer = OspData::OspImporter.allocate
+
+      expect(importer.send(:is_proper_status, { 'status' => 'Not Funded' })).to be false
+      expect(importer.send(:is_proper_status, { 'status' => 'Purged' })).to be false
+      expect(importer.send(:is_proper_status, { 'status' => 'Withdrawn' })).to be false
+    end
+
+    it 'returns true for valid statuses' do
+      importer = OspData::OspImporter.allocate
+
+      expect(importer.send(:is_proper_status, { 'status' => 'Awarded' })).to be true
+      expect(importer.send(:is_proper_status, { 'status' => 'Pending' })).to be true
+    end
   end
 end
