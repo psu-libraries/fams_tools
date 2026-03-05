@@ -3,6 +3,7 @@ require 'etda/committee_records_client'
 module CommitteeData
   class EtdaImporter
     def import_all
+      
       Faculty.find_each do |faculty|
         import_for_faculty(faculty)
       rescue Etda::CommitteeRecordsClient::CommitteeRecordsClientError => e
@@ -21,7 +22,8 @@ module CommitteeData
         faculty.committees.create!(
           student_fname: committee['student_fname'],
           student_lname: committee['student_lname'],
-          role:          committee['role'],
+          #Adding in the normalizer method
+          role:          CommitteeRoleNormalizer.normalize(committee['role']),
           thesis_title:  committee['title'],
           degree_type:   committee['degree_name']
         )
