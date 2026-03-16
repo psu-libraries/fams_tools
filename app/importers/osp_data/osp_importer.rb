@@ -54,17 +54,15 @@ class OspData::OspImporter
     false
   end
 
-  def is_proper_status(row)   # We want to update Not Funded to purged or withdrawn but we dont want to import any new Not Funded, withdrawn, or purged contracts
+  # We want to update Not Funded to purged or withdrawn but we dont want to import any new Not Funded, withdrawn, or purged contracts
+  def is_proper_status(row)
     if %w[Purged Withdrawn].include?(row['status'])
       return true if pendnotfund.include? row['ospkey']
 
       false
 
-    elsif ['Not Funded'].include?(row['status'])
-      return false 
-
     else
-      true
+      ['Not Funded'].exclude?(row['status'])
     end
   end
 
