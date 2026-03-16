@@ -54,10 +54,18 @@ class OspData::OspImporter
     false
   end
 
-  def is_proper_status(row)
-    return false if ['Not Funded', 'Purged', 'Withdrawn'].include?(row['status'])
+  def is_proper_status(row)   # We want to update Not Funded to purged or withdrawn but we dont want to import any new Not Funded, withdrawn, or purged contracts
+    if %w[Purged Withdrawn].include?(row['status'])
+      return true if pendnotfund.include? row['ospkey']
 
-    true
+      false
+
+    elsif ['Not Funded'].include?(row['status'])
+      return false 
+
+    else
+      true
+    end
   end
 
   def convert_csv_row_to_hash(row)
