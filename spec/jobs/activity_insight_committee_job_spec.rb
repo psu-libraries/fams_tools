@@ -31,21 +31,21 @@ RSpec.describe ActivityInsightCommitteeJob, type: :job do
     end
 
     it 'calls the XML builder to get the xml enumerator' do
+      expect(CommitteeData::CommitteeXmlBuilder).to receive(:new)
       described_class.new.integrate(target)
-      expect(CommitteeData::CommitteeXmlBuilder).to have_received(:new)
     end
 
     it 'initializes ActivityInsight::IntegrateData with correct arguments' do
-      described_class.new.integrate(target)
-
       expect(ActivityInsight::IntegrateData)
-        .to have_received(:new)
+        .to receive(:new)
         .with(xml_enumerator, target, :post)
+
+      described_class.new.integrate(target)
     end
 
     it 'calls integrate on the integrator and returns its errors' do
+      expect(integrator_double).to receive(:integrate)
       result = described_class.new.integrate(target)
-      expect(integrator_double).to have_received(:integrate)
       expect(result).to eq([])
     end
   end
