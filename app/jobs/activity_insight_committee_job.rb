@@ -1,7 +1,5 @@
 class ActivityInsightCommitteeJob < ApplicationJob
-  def integrate(params, _user_uploaded = true)
-    target = params[:target]
-
+  def integrate(target)
     CommitteeData::EtdaImporter.new.import_all
 
     builder   = CommitteeData::CommitteeXmlBuilder.new
@@ -14,6 +12,6 @@ class ActivityInsightCommitteeJob < ApplicationJob
   private
 
   def name
-    'Committee Membership Integration'
+    'Committee Integration'
   end
 end

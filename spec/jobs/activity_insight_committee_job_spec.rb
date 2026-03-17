@@ -52,7 +52,7 @@ RSpec.describe ActivityInsightCommitteeJob, type: :job do
 
   describe '#name' do
     it 'returns the job name' do
-      expect(described_class.new.name).to eq('Committee Integration')
+      expect(described_class.new.send(:name)).to eq('Committee Integration')
     end
   end
 end
