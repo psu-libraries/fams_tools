@@ -3,12 +3,11 @@ require 'importers/importers_helper'
 RSpec.describe CommitteeData::EtdaImporter do
   subject(:importer) { described_class.new }
 
-  let(:faculty) { create(:faculty, access_id: 'abc123') }
-  let(:faculty_one)    { create(:faculty, access_id: 'mpk6156') }
-  let(:faculty_two)    { create(:faculty, access_id: 'aez1236') }
+  let(:faculty)     { create(:faculty, access_id: 'abc123') }
+  let(:faculty_one) { create(:faculty, access_id: 'mpk6156') }
+  let(:faculty_two) { create(:faculty, access_id: 'aez1236') }
 
-  let(:client)     { instance_double(Etda::CommitteeRecordsClient) }
-  let(:committees) { instance_double(committees) }
+  let(:client) { instance_double(Etda::CommitteeRecordsClient) }
 
   before do
     allow(Etda::CommitteeRecordsClient).to receive(:new).and_return(client)
@@ -24,11 +23,10 @@ RSpec.describe CommitteeData::EtdaImporter do
       end
 
       before do
+        faculty
+        faculty_one
+        faculty_two
         allow(client).to receive(:faculty_committees).and_return(api_response)
-        allow(faculty).to receive(:committees).and_return(committees)
-        allow(faculty_one).to receive(:committees).and_return(committees)
-        allow(faculty_two).to receive(:committees).and_return(committees)
-        allow(committees).to receive(:create!)
       end
 
       it 'creates a committee with the correct attributes' do
@@ -43,8 +41,11 @@ RSpec.describe CommitteeData::EtdaImporter do
   end
 
   it 'rescues CommitteeRecordsClientError and logs it' do
-    expect(Rails.logger).to receive(:error).with(/abc123.*API down/)
+    faculty
+    allow(client).to receive(:faculty_committees)
+      .and_raise(Etda::CommitteeRecordsClient::CommitteeRecordsClientError, 'API down')
 
+    expect(Rails.logger).to receive(:error).with(/abc123.*API down/)
     expect { importer.import_all }.not_to raise_error
   end
 end
