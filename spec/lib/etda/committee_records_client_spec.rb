@@ -9,10 +9,9 @@ RSpec.describe Etda::CommitteeRecordsClient do
       it 'returns committee member JSON' do
         # Create a mock test but with a respone returned as a JSON
 
-        fake_response = instance_double(
-          success?: true,
-          parsed_response: [{ id: 1, name: 'Millennium Scholar' }]
-        )
+        fake_response = instance_double(HTTParty::Response,
+                                        success?: true,
+                                        parsed_response: [{ id: 1, name: 'Millennium Scholar' }])
 
         allow(HTTParty).to receive(:post).and_return(fake_response)
 
@@ -28,10 +27,9 @@ RSpec.describe Etda::CommitteeRecordsClient do
     context 'when user has no committees' do
       it 'returns empty committee' do
         # Create a mock test but with no response
-        fake_response = instance_double(
-          success?: true,
-          parsed_response: []
-        )
+        fake_response = instance_double(HTTParty::Response,
+                                        success?: true,
+                                        parsed_response: [])
 
         allow(HTTParty).to receive(:post).and_return(fake_response)
 
@@ -46,10 +44,9 @@ RSpec.describe Etda::CommitteeRecordsClient do
     # Checking for when key is invalid
     context 'when API key is invalid' do
       it 'raises a committee records client error' do
-        fake_response = instance_double(
-          success?: false,
-          parsed_response: { 'error' => 'Invalid API key' }
-        )
+        fake_response = instance_double(HTTParty::Response,
+                                        success?: false,
+                                        parsed_response: { 'error' => 'Invalid API key' })
 
         allow(HTTParty).to receive(:post).and_return(fake_response)
 
