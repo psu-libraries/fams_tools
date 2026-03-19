@@ -9,7 +9,7 @@ class CommitteeRoleNormalizer
     ['Second Reader', /second\s+reader/i],
     ['Reader', /reader/i],
     ['Member', /(member|rep|represent|representative|substitute)/i]
-    
+
   ].freeze
 
   def self.normalize(raw_name)
