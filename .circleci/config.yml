@@ -12,7 +12,7 @@ jobs:
       REGISTRY_HOST: harbor.k8s.libraries.psu.edu
       REGISTRY_REPO: library/fams-tools
       GITHUB_USER: 'psu-stewardship-bot'
-      CONFIG_REPO: git@github.com:psu-libraries/fams-config.git
+      CONFIG_REPO: https://github.com/psu-libraries/fams-config.git
     steps:
       - add_ssh_keys
       - run:
@@ -27,7 +27,7 @@ jobs:
     docker:
       - image: harbor.k8s.libraries.psu.edu/library/ci-utils:v4.0.4
     environment:
-      CONFIG_REPO: git@github.com:psu-libraries/fams-config.git
+      CONFIG_REPO: https://github.com/psu-libraries/fams-config.git
     steps:
       - add_ssh_keys
       - run:
