@@ -28,7 +28,7 @@ class CommitteeData::CommitteeXmlBuilder
                 xml.ROLE_OTHER committee.role_other_explanation if committee.role_other_explanation.present?
                 xml.TYPE committee.type_of_work
                 xml.TYPE_OTHER committee.type_other_explanation if committee.type_other_explanation.present?
-                xml.COMP committee.stage_of_completion
+                xml.COMPSTAGE committee.stage_of_completion
                 xml.DTY_START committee.start_year if committee.start_year
                 xml.DTY_END committee.completion_year if committee.completion_year
 

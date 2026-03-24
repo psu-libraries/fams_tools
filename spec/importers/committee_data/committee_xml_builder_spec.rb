@@ -27,7 +27,7 @@ RSpec.describe CommitteeData::CommitteeXmlBuilder do
     <DSL>
       <ROLE>Mentor</ROLE>
       <TYPE>Ph.D. Dissertation Committee</TYPE>
-      <COMP>Completed</COMP>
+      <COMPSTAGE>Completed</COMPSTAGE>
       <DTY_START>2024</DTY_START>
       <DTY_END>2026</DTY_END>
       <DSL_STUDENT>
@@ -62,7 +62,7 @@ RSpec.describe CommitteeData::CommitteeXmlBuilder do
       xml = xml_builder_obj.xmls_enumerator.first
       expect(xml).not_to include('<DTY_START>')
       expect(xml).not_to include('<DTY_END>')
-      expect(xml).to include('<COMP>In Process</COMP>')
+      expect(xml).to include('<COMPSTAGE>In Process</COMPSTAGE>')
     end
 
     it 'includes ROLE_OTHER and TYPE_OTHER when role or type is Other' do
