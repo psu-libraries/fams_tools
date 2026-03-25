@@ -146,6 +146,7 @@ jobs:
           # Run the db service first, then wait 10 seconds
           # for the rest.
           command: |
+            cd ~/project || cd /home/circleci/project || exit 1
             echo "Current working directory: $(pwd)"
             docker-compose up -d db &&
             sleep 10s &&
