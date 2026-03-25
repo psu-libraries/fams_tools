@@ -142,6 +142,10 @@ jobs:
           command: |
             echo "Current working directory: $(pwd)"
             docker-compose build
+            - run:
+                name: Tag Docker image
+                command: |
+                  docker tag fams_tools_web:latest $REGISTRY_HOST/$REGISTRY_REPO:$TAG
       - run:
           name: "Run Container"
           command: |
