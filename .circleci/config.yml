@@ -1,377 +1,145 @@
-# version: 2.1
-
-# orbs:
-#   docker: circleci/docker@3.0.1
-#   browser-tools: circleci/browser-tools@1.5.2
-
-# parameters:
-
-#   GHA_Action:
-#     type: string
-#     default: ""
-#   GHA_Actor:
-#     type: string
-#     default: ""
-#   GHA_Event:
-#     type: string
-#     default: ""
-#   GHA_Meta:
-#     type: string
-#     default: ""
-#   CI_UTILS_IMAGE_TAG:
-#     type: string
-#     default: "v4.6.1"
-#   CONFIG_REPO_NAME:
-#     type: string
-#     default: "fams-config"
-#   CONFIG_REPO_URL:
-#     type: string
-#     default: "https://github.com/psu-libraries/fams-config.git"
-#   CLUSTERS_DEV:
-#     type: string
-#     default: "uldev"
-#   CLUSTERS_PROD:
-#     type: string
-#     default: "prod"    
-#   REGISTRY_HOST:
-#     type: string
-#     default: "harbor.k8s.libraries.psu.edu"    
-#   PIPELINE_CONFIG_VERSION:
-#     type: string
-#     default: "1.0.1"
-
-# commands:
-
-#   clone-config-repo:
-#     steps:
-#       - add_ssh_keys
-#       - run:
-#           name: Prepare GitHub Access
-#           command: |
-#             ssh-keyscan github.com > ~/.ssh/known_hosts
-#             git clone << pipeline.parameters.CONFIG_REPO_URL >>
-
-
-#   compute-docker-tag:
-#     steps:
-#       - run:
-#           name: Compute Docker Tag
-#           command: |
-#             if [[ "$CIRCLE_BRANCH" == "main" ]]; then
-#               TAG="$CIRCLE_SHA1"
-#             else
-#               SLUG=$(slugify-branch "$CIRCLE_BRANCH")
-#               TAG="${SLUG}--$CIRCLE_SHA1"
-#             fi
-#             echo "export TAG=$TAG" >> "$BASH_ENV"    
-
-# executors:
-
-#   ci-utils:
-#     parameters:
-#       image_tag:
-#         type: string
-#       registry_host:
-#         type: string
-#     docker:
-#       - image: << parameters.registry_host >>/library/ci-utils:<< parameters.image_tag >>
-
-# jobs:
-#   release-image:
-#     parameters:
-#       to_tag:
-#         type: string
-#       from_tag:
-#         type: string
-#       clusters:
-#         type: string
-#     executor:
-#       name: ci-utils
-#       image_tag: << pipeline.parameters.CI_UTILS_IMAGE_TAG >>
-#       registry_host: << pipeline.parameters.REGISTRY_HOST >>
-#     environment:
-#       clusters: << parameters.clusters >>
-#       CONFIG_REPO: https://github.com/psu-libraries/fams-config.git
-#       CONFIG_REPO_NAME: << pipeline.parameters.CONFIG_REPO_NAME >>
-#       REGISTRY_HOST: harbor.k8s.libraries.psu.edu
-#       FROM_TAG: << parameters.from_tag >>
-#       TO_TAG: << parameters.to_tag >>
-#       PIPELINE_CONFIG_VERSION: << pipeline.parameters.PIPELINE_CONFIG_VERSION >>
-#     steps:
-#       - clone-config-repo
-#       - run:
-#           name: Tag & Release Image
-#           command: |
-#             export TRIGGERED_BY="$CIRCLE_USERNAME"
-#             export REGISTRY_REPO="$CIRCLE_PROJECT_REPONAME"
-#             /usr/local/bin/image-tag
-#             cd $CONFIG_REPO_NAME
-
-#             # Split comma-separated clusters into array and loop
-#             clusters="${clusters// /}"
-#             IFS=',' read -ra CLUSTERS \<<< "$clusters"
-#             for cluster in "${CLUSTERS[@]}"; do
-#               export TARGET_CLUSTER="$cluster"
-#               echo "Processing cluster: $TARGET_CLUSTER"
-#               /usr/local/bin/image-release-pr "clusters/$TARGET_CLUSTER/manifests/prod.yaml"
-#             done   
-#   build-image:
-#     environment:
-#       REGISTRY_HOST: << pipeline.parameters.REGISTRY_HOST >>
-#       REGISTRY_REPO: "library/fams-tools"
-#     working_directory: /home/circleci/project
-#     executor:
-#       name: ci-utils
-#       image_tag: << pipeline.parameters.CI_UTILS_IMAGE_TAG >>
-#       registry_host: << pipeline.parameters.REGISTRY_HOST >>
-#     steps:
-#       - run:
-#           name: Install docker-compose
-#           command: |
-#             apt-get update && apt-get install -y docker-compose
-#       - setup_remote_docker:
-#           docker_layer_caching: true
-#       - checkout
-#       - compute-docker-tag
-#       - docker/check:
-#           registry: $REGISTRY_HOST
-#       - run:
-#           name: "Build Container"
-#           command: |
-#             echo "Current working directory: $(pwd)"
-#             docker-compose build
-
-#       - run:
-#           name: "Run Container"
-#           # Initial setup of db takes longer than usual.
-#           # Run the db service first, then wait 10 seconds
-#           # for the rest.
-#           command: |
-#             echo "Current working directory: $(pwd)"
-#             docker-compose up -d db &&
-#             sleep 10s &&
-#             docker-compose up -d
-#       - run:
-#           name: "Rspec"
-#           command: |
-#             docker-compose exec web /app/bin/ci-rspec      
-
-#       # - docker/build:
-#       #     image: $REGISTRY_REPO
-#       #     registry: $REGISTRY_HOST
-#       #     tag: $TAG
-#       #     extra_build_args: "--target production"
-#       #     use_buildkit: true
-#       - run:
-#           name: Save Docker image
-#           command: |
-#             docker save $REGISTRY_HOST/$REGISTRY_REPO:$TAG -o /tmp/docker-image.tar
-#       - run:
-#           name: Save image info for push job
-#           command: |
-#             mkdir -p /tmp/docker-image-info
-#             echo "$REGISTRY_HOST/$REGISTRY_REPO:$TAG" > /tmp/docker-image-info/image-name.txt
-#       - persist_to_workspace:
-#           root: /tmp
-#           paths:
-#             - docker-image.tar
-#             - docker-image-info
-
-#   push-image:
-#     environment:
-#       REGISTRY_HOST: << pipeline.parameters.REGISTRY_HOST >>
-#       REGISTRY_REPO: "library/fams-tools"
-#     executor:
-#       name: ci-utils
-#       image_tag: << pipeline.parameters.CI_UTILS_IMAGE_TAG >>
-#       registry_host: << pipeline.parameters.REGISTRY_HOST >>
-#     steps:
-#       - setup_remote_docker:
-#           docker_layer_caching: false
-#       - checkout
-#       - compute-docker-tag
-#       - attach_workspace:
-#           at: /tmp
-#       - run:
-#           name: Load Docker image
-#           command: |
-#             docker load -i /tmp/docker-image.tar
-#       - docker/check:
-#           registry: $REGISTRY_HOST
-#       - docker/push:
-#           image: $REGISTRY_REPO
-#           registry: $REGISTRY_HOST
-#           tag: $TAG  
-
-#   delete-deployment:
-#     parameters:
-#       delete_branch:
-#         type: string
-#     executor:
-#       name: ci-utils
-#       image_tag: << pipeline.parameters.CI_UTILS_IMAGE_TAG >>
-#       registry_host: << pipeline.parameters.REGISTRY_HOST >>
-#     environment:
-#       CONFIG_REPO_NAME: << pipeline.parameters.CONFIG_REPO_NAME >>
-#       CONFIG_REPO_URL: << pipeline.parameters.CONFIG_REPO_URL >>
-#       DELETE_BRANCH: << parameters.delete_branch >>
-#     steps:
-#       - clone-config-repo
-#       - run:
-#           name: Delete Deployment
-#           command: |
-#             export TRIGGERED_BY="$CIRCLE_USERNAME"
-#             cd $CONFIG_REPO_NAME
-#             ./bin/ci-delete-manifest
-
-#   deploy-application:
-#     executor:
-#       name: ci-utils
-#       image_tag: << pipeline.parameters.CI_UTILS_IMAGE_TAG >>
-#       registry_host: << pipeline.parameters.REGISTRY_HOST >>
-#     environment:
-#       clusters: << parameters.clusters >>
-#       CONFIG_REPO_NAME: << pipeline.parameters.CONFIG_REPO_NAME >>
-#       CONFIG_REPO_URL: << pipeline.parameters.CONFIG_REPO_URL >>
-#       CONFIG_REPO: << pipeline.parameters.CONFIG_REPO_URL >>
-#       TO_YAML_TAG_TARGET: ".spec.source.helm.values.explore.image.tag"
-#     parameters:
-#       clusters:
-#         type: string
-#     steps:
-#       - clone-config-repo
-#       - compute-docker-tag
-#       - run:
-#           name: Add or Update Application Manifest
-#           command: |
-#             export TRIGGERED_BY="$CIRCLE_USERNAME"
-#             # Split comma-separated clusters into array and loop
-#             clusters="${clusters// /}"
-#             IFS=',' read -ra CLUSTERS \<<< "$clusters"
-#             echo "Pre loop Directory: $(pwd)"
-#             for cluster in "${CLUSTERS[@]}"; do
-#                 export TARGET_CLUSTER="$cluster"
-#                 echo "Processing cluster: $TARGET_CLUSTER"
-#                 cd $CONFIG_REPO_NAME
-#                 ./bin/ci-write-manifest
-#                 echo "Finished processing $TARGET_CLUSTER"
-#                 git status
-#             done            
-            
-# workflows:
-#   fams-ci-cd:
-#     jobs:
-#     - release-image: 
-#         name: release-image
-#         clusters: << pipeline.parameters.CLUSTERS_PROD >>
-#         context:
-#           - org-global
-#         from_tag: "<< pipeline.git.revision >>"
-#         to_tag: "<< pipeline.git.tag >>"
-#         filters:
-#           branches:
-#             ignore: /.*/
-#           tags:
-#             only: /^v\d+\.\d+\.\d+.*/    
-#     - build-image:
-#         name: build-image
-#         context:
-#           - org-global
-#         filters:
-#           branches:
-#             only:
-#               - main
-#               - /preview\/.*/
-#     - push-image:
-#         name: push-image
-#         context:
-#           - org-global
-#         filters:
-#           branches:              
-#             only:
-#               - main
-#               - /preview\/.*/
-#         requires:
-#           - build-image
-#     - deploy-application:
-#         name: deploy-application
-#         context:
-#           - org-global
-#         clusters: << pipeline.parameters.CLUSTERS_DEV >>
-#         filters:
-#           branches:
-#             only:
-#               - main
-#               - /preview\/.*/
-#         requires:
-#           - push-image   
-
-
 version: 2.1
 
 orbs:
-  docker: circleci/docker@2.8.2
+  docker: circleci/docker@3.0.1
   browser-tools: circleci/browser-tools@1.5.2
 
+parameters:
+
+  GHA_Action:
+    type: string
+    default: ""
+  GHA_Actor:
+    type: string
+    default: ""
+  GHA_Event:
+    type: string
+    default: ""
+  GHA_Meta:
+    type: string
+    default: ""
+  CI_UTILS_IMAGE_TAG:
+    type: string
+    default: "v4.6.1"
+  CONFIG_REPO_NAME:
+    type: string
+    default: "fams-config"
+  CONFIG_REPO_URL:
+    type: string
+    default: "https://github.com/psu-libraries/fams-config.git"
+  CLUSTERS_DEV:
+    type: string
+    default: "uldev"
+  CLUSTERS_PROD:
+    type: string
+    default: "prod"    
+  REGISTRY_HOST:
+    type: string
+    default: "harbor.k8s.libraries.psu.edu"    
+  PIPELINE_CONFIG_VERSION:
+    type: string
+    default: "1.0.1"
+
+commands:
+
+  clone-config-repo:
+    steps:
+      - add_ssh_keys
+      - run:
+          name: Prepare GitHub Access
+          command: |
+            ssh-keyscan github.com > ~/.ssh/known_hosts
+            git clone << pipeline.parameters.CONFIG_REPO_URL >>
+
+
+  compute-docker-tag:
+    steps:
+      - run:
+          name: Compute Docker Tag
+          command: |
+            if [[ "$CIRCLE_BRANCH" == "main" ]]; then
+              TAG="$CIRCLE_SHA1"
+            else
+              SLUG=$(slugify-branch "$CIRCLE_BRANCH")
+              TAG="${SLUG}--$CIRCLE_SHA1"
+            fi
+            echo "export TAG=$TAG" >> "$BASH_ENV"    
+
+executors:
+
+  ci-utils:
+    parameters:
+      image_tag:
+        type: string
+      registry_host:
+        type: string
+    docker:
+      - image: << parameters.registry_host >>/library/ci-utils:<< parameters.image_tag >>
+
 jobs:
-  release:
-    docker:
-      - image: harbor.k8s.libraries.psu.edu/library/ci-utils:v4.0.4
+  release-image:
+    parameters:
+      to_tag:
+        type: string
+      from_tag:
+        type: string
+      clusters:
+        type: string
+    executor:
+      name: ci-utils
+      image_tag: << pipeline.parameters.CI_UTILS_IMAGE_TAG >>
+      registry_host: << pipeline.parameters.REGISTRY_HOST >>
     environment:
+      clusters: << parameters.clusters >>
+      CONFIG_REPO: https://github.com/psu-libraries/fams-config.git
+      CONFIG_REPO_NAME: << pipeline.parameters.CONFIG_REPO_NAME >>
       REGISTRY_HOST: harbor.k8s.libraries.psu.edu
-      REGISTRY_REPO: library/fams-tools
-      GITHUB_USER: 'psu-stewardship-bot'
-      CONFIG_REPO: git@github.com:psu-libraries/fams-config.git
+      FROM_TAG: << parameters.from_tag >>
+      TO_TAG: << parameters.to_tag >>
+      PIPELINE_CONFIG_VERSION: << pipeline.parameters.PIPELINE_CONFIG_VERSION >>
     steps:
-      - add_ssh_keys
+      - clone-config-repo
       - run:
-          name: "Release"
+          name: Tag & Release Image
           command: |
-            /usr/local/bin/tag-image
-            ssh-keyscan github.com > ~/.ssh/known_hosts
-            git clone $CONFIG_REPO
-            cd fams-config
-            /usr/local/bin/pr-release clusters/prod/manifests/fams_tools/prod.yaml
-  deploy:
-    docker:
-      - image: harbor.k8s.libraries.psu.edu/library/ci-utils:v4.0.4
+            export TRIGGERED_BY="$CIRCLE_USERNAME"
+            export REGISTRY_REPO="$CIRCLE_PROJECT_REPONAME"
+            /usr/local/bin/image-tag
+            cd $CONFIG_REPO_NAME
+
+            # Split comma-separated clusters into array and loop
+            clusters="${clusters// /}"
+            IFS=',' read -ra CLUSTERS \<<< "$clusters"
+            for cluster in "${CLUSTERS[@]}"; do
+              export TARGET_CLUSTER="$cluster"
+              echo "Processing cluster: $TARGET_CLUSTER"
+              /usr/local/bin/image-release-pr "clusters/$TARGET_CLUSTER/manifests/prod.yaml"
+            done   
+  build-image:
     environment:
-      CONFIG_REPO: git@github.com:psu-libraries/fams-config.git
+      REGISTRY_HOST: << pipeline.parameters.REGISTRY_HOST >>
+      REGISTRY_REPO: "library/fams-tools"
+    working_directory: /home/circleci/project
+    executor:
+      name: ci-utils
+      image_tag: << pipeline.parameters.CI_UTILS_IMAGE_TAG >>
+      registry_host: << pipeline.parameters.REGISTRY_HOST >>
     steps:
-      - add_ssh_keys
       - run:
-          name: "Updating Config Repo"
+          name: Install docker-compose
           command: |
-            ssh-keyscan github.com > ~/.ssh/known_hosts
-            git clone $CONFIG_REPO
-            cd fams-config
-            ./bin/generate_app
-  publish:
-    executor: 
-      name: docker/docker
-    steps:
-      - setup_remote_docker
-      - checkout
+            apt-get update && apt-get install -y docker-compose
+      - setup_remote_docker:
+          docker_layer_caching: true
+        - checkout:
+          path: /home/circleci/project
+      - compute-docker-tag
       - docker/check:
-          registry: harbor.k8s.libraries.psu.edu
-      - docker/build:
-          image: library/fams-tools
-          registry: harbor.k8s.libraries.psu.edu
-          use-buildkit: true
-          tag: "$CIRCLE_SHA1"
-          extra_build_args: "--target=production"
-      - docker/push:
-          image: library/fams-tools
-          registry: harbor.k8s.libraries.psu.edu
-          tag: "$CIRCLE_SHA1"
-  build:
-    machine:
-      image: ubuntu-2404:current
-    steps:
-      - checkout
+          registry: $REGISTRY_HOST
       - run:
           name: "Build Container"
           command: |
+            echo "Current working directory: $(pwd)"
             docker-compose build
 
       - run:
@@ -380,42 +148,161 @@ jobs:
           # Run the db service first, then wait 10 seconds
           # for the rest.
           command: |
+            echo "Current working directory: $(pwd)"
             docker-compose up -d db &&
             sleep 10s &&
             docker-compose up -d
-
       - run:
           name: "Rspec"
           command: |
-            docker-compose exec web /app/bin/ci-rspec
+            docker-compose exec web /app/bin/ci-rspec      
 
+      # - docker/build:
+      #     image: $REGISTRY_REPO
+      #     registry: $REGISTRY_HOST
+      #     tag: $TAG
+      #     extra_build_args: "--target production"
+      #     use_buildkit: true
+      - run:
+          name: Save Docker image
+          command: |
+            docker save $REGISTRY_HOST/$REGISTRY_REPO:$TAG -o /tmp/docker-image.tar
+      - run:
+          name: Save image info for push job
+          command: |
+            mkdir -p /tmp/docker-image-info
+            echo "$REGISTRY_HOST/$REGISTRY_REPO:$TAG" > /tmp/docker-image-info/image-name.txt
+      - persist_to_workspace:
+          root: /tmp
+          paths:
+            - docker-image.tar
+            - docker-image-info
+
+  push-image:
+    environment:
+      REGISTRY_HOST: << pipeline.parameters.REGISTRY_HOST >>
+      REGISTRY_REPO: "library/fams-tools"
+    executor:
+      name: ci-utils
+      image_tag: << pipeline.parameters.CI_UTILS_IMAGE_TAG >>
+      registry_host: << pipeline.parameters.REGISTRY_HOST >>
+    steps:
+      - setup_remote_docker:
+          docker_layer_caching: false
+      - checkout
+      - compute-docker-tag
+      - attach_workspace:
+          at: /tmp
+      - run:
+          name: Load Docker image
+          command: |
+            docker load -i /tmp/docker-image.tar
+      - docker/check:
+          registry: $REGISTRY_HOST
+      - docker/push:
+          image: $REGISTRY_REPO
+          registry: $REGISTRY_HOST
+          tag: $TAG  
+
+  delete-deployment:
+    parameters:
+      delete_branch:
+        type: string
+    executor:
+      name: ci-utils
+      image_tag: << pipeline.parameters.CI_UTILS_IMAGE_TAG >>
+      registry_host: << pipeline.parameters.REGISTRY_HOST >>
+    environment:
+      CONFIG_REPO_NAME: << pipeline.parameters.CONFIG_REPO_NAME >>
+      CONFIG_REPO_URL: << pipeline.parameters.CONFIG_REPO_URL >>
+      DELETE_BRANCH: << parameters.delete_branch >>
+    steps:
+      - clone-config-repo
+      - run:
+          name: Delete Deployment
+          command: |
+            export TRIGGERED_BY="$CIRCLE_USERNAME"
+            cd $CONFIG_REPO_NAME
+            ./bin/ci-delete-manifest
+
+  deploy-application:
+    executor:
+      name: ci-utils
+      image_tag: << pipeline.parameters.CI_UTILS_IMAGE_TAG >>
+      registry_host: << pipeline.parameters.REGISTRY_HOST >>
+    environment:
+      clusters: << parameters.clusters >>
+      CONFIG_REPO_NAME: << pipeline.parameters.CONFIG_REPO_NAME >>
+      CONFIG_REPO_URL: << pipeline.parameters.CONFIG_REPO_URL >>
+      CONFIG_REPO: << pipeline.parameters.CONFIG_REPO_URL >>
+      TO_YAML_TAG_TARGET: ".spec.source.helm.values.explore.image.tag"
+    parameters:
+      clusters:
+        type: string
+    steps:
+      - clone-config-repo
+      - compute-docker-tag
+      - run:
+          name: Add or Update Application Manifest
+          command: |
+            export TRIGGERED_BY="$CIRCLE_USERNAME"
+            # Split comma-separated clusters into array and loop
+            clusters="${clusters// /}"
+            IFS=',' read -ra CLUSTERS \<<< "$clusters"
+            echo "Pre loop Directory: $(pwd)"
+            for cluster in "${CLUSTERS[@]}"; do
+                export TARGET_CLUSTER="$cluster"
+                echo "Processing cluster: $TARGET_CLUSTER"
+                cd $CONFIG_REPO_NAME
+                ./bin/ci-write-manifest
+                echo "Finished processing $TARGET_CLUSTER"
+                git status
+            done            
+            
 workflows:
-  fams:
+  fams-ci-cd:
     jobs:
-    - release:
+    - release-image: 
+        name: release-image
+        clusters: << pipeline.parameters.CLUSTERS_PROD >>
         context:
           - org-global
-        name: "release image"
+        from_tag: "<< pipeline.git.revision >>"
+        to_tag: "<< pipeline.git.tag >>"
         filters:
-          tags:
-            only:
-              - /^v\d+.\d+.\d+.*/
           branches:
-            ignore:
-              - /.*/
-    - build
-    - publish:
-        requires:
-          - build
+            ignore: /.*/
+          tags:
+            only: /^v\d+\.\d+\.\d+.*/    
+    - build-image:
+        name: build-image
         context:
           - org-global
-    - deploy:
-        context:
-          - org-global
-        requires:
-          - publish
         filters:
           branches:
             only:
               - main
               - /preview\/.*/
+    - push-image:
+        name: push-image
+        context:
+          - org-global
+        filters:
+          branches:              
+            only:
+              - main
+              - /preview\/.*/
+        requires:
+          - build-image
+    - deploy-application:
+        name: deploy-application
+        context:
+          - org-global
+        clusters: << pipeline.parameters.CLUSTERS_DEV >>
+        filters:
+          branches:
+            only:
+              - main
+              - /preview\/.*/
+        requires:
+          - push-image   

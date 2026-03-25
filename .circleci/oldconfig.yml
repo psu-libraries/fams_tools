@@ -1,0 +1,112 @@
+version: 2.1
+
+orbs:
+  docker: circleci/docker@2.8.2
+  browser-tools: circleci/browser-tools@1.5.2
+
+jobs:
+  release:
+    docker:
+      - image: harbor.k8s.libraries.psu.edu/library/ci-utils:v4.0.4
+    environment:
+      REGISTRY_HOST: harbor.k8s.libraries.psu.edu
+      REGISTRY_REPO: library/fams-tools
+      GITHUB_USER: 'psu-stewardship-bot'
+      CONFIG_REPO: git@github.com:psu-libraries/fams-config.git
+    steps:
+      - add_ssh_keys
+      - run:
+          name: "Release"
+          command: |
+            /usr/local/bin/tag-image
+            ssh-keyscan github.com > ~/.ssh/known_hosts
+            git clone $CONFIG_REPO
+            cd fams-config
+            /usr/local/bin/pr-release clusters/prod/manifests/fams_tools/prod.yaml
+  deploy:
+    docker:
+      - image: harbor.k8s.libraries.psu.edu/library/ci-utils:v4.0.4
+    environment:
+      CONFIG_REPO: git@github.com:psu-libraries/fams-config.git
+    steps:
+      - add_ssh_keys
+      - run:
+          name: "Updating Config Repo"
+          command: |
+            ssh-keyscan github.com > ~/.ssh/known_hosts
+            git clone $CONFIG_REPO
+            cd fams-config
+            ./bin/generate_app
+  publish:
+    executor: 
+      name: docker/docker
+    steps:
+      - setup_remote_docker
+      - checkout
+      - docker/check:
+          registry: harbor.k8s.libraries.psu.edu
+      - docker/build:
+          image: library/fams-tools
+          registry: harbor.k8s.libraries.psu.edu
+          use-buildkit: true
+          tag: "$CIRCLE_SHA1"
+          extra_build_args: "--target=production"
+      - docker/push:
+          image: library/fams-tools
+          registry: harbor.k8s.libraries.psu.edu
+          tag: "$CIRCLE_SHA1"
+  build:
+    machine:
+      image: ubuntu-2404:current
+    steps:
+      - checkout
+      - run:
+          name: "Build Container"
+          command: |
+            docker-compose build
+
+      - run:
+          name: "Run Container"
+          # Initial setup of db takes longer than usual.
+          # Run the db service first, then wait 10 seconds
+          # for the rest.
+          command: |
+            docker-compose up -d db &&
+            sleep 10s &&
+            docker-compose up -d
+
+      - run:
+          name: "Rspec"
+          command: |
+            docker-compose exec web /app/bin/ci-rspec
+
+workflows:
+  fams:
+    jobs:
+    - release:
+        context:
+          - org-global
+        name: "release image"
+        filters:
+          tags:
+            only:
+              - /^v\d+.\d+.\d+.*/
+          branches:
+            ignore:
+              - /.*/
+    - build
+    - publish:
+        requires:
+          - build
+        context:
+          - org-global
+    - deploy:
+        context:
+          - org-global
+        requires:
+          - publish
+        filters:
+          branches:
+            only:
+              - main
+              - /preview\/.*/
