@@ -145,7 +145,7 @@ jobs:
       - run:
           name: Tag Docker image
           command: |
-            docker tag fams_tools_web:latest $REGISTRY_HOST/$REGISTRY_REPO:$TAG
+            docker tag project-web $REGISTRY_HOST/$REGISTRY_REPO:$TAG
       - run:
           name: "Run Container"
           command: |
