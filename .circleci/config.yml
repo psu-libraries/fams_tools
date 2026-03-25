@@ -137,6 +137,7 @@ jobs:
       - run:
           name: "Build Container"
           command: |
+            echo "Current working directory: $(pwd)"
             docker-compose build
 
       - run:
@@ -145,6 +146,7 @@ jobs:
           # Run the db service first, then wait 10 seconds
           # for the rest.
           command: |
+            echo "Current working directory: $(pwd)"
             docker-compose up -d db &&
             sleep 10s &&
             docker-compose up -d
