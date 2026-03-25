@@ -124,6 +124,10 @@ jobs:
       image_tag: << pipeline.parameters.CI_UTILS_IMAGE_TAG >>  
       registry_host: << pipeline.parameters.REGISTRY_HOST >>
     steps:
+      - run:
+          name: Install docker-compose
+          command: |
+            apt-get update && apt-get install -y docker-compose
       - setup_remote_docker:
           docker_layer_caching: true
       - checkout
