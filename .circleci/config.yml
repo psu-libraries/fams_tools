@@ -131,7 +131,7 @@ jobs:
             apt-get update && apt-get install -y docker-compose
       - setup_remote_docker:
           docker_layer_caching: true
-        - checkout:
+      - checkout:
           path: /home/circleci/project
       - compute-docker-tag
       - docker/check:
