@@ -92,8 +92,6 @@ module CommitteeData
 
     def determine_completion_stage(final_submission_approved_at, submission_status)
       return 'Completed' if final_submission_approved_at.present?
-      return 'Withdrew' if submission_status&.downcase&.include?('withdrawn')
-
       'In Process'
     end
   end
