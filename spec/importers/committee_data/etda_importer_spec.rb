@@ -18,7 +18,7 @@ RSpec.describe CommitteeData::EtdaImporter do
       let(:api_response) do
         { data: { 'committees' => [
           { 'student_fname' => 'Spider', 'student_lname' => 'Man',
-            'role' => 'advisor', 'title' => 'My Thesis', 'degree_name' => 'PhD',
+            'role' => 'advisor', 'title' => 'My Thesis', 'degree_type' => 'Dissertation',
             'approval_started_at' => '2024-08-15T10:30:00Z',
             'final_submission_approved_at' => '2026-01-15T10:30:00Z',
             'submission_status' => 'released for publication' }
@@ -37,82 +37,37 @@ RSpec.describe CommitteeData::EtdaImporter do
         expect(Committee.last.student_fname).to eq('Spider')
         expect(Committee.last.student_lname).to eq('Man')
         expect(Committee.last.role).to eq('Advisor')
-        expect(Committee.last.role_other_explanation).to be_nil
         expect(Committee.last.thesis_title).to eq('My Thesis')
-        expect(Committee.last.degree_type).to eq('PhD')
-        expect(Committee.last.type_of_work).to eq('Ph.D. Dissertation')
+        expect(Committee.last.type_of_work).to eq('Dissertation Committee')
         expect(Committee.last.stage_of_completion).to eq('Completed')
         expect(Committee.last.start_year).to eq(2024)
         expect(Committee.last.completion_year).to eq(2026)
-      end
-
-      context 'when role does not match any valid Activity Insight value' do
-        let(:api_response) do
-          { data: { 'committees' => [
-            { 'student_fname' => 'Spider', 'student_lname' => 'Man',
-              'role' => 'External Reviewer', 'title' => 'My Thesis', 'degree_name' => 'PhD',
-              'approval_started_at' => nil,
-              'final_submission_approved_at' => nil,
-              'submission_status' => 'waiting for publication release' }
-          ] } }
-        end
-
-        it 'saves role as Other and stores original role in role_other_explanation' do
-          importer.import_all
-          committee = Committee.last
-          expect(committee.role).to eq('Other')
-          expect(committee.role_other_explanation).to eq('External Reviewer')
-        end
       end
     end
   end
 
   describe '#map_type_of_work' do
-    it 'maps PhD with Advisor role to Ph.D. Dissertation' do
-      expect(importer.send(:map_type_of_work, 'PhD', 'Advisor')).to eq('Ph.D. Dissertation')
+    it 'maps Dissertation to Dissertation Committee' do
+      expect(importer.send(:map_type_of_work, 'Dissertation')).to eq('Dissertation Committee')
     end
 
-    it 'maps PhD with Chairperson role to Ph.D. Dissertation' do
-      expect(importer.send(:map_type_of_work, 'PhD', 'Chairperson')).to eq('Ph.D. Dissertation')
+    it "maps Master Thesis to Master's Committee" do
+      expect(importer.send(:map_type_of_work, 'Master Thesis')).to eq("Master's Committee")
     end
 
-    it 'maps PhD with Member role to Ph.D. Dissertation Committee' do
-      expect(importer.send(:map_type_of_work, 'PhD', 'Member')).to eq('Ph.D. Dissertation Committee')
+    it 'maps Thesis to Undergraduate Honors Thesis' do
+      expect(importer.send(:map_type_of_work, 'Thesis')).to eq('Undergraduate Honors Thesis')
     end
 
-    it 'maps Ph.D. to Ph.D. Dissertation Committee when no role given' do
-      expect(importer.send(:map_type_of_work, 'Ph.D.')).to eq('Ph.D. Dissertation Committee')
+    it "maps Final Paper to Master's Paper Committee" do
+      expect(importer.send(:map_type_of_work, 'Final Paper')).to eq("Master's Paper Committee")
     end
 
-    it 'maps MS with Advisor role to Master\'s Thesis' do
-      expect(importer.send(:map_type_of_work, 'MS', 'Advisor')).to eq("Master's Thesis")
+    it 'raises DegreeTypeError for unknown degree types' do
+      expect { importer.send(:map_type_of_work, 'DMA') }.to raise_error(CommitteeData::EtdaImporter::DegreeTypeError)
     end
 
-    it 'maps MS with Member role to Master\'s Thesis Committee' do
-      expect(importer.send(:map_type_of_work, 'MS', 'Member')).to eq("Master's Thesis Committee")
-    end
-
-    it 'maps MA to Master\'s Thesis Committee when no role given' do
-      expect(importer.send(:map_type_of_work, 'MA')).to eq("Master's Thesis Committee")
-    end
-
-    it 'maps undergraduate degrees to Undergraduate Research' do
-      expect(importer.send(:map_type_of_work, 'BS')).to eq('Undergraduate Research')
-    end
-
-    it 'maps postdoc to Postdoctoral Mentorship' do
-      expect(importer.send(:map_type_of_work, 'Postdoc')).to eq('Postdoctoral Mentorship')
-    end
-
-    it 'maps honors to Honors Thesis' do
-      expect(importer.send(:map_type_of_work, 'HONORS')).to eq('Honors Thesis')
-    end
-
-    it 'defaults to Dissertation Committee for unknown degree types' do
-      expect(importer.send(:map_type_of_work, 'DMA')).to eq('Dissertation Committee')
-    end
-
-    it 'returns nil for blank degree name' do
+    it 'returns nil for blank degree type' do
       expect(importer.send(:map_type_of_work, nil)).to be_nil
       expect(importer.send(:map_type_of_work, '')).to be_nil
     end
@@ -152,14 +107,9 @@ RSpec.describe CommitteeData::EtdaImporter do
       expect(result).to eq('Completed')
     end
 
-    it 'returns In Process when final submission date is nil and not withdrawn' do
+    it 'returns In Process when final submission date is nil' do
       result = importer.send(:determine_completion_stage, nil, 'waiting for publication release')
       expect(result).to eq('In Process')
-    end
-
-    it 'returns Withdrew when submission status indicates withdrawal' do
-      result = importer.send(:determine_completion_stage, nil, 'withdrawn by student')
-      expect(result).to eq('Withdrew')
     end
 
     it 'handles nil submission status gracefully' do

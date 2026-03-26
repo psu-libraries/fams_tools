@@ -13,7 +13,6 @@ RSpec.describe CommitteeData::CommitteeXmlBuilder do
         student_lname: 'User',
         role: 'Mentor',
         thesis_title: 'Test Title',
-        degree_type: 'PhD',
         type_of_work: 'Ph.D. Dissertation Committee',
         stage_of_completion: 'Completed',
         start_year: 2024,
@@ -33,7 +32,6 @@ RSpec.describe CommitteeData::CommitteeXmlBuilder do
       <DSL_STUDENT>
         <FNAME>Test</FNAME>
         <LNAME>User</LNAME>
-        <DEG>PhD</DEG>
         <TITLE>Test Title</TITLE>
       </DSL_STUDENT>
     </DSL>
@@ -52,7 +50,6 @@ RSpec.describe CommitteeData::CommitteeXmlBuilder do
         student_lname: 'User',
         role: 'Mentor',
         thesis_title: 'Test Title',
-        degree_type: 'PhD',
         type_of_work: 'Ph.D. Dissertation Committee',
         stage_of_completion: 'In Process',
         start_year: nil,
@@ -65,29 +62,7 @@ RSpec.describe CommitteeData::CommitteeXmlBuilder do
       expect(xml).to include('<COMPSTAGE>In Process</COMPSTAGE>')
     end
 
-    it 'includes ROLE_OTHER and TYPE_OTHER when role or type is Other' do
-      faculty = FactoryBot.create(:faculty, access_id: 'test123')
-
-      Committee.create!(
-        faculty: faculty,
-        student_fname: 'Test',
-        student_lname: 'User',
-        role: 'Other',
-        role_other_explanation: 'External International Reviewer',
-        type_of_work: 'Other',
-        type_other_explanation: 'Special Joint Program Committee',
-        thesis_title: 'Research',
-        degree_type: 'Special Degree'
-      )
-
-      xml = xml_builder_obj.xmls_enumerator.first
-      expect(xml).to include('<ROLE>Other</ROLE>')
-      expect(xml).to include('<ROLE_OTHER>External International Reviewer</ROLE_OTHER>')
-      expect(xml).to include('<TYPE>Other</TYPE>')
-      expect(xml).to include('<TYPE_OTHER>Special Joint Program Committee</TYPE_OTHER>')
-    end
-
-    it 'omits ROLE_OTHER and TYPE_OTHER when explanations are absent' do
+    it 'omits TYPE_OTHER when type_other_explanation is absent' do
       faculty = FactoryBot.create(:faculty, access_id: 'test123')
 
       Committee.create!(
@@ -95,12 +70,10 @@ RSpec.describe CommitteeData::CommitteeXmlBuilder do
         student_fname: 'Test',
         student_lname: 'User',
         role: 'Advisor',
-        thesis_title: 'Test Title',
-        degree_type: 'PhD'
+        thesis_title: 'Test Title'
       )
 
       xml = xml_builder_obj.xmls_enumerator.first
-      expect(xml).not_to include('<ROLE_OTHER>')
       expect(xml).not_to include('<TYPE_OTHER>')
     end
 
@@ -115,8 +88,8 @@ RSpec.describe CommitteeData::CommitteeXmlBuilder do
       faculty1 = FactoryBot.create(:faculty, access_id: 'fac1')
       faculty2 = FactoryBot.create(:faculty, access_id: 'fac2')
 
-      Committee.create!(faculty: faculty1, student_fname: 'John', student_lname: 'Doe', role: 'Mentor', thesis_title: 'Title 1', degree_type: 'PhD')
-      Committee.create!(faculty: faculty2, student_fname: 'Jane', student_lname: 'Smith', role: 'Chair', thesis_title: 'Title 2', degree_type: 'MS')
+      Committee.create!(faculty: faculty1, student_fname: 'John', student_lname: 'Doe', role: 'Mentor', thesis_title: 'Title 1')
+      Committee.create!(faculty: faculty2, student_fname: 'Jane', student_lname: 'Smith', role: 'Chair', thesis_title: 'Title 2')
 
       result = xml_builder_obj.xmls_enumerator.to_a
       expect(result.length).to eq(1)
@@ -125,8 +98,8 @@ RSpec.describe CommitteeData::CommitteeXmlBuilder do
     it 'handles faculty member with multiple committees' do
       faculty = FactoryBot.create(:faculty, access_id: 'test123')
 
-      Committee.create!(faculty: faculty, student_fname: 'John', student_lname: 'Doe', role: 'Mentor', thesis_title: 'Title 1', degree_type: 'PhD')
-      Committee.create!(faculty: faculty, student_fname: 'Jane', student_lname: 'Smith', role: 'Member', thesis_title: 'Title 2', degree_type: 'MS')
+      Committee.create!(faculty: faculty, student_fname: 'John', student_lname: 'Doe', role: 'Mentor', thesis_title: 'Title 1')
+      Committee.create!(faculty: faculty, student_fname: 'Jane', student_lname: 'Smith', role: 'Member', thesis_title: 'Title 2')
 
       xml = xml_builder_obj.xmls_enumerator.first
       expect(xml.scan('<DSL>').count).to eq(2)

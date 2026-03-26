@@ -2,6 +2,8 @@ require 'etda/committee_records_client'
 
 module CommitteeData
   class EtdaImporter
+    class DegreeTypeError < RuntimeError; end
+
     def import_all
       Faculty.find_each do |faculty|
         import_for_faculty(faculty)
@@ -23,10 +25,8 @@ module CommitteeData
           student_fname: committee['student_fname'],
           student_lname: committee['student_lname'],
           role: normalized_role,
-          role_other_explanation: normalized_role == 'Other' ? committee['role'] : nil,
           thesis_title: committee['title'],
-          degree_type: committee['degree_name'],
-          type_of_work: map_type_of_work(committee['degree_name'], normalized_role),
+          type_of_work: map_type_of_work(committee['degree_type']),
           stage_of_completion: determine_completion_stage(
             committee['final_submission_approved_at'],
             committee['submission_status']
@@ -39,46 +39,21 @@ module CommitteeData
       Rails.logger.info("Imported #{committees_data.length} committees for #{faculty.access_id}")
     end
 
-    def map_type_of_work(degree_name, role = nil)
-      return nil if degree_name.blank?
+    def map_type_of_work(degree_type)
+      return nil if degree_type.blank?
 
-      case degree_name.upcase.strip
-      when 'PHD', 'PH.D.', 'DOCTOR OF PHILOSOPHY'
-        determine_phd_type(role)
-      when 'MS', 'M.S.', 'MASTER OF SCIENCE', 'MA', 'M.A.', 'MASTER OF ARTS'
-        determine_masters_type(role)
-      when 'UNDERGRADUATE', 'BS', 'BA', 'B.S.', 'B.A.'
-        'Undergraduate Research'
-      when 'POSTDOC', 'POSTDOCTORAL'
-        'Postdoctoral Mentorship'
-      when 'HONORS'
-        'Honors Thesis'
-      else
-        if degree_name.downcase.include?('phd') || degree_name.downcase.include?('doctor')
-          'Ph.D. Dissertation Committee'
-        elsif degree_name.downcase.include?('master')
-          "Master's Thesis Committee"
-        else
-          'Dissertation Committee'
-        end
-      end
-    end
+      case degree_type.strip
+      when 'Master Thesis'
+        "Master's Committee"
+      when 'Dissertation'
+        'Dissertation Committee'
+      when 'Thesis'
+        'Undergraduate Honors Thesis'
+      when 'Final Paper'
+        "Master's Paper Committee"
 
-    def determine_phd_type(role)
-      case role&.downcase
-      when 'advisor', 'chairperson'
-        'Ph.D. Dissertation'
       else
-        'Ph.D. Dissertation Committee'
-      end
-    end
-
-    def determine_masters_type(role)
-      case role&.downcase
-      when 'advisor', 'chairperson'
-        "Master's Thesis"
-      else
-        "Master's Thesis Committee"
+        raise DegreeTypeError, "Unexpected Degree Type: #{degree_type.strip}"
       end
     end
 
@@ -90,8 +65,9 @@ module CommitteeData
       nil
     end
 
-    def determine_completion_stage(final_submission_approved_at, submission_status)
+    def determine_completion_stage(final_submission_approved_at, _submission_status)
       return 'Completed' if final_submission_approved_at.present?
+
       'In Process'
     end
   end

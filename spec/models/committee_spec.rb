@@ -11,7 +11,6 @@ RSpec.describe Committee, type: :model do
     it { is_expected.to have_db_column(:student_lname).of_type(:string) }
     it { is_expected.to have_db_column(:role).of_type(:string) }
     it { is_expected.to have_db_column(:thesis_title).of_type(:string) }
-    it { is_expected.to have_db_column(:degree_type).of_type(:string) }
     it { is_expected.to have_db_column(:faculty_id).of_type(:integer) }
 
     it 'has faculty_id as bigint in the database' do

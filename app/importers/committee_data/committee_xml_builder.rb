@@ -25,7 +25,6 @@ class CommitteeData::CommitteeXmlBuilder
             committees.each do |committee|
               xml.DSL do
                 xml.ROLE committee.role
-                xml.ROLE_OTHER committee.role_other_explanation if committee.role_other_explanation.present?
                 xml.TYPE committee.type_of_work
                 xml.TYPE_OTHER committee.type_other_explanation if committee.type_other_explanation.present?
                 xml.COMPSTAGE committee.stage_of_completion
@@ -35,7 +34,6 @@ class CommitteeData::CommitteeXmlBuilder
                 xml.DSL_STUDENT do
                   xml.FNAME committee.student_fname
                   xml.LNAME committee.student_lname
-                  xml.DEG committee.degree_type
                   xml.TITLE committee.thesis_title
                 end
               end
