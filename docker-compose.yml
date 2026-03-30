@@ -3,7 +3,7 @@ services:
   db:
     environment:
       MYSQL_ROOT_PASSWORD: ai_integration
-    image: mariadb:10.2
+    image: mariadb:11.4
     ports:
     - "3306:3306"
     volumes:
@@ -27,11 +27,11 @@ services:
       FAMS_WEBSERVICES_BASE_URI: ${FAMS_WEBSERVICES_BASE_URI}
       CENTRAL_LDAP_HOST: ${CENTRAL_LDAP_HOST}
       CENTRAL_LDAP_PORT: ${CENTRAL_LDAP_PORT}
-    build: 
+    build:
       args:
         UID: "${UID:-1001}"
       context: .
-      target: dev 
+      target: dev
       dockerfile: Dockerfile
     ports:
     - "3000:3000"
@@ -44,10 +44,10 @@ services:
       consistency: cached
       source: .
       target: /app/
-networks:                                
-  default:                               
-    driver: bridge                       
-    driver_opts:                         
+networks:
+  default:
+    driver: bridge
+    driver_opts:
       com.docker.network.driver.mtu: 1400
 volumes:
   ai-integration-data: {}
