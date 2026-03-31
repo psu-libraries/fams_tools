@@ -2,7 +2,7 @@ version: 2.1
 
 orbs:
   docker: circleci/docker@2.8.2
-  browser-tools: circleci/browser-tools@1.5.2
+  browser-tools: circleci/browser-tools@2.4
 
 jobs:
   release:
@@ -38,7 +38,7 @@ jobs:
             cd fams-config
             ./bin/generate_app
   publish:
-    executor: 
+    executor:
       name: docker/docker
     steps:
       - setup_remote_docker
