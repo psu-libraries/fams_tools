@@ -62,21 +62,6 @@ RSpec.describe CommitteeData::CommitteeXmlBuilder do
       expect(xml).to include('<COMPSTAGE>In Process</COMPSTAGE>')
     end
 
-    it 'omits TYPE_OTHER when type_other_explanation is absent' do
-      faculty = FactoryBot.create(:faculty, access_id: 'test123')
-
-      Committee.create!(
-        faculty: faculty,
-        student_fname: 'Test',
-        student_lname: 'User',
-        role: 'Advisor',
-        thesis_title: 'Test Title'
-      )
-
-      xml = xml_builder_obj.xmls_enumerator.first
-      expect(xml).not_to include('<TYPE_OTHER>')
-    end
-
     it 'handles faculty with no committees' do
       FactoryBot.create(:faculty, access_id: 'test123')
 

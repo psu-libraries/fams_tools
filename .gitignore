@@ -42,6 +42,6 @@ spec/examples.txt
 .cache
 .bash_history
 .envrc
-.irb_historyx 
+.irb_history
 .DS_Store
 CLAUDE.md
