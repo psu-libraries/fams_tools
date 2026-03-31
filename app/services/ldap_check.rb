@@ -6,10 +6,10 @@ class LdapCheck
   end
 
   def check(data, should_disable)
-    uids = CSV.parse(data.read, headers: true)
+    uids = CSV.parse(data.read.force_encoding('UTF-8').sub(/\A\xEF\xBB\xBF/, ''), headers: true)
               .filter_map { |row| row['Username'] }
 
-    return { error: 'No usernames were found in the uploaded CSV. Make sure there is a "Usernames" column.' } if uids.empty?
+    return { error: 'No usernames were found in the uploaded CSV. Make sure there is a "Username" column.' } if uids.empty?
 
     entries = pull_ldap_data(uids)
     disabled_uids = find_disabled_users(entries)
