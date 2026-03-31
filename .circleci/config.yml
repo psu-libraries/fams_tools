@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  docker: circleci/docker@2.8.2
+  docker: circleci/docker@3.1
   browser-tools: circleci/browser-tools@2.4
 
 jobs:
@@ -48,7 +48,6 @@ jobs:
       - docker/build:
           image: library/fams-tools
           registry: harbor.k8s.libraries.psu.edu
-          use-buildkit: true
           tag: "$CIRCLE_SHA1"
           extra_build_args: "--target=production"
       - docker/push:
