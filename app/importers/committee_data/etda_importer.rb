@@ -19,6 +19,8 @@ module CommitteeData
       committees_data = result[:data]['committees']
 
       committees_data.each do |committee|
+        next unless within_last_six_months?(committee['approval_started_at'])
+
         normalized_role = CommitteeRoleNormalizer.normalize(committee['role'])
 
         faculty.committees.create!(
@@ -63,6 +65,12 @@ module CommitteeData
       Date.parse(date_string).year
     rescue ArgumentError
       nil
+    end
+
+    def within_last_six_months?(date_string)
+      return false if date_string.blank?
+
+      Date.parse(date_string) >= 6.months.ago
     end
 
     def determine_completion_stage(final_submission_approved_at, _submission_status)

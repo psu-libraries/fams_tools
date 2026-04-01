@@ -21,6 +21,7 @@ This app parses data from faculty CVs, and integrates data into Activity Insight
 
   Add the following untracked files/folders:
 
+  * `config/database.yml` This will be similar to `config/database.yml.sample`
   * `config/activity_insight.yml`
   * `config/integration_passcode.yml`
   * `public/log`

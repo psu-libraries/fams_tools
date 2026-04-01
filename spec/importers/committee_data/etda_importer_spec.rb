@@ -19,7 +19,7 @@ RSpec.describe CommitteeData::EtdaImporter do
         { data: { 'committees' => [
           { 'student_fname' => 'Spider', 'student_lname' => 'Man',
             'role' => 'advisor', 'title' => 'My Thesis', 'degree_type' => 'Dissertation',
-            'approval_started_at' => '2024-08-15T10:30:00Z',
+            'approval_started_at' => 1.month.ago.iso8601,
             'final_submission_approved_at' => '2026-01-15T10:30:00Z',
             'submission_status' => 'released for publication' }
         ] } }
@@ -40,7 +40,7 @@ RSpec.describe CommitteeData::EtdaImporter do
         expect(Committee.last.thesis_title).to eq('My Thesis')
         expect(Committee.last.type_of_work).to eq('Dissertation Committee')
         expect(Committee.last.stage_of_completion).to eq('Completed')
-        expect(Committee.last.start_year).to eq(2024)
+        expect(Committee.last.start_year).to eq(1.month.ago.year)
         expect(Committee.last.completion_year).to eq(2026)
       end
     end
@@ -98,6 +98,26 @@ RSpec.describe CommitteeData::EtdaImporter do
       let(:date_string) { 'not-a-date' }
 
       it { is_expected.to be_nil }
+    end
+  end
+
+  describe '#within_last_six_months?' do
+    it 'returns true for a date within the last 6 months' do
+      recent_date = 1.month.ago.iso8601
+      expect(importer.send(:within_last_six_months?, recent_date)).to be true
+    end
+
+    it 'returns false for a date older than 6 months' do
+      old_date = 1.year.ago.iso8601
+      expect(importer.send(:within_last_six_months?, old_date)).to be false
+    end
+
+    it 'returns false for a nil date' do
+      expect(importer.send(:within_last_six_months?, nil)).to be false
+    end
+
+    it 'returns false for a blank date' do
+      expect(importer.send(:within_last_six_months?, '')).to be false
     end
   end
 
