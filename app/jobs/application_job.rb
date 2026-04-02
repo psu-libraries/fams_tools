@@ -86,5 +86,6 @@ class ApplicationJob < ActiveJob::Base
     Yearly.delete_all
     ComEffort.delete_all
     ComQuality.delete_all
+    Committee.delete_all
   end
 end
