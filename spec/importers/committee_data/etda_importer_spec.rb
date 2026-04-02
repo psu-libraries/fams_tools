@@ -3,9 +3,9 @@ require 'importers/importers_helper'
 RSpec.describe CommitteeData::EtdaImporter do
   subject(:importer) { described_class.new }
 
-  let(:faculty)     { create(:faculty, access_id: 'abc123') }
-  let(:faculty_one) { create(:faculty, access_id: 'mpk6156') }
-  let(:faculty_two) { create(:faculty, access_id: 'aez1236') }
+  let!(:faculty)     { create(:faculty, access_id: 'abc123') }
+  let!(:faculty_one) { create(:faculty, access_id: 'mpk6156') }
+  let!(:faculty_two) { create(:faculty, access_id: 'aez1236') }
 
   let(:client) { instance_double(Etda::CommitteeRecordsClient) }
 
@@ -26,9 +26,6 @@ RSpec.describe CommitteeData::EtdaImporter do
       end
 
       before do
-        faculty
-        faculty_one
-        faculty_two
         allow(client).to receive(:faculty_committees).and_return(api_response)
       end
 
@@ -123,27 +120,23 @@ RSpec.describe CommitteeData::EtdaImporter do
 
   describe '#determine_completion_stage' do
     it 'returns Completed when final submission date is present' do
-      result = importer.send(:determine_completion_stage, '2026-01-15T10:30:00Z', 'released for publication')
+      result = importer.send(:determine_completion_stage, '2026-01-15T10:30:00Z')
       expect(result).to eq('Completed')
     end
 
     it 'returns In Process when final submission date is nil' do
-      result = importer.send(:determine_completion_stage, nil, 'waiting for publication release')
-      expect(result).to eq('In Process')
-    end
-
-    it 'handles nil submission status gracefully' do
-      result = importer.send(:determine_completion_stage, nil, nil)
+      result = importer.send(:determine_completion_stage, nil)
       expect(result).to eq('In Process')
     end
   end
 
   it 'rescues CommitteeRecordsClientError and logs it' do
-    faculty
     allow(client).to receive(:faculty_committees)
       .and_raise(Etda::CommitteeRecordsClient::CommitteeRecordsClientError, 'API down')
 
+    expect(Rails.logger).to receive(:error).with(/mpk6156.*API down/)
     expect(Rails.logger).to receive(:error).with(/abc123.*API down/)
+    expect(Rails.logger).to receive(:error).with(/aez1236.*API down/)
     expect { importer.import_all }.not_to raise_error
   end
 end

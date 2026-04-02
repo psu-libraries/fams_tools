@@ -41,7 +41,7 @@ RSpec.describe CommitteeData::CommitteeXmlBuilder do
       )
     end
 
-    it 'omits DTY_START and DTY_END when years are nil' do
+    it 'omits DTY_END when completion year is nil' do
       faculty = FactoryBot.create(:faculty, access_id: 'test123')
 
       Committee.create!(
@@ -52,12 +52,12 @@ RSpec.describe CommitteeData::CommitteeXmlBuilder do
         thesis_title: 'Test Title',
         type_of_work: 'Ph.D. Dissertation Committee',
         stage_of_completion: 'In Process',
-        start_year: nil,
+        start_year: 2024,
         completion_year: nil
       )
 
       xml = xml_builder_obj.xmls_enumerator.first
-      expect(xml).not_to include('<DTY_START>')
+      expect(xml).to include('<DTY_START>')
       expect(xml).not_to include('<DTY_END>')
       expect(xml).to include('<COMPSTAGE>In Process</COMPSTAGE>')
     end

@@ -30,8 +30,7 @@ module CommitteeData
           thesis_title: committee['title'],
           type_of_work: map_type_of_work(committee['degree_type']),
           stage_of_completion: determine_completion_stage(
-            committee['final_submission_approved_at'],
-            committee['submission_status']
+            committee['final_submission_approved_at']
           ),
           start_year: extract_year(committee['approval_started_at']),
           completion_year: extract_year(committee['final_submission_approved_at'])
@@ -73,7 +72,7 @@ module CommitteeData
       Date.parse(date_string) >= 6.months.ago
     end
 
-    def determine_completion_stage(final_submission_approved_at, _submission_status)
+    def determine_completion_stage(final_submission_approved_at)
       return 'Completed' if final_submission_approved_at.present?
 
       'In Process'
