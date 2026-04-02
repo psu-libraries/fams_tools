@@ -64,7 +64,6 @@ ActiveRecord::Schema[7.2].define(version: 2026_03_26_000000) do
     t.string "stage_of_completion"
     t.integer "start_year"
     t.integer "completion_year"
-    t.text "type_other_explanation"
     t.index ["faculty_id"], name: "index_committees_on_faculty_id"
   end
 
