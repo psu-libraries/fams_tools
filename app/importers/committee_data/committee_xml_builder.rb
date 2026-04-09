@@ -25,11 +25,14 @@ class CommitteeData::CommitteeXmlBuilder
             committees.each do |committee|
               xml.DSL do
                 xml.ROLE committee.role
+                xml.TYPE committee.type_of_work
+                xml.COMPSTAGE committee.stage_of_completion
+                xml.DTY_START committee.start_year
+                xml.DTY_END committee.completion_year if committee.completion_year
 
                 xml.DSL_STUDENT do
                   xml.FNAME committee.student_fname
                   xml.LNAME committee.student_lname
-                  xml.DEG committee.degree_type
                   xml.TITLE committee.thesis_title
                 end
               end

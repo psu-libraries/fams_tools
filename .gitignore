@@ -44,3 +44,4 @@ spec/examples.txt
 .envrc
 .irb_history
 .DS_Store
+CLAUDE.md
