@@ -1,6 +1,6 @@
 class ActivityInsightCommitteeJob < ApplicationJob
-  def integrate(params)
-    target = params[:target]
+  def integrate(target)
+    CommitteeData::EtdaImporter.new.import_all
 
     builder   = CommitteeData::CommitteeXmlBuilder.new
     xml_enum  = builder.xmls_enumerator
@@ -12,6 +12,6 @@ class ActivityInsightCommitteeJob < ApplicationJob
   private
 
   def name
-    'Committee Membership Integration'
+    'Committee Integration'
   end
 end

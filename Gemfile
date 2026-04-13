@@ -50,7 +50,7 @@ gem 'jbuilder', '~> 2.5'
 gem 'spreadsheet'
 
 # Http client
-gem 'httparty', '~> 0.21'
+gem 'httparty', '~> 0.24'
 
 # Mocking outgoing requests
 gem 'webmock'

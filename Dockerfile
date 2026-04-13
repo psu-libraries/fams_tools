@@ -1,4 +1,4 @@
-FROM harbor.k8s.libraries.psu.edu/library/ruby-3.4.1-node-22:20260202 as base
+FROM harbor.k8s.libraries.psu.edu/library/ruby-3.4.9-node-22:20260317 AS base
 ARG UID=1001
 WORKDIR /app
 
@@ -17,6 +17,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends g++ \
     gstreamer1.0-tools \
     gstreamer1.0-x \
     libmariadb-dev \
+    libyaml-dev \
     xvfb \
     qtbase5-dev \
     curl \
@@ -44,19 +45,20 @@ COPY --chown=app .bundle/config /app/.bundle/config
 RUN gem install bundler -v "$(grep -A 1 "BUNDLED WITH" Gemfile.lock | tail -n 1)"
 
 # - - - - - - - - - - - -
-FROM base as dev
+FROM base AS dev
 WORKDIR /app
 USER app
 COPY --chown=app . /app
 CMD ["/app/bin/startup"]
 
 # - - - - - - - - - - - -
-FROM base as production
+FROM base AS production
 WORKDIR /app
 
 COPY --chown=app . /app
 
-RUN bundle install --without development test && \
+RUN bundle config set --local without 'development test' && \
+  bundle install && \
   bundle clean && \
   rm -rf /app/.bundle/cache && \
   rm -rf /app/vendor/bundle/ruby/*/cache

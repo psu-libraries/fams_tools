@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_12_05_172036) do
+ActiveRecord::Schema[7.2].define(version: 2026_03_26_000000) do
   create_table "authors", charset: "utf8mb4", force: :cascade do |t|
     t.string "f_name"
     t.string "m_name"
@@ -58,9 +58,12 @@ ActiveRecord::Schema[7.2].define(version: 2025_12_05_172036) do
     t.string "student_lname"
     t.string "role"
     t.string "thesis_title"
-    t.string "degree_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "type_of_work"
+    t.string "stage_of_completion"
+    t.integer "start_year"
+    t.integer "completion_year"
     t.index ["faculty_id"], name: "index_committees_on_faculty_id"
   end
 
