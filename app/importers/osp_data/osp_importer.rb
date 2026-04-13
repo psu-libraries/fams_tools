@@ -154,36 +154,45 @@ DateTime.strptime(row['accessid'],
       attr.sponsor_type = row['sponsortype']
     end
 
-    contract = Contract.find_or_initialize_by(osp_key: row['ospkey'])
-
-    should_update_contract = contract.new_record? || (contract.status == 'Pending' && row['status'] == 'Awarded')
-
-    if should_update_contract
-      contract.title = row['title']
-      contract.sponsor = sponsor
-      contract.status = row['status']
-
-      contract.submitted = (DateTime.strptime(row['submitted'], '%m/%d/%Y %T') if row['submitted'].present?)
-      contract.awarded = (DateTime.strptime(row['awarded'], '%m/%d/%Y %T') if row['awarded'].present?)
-      contract.requested = row['requested']
-      contract.funded = row['funded']
-      contract.total_anticipated = row['totalanticipated']
-      contract.start_date = (DateTime.strptime(row['startdate'], '%m/%d/%Y %T') if row['startdate'].present?)
-      contract.end_date = (DateTime.strptime(row['enddate'], '%m/%d/%Y %T') if row['enddate'].present?)
-      contract.grant_contract = row['grantcontract']
-      contract.base_agreement = row['baseagreement'].to_s.gsub("\u0000", '')
-      contract.notfunded = (DateTime.strptime(row['notfunded'], '%m/%d/%Y %T') if row['notfunded'].present?)
-      contract.effort_academic = row['effortacademic']
-      contract.effort_summer = row['effortsummer']
-      contract.effort_calendar = row['effortcalendar']
-      contract.save!
+    contract = Contract.find_or_create_by(osp_key: row['ospkey']) do |attr|
+      attr.title = row['title']
+      attr.sponsor = sponsor
+      attr.status = row['status']
+      if row['submitted'].present?
+        attr.submitted = DateTime.strptime(row['submitted'],
+                                           '%m/%d/%Y %T')
+      end
+      if row['awarded'].present?
+        attr.awarded = DateTime.strptime(row['awarded'],
+                                         '%m/%d/%Y %T')
+      end
+      attr.requested = row['requested']
+      attr.funded = row['funded']
+      attr.total_anticipated = row['totalanticipated']
+      if row['startdate'].present?
+        attr.start_date = DateTime.strptime(row['startdate'],
+                                            '%m/%d/%Y %T')
+      end
+      if row['enddate'].present?
+        attr.end_date = DateTime.strptime(row['enddate'],
+                                          '%m/%d/%Y %T')
+      end
+      attr.grant_contract = row['grantcontract']
+      attr.base_agreement = row['baseagreement'].gsub("\u0000", '')
+      if row['notfunded'].present?
+        attr.notfunded = DateTime.strptime(row['notfunded'],
+                                           '%m/%d/%Y %T')
+      end
+      attr.effort_academic = row['effortacademic']
+      attr.effort_summer = row['effortsummer']
+      attr.effort_calendar = row['effortcalendar']
     end
 
     faculty = Faculty.find_by(access_id: row['accessid'])
 
     begin
-      ContractFacultyLink.create(contract: contract,
-                                 faculty: faculty,
+      ContractFacultyLink.create(contract:,
+                                 faculty:,
                                  role: row['role'],
                                  pct_credit: row['pctcredit'])
     rescue ActiveRecord::RecordNotUnique
