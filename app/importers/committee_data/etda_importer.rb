@@ -16,6 +16,7 @@ module CommitteeData
 
     def import_for_faculty(faculty)
       result = Etda::CommitteeRecordsClient.new.faculty_committees(faculty.access_id)
+      committee_count = 0
       committees_data = result[:data]['committees']
 
       committees_data.each do |committee|
@@ -34,10 +35,13 @@ module CommitteeData
           ),
           start_year: extract_year(committee['approval_started_at']),
           completion_year: extract_year(committee['final_submission_approved_at'])
+
+    
         )
+        committee_count += 1
       end
 
-      Rails.logger.info("Imported #{committees_data.length} committees for #{faculty.access_id}")
+      Rails.logger.info("Imported #{committee_count} committees for #{faculty.access_id}")
     end
 
     def map_type_of_work(degree_type)

@@ -309,6 +309,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_03_26_000000) do
     t.string "hr_code"
     t.text "departments", size: :long, collation: "utf8mb4_bin"
     t.index ["faculty_id"], name: "index_yearlies_on_faculty_id", unique: true
+    t.check_constraint "json_valid(`departments`)", name: "departments"
   end
 
   add_foreign_key "authors", "works", on_delete: :cascade
