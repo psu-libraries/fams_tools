@@ -24,7 +24,9 @@ RSpec.describe CreateUserService do
   let(:csv_path) { Rails.root.join('app/parsing_files/upload.csv').to_s }
 
   before do
-    allow(CSV).to receive(:foreach).with(csv_path, headers: true).and_yield(csv_row)
+    header_row = instance_double(CSV::Row, headers: ['Username', 'First Name', 'Last Name', 'Email', 'Security'])
+    allow(CSV).to receive(:open).and_return(header_row)
+    allow(CSV).to receive(:foreach).with(csv_path, headers: true, encoding: 'bom|utf-8').and_yield(csv_row)
     allow(CreateUserXmlBuilder).to receive_messages(create_user_xml: "<User PSUIDFacultyOnly='123456789' PennStateHealthUsername='' username='txt124'><FirstName>Smith</FirstName><LastName>John</LastName><Email>txt124@psu.edu</Email><ShibbolethAuthentication/></User>", insert_metadata_xml: '<INDIVIDUAL-ACTIVITIES-University><ADMIN><AC_YEAR>2025-2026</AC_YEAR><ADMIN_DEP><DEP>UL - Libraries Strategic Technologies</DEP></ADMIN_DEP><CAMPUS>UP</CAMPUS><CAMPUS_NAME>University Park</CAMPUS_NAME><COLLEGE>UL</COLLEGE><COLLEGE_NAME>University Libraries</COLLEGE_NAME><DTD_END/><DTD_START/><DTM_END/><DTM_START/><DTY_END/><DTY_START/><ENDPOS/><GRADUATE/><HR_CODE/><LEAVE/><LEAVE_OTHER/><RANK/><RESULT_SABB/><SCHOOL/><TENURE/><TIME_STATUS/><TITLE/></ADMIN></INDIVIDUAL-ACTIVITIES-University>', add_faculty_group_xml: '<INDIVIDUAL-ACTIVITIES-University-Faculty/>')
     allow(ENV).to receive(:fetch).with('FAMS_WEBSERVICES_USERNAME').and_return('fakeuser')
     allow(ENV).to receive(:fetch).with('FAMS_WEBSERVICES_PASSWORD').and_return('fakepass')
@@ -72,6 +74,55 @@ RSpec.describe CreateUserService do
 
         expect(errors).to all(include(:response))
         expect(errors.first[:response]).to include('Error:')
+      end
+    end
+
+    context 'when CSV is missing required columns' do
+      before do
+        allow(CSV).to receive(:foreach).and_call_original
+        allow(CSV).to receive(:open).and_call_original
+
+        FileUtils.mkdir_p(Rails.root.join('app/parsing_files'))
+        FileUtils.cp(
+          Rails.root.join('spec/fixtures/create_user_missing_columns.csv'),
+          Rails.root.join('app/parsing_files/upload.csv')
+        )
+      end
+
+      after do
+        FileUtils.rm_f(Rails.root.join('app/parsing_files/upload.csv'))
+      end
+
+      it 'raises an error listing the missing columns' do
+        expect { service.create_user }.to raise_error(RuntimeError, /missing required columns: Username/)
+      end
+    end
+
+    context 'when CSV has BOM encoding' do
+      before do
+        allow(CSV).to receive(:foreach).and_call_original
+        allow(CSV).to receive(:open).and_call_original
+
+        FileUtils.mkdir_p(Rails.root.join('app/parsing_files'))
+        FileUtils.cp(
+          Rails.root.join('spec/fixtures/create_user_bom.csv'),
+          Rails.root.join('app/parsing_files/upload.csv')
+        )
+        allow(HTTParty).to receive(:post).and_return(success_response)
+      end
+
+      after do
+        FileUtils.rm_f(Rails.root.join('app/parsing_files/upload.csv'))
+      end
+
+      it 'parses the CSV correctly without errors' do
+        errors = service.create_user
+        expect(errors).to be_empty
+      end
+
+      it 'sends requests for the user in the CSV' do
+        service.create_user
+        expect(HTTParty).to have_received(:post).at_least(2).times
       end
     end
   end
