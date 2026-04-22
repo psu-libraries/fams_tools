@@ -1,3 +1,8 @@
+require 'net/http'
+require 'uri'
+require 'json'
+require 'nokogiri'
+
 FACULTY = [
   "example1 psu.edu",
 ]
