@@ -11,7 +11,7 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[7.2].define(version: 2026_04_23_000000) do
-  create_table "authors", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "authors", charset: "utf8mb4", force: :cascade do |t|
     t.string "f_name"
     t.string "m_name"
     t.string "l_name"
@@ -19,7 +19,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_04_23_000000) do
     t.index ["work_id"], name: "fk_rails_ef7807179c"
   end
 
-  create_table "com_efforts", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "com_efforts", charset: "utf8mb4", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "com_id"
@@ -35,7 +35,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_04_23_000000) do
     t.index ["faculty_id"], name: "fk_rails_c1c0816923"
   end
 
-  create_table "com_qualities", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "com_qualities", charset: "utf8mb4", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "com_id"
@@ -51,7 +51,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_04_23_000000) do
     t.index ["faculty_id"], name: "fk_rails_5da34f5b2e"
   end
 
-  create_table "committees", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "committees", charset: "utf8mb4", force: :cascade do |t|
     t.bigint "faculty_id", null: false
     t.string "student_fname"
     t.string "student_mname"
@@ -69,7 +69,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_04_23_000000) do
     t.index ["faculty_id"], name: "index_committees_on_faculty_id"
   end
 
-  create_table "contract_faculty_links", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "contract_faculty_links", charset: "utf8mb4", force: :cascade do |t|
     t.string "role"
     t.integer "pct_credit"
     t.bigint "contract_id"
@@ -78,7 +78,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_04_23_000000) do
     t.index ["faculty_id"], name: "fk_rails_7f7c136a9d"
   end
 
-  create_table "contracts", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "contracts", charset: "utf8mb4", force: :cascade do |t|
     t.integer "osp_key"
     t.string "title"
     t.bigint "sponsor_id"
@@ -100,7 +100,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_04_23_000000) do
     t.index ["sponsor_id"], name: "fk_rails_918599a14c"
   end
 
-  create_table "courses", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "courses", charset: "utf8mb4", force: :cascade do |t|
     t.integer "academic_course_id"
     t.string "term"
     t.integer "calendar_year"
@@ -109,7 +109,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_04_23_000000) do
     t.index ["academic_course_id", "term", "calendar_year"], name: "index_courses_on_academic_course_id_and_term_and_calendar_year", unique: true
   end
 
-  create_table "editors", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "editors", charset: "utf8mb4", force: :cascade do |t|
     t.string "f_name"
     t.string "m_name"
     t.string "l_name"
@@ -117,7 +117,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_04_23_000000) do
     t.index ["work_id"], name: "fk_rails_6c877ed7df"
   end
 
-  create_table "external_authors", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "external_authors", charset: "utf8mb4", force: :cascade do |t|
     t.bigint "publication_id"
     t.string "f_name"
     t.string "m_name"
@@ -129,7 +129,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_04_23_000000) do
     t.index ["publication_id"], name: "fk_rails_eb03e1acd5"
   end
 
-  create_table "faculties", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "faculties", charset: "utf8mb4", force: :cascade do |t|
     t.string "access_id"
     t.bigint "user_id"
     t.string "f_name"
@@ -143,14 +143,14 @@ ActiveRecord::Schema[7.2].define(version: 2026_04_23_000000) do
     t.index ["access_id"], name: "index_faculties_on_access_id", unique: true
   end
 
-  create_table "integrations", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "integrations", charset: "utf8mb4", force: :cascade do |t|
     t.string "process_type"
     t.boolean "is_active"
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
   end
 
-  create_table "personal_contacts", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "personal_contacts", charset: "utf8mb4", force: :cascade do |t|
     t.bigint "faculty_id", null: false
     t.string "telephone_number"
     t.string "postal_address"
@@ -169,7 +169,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_04_23_000000) do
     t.index ["faculty_id"], name: "index_personal_contacts_on_faculty_id", unique: true
   end
 
-  create_table "presentation_contributors", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "presentation_contributors", charset: "utf8mb4", force: :cascade do |t|
     t.bigint "presentation_id", null: false
     t.string "f_name"
     t.string "m_name"
@@ -177,7 +177,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_04_23_000000) do
     t.index ["presentation_id"], name: "index_presentation_contributors_on_presentation_id"
   end
 
-  create_table "presentations", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "presentations", charset: "utf8mb4", force: :cascade do |t|
     t.bigint "faculty_id", null: false
     t.string "title"
     t.string "dty_date"
@@ -187,7 +187,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_04_23_000000) do
     t.index ["faculty_id"], name: "index_presentations_on_faculty_id"
   end
 
-  create_table "publication_faculty_links", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "publication_faculty_links", charset: "utf8mb4", force: :cascade do |t|
     t.bigint "faculty_id"
     t.bigint "publication_id"
     t.string "category"
@@ -199,14 +199,14 @@ ActiveRecord::Schema[7.2].define(version: 2026_04_23_000000) do
     t.index ["publication_id"], name: "fk_rails_7abcf28acb"
   end
 
-  create_table "publication_listings", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "publication_listings", charset: "utf8mb4", force: :cascade do |t|
     t.string "name"
     t.string "type"
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
   end
 
-  create_table "publications", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "publications", charset: "utf8mb4", force: :cascade do |t|
     t.text "title"
     t.integer "volume"
     t.integer "dty"
@@ -233,7 +233,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_04_23_000000) do
     t.bigint "rmd_id"
   end
 
-  create_table "sections", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "sections", charset: "utf8mb4", force: :cascade do |t|
     t.string "class_campus_code"
     t.string "cross_listed_flag"
     t.string "course_number"
@@ -255,13 +255,13 @@ ActiveRecord::Schema[7.2].define(version: 2026_04_23_000000) do
     t.index ["faculty_id", "course_id", "class_campus_code", "subject_code", "course_number", "course_suffix", "class_section_code", "course_component"], name: "pkey", unique: true, length: { class_campus_code: 50, subject_code: 50, course_suffix: 50, class_section_code: 50, course_component: 50 }
   end
 
-  create_table "sponsors", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "sponsors", charset: "utf8mb4", force: :cascade do |t|
     t.string "sponsor_name"
     t.string "sponsor_type"
     t.index ["sponsor_name"], name: "index_sponsors_on_sponsor_name", unique: true
   end
 
-  create_table "works", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "works", charset: "utf8mb4", force: :cascade do |t|
     t.bigint "publication_listing_id"
     t.text "title"
     t.string "journal"
@@ -292,7 +292,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_04_23_000000) do
     t.index ["publication_listing_id"], name: "index_works_on_publication_listing_id"
   end
 
-  create_table "yearlies", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "yearlies", charset: "utf8mb4", force: :cascade do |t|
     t.bigint "faculty_id"
     t.string "academic_year"
     t.string "campus"
