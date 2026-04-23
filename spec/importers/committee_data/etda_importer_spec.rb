@@ -38,7 +38,29 @@ RSpec.describe CommitteeData::EtdaImporter do
         expect(Committee.last.type_of_work).to eq('Dissertation Committee')
         expect(Committee.last.stage_of_completion).to eq('Completed')
         expect(Committee.last.start_year).to eq(1.month.ago.year)
+        expect(Committee.last.start_month).to eq(1.month.ago.month)
         expect(Committee.last.completion_year).to eq(2026)
+        expect(Committee.last.completion_month).to eq(1)
+      end
+    end
+
+    context 'when final_submission_approved_at is nil' do
+      let(:api_response) do
+        { data: { 'committees' => [
+          { 'student_fname' => 'Spider', 'student_lname' => 'Man',
+            'role' => 'advisor', 'title' => 'My Thesis', 'degree_type' => 'Dissertation',
+            'approval_started_at' => 1.month.ago.iso8601,
+            'final_submission_approved_at' => nil,
+            'submission_status' => 'waiting for publication release' }
+        ] } }
+      end
+
+      before { allow(client).to receive(:faculty_committees).and_return(api_response) }
+
+      it 'stores nil for completion_year and completion_month' do
+        importer.import_all
+        expect(Committee.last.completion_year).to be_nil
+        expect(Committee.last.completion_month).to be_nil
       end
     end
   end
@@ -77,6 +99,34 @@ RSpec.describe CommitteeData::EtdaImporter do
       let(:date_string) { '2026-01-15T10:30:00Z' }
 
       it { is_expected.to eq(2026) }
+    end
+
+    context 'with nil' do
+      let(:date_string) { nil }
+
+      it { is_expected.to be_nil }
+    end
+
+    context 'with an empty string' do
+      let(:date_string) { '' }
+
+      it { is_expected.to be_nil }
+    end
+
+    context 'with an invalid date string' do
+      let(:date_string) { 'not-a-date' }
+
+      it { is_expected.to be_nil }
+    end
+  end
+
+  describe '#extract_month' do
+    subject(:extract) { importer.send(:extract_month, date_string) }
+
+    context 'with a valid ISO8601 date string' do
+      let(:date_string) { '2026-01-15T10:30:00Z' }
+
+      it { is_expected.to eq(1) }
     end
 
     context 'with nil' do

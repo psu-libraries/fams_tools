@@ -33,7 +33,9 @@ module CommitteeData
             committee['final_submission_approved_at']
           ),
           start_year: extract_year(committee['approval_started_at']),
-          completion_year: extract_year(committee['final_submission_approved_at'])
+          start_month: extract_month(committee['approval_started_at']),
+          completion_year: extract_year(committee['final_submission_approved_at']),
+          completion_month: extract_month(committee['final_submission_approved_at'])
         )
       end
 
@@ -62,6 +64,14 @@ module CommitteeData
       return nil if date_string.blank?
 
       Date.parse(date_string).year
+    rescue ArgumentError
+      nil
+    end
+
+    def extract_month(date_string)
+      return nil if date_string.blank?
+
+      Date.parse(date_string).month
     rescue ArgumentError
       nil
     end
