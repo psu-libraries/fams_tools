@@ -14,6 +14,7 @@ RSpec.describe CommitteeData::CommitteeXmlBuilder do
         role: 'Mentor',
         thesis_title: 'Test Title',
         type_of_work: 'Ph.D. Dissertation Committee',
+        degree_name: 'PhD',
         stage_of_completion: 'Completed',
         start_year: 2024,
         start_month: 8,
@@ -36,6 +37,7 @@ RSpec.describe CommitteeData::CommitteeXmlBuilder do
       <DSL_STUDENT>
         <FNAME access="READ_ONLY">Test</FNAME>
         <LNAME access="READ_ONLY">User</LNAME>
+        <DEG access="READ_ONLY">PhD</DEG>
         <TITLE access="READ_ONLY">Test Title</TITLE>
       </DSL_STUDENT>
     </DSL>
@@ -43,6 +45,38 @@ RSpec.describe CommitteeData::CommitteeXmlBuilder do
 </Data>
 '
       )
+    end
+
+    it 'emits DEG when degree_name is present' do
+      faculty = FactoryBot.create(:faculty, access_id: 'test123')
+
+      Committee.create!(
+        faculty: faculty,
+        student_fname: 'Jane',
+        student_lname: 'Doe',
+        role: 'Mentor',
+        thesis_title: 'A Title',
+        degree_name: 'MS'
+      )
+
+      xml = xml_builder_obj.xmls_enumerator.first
+      expect(xml).to include('<DEG access="READ_ONLY">MS</DEG>')
+    end
+
+    it 'omits DEG when degree_name is nil' do
+      faculty = FactoryBot.create(:faculty, access_id: 'test123')
+
+      Committee.create!(
+        faculty: faculty,
+        student_fname: 'Jane',
+        student_lname: 'Doe',
+        role: 'Mentor',
+        thesis_title: 'A Title',
+        degree_name: nil
+      )
+
+      xml = xml_builder_obj.xmls_enumerator.first
+      expect(xml).not_to include('<DEG')
     end
 
     it 'omits DTY_END when completion year is nil' do

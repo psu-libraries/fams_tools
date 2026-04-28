@@ -43,6 +43,7 @@ class CommitteeData::CommitteeXmlBuilder
                 xml.DSL_STUDENT do
                   xml.FNAME committee.student_fname, access: 'READ_ONLY'
                   xml.LNAME committee.student_lname, access: 'READ_ONLY'
+                  xml.DEG committee.degree_name, access: 'READ_ONLY' if committee.degree_name.present?
                   xml.TITLE committee.thesis_title, access: 'READ_ONLY'
                 end
               end

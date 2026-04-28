@@ -19,6 +19,7 @@ RSpec.describe CommitteeData::EtdaImporter do
         { data: { 'committees' => [
           { 'student_fname' => 'Spider', 'student_lname' => 'Man',
             'role' => 'advisor', 'title' => 'My Thesis', 'degree_type' => 'Dissertation',
+            'degree_name' => 'PhD',
             'approval_started_at' => 1.month.ago.iso8601,
             'final_submission_approved_at' => '2026-01-15T10:30:00Z',
             'submission_status' => 'released for publication' }
@@ -36,11 +37,32 @@ RSpec.describe CommitteeData::EtdaImporter do
         expect(Committee.last.role).to eq('Advisor')
         expect(Committee.last.thesis_title).to eq('My Thesis')
         expect(Committee.last.type_of_work).to eq('Dissertation Committee')
+        expect(Committee.last.degree_name).to eq('PhD')
         expect(Committee.last.stage_of_completion).to eq('Completed')
         expect(Committee.last.start_year).to eq(1.month.ago.year)
         expect(Committee.last.start_month).to eq(1.month.ago.month)
         expect(Committee.last.completion_year).to eq(2026)
         expect(Committee.last.completion_month).to eq(1)
+      end
+    end
+
+    context 'when degree_name is nil in the API response' do
+      let(:api_response) do
+        { data: { 'committees' => [
+          { 'student_fname' => 'Spider', 'student_lname' => 'Man',
+            'role' => 'advisor', 'title' => 'My Thesis', 'degree_type' => 'Dissertation',
+            'degree_name' => nil,
+            'approval_started_at' => 1.month.ago.iso8601,
+            'final_submission_approved_at' => '2026-01-15T10:30:00Z',
+            'submission_status' => 'released for publication' }
+        ] } }
+      end
+
+      before { allow(client).to receive(:faculty_committees).and_return(api_response) }
+
+      it 'stores nil for degree_name' do
+        importer.import_all
+        expect(Committee.last.degree_name).to be_nil
       end
     end
 

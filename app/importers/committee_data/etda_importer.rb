@@ -30,6 +30,7 @@ module CommitteeData
           role_other: role_other,
           thesis_title: committee['title'],
           type_of_work: map_type_of_work(committee['degree_type']),
+          degree_name: committee['degree_name'],
           stage_of_completion: determine_completion_stage(
             committee['final_submission_approved_at']
           ),

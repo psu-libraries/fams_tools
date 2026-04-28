@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_04_28_000000) do
+ActiveRecord::Schema[7.2].define(version: 2026_04_28_120000) do
   create_table "authors", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.string "f_name"
     t.string "m_name"
@@ -67,6 +67,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_04_28_000000) do
     t.integer "start_month"
     t.integer "completion_month"
     t.string "role_other"
+    t.string "degree_name"
     t.index ["faculty_id"], name: "index_committees_on_faculty_id"
   end
 
