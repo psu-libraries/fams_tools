@@ -26,17 +26,17 @@ RSpec.describe CommitteeData::CommitteeXmlBuilder do
 <Data>
   <Record username="test123">
     <DSL>
-      <ROLE>Mentor</ROLE>
-      <TYPE>Ph.D. Dissertation Committee</TYPE>
-      <COMPSTAGE>Completed</COMPSTAGE>
-      <DTM_START>August</DTM_START>
-      <DTY_START>2024</DTY_START>
-      <DTM_END>January</DTM_END>
-      <DTY_END>2026</DTY_END>
+      <ROLE access="READ_ONLY">Mentor</ROLE>
+      <TYPE access="READ_ONLY">Ph.D. Dissertation Committee</TYPE>
+      <COMPSTAGE access="READ_ONLY">Completed</COMPSTAGE>
+      <DTM_START access="READ_ONLY">August</DTM_START>
+      <DTY_START access="READ_ONLY">2024</DTY_START>
+      <DTM_END access="READ_ONLY">January</DTM_END>
+      <DTY_END access="READ_ONLY">2026</DTY_END>
       <DSL_STUDENT>
-        <FNAME>Test</FNAME>
-        <LNAME>User</LNAME>
-        <TITLE>Test Title</TITLE>
+        <FNAME access="READ_ONLY">Test</FNAME>
+        <LNAME access="READ_ONLY">User</LNAME>
+        <TITLE access="READ_ONLY">Test Title</TITLE>
       </DSL_STUDENT>
     </DSL>
   </Record>
@@ -61,9 +61,9 @@ RSpec.describe CommitteeData::CommitteeXmlBuilder do
       )
 
       xml = xml_builder_obj.xmls_enumerator.first
-      expect(xml).to include('<DTY_START>')
-      expect(xml).not_to include('<DTY_END>')
-      expect(xml).to include('<COMPSTAGE>In Process</COMPSTAGE>')
+      expect(xml).to include('<DTY_START access="READ_ONLY">')
+      expect(xml).not_to include('<DTY_END')
+      expect(xml).to include('<COMPSTAGE access="READ_ONLY">In Process</COMPSTAGE>')
     end
 
     it 'emits only end-date tags when start and end dates are the same year and month' do
@@ -82,10 +82,10 @@ RSpec.describe CommitteeData::CommitteeXmlBuilder do
       )
 
       xml = xml_builder_obj.xmls_enumerator.first
-      expect(xml).not_to include('<DTM_START>')
-      expect(xml).not_to include('<DTY_START>')
-      expect(xml).to include('<DTM_END>March</DTM_END>')
-      expect(xml).to include('<DTY_END>2025</DTY_END>')
+      expect(xml).not_to include('<DTM_START')
+      expect(xml).not_to include('<DTY_START')
+      expect(xml).to include('<DTM_END access="READ_ONLY">March</DTM_END>')
+      expect(xml).to include('<DTY_END access="READ_ONLY">2025</DTY_END>')
     end
 
     it 'emits all four date tags when year matches but months differ' do
@@ -104,10 +104,10 @@ RSpec.describe CommitteeData::CommitteeXmlBuilder do
       )
 
       xml = xml_builder_obj.xmls_enumerator.first
-      expect(xml).to include('<DTM_START>March</DTM_START>')
-      expect(xml).to include('<DTY_START>2025</DTY_START>')
-      expect(xml).to include('<DTM_END>November</DTM_END>')
-      expect(xml).to include('<DTY_END>2025</DTY_END>')
+      expect(xml).to include('<DTM_START access="READ_ONLY">March</DTM_START>')
+      expect(xml).to include('<DTY_START access="READ_ONLY">2025</DTY_START>')
+      expect(xml).to include('<DTM_END access="READ_ONLY">November</DTM_END>')
+      expect(xml).to include('<DTY_END access="READ_ONLY">2025</DTY_END>')
     end
 
     it 'emits all four date tags when years differ' do
@@ -126,10 +126,10 @@ RSpec.describe CommitteeData::CommitteeXmlBuilder do
       )
 
       xml = xml_builder_obj.xmls_enumerator.first
-      expect(xml).to include('<DTM_START>August</DTM_START>')
-      expect(xml).to include('<DTY_START>2024</DTY_START>')
-      expect(xml).to include('<DTM_END>January</DTM_END>')
-      expect(xml).to include('<DTY_END>2026</DTY_END>')
+      expect(xml).to include('<DTM_START access="READ_ONLY">August</DTM_START>')
+      expect(xml).to include('<DTY_START access="READ_ONLY">2024</DTY_START>')
+      expect(xml).to include('<DTM_END access="READ_ONLY">January</DTM_END>')
+      expect(xml).to include('<DTY_END access="READ_ONLY">2026</DTY_END>')
     end
 
     it 'emits only DTY_END when months are nil and years are the same' do
@@ -148,10 +148,10 @@ RSpec.describe CommitteeData::CommitteeXmlBuilder do
       )
 
       xml = xml_builder_obj.xmls_enumerator.first
-      expect(xml).not_to include('<DTM_START>')
-      expect(xml).not_to include('<DTY_START>')
-      expect(xml).not_to include('<DTM_END>')
-      expect(xml).to include('<DTY_END>2025</DTY_END>')
+      expect(xml).not_to include('<DTM_START')
+      expect(xml).not_to include('<DTY_START')
+      expect(xml).not_to include('<DTM_END')
+      expect(xml).to include('<DTY_END access="READ_ONLY">2025</DTY_END>')
     end
 
     it 'emits both years and no month tags when months are nil and years differ' do
@@ -170,10 +170,10 @@ RSpec.describe CommitteeData::CommitteeXmlBuilder do
       )
 
       xml = xml_builder_obj.xmls_enumerator.first
-      expect(xml).to include('<DTY_START>2024</DTY_START>')
-      expect(xml).to include('<DTY_END>2026</DTY_END>')
-      expect(xml).not_to include('<DTM_START>')
-      expect(xml).not_to include('<DTM_END>')
+      expect(xml).to include('<DTY_START access="READ_ONLY">2024</DTY_START>')
+      expect(xml).to include('<DTY_END access="READ_ONLY">2026</DTY_END>')
+      expect(xml).not_to include('<DTM_START')
+      expect(xml).not_to include('<DTM_END')
     end
 
     it 'handles faculty with no committees' do
@@ -221,8 +221,8 @@ RSpec.describe CommitteeData::CommitteeXmlBuilder do
       )
 
       xml = xml_builder_obj.xmls_enumerator.first
-      expect(xml).to include('<ROLE>Other</ROLE>')
-      expect(xml).to include('<ROLE_OTHER>Support Faculty</ROLE_OTHER>')
+      expect(xml).to include('<ROLE access="READ_ONLY">Other</ROLE>')
+      expect(xml).to include('<ROLE_OTHER access="READ_ONLY">Support Faculty</ROLE_OTHER>')
     end
 
     it 'does not emit ROLE_OTHER when role_other is blank' do
@@ -242,7 +242,7 @@ RSpec.describe CommitteeData::CommitteeXmlBuilder do
       )
 
       xml = xml_builder_obj.xmls_enumerator.first
-      expect(xml).not_to include('<ROLE_OTHER>')
+      expect(xml).not_to include('<ROLE_OTHER')
     end
   end
 end
