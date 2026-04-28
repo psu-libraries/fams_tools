@@ -14,12 +14,12 @@ class CommitteeRoleNormalizer
 
   def self.normalize(raw_name)
     text = raw_name.to_s.strip
-    return 'Other' if text.empty?
+    return ['Other', nil] if text.empty?
 
     PRIORITY_REGEX.each do |label, regex|
-      return label if text.match?(regex)
+      return [label, nil] if text.match?(regex)
     end
 
-    'Other'
+    ['Other', text]
   end
 end

@@ -25,6 +25,7 @@ class CommitteeData::CommitteeXmlBuilder
             committees.each do |committee|
               xml.DSL do
                 xml.ROLE committee.role
+                xml.ROLE_OTHER committee.role_other if committee.role_other.present?
                 xml.TYPE committee.type_of_work
                 xml.COMPSTAGE committee.stage_of_completion
 

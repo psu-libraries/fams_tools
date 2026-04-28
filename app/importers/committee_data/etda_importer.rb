@@ -21,12 +21,13 @@ module CommitteeData
       committees_data.each do |committee|
         next unless within_last_six_months?(committee['approval_started_at'])
 
-        normalized_role = CommitteeRoleNormalizer.normalize(committee['role'])
+        role, role_other = CommitteeRoleNormalizer.normalize(committee['role'])
 
         faculty.committees.create!(
           student_fname: committee['student_fname'],
           student_lname: committee['student_lname'],
-          role: normalized_role,
+          role: role,
+          role_other: role_other,
           thesis_title: committee['title'],
           type_of_work: map_type_of_work(committee['degree_type']),
           stage_of_completion: determine_completion_stage(

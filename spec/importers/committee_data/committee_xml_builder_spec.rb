@@ -203,5 +203,46 @@ RSpec.describe CommitteeData::CommitteeXmlBuilder do
       xml = xml_builder_obj.xmls_enumerator.first
       expect(xml.scan('<DSL>').count).to eq(2)
     end
+
+    it 'emits ROLE_OTHER when role is Other and role_other is present' do
+      faculty = FactoryBot.create(:faculty, access_id: 'test123')
+
+      Committee.create!(
+        faculty: faculty,
+        student_fname: 'Jane',
+        student_lname: 'Doe',
+        role: 'Other',
+        role_other: 'Support Faculty',
+        thesis_title: 'Some Title',
+        type_of_work: 'Dissertation Committee',
+        stage_of_completion: 'In Process',
+        start_year: 2025,
+        start_month: 1
+      )
+
+      xml = xml_builder_obj.xmls_enumerator.first
+      expect(xml).to include('<ROLE>Other</ROLE>')
+      expect(xml).to include('<ROLE_OTHER>Support Faculty</ROLE_OTHER>')
+    end
+
+    it 'does not emit ROLE_OTHER when role_other is blank' do
+      faculty = FactoryBot.create(:faculty, access_id: 'test123')
+
+      Committee.create!(
+        faculty: faculty,
+        student_fname: 'Jane',
+        student_lname: 'Doe',
+        role: 'Mentor',
+        role_other: nil,
+        thesis_title: 'Some Title',
+        type_of_work: 'Dissertation Committee',
+        stage_of_completion: 'In Process',
+        start_year: 2025,
+        start_month: 1
+      )
+
+      xml = xml_builder_obj.xmls_enumerator.first
+      expect(xml).not_to include('<ROLE_OTHER>')
+    end
   end
 end
