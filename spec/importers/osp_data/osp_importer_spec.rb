@@ -83,6 +83,15 @@ RSpec.describe OspData::OspImporter do
     data_arr
   end
 
+  let(:data_book6) do
+    data_arr = []
+    data_arr << [1, 1, '', '', '', '', '', '', '', 1, 'Not Funded', '', '', 1, 1, 1, '', '', '', '', '', '', '', '', '',
+                 0.15, 0.15, 0.15]
+    data_arr << [2, 1, '', '', '', '', '', '', '', 1, 'Awarded', '', '', 1, 1, 1, '', '', '', '', '', '', '', '', '',
+                 0.15, 0.15, 0.15]
+    data_arr
+  end
+
   let(:fake_backup) do
     data_arr = []
     data_arr << %w[OSPKEY STATUS]
@@ -181,6 +190,16 @@ RSpec.describe OspData::OspImporter do
       expect(Contract.first.status).to eq('Awarded')
       expect(Contract.second.status).to eq('Withdrawn')
       expect(Contract.third.status).to eq('Purged')
+    end
+
+    it "removes rows with 'Not Funded' status" do
+      allow(CSV).to receive(:open).and_return(data_book6)
+      allow(CSV).to receive(:foreach).and_yield(fake_backup[0]).and_yield(fake_backup[1]).and_yield(fake_backup[2])
+      allow_any_instance_of(OspData::OspImporter).to receive(:is_good_date).and_return(true)
+      allow_any_instance_of(OspData::OspImporter).to receive(:is_user).and_return(true)
+      osp_parser_obj.format_and_populate
+      expect(Contract.count).to eq(1)
+      expect(Contract.first.status).to eq('Awarded')
     end
   end
 
