@@ -21,19 +21,23 @@ module CommitteeData
       committees_data.each do |committee|
         next unless within_last_six_months?(committee['approval_started_at'])
 
-        normalized_role = CommitteeRoleNormalizer.normalize(committee['role'])
+        role, role_other = CommitteeRoleNormalizer.normalize(committee['role'])
 
         faculty.committees.create!(
           student_fname: committee['student_fname'],
           student_lname: committee['student_lname'],
-          role: normalized_role,
+          role: role,
+          role_other: role_other,
           thesis_title: committee['title'],
           type_of_work: map_type_of_work(committee['degree_type']),
+          degree_name: committee['degree_name'],
           stage_of_completion: determine_completion_stage(
             committee['final_submission_approved_at']
           ),
           start_year: extract_year(committee['approval_started_at']),
-          completion_year: extract_year(committee['final_submission_approved_at'])
+          start_month: extract_month(committee['approval_started_at']),
+          completion_year: extract_year(committee['final_submission_approved_at']),
+          completion_month: extract_month(committee['final_submission_approved_at'])
         )
       end
 
@@ -62,6 +66,14 @@ module CommitteeData
       return nil if date_string.blank?
 
       Date.parse(date_string).year
+    rescue ArgumentError
+      nil
+    end
+
+    def extract_month(date_string)
+      return nil if date_string.blank?
+
+      Date.parse(date_string).month
     rescue ArgumentError
       nil
     end
