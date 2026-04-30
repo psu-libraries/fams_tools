@@ -121,8 +121,8 @@ RSpec.describe CreateUserService do
       end
 
       it 'sends requests for the user in the CSV' do
+        expect(HTTParty).to receive(:post).at_least(:twice)
         service.create_user
-        expect(HTTParty).to have_received(:post).at_least(2).times
       end
     end
   end
