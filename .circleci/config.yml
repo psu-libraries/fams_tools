@@ -66,13 +66,18 @@ jobs:
 
       - run:
           name: "Run Container"
-          # Initial setup of db takes longer than usual.
-          # Run the db service first, then wait 10 seconds
-          # for the rest.
           command: |
-            docker-compose up -d db &&
-            sleep 10s &&
+            docker-compose up -d db
+            until bash -c "echo > /dev/tcp/127.0.0.1/3306" 2>/dev/null; do
+              echo "Waiting for db..."
+              sleep 2
+            done
             docker-compose up -d
+
+      - run:
+          name: Capture web container logs on failure
+          command: docker-compose logs web
+          when: on_fail
 
       - run:
           name: "Rspec"
