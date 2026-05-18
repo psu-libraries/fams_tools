@@ -15,19 +15,42 @@ RSpec.describe CommitteeData::EtdaImporter do
 
   describe '#import_all' do
     context 'when the import finds a committee' do
-      let(:api_response) do
-        { data: { 'committees' => [
-          { 'student_fname' => 'Spider', 'student_lname' => 'Man',
-            'role' => 'advisor', 'title' => 'My Thesis', 'degree_type' => 'Dissertation',
-            'degree_name' => 'PhD',
-            'approval_started_at' => 1.month.ago.iso8601,
-            'final_submission_approved_at' => '2026-01-15T10:30:00Z',
-            'submission_status' => 'released for publication' }
-        ] } }
+      let(:committee_data) do
+        { 'student_fname' => 'Spider', 'student_lname' => 'Man',
+          'role' => 'advisor', 'title' => 'My Thesis', 'degree_type' => 'Dissertation',
+          'degree_name' => 'PhD',
+          'approval_started_at' => 1.month.ago.iso8601,
+          'final_submission_approved_at' => '2026-01-15T10:30:00Z',
+          'submission_status' => 'released for publication' }
+      end
+
+      let(:multi_endpoint_response) do
+        {
+          etda: {
+            success: true,
+            data: { 'committees' => [committee_data] },
+            endpoint: :etda
+          },
+          honors: {
+            success: true,
+            data: { 'committees' => [] },
+            endpoint: :honors
+          },
+          millennium_scholars: {
+            success: true,
+            data: { 'committees' => [] },
+            endpoint: :millennium_scholars
+          },
+          sset: {
+            success: true,
+            data: { 'committees' => [] },
+            endpoint: :sset
+          }
+        }
       end
 
       before do
-        allow(client).to receive(:faculty_committees).and_return(api_response)
+        allow(client).to receive(:faculty_committees_from_all_endpoints).and_return(multi_endpoint_response)
       end
 
       it 'creates a committee with the correct attributes' do
@@ -47,18 +70,41 @@ RSpec.describe CommitteeData::EtdaImporter do
     end
 
     context 'when degree_name is nil in the API response' do
-      let(:api_response) do
-        { data: { 'committees' => [
-          { 'student_fname' => 'Spider', 'student_lname' => 'Man',
-            'role' => 'advisor', 'title' => 'My Thesis', 'degree_type' => 'Dissertation',
-            'degree_name' => nil,
-            'approval_started_at' => 1.month.ago.iso8601,
-            'final_submission_approved_at' => '2026-01-15T10:30:00Z',
-            'submission_status' => 'released for publication' }
-        ] } }
+      let(:committee_data) do
+        { 'student_fname' => 'Spider', 'student_lname' => 'Man',
+          'role' => 'advisor', 'title' => 'My Thesis', 'degree_type' => 'Dissertation',
+          'degree_name' => nil,
+          'approval_started_at' => 1.month.ago.iso8601,
+          'final_submission_approved_at' => '2026-01-15T10:30:00Z',
+          'submission_status' => 'released for publication' }
       end
 
-      before { allow(client).to receive(:faculty_committees).and_return(api_response) }
+      let(:multi_endpoint_response) do
+        {
+          etda: {
+            success: true,
+            data: { 'committees' => [committee_data] },
+            endpoint: :etda
+          },
+          honors: {
+            success: true,
+            data: { 'committees' => [] },
+            endpoint: :honors
+          },
+          millennium_scholars: {
+            success: true,
+            data: { 'committees' => [] },
+            endpoint: :millennium_scholars
+          },
+          sset: {
+            success: true,
+            data: { 'committees' => [] },
+            endpoint: :sset
+          }
+        }
+      end
+
+      before { allow(client).to receive(:faculty_committees_from_all_endpoints).and_return(multi_endpoint_response) }
 
       it 'stores nil for degree_name' do
         importer.import_all
@@ -67,17 +113,40 @@ RSpec.describe CommitteeData::EtdaImporter do
     end
 
     context 'when final_submission_approved_at is nil' do
-      let(:api_response) do
-        { data: { 'committees' => [
-          { 'student_fname' => 'Spider', 'student_lname' => 'Man',
-            'role' => 'advisor', 'title' => 'My Thesis', 'degree_type' => 'Dissertation',
-            'approval_started_at' => 1.month.ago.iso8601,
-            'final_submission_approved_at' => nil,
-            'submission_status' => 'waiting for publication release' }
-        ] } }
+      let(:committee_data) do
+        { 'student_fname' => 'Spider', 'student_lname' => 'Man',
+          'role' => 'advisor', 'title' => 'My Thesis', 'degree_type' => 'Dissertation',
+          'approval_started_at' => 1.month.ago.iso8601,
+          'final_submission_approved_at' => nil,
+          'submission_status' => 'waiting for publication release' }
       end
 
-      before { allow(client).to receive(:faculty_committees).and_return(api_response) }
+      let(:multi_endpoint_response) do
+        {
+          etda: {
+            success: true,
+            data: { 'committees' => [committee_data] },
+            endpoint: :etda
+          },
+          honors: {
+            success: true,
+            data: { 'committees' => [] },
+            endpoint: :honors
+          },
+          millennium_scholars: {
+            success: true,
+            data: { 'committees' => [] },
+            endpoint: :millennium_scholars
+          },
+          sset: {
+            success: true,
+            data: { 'committees' => [] },
+            endpoint: :sset
+          }
+        }
+      end
+
+      before { allow(client).to receive(:faculty_committees_from_all_endpoints).and_return(multi_endpoint_response) }
 
       it 'stores nil for completion_year and completion_month' do
         importer.import_all
@@ -202,13 +271,123 @@ RSpec.describe CommitteeData::EtdaImporter do
     end
   end
 
-  it 'rescues CommitteeRecordsClientError and logs it' do
-    allow(client).to receive(:faculty_committees)
-      .and_raise(Etda::CommitteeRecordsClient::CommitteeRecordsClientError, 'API down')
+  it 'rescues StandardError and logs it' do
+    allow(client).to receive(:faculty_committees_from_all_endpoints)
+      .and_raise(StandardError, 'API down')
 
     expect(Rails.logger).to receive(:error).with(/mpk6156.*API down/)
     expect(Rails.logger).to receive(:error).with(/abc123.*API down/)
     expect(Rails.logger).to receive(:error).with(/aez1236.*API down/)
     expect { importer.import_all }.not_to raise_error
+  end
+
+  describe 'multi-endpoint import' do
+    it 'imports committees from all endpoints' do
+      faculty = create(:faculty)
+
+      etda_result = {
+        etda: {
+          success: true,
+          data: {
+            'committees' => [
+              {
+                'student_fname' => 'John',
+                'student_lname' => 'Doe',
+                'role' => 'Chair',
+                'title' => 'Thesis 1',
+                'degree_type' => 'Dissertation',
+                'degree_name' => 'PhD',
+                'approval_started_at' => 2.months.ago.to_date.to_s,
+                'final_submission_approved_at' => nil
+              }
+            ]
+          },
+          endpoint: :etda
+        },
+        honors: {
+          success: true,
+          data: {
+            'committees' => [
+              {
+                'student_fname' => 'Jane',
+                'student_lname' => 'Smith',
+                'role' => 'Member',
+                'title' => 'Honors Thesis',
+                'degree_type' => 'Thesis',
+                'degree_name' => 'BA',
+                'approval_started_at' => 1.month.ago.to_date.to_s,
+                'final_submission_approved_at' => nil
+              }
+            ]
+          },
+          endpoint: :honors
+        },
+        millennium_scholars: {
+          success: true,
+          data: { 'committees' => [] },
+          endpoint: :millennium_scholars
+        },
+        sset: {
+          success: true,
+          data: { 'committees' => [] },
+          endpoint: :sset
+        }
+      }
+
+      allow(client).to receive(:faculty_committees_from_all_endpoints).and_return(etda_result)
+
+      importer.import_all
+
+      expect(faculty.committees.count).to eq(2)
+      expect(faculty.committees.find_by(student_fname: 'John')).to be_present
+      expect(faculty.committees.find_by(student_fname: 'Jane')).to be_present
+    end
+
+    it 'continues importing if one endpoint fails' do
+      faculty = create(:faculty)
+
+      etda_result = {
+        etda: {
+          success: true,
+          data: {
+            'committees' => [
+              {
+                'student_fname' => 'John',
+                'student_lname' => 'Doe',
+                'role' => 'Chair',
+                'title' => 'Thesis',
+                'degree_type' => 'Dissertation',
+                'degree_name' => 'PhD',
+                'approval_started_at' => 2.months.ago.to_date.to_s,
+                'final_submission_approved_at' => nil
+              }
+            ]
+          },
+          endpoint: :etda
+        },
+        honors: {
+          success: false,
+          error: 'API unavailable',
+          endpoint: :honors
+        },
+        millennium_scholars: {
+          success: true,
+          data: { 'committees' => [] },
+          endpoint: :millennium_scholars
+        },
+        sset: {
+          success: true,
+          data: { 'committees' => [] },
+          endpoint: :sset
+        }
+      }
+
+      allow(client).to receive(:faculty_committees_from_all_endpoints).and_return(etda_result)
+
+      importer = CommitteeData::EtdaImporter.new
+      expect { importer.import_all }.not_to raise_error
+
+      expect(faculty.committees.count).to eq(1)
+    end
   end
 end

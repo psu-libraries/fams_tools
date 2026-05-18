@@ -7,7 +7,7 @@ module CommitteeData
     def import_all
       Faculty.find_each do |faculty|
         import_for_faculty(faculty)
-      rescue Etda::CommitteeRecordsClient::CommitteeRecordsClientError => e
+      rescue StandardError => e
         Rails.logger.error("Failed to import committees for #{faculty.access_id}: #{e.message}")
       end
     end
@@ -15,8 +15,21 @@ module CommitteeData
     private
 
     def import_for_faculty(faculty)
-      result = Etda::CommitteeRecordsClient.new.faculty_committees(faculty.access_id)
-      committees_data = result[:data]['committees']
+      results = Etda::CommitteeRecordsClient.new.faculty_committees_from_all_endpoints(faculty.access_id)
+
+      results.each do |endpoint_name, endpoint_result|
+        process_endpoint_result(faculty, endpoint_name, endpoint_result)
+      end
+    end
+
+    def process_endpoint_result(faculty, endpoint_name, endpoint_result)
+      unless endpoint_result[:success]
+        Rails.logger.warn("Failed to fetch from #{endpoint_name} for #{faculty.access_id}: #{endpoint_result[:error]}")
+        return
+      end
+
+      committees_data = endpoint_result[:data]['committees']
+      imported_count = 0
 
       committees_data.each do |committee|
         next unless within_last_six_months?(committee['approval_started_at'])
@@ -39,9 +52,10 @@ module CommitteeData
           completion_year: extract_year(committee['final_submission_approved_at']),
           completion_month: extract_month(committee['final_submission_approved_at'])
         )
+        imported_count += 1
       end
 
-      Rails.logger.info("Imported #{committees_data.length} committees for #{faculty.access_id}")
+      Rails.logger.info("Imported #{imported_count} committees for #{faculty.access_id} from #{endpoint_name}") if imported_count > 0
     end
 
     def map_type_of_work(degree_type)
