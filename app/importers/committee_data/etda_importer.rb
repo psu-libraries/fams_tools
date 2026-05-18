@@ -55,7 +55,7 @@ module CommitteeData
         imported_count += 1
       end
 
-      Rails.logger.info("Imported #{imported_count} committees for #{faculty.access_id} from #{endpoint_name}") if imported_count > 0
+      Rails.logger.info("Imported #{imported_count} committees for #{faculty.access_id} from #{endpoint_name}") if imported_count.positive?
     end
 
     def map_type_of_work(degree_type)

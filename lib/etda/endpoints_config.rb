@@ -2,7 +2,7 @@ module Etda
   class EndpointsConfig
     class UnknownEndpointError < StandardError; end
 
-    ENDPOINT_NAMES = [:etda, :honors, :millennium_scholars, :sset].freeze
+    ENDPOINT_NAMES = %i[etda honors millennium_scholars sset].freeze
 
     def self.all_endpoints
       {
