@@ -67,4 +67,85 @@ RSpec.describe Etda::CommitteeRecordsClient do
       end
     end
   end
+
+  describe '#faculty_committees_from_all_endpoints' do
+    let(:access_id) { 'faculty123' }
+
+    it 'returns results from all 4 endpoints' do
+      etda_response = instance_double(HTTParty::Response,
+                                      success?: true,
+                                      parsed_response: { 'committees' => [{ 'id' => 1, 'student_fname' => 'John' }] })
+      honors_response = instance_double(HTTParty::Response,
+                                        success?: true,
+                                        parsed_response: { 'committees' => [{ 'id' => 2, 'student_fname' => 'Jane' }] })
+      ms_response = instance_double(HTTParty::Response,
+                                    success?: true,
+                                    parsed_response: { 'committees' => [{ 'id' => 3, 'student_fname' => 'Bob' }] })
+      sset_response = instance_double(HTTParty::Response,
+                                      success?: true,
+                                      parsed_response: { 'committees' => [{ 'id' => 4, 'student_fname' => 'Alice' }] })
+
+      allow(HTTParty).to receive(:post).and_return(etda_response, honors_response, ms_response, sset_response)
+
+      result = client.faculty_committees_from_all_endpoints(access_id)
+
+      expect(result).to be_a(Hash)
+      expect(result.keys).to contain_exactly(:etda, :honors, :millennium_scholars, :sset)
+      expect(result[:etda][:data]['committees'].length).to eq(1)
+      expect(result[:honors][:data]['committees'].length).to eq(1)
+      expect(result[:millennium_scholars][:data]['committees'].length).to eq(1)
+      expect(result[:sset][:data]['committees'].length).to eq(1)
+    end
+
+    it 'continues if one endpoint fails' do
+      etda_response = instance_double(HTTParty::Response,
+                                      success?: true,
+                                      parsed_response: { 'committees' => [{ 'id' => 1 }] })
+      error_response = instance_double(HTTParty::Response,
+                                       success?: false,
+                                       parsed_response: { 'error' => 'Not found' })
+      ms_response = instance_double(HTTParty::Response,
+                                    success?: true,
+                                    parsed_response: { 'committees' => [{ 'id' => 3 }] })
+      sset_response = instance_double(HTTParty::Response,
+                                      success?: true,
+                                      parsed_response: { 'committees' => [{ 'id' => 4 }] })
+
+      allow(HTTParty).to receive(:post).and_return(etda_response, error_response, ms_response, sset_response)
+
+      result = client.faculty_committees_from_all_endpoints(access_id)
+
+      expect(result[:etda][:success]).to be(true)
+      expect(result[:honors][:success]).to be(false)
+      expect(result[:millennium_scholars][:success]).to be(true)
+      expect(result[:sset][:success]).to be(true)
+    end
+
+    it 'includes endpoint name in result' do
+      response = instance_double(HTTParty::Response,
+                                 success?: true,
+                                 parsed_response: { 'committees' => [] })
+      allow(HTTParty).to receive(:post).and_return(response)
+
+      result = client.faculty_committees_from_all_endpoints(access_id)
+
+      result.each do |endpoint_name, endpoint_result|
+        expect(endpoint_result[:endpoint]).to eq(endpoint_name)
+      end
+    end
+  end
+
+  describe 'with specific endpoint' do
+    it 'fetches from specific endpoint when initialized' do
+      client_honors = Etda::CommitteeRecordsClient.new(endpoint: :honors)
+      response = instance_double(HTTParty::Response,
+                                 success?: true,
+                                 parsed_response: { 'committees' => [] })
+      allow(HTTParty).to receive(:post).and_return(response)
+
+      result = client_honors.faculty_committees('faculty123')
+
+      expect(result[:success]).to be(true)
+    end
+  end
 end
