@@ -55,6 +55,8 @@ module CommitteeData
 
       committees_data = endpoint_result[:data]['committees'] || []
 
+      Rails.logger.info("Imported #{committees_data.length} committees for #{faculty.access_id}")
+
       committees_data.each do |committee|
         next unless within_last_six_months?(committee['approval_started_at'])
 
