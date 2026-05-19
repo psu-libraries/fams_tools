@@ -4,6 +4,25 @@ module CommitteeData
   class EtdaImporter
     class DegreeTypeError < RuntimeError; end
 
+    ENDPOINTS = {
+      etda: {
+        url: ENV.fetch('ETDA_API_URL', 'http://localhost:3000'),
+        api_token: ENV.fetch('ETDA_API_TOKEN', 'abc123')
+      },
+      honors: {
+        url: ENV.fetch('HONORS_API_URL', 'http://localhost:3001'),
+        api_token: ENV.fetch('HONORS_API_TOKEN', 'honors_token')
+      },
+      millennium_scholars: {
+        url: ENV.fetch('MILLENNIUM_SCHOLARS_API_URL', 'http://localhost:3002'),
+        api_token: ENV.fetch('MILLENNIUM_SCHOLARS_API_TOKEN', 'ms_token')
+      },
+      sset: {
+        url: ENV.fetch('SSET_API_URL', 'http://localhost:3003'),
+        api_token: ENV.fetch('SSET_API_TOKEN', 'sset_token')
+      }
+    }.freeze
+
     def import_all
       Faculty.find_each do |faculty|
         import_for_faculty(faculty)
@@ -15,11 +34,18 @@ module CommitteeData
     private
 
     def import_for_faculty(faculty)
-      results = Etda::CommitteeRecordsClient.new.faculty_committees_from_all_endpoints(faculty.access_id)
-
-      results.each do |endpoint_name, endpoint_result|
+      ENDPOINTS.each do |endpoint_name, config|
+        endpoint_result = fetch_from_endpoint(faculty.access_id, config)
         process_endpoint_result(faculty, endpoint_name, endpoint_result)
       end
+    end
+
+    def fetch_from_endpoint(access_id, config)
+      client = Etda::CommitteeRecordsClient.new(url: config[:url], api_token: config[:api_token])
+      committee_data = client.faculty_committees(access_id)
+      { success: true, data: committee_data }
+    rescue Etda::CommitteeRecordsClient::CommitteeRecordsClientError => e
+      { success: false, error: e.message }
     end
 
     def process_endpoint_result(faculty, endpoint_name, endpoint_result)
