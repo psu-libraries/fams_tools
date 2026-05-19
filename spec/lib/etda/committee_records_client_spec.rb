@@ -93,17 +93,13 @@ RSpec.describe Etda::CommitteeRecordsClient do
       end
     end
 
-    context 'posts to the correct URL with headers' do
+    context 'when posting to the correct URL with headers' do
       it 'verifies the HTTParty.post call' do
         fake_response = instance_double(HTTParty::Response,
                                         success?: true,
                                         parsed_response: [])
 
-        allow(HTTParty).to receive(:post).and_return(fake_response)
-
-        client.faculty_committees('test_access_id')
-
-        expect(HTTParty).to have_received(:post).with(
+        expect(HTTParty).to receive(:post).and_return(fake_response).with(
           "#{url}/api/v1/committee_records/faculty_committees",
           hash_including(
             headers: {
