@@ -5,6 +5,9 @@ module Etda
     class CommitteeRecordsClientError < StandardError; end
 
     def initialize(url:, api_token:)
+      raise ArgumentError, 'url is required' if url.blank?
+      raise ArgumentError, 'api_token is required' if api_token.blank?
+
       @url = url
       @api_token = api_token
     end
@@ -17,10 +20,8 @@ module Etda
       )
 
       handle_response(response)
-
-    # Tells us the error with committee records client with the error itself
-    rescue StandardError => e
-      raise CommitteeRecordsClientError, e.message
+    rescue HTTParty::Error, Timeout::Error => e
+      raise CommitteeRecordsClientError, "API request failed: #{e.message}"
     end
 
     private
@@ -39,7 +40,10 @@ module Etda
     end
 
     def handle_response(response)
-      raise CommitteeRecordsClientError, response.parsed_response['error'] || 'Unknown error' unless response.success?
+      unless response.success?
+        error_msg = response.parsed_response['error'] || 'Unknown error'
+        raise CommitteeRecordsClientError, "HTTP #{response.code}: #{error_msg}"
+      end
 
       {
         success: true,
