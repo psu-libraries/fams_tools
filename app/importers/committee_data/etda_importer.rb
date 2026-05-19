@@ -4,6 +4,7 @@ module CommitteeData
   class EtdaImporter
     class DegreeTypeError < RuntimeError; end
 
+    # Four separate thesis submission systems, each with its own URL and auth token.
     ENDPOINTS = {
       etda: {
         url: ENV.fetch('ETDA_API_URL', 'http://localhost:3000'),
@@ -40,6 +41,7 @@ module CommitteeData
       end
     end
 
+    # Rescues per-endpoint so a single failing system doesn't abort the others.
     def fetch_from_endpoint(access_id, config)
       client = Etda::CommitteeRecordsClient.new(url: config[:url], api_token: config[:api_token])
       client.faculty_committees(access_id)
