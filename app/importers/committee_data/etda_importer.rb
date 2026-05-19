@@ -55,7 +55,6 @@ module CommitteeData
       end
 
       committees_data = endpoint_result[:data]['committees']
-      imported_count = 0
 
       committees_data.each do |committee|
         next unless within_last_six_months?(committee['approval_started_at'])
@@ -78,10 +77,7 @@ module CommitteeData
           completion_year: extract_year(committee['final_submission_approved_at']),
           completion_month: extract_month(committee['final_submission_approved_at'])
         )
-        imported_count += 1
       end
-
-      Rails.logger.info("Imported #{imported_count} committees for #{faculty.access_id} from #{endpoint_name}") if imported_count.positive?
     end
 
     def map_type_of_work(degree_type)
