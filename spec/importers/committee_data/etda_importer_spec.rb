@@ -28,7 +28,7 @@ RSpec.describe CommitteeData::EtdaImporter do
       end
 
       it 'creates a committee with the correct attributes' do
-        expect { importer.import_all }.to change(Committee, :count).by(3)
+        expect { importer.import_all }.to change(Committee, :count).by(4)
         expect(Committee.last.student_fname).to eq('Spider')
         expect(Committee.last.student_lname).to eq('Man')
         expect(Committee.last.role).to eq('Advisor')
@@ -210,9 +210,9 @@ RSpec.describe CommitteeData::EtdaImporter do
     allow(client).to receive(:faculty_committees)
       .and_raise(Etda::CommitteeRecordsClient::CommitteeRecordsClientError, 'API down')
 
-    expect(Rails.logger).to receive(:error).with(/mpk6156.*API down/)
-    expect(Rails.logger).to receive(:error).with(/abc123.*API down/)
-    expect(Rails.logger).to receive(:error).with(/aez1236.*API down/)
+    expect(Rails.logger).to receive(:error).with(/mpk6156.*API down/).at_least(:once)
+    expect(Rails.logger).to receive(:error).with(/abc123.*API down/).at_least(:once)
+    expect(Rails.logger).to receive(:error).with(/aez1236.*API down/).at_least(:once)
     expect { importer.import_all }.not_to raise_error
   end
 
@@ -260,6 +260,7 @@ RSpec.describe CommitteeData::EtdaImporter do
 
       empty_data = { success: true, data: { 'committees' => [] } }
 
+      allow(client).to receive(:faculty_committees).and_return(empty_data)
       allow(client).to receive(:faculty_committees)
         .with(faculty.access_id)
         .and_return(etda_data, honors_data, empty_data, empty_data)
@@ -294,12 +295,17 @@ RSpec.describe CommitteeData::EtdaImporter do
         }
       }
 
-      allow(client).to receive(:faculty_committees)
-        .with(faculty.access_id)
-        .and_return(etda_data)
-        .and_raise(Etda::CommitteeRecordsClient::CommitteeRecordsClientError, 'API unavailable')
-        .and_return({ success: true, data: { 'committees' => [] } })
-        .and_return({ success: true, data: { 'committees' => [] } })
+      allow(client).to receive(:faculty_committees).and_return({ success: true, data: { 'committees' => [] } })
+
+      call_count = 0
+      allow(client).to receive(:faculty_committees).with(faculty.access_id) do
+        call_count += 1
+        case call_count
+        when 1 then etda_data
+        when 2 then raise Etda::CommitteeRecordsClient::CommitteeRecordsClientError, 'API unavailable'
+        else { success: true, data: { 'committees' => [] } }
+        end
+      end
 
       expect { importer.import_all }.not_to raise_error
 

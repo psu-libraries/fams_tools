@@ -49,7 +49,7 @@ module CommitteeData
 
     def process_endpoint_result(faculty, endpoint_name, endpoint_result)
       unless endpoint_result[:success]
-        Rails.logger.warn("Failed to fetch from #{endpoint_name} for #{faculty.access_id}: #{endpoint_result[:error]}")
+        Rails.logger.error("Failed to fetch from #{endpoint_name} for #{faculty.access_id}: #{endpoint_result[:error]}")
         return
       end
 

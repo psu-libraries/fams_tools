@@ -109,6 +109,8 @@ RSpec.describe Etda::CommitteeRecordsClient do
             body: { access_id: 'test_access_id' }.to_json
           )
         )
+
+        client.faculty_committees('test_access_id')
       end
     end
   end
