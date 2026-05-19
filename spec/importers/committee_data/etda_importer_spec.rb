@@ -22,9 +22,9 @@ RSpec.describe CommitteeData::EtdaImporter do
 
       before do
         allow(Etda::CommitteeRecordsClient).to receive(:new).and_return(client)
-        allow(client).to receive(:faculty_committees).with('abc123').and_return({ 'committees' => [committee_data] })
-        allow(client).to receive(:faculty_committees).with('mpk6156').and_return({ 'committees' => [] })
-        allow(client).to receive(:faculty_committees).with('aez1236').and_return({ 'committees' => [] })
+        allow(client).to receive(:faculty_committees).with('abc123').and_return({ success: true, data: { 'committees' => [committee_data] } })
+        allow(client).to receive(:faculty_committees).with('mpk6156').and_return({ success: true, data: { 'committees' => [] } })
+        allow(client).to receive(:faculty_committees).with('aez1236').and_return({ success: true, data: { 'committees' => [] } })
       end
 
       it 'creates a committee with the correct attributes' do
@@ -55,9 +55,9 @@ RSpec.describe CommitteeData::EtdaImporter do
 
       before do
         allow(Etda::CommitteeRecordsClient).to receive(:new).and_return(client)
-        allow(client).to receive(:faculty_committees).with('abc123').and_return({ 'committees' => [committee_data] })
-        allow(client).to receive(:faculty_committees).with('mpk6156').and_return({ 'committees' => [] })
-        allow(client).to receive(:faculty_committees).with('aez1236').and_return({ 'committees' => [] })
+        allow(client).to receive(:faculty_committees).with('abc123').and_return({ success: true, data: { 'committees' => [committee_data] } })
+        allow(client).to receive(:faculty_committees).with('mpk6156').and_return({ success: true, data: { 'committees' => [] } })
+        allow(client).to receive(:faculty_committees).with('aez1236').and_return({ success: true, data: { 'committees' => [] } })
       end
 
       it 'stores nil for degree_name' do
@@ -77,9 +77,9 @@ RSpec.describe CommitteeData::EtdaImporter do
 
       before do
         allow(Etda::CommitteeRecordsClient).to receive(:new).and_return(client)
-        allow(client).to receive(:faculty_committees).with('abc123').and_return({ 'committees' => [committee_data] })
-        allow(client).to receive(:faculty_committees).with('mpk6156').and_return({ 'committees' => [] })
-        allow(client).to receive(:faculty_committees).with('aez1236').and_return({ 'committees' => [] })
+        allow(client).to receive(:faculty_committees).with('abc123').and_return({ success: true, data: { 'committees' => [committee_data] } })
+        allow(client).to receive(:faculty_committees).with('mpk6156').and_return({ success: true, data: { 'committees' => [] } })
+        allow(client).to receive(:faculty_committees).with('aez1236').and_return({ success: true, data: { 'committees' => [] } })
       end
 
       it 'stores nil for completion_year and completion_month' do
@@ -223,36 +223,42 @@ RSpec.describe CommitteeData::EtdaImporter do
       allow(Etda::CommitteeRecordsClient).to receive(:new).and_return(client)
 
       etda_data = {
-        'committees' => [
-          {
-            'student_fname' => 'John',
-            'student_lname' => 'Doe',
-            'role' => 'Chair',
-            'title' => 'Thesis 1',
-            'degree_type' => 'Dissertation',
-            'degree_name' => 'PhD',
-            'approval_started_at' => 2.months.ago.to_date.to_s,
-            'final_submission_approved_at' => nil
-          }
-        ]
+        success: true,
+        data: {
+          'committees' => [
+            {
+              'student_fname' => 'John',
+              'student_lname' => 'Doe',
+              'role' => 'Chair',
+              'title' => 'Thesis 1',
+              'degree_type' => 'Dissertation',
+              'degree_name' => 'PhD',
+              'approval_started_at' => 2.months.ago.to_date.to_s,
+              'final_submission_approved_at' => nil
+            }
+          ]
+        }
       }
 
       honors_data = {
-        'committees' => [
-          {
-            'student_fname' => 'Jane',
-            'student_lname' => 'Smith',
-            'role' => 'Member',
-            'title' => 'Honors Thesis',
-            'degree_type' => 'Thesis',
-            'degree_name' => 'BA',
-            'approval_started_at' => 1.month.ago.to_date.to_s,
-            'final_submission_approved_at' => nil
-          }
-        ]
+        success: true,
+        data: {
+          'committees' => [
+            {
+              'student_fname' => 'Jane',
+              'student_lname' => 'Smith',
+              'role' => 'Member',
+              'title' => 'Honors Thesis',
+              'degree_type' => 'Thesis',
+              'degree_name' => 'BA',
+              'approval_started_at' => 1.month.ago.to_date.to_s,
+              'final_submission_approved_at' => nil
+            }
+          ]
+        }
       }
 
-      empty_data = { 'committees' => [] }
+      empty_data = { success: true, data: { 'committees' => [] } }
 
       allow(client).to receive(:faculty_committees)
         .with(faculty.access_id)
@@ -271,26 +277,29 @@ RSpec.describe CommitteeData::EtdaImporter do
       allow(Etda::CommitteeRecordsClient).to receive(:new).and_return(client)
 
       etda_data = {
-        'committees' => [
-          {
-            'student_fname' => 'John',
-            'student_lname' => 'Doe',
-            'role' => 'Chair',
-            'title' => 'Thesis',
-            'degree_type' => 'Dissertation',
-            'degree_name' => 'PhD',
-            'approval_started_at' => 2.months.ago.to_date.to_s,
-            'final_submission_approved_at' => nil
-          }
-        ]
+        success: true,
+        data: {
+          'committees' => [
+            {
+              'student_fname' => 'John',
+              'student_lname' => 'Doe',
+              'role' => 'Chair',
+              'title' => 'Thesis',
+              'degree_type' => 'Dissertation',
+              'degree_name' => 'PhD',
+              'approval_started_at' => 2.months.ago.to_date.to_s,
+              'final_submission_approved_at' => nil
+            }
+          ]
+        }
       }
 
       allow(client).to receive(:faculty_committees)
         .with(faculty.access_id)
         .and_return(etda_data)
         .and_raise(Etda::CommitteeRecordsClient::CommitteeRecordsClientError, 'API unavailable')
-        .and_return({ 'committees' => [] })
-        .and_return({ 'committees' => [] })
+        .and_return({ success: true, data: { 'committees' => [] } })
+        .and_return({ success: true, data: { 'committees' => [] } })
 
       expect { importer.import_all }.not_to raise_error
 

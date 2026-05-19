@@ -42,8 +42,7 @@ module CommitteeData
 
     def fetch_from_endpoint(access_id, config)
       client = Etda::CommitteeRecordsClient.new(url: config[:url], api_token: config[:api_token])
-      committee_data = client.faculty_committees(access_id)
-      { success: true, data: committee_data }
+      client.faculty_committees(access_id)
     rescue Etda::CommitteeRecordsClient::CommitteeRecordsClientError => e
       { success: false, error: e.message }
     end
@@ -54,7 +53,7 @@ module CommitteeData
         return
       end
 
-      committees_data = endpoint_result[:data]['committees']
+      committees_data = endpoint_result[:data]['committees'] || []
 
       committees_data.each do |committee|
         next unless within_last_six_months?(committee['approval_started_at'])
@@ -118,6 +117,8 @@ module CommitteeData
       return false if date_string.blank?
 
       Date.parse(date_string) >= 6.months.ago
+    rescue ArgumentError
+      false
     end
 
     def determine_completion_stage(final_submission_approved_at)

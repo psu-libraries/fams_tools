@@ -41,7 +41,9 @@ module Etda
 
     def handle_response(response)
       unless response.success?
-        error_msg = response.parsed_response['error'] || 'Unknown error'
+        parsed = response.parsed_response
+        error_msg = parsed.is_a?(Hash) ? parsed['error'] : nil
+        error_msg ||= 'Unknown error'
         raise CommitteeRecordsClientError, "HTTP #{response.code}: #{error_msg}"
       end
 
