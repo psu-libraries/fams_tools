@@ -255,8 +255,8 @@ RSpec.describe CommitteeData::EtdaImporter do
       empty_data = { 'committees' => [] }
 
       allow(client).to receive(:faculty_committees)
-                       .with(faculty.access_id)
-                       .and_return(etda_data, honors_data, empty_data, empty_data)
+        .with(faculty.access_id)
+        .and_return(etda_data, honors_data, empty_data, empty_data)
 
       importer.import_all
 
@@ -286,11 +286,11 @@ RSpec.describe CommitteeData::EtdaImporter do
       }
 
       allow(client).to receive(:faculty_committees)
-                       .with(faculty.access_id)
-                       .and_return(etda_data)
-                       .and_raise(Etda::CommitteeRecordsClient::CommitteeRecordsClientError, 'API unavailable')
-                       .and_return({ 'committees' => [] })
-                       .and_return({ 'committees' => [] })
+        .with(faculty.access_id)
+        .and_return(etda_data)
+        .and_raise(Etda::CommitteeRecordsClient::CommitteeRecordsClientError, 'API unavailable')
+        .and_return({ 'committees' => [] })
+        .and_return({ 'committees' => [] })
 
       expect { importer.import_all }.not_to raise_error
 
