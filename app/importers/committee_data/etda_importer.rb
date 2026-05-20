@@ -4,25 +4,29 @@ module CommitteeData
   class EtdaImporter
     class DegreeTypeError < RuntimeError; end
 
-    # Four separate thesis submission systems, each with its own URL and auth token.
-    ENDPOINTS = {
-      etda: {
-        url: ENV.fetch('ETDA_API_URL', 'http://localhost:3000'),
-        api_token: ENV.fetch('ETDA_API_TOKEN', 'abc123')
-      },
-      honors: {
-        url: ENV.fetch('HONORS_API_URL', 'http://localhost:3001'),
-        api_token: ENV.fetch('HONORS_API_TOKEN', 'honors_token')
-      },
-      millennium_scholars: {
-        url: ENV.fetch('MILLENNIUM_SCHOLARS_API_URL', 'http://localhost:3002'),
-        api_token: ENV.fetch('MILLENNIUM_SCHOLARS_API_TOKEN', 'ms_token')
-      },
-      sset: {
-        url: ENV.fetch('SSET_API_URL', 'http://localhost:3003'),
-        api_token: ENV.fetch('SSET_API_TOKEN', 'sset_token')
-      }
-    }.freeze
+    class Endpoint
+      attr_reader :partner
+
+      PARTNERS = %i[graduate honors millennium_scholars sset].freeze
+
+      def initialize(partner)
+        @partner = partner
+      end
+
+      def self.each(&)
+        PARTNERS.each do |partner|
+          yield new(partner)
+        end
+      end
+
+      def url
+        ENV.fetch("#{@partner.to_s.upcase}_API_URL", 'http://localhost:3000')
+      end
+
+      def api_token
+        ENV.fetch("#{@partner.to_s.upcase}_API_TOKEN", 'abc123')
+      end
+    end
 
     def import_all
       Faculty.find_each do |faculty|
@@ -35,15 +39,15 @@ module CommitteeData
     private
 
     def import_for_faculty(faculty)
-      ENDPOINTS.each do |endpoint_name, config|
-        endpoint_result = fetch_from_endpoint(faculty.access_id, config)
-        process_endpoint_result(faculty, endpoint_name, endpoint_result)
+      Endpoint.each do |endpoint|
+        endpoint_result = fetch_from_endpoint(faculty.access_id, endpoint)
+        process_endpoint_result(faculty, endpoint.partner, endpoint_result)
       end
     end
 
     # Rescues per-endpoint so a single failing system doesn't abort the others.
-    def fetch_from_endpoint(access_id, config)
-      client = Etda::CommitteeRecordsClient.new(url: config[:url], api_token: config[:api_token])
+    def fetch_from_endpoint(access_id, endpoint)
+      client = Etda::CommitteeRecordsClient.new(url: endpoint.url, api_token: endpoint.api_token)
       client.faculty_committees(access_id)
     rescue Etda::CommitteeRecordsClient::CommitteeRecordsClientError => e
       { success: false, error: e.message }
