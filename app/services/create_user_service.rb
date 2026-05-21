@@ -10,11 +10,15 @@ class CreateUserService
     @target = target
   end
 
+  REQUIRED_COLUMNS = ['Username', 'First Name', 'Last Name', 'Email'].freeze
+
   def create_user
     username = ENV.fetch('FAMS_WEBSERVICES_USERNAME')
     password = ENV.fetch('FAMS_WEBSERVICES_PASSWORD')
 
-    CSV.foreach(csv_path, headers: true) do |row|
+    validate_csv_headers!
+
+    CSV.foreach(csv_path, headers: true, encoding: 'bom|utf-8') do |row|
       current_user = row['Username'].strip
       user_xml = CreateUserXmlBuilder.create_user_xml(row)
       response1 = send_request(base_uri + '/User', user_xml, username, password)
@@ -50,6 +54,14 @@ class CreateUserService
       headers: { 'Content-Type' => 'application/xml' },
       basic_auth: { username:, password: }
     )
+  end
+
+  def validate_csv_headers!
+    headers = CSV.open(csv_path, headers: true, encoding: 'bom|utf-8', &:readline).headers
+    missing = REQUIRED_COLUMNS - headers
+    return if missing.empty?
+
+    raise "CSV is missing required columns: #{missing.join(', ')}"
   end
 
   def csv_path
