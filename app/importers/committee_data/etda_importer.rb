@@ -63,27 +63,33 @@ module CommitteeData
 
       Rails.logger.info("Imported #{committees_data.length} committees for #{faculty.access_id}")
 
-      committees_data.each do |committee|
-        next unless within_last_six_months?(committee['approval_started_at'])
+      committees_data.each do |committee_data|
+        next unless within_last_six_months?(committee_data['approval_started_at'])
 
-        role, role_other = CommitteeRoleNormalizer.normalize(committee['role'])
+        role, role_other = CommitteeRoleNormalizer.normalize(committee_data['role'])
+        type_of_work = map_type_of_work(committee_data['degree_type'])
+        start_year = extract_year(committee_data['approval_started_at'])
+        start_month = extract_month(committee_data['approval_started_at'])
 
-        faculty.committees.create!(
-          student_fname: committee['student_fname'],
-          student_lname: committee['student_lname'],
+        committee = faculty.committees.find_or_initialize_by(
+          student_fname: committee_data['student_fname'],
+          student_lname: committee_data['student_lname'],
           role: role,
-          role_other: role_other,
-          thesis_title: committee['title'],
-          type_of_work: map_type_of_work(committee['degree_type']),
-          degree_name: committee['degree_name'],
-          stage_of_completion: determine_completion_stage(
-            committee['final_submission_approved_at']
-          ),
-          start_year: extract_year(committee['approval_started_at']),
-          start_month: extract_month(committee['approval_started_at']),
-          completion_year: extract_year(committee['final_submission_approved_at']),
-          completion_month: extract_month(committee['final_submission_approved_at'])
+          type_of_work: type_of_work,
+          start_year: start_year,
+          start_month: start_month
         )
+
+        committee.assign_attributes(
+          role_other: role_other,
+          thesis_title: committee_data['title'],
+          degree_name: committee_data['degree_name'],
+          stage_of_completion: determine_completion_stage(committee_data['final_submission_approved_at']),
+          completion_year: extract_year(committee_data['final_submission_approved_at']),
+          completion_month: extract_month(committee_data['final_submission_approved_at'])
+        )
+
+        committee.save!
       end
     end
 
