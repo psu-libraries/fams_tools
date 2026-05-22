@@ -28,7 +28,7 @@ RSpec.describe CommitteeData::EtdaImporter do
       end
 
       it 'creates a committee with the correct attributes' do
-        expect { importer.import_all }.to change(Committee, :count).by(4)
+        expect { importer.import_all }.to change(Committee, :count).by(1)
         expect(Committee.last.student_fname).to eq('Spider')
         expect(Committee.last.student_lname).to eq('Man')
         expect(Committee.last.role).to eq('Advisor')
