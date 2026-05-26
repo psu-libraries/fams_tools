@@ -179,6 +179,7 @@ jobs:
       CONFIG_REPO_NAME: << pipeline.parameters.CONFIG_REPO_NAME >>
       CONFIG_REPO_URL: << pipeline.parameters.CONFIG_REPO_URL >>
       DELETE_BRANCH: << parameters.delete_branch >>
+      APP_NAME: "fams-tools"
     steps:
       - clone-config-repo
       - run:
@@ -198,6 +199,7 @@ jobs:
       CONFIG_REPO_NAME: << pipeline.parameters.CONFIG_REPO_NAME >>
       CONFIG_REPO_URL: << pipeline.parameters.CONFIG_REPO_URL >>
       CONFIG_REPO: << pipeline.parameters.CONFIG_REPO_URL >>
+      APP_NAME: "fams-tools"
     parameters:
       clusters:
         type: string
@@ -248,11 +250,7 @@ jobs:
       - run:
           name: Tag & Release Image
           command: |
-            export TRIGGERED_BY="$CIRCLE_USERNAME"
-            /usr/local/bin/image-tag
-            cd $CONFIG_REPO_NAME
-            /usr/local/bin/image-release-pr "clusters/prod/manifests/fams_tools/prod.yaml"
-            /usr/local/bin/image-release-pr "clusters/ulprod/manifests/fams_tools/prod.yaml"
+            /usr/local/bin/image-release-for-clusters
 
 workflows:
 
