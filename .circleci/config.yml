@@ -84,6 +84,155 @@ jobs:
           command: |
             docker-compose exec web /app/bin/ci-rspec
 
+<<<<<<< Updated upstream
+=======
+  build-image:
+    environment:
+      REGISTRY_HOST: << pipeline.parameters.REGISTRY_HOST >>
+      REGISTRY_REPO: "library/fams-tools"
+    executor:
+      name: ci-utils
+      image_tag: << pipeline.parameters.CI_UTILS_IMAGE_TAG >>
+      registry_host: << pipeline.parameters.REGISTRY_HOST >>
+    steps:
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - checkout
+      - compute-docker-tag
+      - docker/check:
+          registry: $REGISTRY_HOST
+      - docker/build:
+          image: $REGISTRY_REPO
+          registry: $REGISTRY_HOST
+          tag: $TAG
+          extra_build_args: "--target=production"
+      - run:
+          name: Save Docker image
+          command: |
+            docker save $REGISTRY_HOST/$REGISTRY_REPO:$TAG -o /tmp/docker-image.tar
+      - run:
+          name: Save image info for push job
+          command: |
+            mkdir -p /tmp/docker-image-info
+            echo "$REGISTRY_HOST/$REGISTRY_REPO:$TAG" > /tmp/docker-image-info/image-name.txt
+      - persist_to_workspace:
+          root: /tmp
+          paths:
+            - docker-image.tar
+            - docker-image-info
+
+  push-image:
+    environment:
+      REGISTRY_HOST: << pipeline.parameters.REGISTRY_HOST >>
+      REGISTRY_REPO: "library/fams-tools"
+    executor:
+      name: ci-utils
+      image_tag: << pipeline.parameters.CI_UTILS_IMAGE_TAG >>
+      registry_host: << pipeline.parameters.REGISTRY_HOST >>
+    steps:
+      - setup_remote_docker:
+          docker_layer_caching: false
+      - checkout
+      - compute-docker-tag
+      - attach_workspace:
+          at: /tmp
+      - run:
+          name: Load Docker image
+          command: |
+            docker load -i /tmp/docker-image.tar
+      - docker/check:
+          registry: $REGISTRY_HOST
+      - docker/push:
+          image: $REGISTRY_REPO
+          registry: $REGISTRY_HOST
+          tag: $TAG
+
+  delete-deployment:
+    parameters:
+      delete_branch:
+        type: string
+    executor:
+      name: ci-utils
+      image_tag: << pipeline.parameters.CI_UTILS_IMAGE_TAG >>
+      registry_host: << pipeline.parameters.REGISTRY_HOST >>
+    environment:
+      CONFIG_REPO_NAME: << pipeline.parameters.CONFIG_REPO_NAME >>
+      CONFIG_REPO_URL: << pipeline.parameters.CONFIG_REPO_URL >>
+      DELETE_BRANCH: << parameters.delete_branch >>
+      APP_NAME: "fams-tools"
+    steps:
+      - clone-config-repo
+      - run:
+          name: Delete Deployment
+          command: |
+            export TRIGGERED_BY="$CIRCLE_USERNAME"
+            cd $CONFIG_REPO_NAME
+            ./bin/ci-delete-manifest
+
+  deploy-application:
+    executor:
+      name: ci-utils
+      image_tag: << pipeline.parameters.CI_UTILS_IMAGE_TAG >>
+      registry_host: << pipeline.parameters.REGISTRY_HOST >>
+    environment:
+      clusters: << parameters.clusters >>
+      CONFIG_REPO_NAME: << pipeline.parameters.CONFIG_REPO_NAME >>
+      CONFIG_REPO_URL: << pipeline.parameters.CONFIG_REPO_URL >>
+      CONFIG_REPO: << pipeline.parameters.CONFIG_REPO_URL >>
+      APP_NAME: "fams-tools"
+    parameters:
+      clusters:
+        type: string
+    steps:
+      - clone-config-repo
+      - compute-docker-tag
+      - run:
+          name: Add or Update Application Manifest
+          command: |
+            export TRIGGERED_BY="$CIRCLE_USERNAME"
+            clusters="${clusters// /}"
+            IFS=',' read -ra CLUSTERS \<<< "$clusters"
+            echo "Pre loop Directory: $(pwd)"
+            for cluster in "${CLUSTERS[@]}"; do
+                export TARGET_CLUSTER="$cluster"
+                echo "Processing cluster: $TARGET_CLUSTER"
+                cd $CONFIG_REPO_NAME
+                ./bin/ci-write-manifest
+                echo "Finished processing $TARGET_CLUSTER"
+                git status
+            done
+
+  release-image:
+    parameters:
+      clusters:
+        type: string
+      from_tag:
+        type: string
+      to_tag:
+        type: string
+    executor:
+      name: ci-utils
+      image_tag: << pipeline.parameters.CI_UTILS_IMAGE_TAG >>
+      registry_host: << pipeline.parameters.REGISTRY_HOST >>
+    environment:
+      clusters: << parameters.clusters >>
+      CONFIG_REPO_NAME: << pipeline.parameters.CONFIG_REPO_NAME >>
+      CONFIG_REPO: << pipeline.parameters.CONFIG_REPO_URL >>
+      CONFIG_REPO_URL: << pipeline.parameters.CONFIG_REPO_URL >>
+      REGISTRY_HOST: << pipeline.parameters.REGISTRY_HOST >>
+      REGISTRY_REPO: "fams-tools"
+      FROM_TAG: << parameters.from_tag >>
+      TO_TAG: << parameters.to_tag >>
+      TO_YAML_TAG_TARGET: ".spec.source.helm.values.image.tag"
+      PIPELINE_CONFIG_VERSION: << pipeline.parameters.PIPELINE_CONFIG_VERSION >>
+    steps:
+      - clone-config-repo
+      - run:
+          name: Tag & Release Image
+          command: |
+            /usr/local/bin/image-release-for-clusters
+
+>>>>>>> Stashed changes
 workflows:
   fams:
     jobs:
