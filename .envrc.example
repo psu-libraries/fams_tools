@@ -3,11 +3,11 @@
 
 export GRADUATE_API_URL="http://localhost:3000"
 export GRADUATE_API_TOKEN=""
-export HONORS_API_URL="http://localhost:3001"
+export HONORS_API_URL="http://localhost:3000"
 export HONORS_API_TOKEN=""
-export MILLENNIUM_SCHOLARS_API_URL="http://localhost:3002"
+export MILLENNIUM_SCHOLARS_API_URL="http://localhost:3000"
 export MILLENNIUM_SCHOLARS_API_TOKEN=""
-export SSET_API_URL="http://localhost:3003"
+export SSET_API_URL="http://localhost:3000"
 export SSET_API_TOKEN=""
 
 
