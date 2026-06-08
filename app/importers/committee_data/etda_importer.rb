@@ -28,9 +28,9 @@ module CommitteeData
       end
     end
 
-    def import_all
+    def import_all(since: 30.days.ago)
       Faculty.find_each do |faculty|
-        import_for_faculty(faculty)
+        import_for_faculty(faculty, since:)
       rescue StandardError => e
         Rails.logger.error("Failed to import committees for #{faculty.access_id}: #{e.message}")
       end
@@ -38,10 +38,10 @@ module CommitteeData
 
     private
 
-    def import_for_faculty(faculty)
+    def import_for_faculty(faculty, since:)
       Endpoint.each do |endpoint|
         endpoint_result = fetch_from_endpoint(faculty.access_id, endpoint)
-        process_endpoint_result(faculty, endpoint.partner, endpoint_result)
+        process_endpoint_result(faculty, endpoint.partner, endpoint_result, since:)
       end
     end
 
@@ -53,7 +53,7 @@ module CommitteeData
       { success: false, error: e.message }
     end
 
-    def process_endpoint_result(faculty, endpoint_name, endpoint_result)
+    def process_endpoint_result(faculty, endpoint_name, endpoint_result, since:)
       unless endpoint_result[:success]
         Rails.logger.error("Failed to fetch from #{endpoint_name} for #{faculty.access_id}: #{endpoint_result[:error]}")
         return
@@ -64,7 +64,7 @@ module CommitteeData
       Rails.logger.info("Imported #{committees_data.length} committees for #{faculty.access_id}")
 
       committees_data.each do |committee_data|
-        next unless within_last_six_months?(committee_data['approval_started_at'])
+        next unless within_import_window?(committee_data['approval_started_at'], since:)
 
         role, role_other = CommitteeRoleNormalizer.normalize(committee_data['role'])
         type_of_work = map_type_of_work(committee_data['degree_type'])
@@ -127,10 +127,10 @@ module CommitteeData
       nil
     end
 
-    def within_last_six_months?(date_string)
+    def within_import_window?(date_string, since:)
       return false if date_string.blank?
 
-      Date.parse(date_string) >= 6.months.ago
+      Date.parse(date_string) >= since.to_date
     rescue ArgumentError
       false
     end

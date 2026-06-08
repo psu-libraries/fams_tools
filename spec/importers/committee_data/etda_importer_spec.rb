@@ -28,7 +28,7 @@ RSpec.describe CommitteeData::EtdaImporter do
       end
 
       it 'creates a committee with the correct attributes' do
-        expect { importer.import_all }.to change(Committee, :count).by(1)
+        expect { importer.import_all(since: 1.month.ago) }.to change(Committee, :count).by(1)
         expect(Committee.last.student_fname).to eq('Spider')
         expect(Committee.last.student_lname).to eq('Man')
         expect(Committee.last.role).to eq('Advisor')
@@ -61,7 +61,7 @@ RSpec.describe CommitteeData::EtdaImporter do
       end
 
       it 'stores nil for degree_name' do
-        importer.import_all
+        importer.import_all(since: 1.month.ago)
         expect(Committee.last.degree_name).to be_nil
       end
     end
@@ -83,7 +83,7 @@ RSpec.describe CommitteeData::EtdaImporter do
       end
 
       it 'stores nil for completion_year and completion_month' do
-        importer.import_all
+        importer.import_all(since: 1.month.ago)
         expect(Committee.last.completion_year).to be_nil
         expect(Committee.last.completion_month).to be_nil
       end
@@ -173,23 +173,25 @@ RSpec.describe CommitteeData::EtdaImporter do
     end
   end
 
-  describe '#within_last_six_months?' do
-    it 'returns true for a date within the last 6 months' do
-      recent_date = 1.month.ago.iso8601
-      expect(importer.send(:within_last_six_months?, recent_date)).to be true
+  describe '#within_import_window?' do
+    let(:since) { 30.days.ago }
+
+    it 'returns true for a date within the import window' do
+      recent_date = 1.week.ago.iso8601
+      expect(importer.send(:within_import_window?, recent_date, since: since)).to be true
     end
 
-    it 'returns false for a date older than 6 months' do
+    it 'returns false for a date older than the import window' do
       old_date = 1.year.ago.iso8601
-      expect(importer.send(:within_last_six_months?, old_date)).to be false
+      expect(importer.send(:within_import_window?, old_date, since: since)).to be false
     end
 
     it 'returns false for a nil date' do
-      expect(importer.send(:within_last_six_months?, nil)).to be false
+      expect(importer.send(:within_import_window?, nil, since: since)).to be false
     end
 
     it 'returns false for a blank date' do
-      expect(importer.send(:within_last_six_months?, '')).to be false
+      expect(importer.send(:within_import_window?, '', since: since)).to be false
     end
   end
 
@@ -213,7 +215,7 @@ RSpec.describe CommitteeData::EtdaImporter do
     expect(Rails.logger).to receive(:error).with(/mpk6156.*API down/).at_least(:once)
     expect(Rails.logger).to receive(:error).with(/abc123.*API down/).at_least(:once)
     expect(Rails.logger).to receive(:error).with(/aez1236.*API down/).at_least(:once)
-    expect { importer.import_all }.not_to raise_error
+    expect { importer.import_all(since: 1.month.ago) }.not_to raise_error
   end
 
   describe 'multi-endpoint import' do
@@ -265,7 +267,7 @@ RSpec.describe CommitteeData::EtdaImporter do
         .with(faculty.access_id)
         .and_return(etda_data, honors_data, empty_data, empty_data)
 
-      importer.import_all
+      importer.import_all(since: 2.months.ago)
 
       expect(faculty.committees.count).to eq(2)
       expect(faculty.committees.find_by(student_fname: 'John')).to be_present
@@ -307,7 +309,7 @@ RSpec.describe CommitteeData::EtdaImporter do
         end
       end
 
-      expect { importer.import_all }.not_to raise_error
+      expect { importer.import_all(since: 2.months.ago) }.not_to raise_error
 
       expect(faculty.committees.count).to eq(1)
     end
