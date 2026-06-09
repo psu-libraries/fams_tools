@@ -39,10 +39,12 @@ module CommitteeData
     private
 
     def import_for_faculty(faculty, since:)
+      total = 0
       Endpoint.each do |endpoint|
         endpoint_result = fetch_from_endpoint(faculty.access_id, endpoint)
-        process_endpoint_result(faculty, endpoint.partner, endpoint_result, since:)
+        total += process_endpoint_result(faculty, endpoint.partner, endpoint_result, since:)
       end
+      Rails.logger.info("Saved #{total} committees for #{faculty.access_id}")
     end
 
     # Rescues per-endpoint so a single failing system doesn't abort the others.
@@ -56,12 +58,11 @@ module CommitteeData
     def process_endpoint_result(faculty, endpoint_name, endpoint_result, since:)
       unless endpoint_result[:success]
         Rails.logger.error("Failed to fetch from #{endpoint_name} for #{faculty.access_id}: #{endpoint_result[:error]}")
-        return
+        return 0
       end
 
       committees_data = endpoint_result[:data]['committees'] || []
-
-      Rails.logger.info("Imported #{committees_data.length} committees for #{faculty.access_id}")
+      saved = 0
 
       committees_data.each do |committee_data|
         next unless within_import_window?(committee_data['approval_started_at'], since:)
@@ -90,7 +91,10 @@ module CommitteeData
         )
 
         committee.save!
+        saved += 1
       end
+
+      saved
     end
 
     def map_type_of_work(degree_type)
