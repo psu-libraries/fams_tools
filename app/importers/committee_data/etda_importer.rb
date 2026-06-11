@@ -83,7 +83,7 @@ module CommitteeData
 
         committee.assign_attributes(
           role_other: role_other,
-          thesis_title: committee_data['title'],
+          thesis_title: sanitize(committee_data['title']),
           degree_name: committee_data['degree_name'],
           stage_of_completion: determine_completion_stage(committee_data['final_submission_approved_at']),
           completion_year: extract_year(committee_data['final_submission_approved_at']),
@@ -95,6 +95,10 @@ module CommitteeData
       end
 
       saved
+    end
+
+    def sanitize(value)
+      value.to_s.gsub(/[\x00-\x08\x0B\x0C\x0E-\x1F]/, '')
     end
 
     def map_type_of_work(degree_type)

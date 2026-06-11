@@ -40,10 +40,6 @@ every '0 22 * * 0', roles: [:app] do
   rake 'activity_insight:get_user_data'
 end
 
-every '0 1 10 * *', roles: [:app] do
-  rake 'committee:integrate'
-end
-
 # every '0 0 * 4,8,12 2', roles: [:app] do
 #   # first Tuesday of April, August, and December
 #   rake 'com_effort:integrate'
