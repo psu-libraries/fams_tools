@@ -45,4 +45,5 @@ spec/examples.txt
 .irb_history
 .DS_Store
 CLAUDE.md
-/docs/superpowers/
+/docs/superpowers/.local/
+.config/

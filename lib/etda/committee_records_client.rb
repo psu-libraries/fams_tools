@@ -1,36 +1,34 @@
-require './lib/etda/committee_records_client'
 require 'httparty'
+
 module Etda
   class CommitteeRecordsClient
     class CommitteeRecordsClientError < StandardError; end
 
+    def initialize(url:, api_token:)
+      raise ArgumentError, 'url is required' if url.blank?
+      raise ArgumentError, 'api_token is required' if api_token.blank?
+
+      @url = url
+      @api_token = api_token
+    end
+
     def faculty_committees(access_id)
       response = HTTParty.post(
-        "#{base_url}/api/v1/committee_records/faculty_committees",
+        "#{@url}/api/v1/committee_records/faculty_committees",
         headers: headers,
         body: body(access_id)
       )
 
       handle_response(response)
-
-    # Tells us the error with committe records client with the error itself
-    rescue StandardError => e
-      raise CommitteeRecordsClientError, e.message
+    rescue HTTParty::Error, Timeout::Error => e
+      raise CommitteeRecordsClientError, "API request failed: #{e.message}"
     end
 
     private
 
-    def base_url
-      @base_url ||= ENV.fetch('ETDA_API_URL', 'http://localhost:3000')
-    end
-
-    def api_token
-      @api_token ||= ENV.fetch('ETDA_API_TOKEN', 'abc123')
-    end
-
     def headers
       {
-        'X-API-KEY' => api_token,
+        'X-API-KEY' => @api_token,
         'Content-Type' => 'application/json'
       }
     end
@@ -42,7 +40,12 @@ module Etda
     end
 
     def handle_response(response)
-      raise CommitteeRecordsClientError, response.parsed_response['error'] || 'Unknown error' unless response.success?
+      unless response.success?
+        parsed = response.parsed_response
+        error_msg = parsed.is_a?(Hash) ? parsed['error'] : nil
+        error_msg ||= 'Unknown error'
+        raise CommitteeRecordsClientError, "HTTP #{response.code}: #{error_msg}"
+      end
 
       {
         success: true,

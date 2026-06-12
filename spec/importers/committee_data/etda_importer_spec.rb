@@ -9,29 +9,26 @@ RSpec.describe CommitteeData::EtdaImporter do
 
   let(:client) { instance_double(Etda::CommitteeRecordsClient) }
 
-  before do
-    allow(Etda::CommitteeRecordsClient).to receive(:new).and_return(client)
-  end
-
   describe '#import_all' do
     context 'when the import finds a committee' do
-      let(:api_response) do
-        { data: { 'committees' => [
-          { 'student_fname' => 'Spider', 'student_lname' => 'Man',
-            'role' => 'advisor', 'title' => 'My Thesis', 'degree_type' => 'Dissertation',
-            'degree_name' => 'PhD',
-            'approval_started_at' => 1.month.ago.iso8601,
-            'final_submission_approved_at' => '2026-01-15T10:30:00Z',
-            'submission_status' => 'released for publication' }
-        ] } }
+      let(:committee_data) do
+        { 'student_fname' => 'Spider', 'student_lname' => 'Man',
+          'role' => 'advisor', 'title' => 'My Thesis', 'degree_type' => 'Dissertation',
+          'degree_name' => 'PhD',
+          'approval_started_at' => 1.month.ago.iso8601,
+          'final_submission_approved_at' => '2026-01-15T10:30:00Z',
+          'submission_status' => 'released for publication' }
       end
 
       before do
-        allow(client).to receive(:faculty_committees).and_return(api_response)
+        allow(Etda::CommitteeRecordsClient).to receive(:new).and_return(client)
+        allow(client).to receive(:faculty_committees).with('abc123').and_return({ success: true, data: { 'committees' => [committee_data] } })
+        allow(client).to receive(:faculty_committees).with('mpk6156').and_return({ success: true, data: { 'committees' => [] } })
+        allow(client).to receive(:faculty_committees).with('aez1236').and_return({ success: true, data: { 'committees' => [] } })
       end
 
       it 'creates a committee with the correct attributes' do
-        expect { importer.import_all }.to change(Committee, :count).by(3)
+        expect { importer.import_all(since: 1.month.ago) }.to change(Committee, :count).by(1)
         expect(Committee.last.student_fname).to eq('Spider')
         expect(Committee.last.student_lname).to eq('Man')
         expect(Committee.last.role).to eq('Advisor')
@@ -47,40 +44,46 @@ RSpec.describe CommitteeData::EtdaImporter do
     end
 
     context 'when degree_name is nil in the API response' do
-      let(:api_response) do
-        { data: { 'committees' => [
-          { 'student_fname' => 'Spider', 'student_lname' => 'Man',
-            'role' => 'advisor', 'title' => 'My Thesis', 'degree_type' => 'Dissertation',
-            'degree_name' => nil,
-            'approval_started_at' => 1.month.ago.iso8601,
-            'final_submission_approved_at' => '2026-01-15T10:30:00Z',
-            'submission_status' => 'released for publication' }
-        ] } }
+      let(:committee_data) do
+        { 'student_fname' => 'Spider', 'student_lname' => 'Man',
+          'role' => 'advisor', 'title' => 'My Thesis', 'degree_type' => 'Dissertation',
+          'degree_name' => nil,
+          'approval_started_at' => 1.month.ago.iso8601,
+          'final_submission_approved_at' => '2026-01-15T10:30:00Z',
+          'submission_status' => 'released for publication' }
       end
 
-      before { allow(client).to receive(:faculty_committees).and_return(api_response) }
+      before do
+        allow(Etda::CommitteeRecordsClient).to receive(:new).and_return(client)
+        allow(client).to receive(:faculty_committees).with('abc123').and_return({ success: true, data: { 'committees' => [committee_data] } })
+        allow(client).to receive(:faculty_committees).with('mpk6156').and_return({ success: true, data: { 'committees' => [] } })
+        allow(client).to receive(:faculty_committees).with('aez1236').and_return({ success: true, data: { 'committees' => [] } })
+      end
 
       it 'stores nil for degree_name' do
-        importer.import_all
+        importer.import_all(since: 1.month.ago)
         expect(Committee.last.degree_name).to be_nil
       end
     end
 
     context 'when final_submission_approved_at is nil' do
-      let(:api_response) do
-        { data: { 'committees' => [
-          { 'student_fname' => 'Spider', 'student_lname' => 'Man',
-            'role' => 'advisor', 'title' => 'My Thesis', 'degree_type' => 'Dissertation',
-            'approval_started_at' => 1.month.ago.iso8601,
-            'final_submission_approved_at' => nil,
-            'submission_status' => 'waiting for publication release' }
-        ] } }
+      let(:committee_data) do
+        { 'student_fname' => 'Spider', 'student_lname' => 'Man',
+          'role' => 'advisor', 'title' => 'My Thesis', 'degree_type' => 'Dissertation',
+          'approval_started_at' => 1.month.ago.iso8601,
+          'final_submission_approved_at' => nil,
+          'submission_status' => 'waiting for publication release' }
       end
 
-      before { allow(client).to receive(:faculty_committees).and_return(api_response) }
+      before do
+        allow(Etda::CommitteeRecordsClient).to receive(:new).and_return(client)
+        allow(client).to receive(:faculty_committees).with('abc123').and_return({ success: true, data: { 'committees' => [committee_data] } })
+        allow(client).to receive(:faculty_committees).with('mpk6156').and_return({ success: true, data: { 'committees' => [] } })
+        allow(client).to receive(:faculty_committees).with('aez1236').and_return({ success: true, data: { 'committees' => [] } })
+      end
 
       it 'stores nil for completion_year and completion_month' do
-        importer.import_all
+        importer.import_all(since: 1.month.ago)
         expect(Committee.last.completion_year).to be_nil
         expect(Committee.last.completion_month).to be_nil
       end
@@ -170,23 +173,25 @@ RSpec.describe CommitteeData::EtdaImporter do
     end
   end
 
-  describe '#within_last_six_months?' do
-    it 'returns true for a date within the last 6 months' do
-      recent_date = 1.month.ago.iso8601
-      expect(importer.send(:within_last_six_months?, recent_date)).to be true
+  describe '#within_import_window?' do
+    let(:since) { 30.days.ago }
+
+    it 'returns true for a date within the import window' do
+      recent_date = 1.week.ago.iso8601
+      expect(importer.send(:within_import_window?, recent_date, since: since)).to be true
     end
 
-    it 'returns false for a date older than 6 months' do
+    it 'returns false for a date older than the import window' do
       old_date = 1.year.ago.iso8601
-      expect(importer.send(:within_last_six_months?, old_date)).to be false
+      expect(importer.send(:within_import_window?, old_date, since: since)).to be false
     end
 
     it 'returns false for a nil date' do
-      expect(importer.send(:within_last_six_months?, nil)).to be false
+      expect(importer.send(:within_import_window?, nil, since: since)).to be false
     end
 
     it 'returns false for a blank date' do
-      expect(importer.send(:within_last_six_months?, '')).to be false
+      expect(importer.send(:within_import_window?, '', since: since)).to be false
     end
   end
 
@@ -202,13 +207,111 @@ RSpec.describe CommitteeData::EtdaImporter do
     end
   end
 
-  it 'rescues CommitteeRecordsClientError and logs it' do
+  it 'rescues StandardError and logs it' do
+    allow(Etda::CommitteeRecordsClient).to receive(:new).and_return(client)
     allow(client).to receive(:faculty_committees)
       .and_raise(Etda::CommitteeRecordsClient::CommitteeRecordsClientError, 'API down')
 
-    expect(Rails.logger).to receive(:error).with(/mpk6156.*API down/)
-    expect(Rails.logger).to receive(:error).with(/abc123.*API down/)
-    expect(Rails.logger).to receive(:error).with(/aez1236.*API down/)
-    expect { importer.import_all }.not_to raise_error
+    expect(Rails.logger).to receive(:error).with(/mpk6156.*API down/).at_least(:once)
+    expect(Rails.logger).to receive(:error).with(/abc123.*API down/).at_least(:once)
+    expect(Rails.logger).to receive(:error).with(/aez1236.*API down/).at_least(:once)
+    expect { importer.import_all(since: 1.month.ago) }.not_to raise_error
+  end
+
+  describe 'multi-endpoint import' do
+    it 'imports committees from all endpoints' do
+      faculty = create(:faculty)
+
+      allow(Etda::CommitteeRecordsClient).to receive(:new).and_return(client)
+
+      etda_data = {
+        success: true,
+        data: {
+          'committees' => [
+            {
+              'student_fname' => 'John',
+              'student_lname' => 'Doe',
+              'role' => 'Chair',
+              'title' => 'Thesis 1',
+              'degree_type' => 'Dissertation',
+              'degree_name' => 'PhD',
+              'approval_started_at' => 2.months.ago.to_date.to_s,
+              'final_submission_approved_at' => nil
+            }
+          ]
+        }
+      }
+
+      honors_data = {
+        success: true,
+        data: {
+          'committees' => [
+            {
+              'student_fname' => 'Jane',
+              'student_lname' => 'Smith',
+              'role' => 'Member',
+              'title' => 'Honors Thesis',
+              'degree_type' => 'Thesis',
+              'degree_name' => 'BA',
+              'approval_started_at' => 1.month.ago.to_date.to_s,
+              'final_submission_approved_at' => nil
+            }
+          ]
+        }
+      }
+
+      empty_data = { success: true, data: { 'committees' => [] } }
+
+      allow(client).to receive(:faculty_committees).and_return(empty_data)
+      allow(client).to receive(:faculty_committees)
+        .with(faculty.access_id)
+        .and_return(etda_data, honors_data, empty_data, empty_data)
+
+      importer.import_all(since: 2.months.ago)
+
+      expect(faculty.committees.count).to eq(2)
+      expect(faculty.committees.find_by(student_fname: 'John')).to be_present
+      expect(faculty.committees.find_by(student_fname: 'Jane')).to be_present
+    end
+
+    it 'continues importing if one endpoint fails' do
+      faculty = create(:faculty)
+
+      allow(Etda::CommitteeRecordsClient).to receive(:new).and_return(client)
+
+      etda_data = {
+        success: true,
+        data: {
+          'committees' => [
+            {
+              'student_fname' => 'John',
+              'student_lname' => 'Doe',
+              'role' => 'Chair',
+              'title' => 'Thesis',
+              'degree_type' => 'Dissertation',
+              'degree_name' => 'PhD',
+              'approval_started_at' => 2.months.ago.to_date.to_s,
+              'final_submission_approved_at' => nil
+            }
+          ]
+        }
+      }
+
+      allow(client).to receive(:faculty_committees).and_return({ success: true, data: { 'committees' => [] } })
+
+      call_count = 0
+      allow(client).to receive(:faculty_committees).with(faculty.access_id) do
+        call_count += 1
+        case call_count
+        when 1 then etda_data
+        when 2 then raise Etda::CommitteeRecordsClient::CommitteeRecordsClientError, 'API unavailable'
+        else { success: true, data: { 'committees' => [] } }
+        end
+      end
+
+      expect { importer.import_all(since: 2.months.ago) }.not_to raise_error
+
+      expect(faculty.committees.count).to eq(1)
+    end
   end
 end

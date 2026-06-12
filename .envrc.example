@@ -1,8 +1,16 @@
 # Example environment variables for FAMS Tools
 # Copy this file to .envrc and replace with actual values
 
-export ETDA_API_URL="http://localhost:3000"
-export ETDA_API_TOKEN="generate_a_token_in_ETDA_console"
+export GRADUATE_API_URL="http://localhost:3000"
+export GRADUATE_API_TOKEN=""
+export HONORS_API_URL="http://localhost:3000"
+export HONORS_API_TOKEN=""
+export MILLENNIUM_SCHOLARS_API_URL="http://localhost:3000"
+export MILLENNIUM_SCHOLARS_API_TOKEN=""
+export SSET_API_URL="http://localhost:3000"
+export SSET_API_TOKEN=""
+
+
 export FAMS_WEBSERVICES_USERNAME
 export FAMS_WEBSERVICES_PASSWORD
 export FAMS_MAIN_USERNAME
