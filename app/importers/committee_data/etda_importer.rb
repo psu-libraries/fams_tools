@@ -4,9 +4,10 @@ module CommitteeData
   class EtdaImporter
     class DegreeTypeError < RuntimeError; end
 
-    def import_all(since: 30.days.ago)
+    def import_all(since: Date.current.prev_month.change(day: 10),
+                   until_date: Date.current.change(day: 10))
       Faculty.find_each do |faculty|
-        import_for_faculty(faculty, since:)
+        import_for_faculty(faculty, since:, until_date:)
       rescue StandardError => e
         Rails.logger.error("Failed to import committees for #{faculty.access_id}: #{e.message}")
       end
@@ -14,11 +15,11 @@ module CommitteeData
 
     private
 
-    def import_for_faculty(faculty, since:)
+    def import_for_faculty(faculty, since:, until_date:)
       total = 0
       Endpoint.each do |endpoint|
         endpoint_result = fetch_from_endpoint(faculty.access_id, endpoint)
-        total += process_endpoint_result(faculty, endpoint.partner, endpoint_result, since:)
+        total += process_endpoint_result(faculty, endpoint.partner, endpoint_result, since:, until_date:)
       end
       Rails.logger.info("Saved #{total} committees for #{faculty.access_id}")
     end
@@ -31,7 +32,7 @@ module CommitteeData
       { success: false, error: e.message }
     end
 
-    def process_endpoint_result(faculty, endpoint_name, endpoint_result, since:)
+    def process_endpoint_result(faculty, endpoint_name, endpoint_result, since:, until_date:)
       unless endpoint_result[:success]
         Rails.logger.error("Failed to fetch from #{endpoint_name} for #{faculty.access_id}: #{endpoint_result[:error]}")
         return 0
@@ -41,7 +42,7 @@ module CommitteeData
       saved = 0
 
       committees_data.each do |committee_data|
-        next unless within_import_window?(committee_data['approval_started_at'], since:)
+        next unless within_import_window?(committee_data['approval_started_at'], since:, until_date:)
 
         role, role_other = CommitteeRoleNormalizer.normalize(committee_data['role'])
         type_of_work = map_type_of_work(committee_data['degree_type'])
@@ -111,10 +112,10 @@ module CommitteeData
       nil
     end
 
-    def within_import_window?(date_string, since:)
+    def within_import_window?(date_string, since:, until_date:)
       return false if date_string.blank?
 
-      Date.parse(date_string) >= since.to_date
+      Date.parse(date_string).between?(since.to_date, until_date.to_date)
     rescue ArgumentError
       false
     end

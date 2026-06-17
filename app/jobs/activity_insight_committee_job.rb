@@ -1,6 +1,7 @@
 class ActivityInsightCommitteeJob < ApplicationJob
-  def integrate(target)
-    CommitteeData::EtdaImporter.new.import_all
+  def integrate(target, since: nil)
+    window_since, window_until = since ? [since, since.next_month] : default_window
+    CommitteeData::EtdaImporter.new.import_all(since: window_since, until_date: window_until)
 
     builder   = CommitteeData::CommitteeXmlBuilder.new
     xml_enum  = builder.xmls_enumerator
@@ -10,6 +11,10 @@ class ActivityInsightCommitteeJob < ApplicationJob
   end
 
   private
+
+  def default_window
+    [Date.current.prev_month.change(day: 10), Date.current.change(day: 10)]
+  end
 
   def name
     'Committee Integration'
