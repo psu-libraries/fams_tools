@@ -175,23 +175,24 @@ RSpec.describe CommitteeData::EtdaImporter do
 
   describe '#within_import_window?' do
     let(:since) { 30.days.ago }
+    let(:until_date) { Time.current }
 
     it 'returns true for a date within the import window' do
       recent_date = 1.week.ago.iso8601
-      expect(importer.send(:within_import_window?, recent_date, since: since)).to be true
+      expect(importer.send(:within_import_window?, recent_date, since: since, until_date: until_date)).to be true
     end
 
     it 'returns false for a date older than the import window' do
       old_date = 1.year.ago.iso8601
-      expect(importer.send(:within_import_window?, old_date, since: since)).to be false
+      expect(importer.send(:within_import_window?, old_date, since: since, until_date: until_date)).to be false
     end
 
     it 'returns false for a nil date' do
-      expect(importer.send(:within_import_window?, nil, since: since)).to be false
+      expect(importer.send(:within_import_window?, nil, since: since, until_date: until_date)).to be false
     end
 
     it 'returns false for a blank date' do
-      expect(importer.send(:within_import_window?, '', since: since)).to be false
+      expect(importer.send(:within_import_window?, '', since: since, until_date: until_date)).to be false
     end
   end
 
