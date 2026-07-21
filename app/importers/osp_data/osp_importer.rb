@@ -54,8 +54,8 @@ class OspData::OspImporter
     false
   end
 
-  # We want to update 'Pending' contracts when their status changes to anything 
-  # (including but not limited to 'Purged', 'Withdrawn', and 'Not Funded'), 
+  # We want to update 'Pending' contracts when their status changes to anything
+  # (including but not limited to 'Purged', 'Withdrawn', and 'Not Funded'),
   # but we don't want to import any _new_ 'Withdrawn' or 'Purged' contracts.
   def is_proper_status(row)
     if %w[Purged Withdrawn].include?(row['status'])
