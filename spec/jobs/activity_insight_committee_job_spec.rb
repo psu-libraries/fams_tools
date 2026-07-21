@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe ActivityInsightCommitteeJob, type: :job do
+  include ActiveSupport::Testing::TimeHelpers
+
   describe '#integrate' do
     let(:target) { 'test_target' }
     let(:xml_enumerator) { ['<xml>test</xml>'].to_enum }
@@ -60,9 +62,7 @@ RSpec.describe ActivityInsightCommitteeJob, type: :job do
     describe 'window computation' do
       let(:current_date) { Date.new(2026, 6, 18) }
 
-      before do
-        allow(Date).to receive(:current).and_return(current_date)
-      end
+      before { travel_to(current_date) }
 
       it 'defaults to 1 month back (May 10 → June 10)' do
         expect(importer_double).to receive(:import_all).with(

@@ -89,6 +89,8 @@ RSpec.describe OspData::OspImporter do
                  0.15, 0.15, 0.15]
     data_arr << [2, 1, '', '', '', '', '', '', '', 1, 'Awarded', '', '', 1, 1, 1, '', '', '', '', '', '', '', '', '',
                  0.15, 0.15, 0.15]
+    data_arr << [193_848, 1, '', '', '', '', '', '', '', 1, 'Purged', '', '', 1, 1, 1, '', '', '', '', '', '', '', '',
+                 '', 0.15, 0.15, 0.15]
     data_arr
   end
 
@@ -96,7 +98,7 @@ RSpec.describe OspData::OspImporter do
     data_arr = []
     data_arr << %w[OSPKEY STATUS]
     data_arr << [123_456, 'Pending']
-    data_arr << [193_848, 'Not Funded']
+    data_arr << [193_848, 'Pending']
   end
 
   before do
@@ -179,8 +181,8 @@ RSpec.describe OspData::OspImporter do
     end
   end
 
-  describe '#filter_by_status' do
-    it "removes rows with 'Purged' or 'Withdrawn' status" do
+  describe '#is_proper_status' do
+    it "keeps 'Purged' or 'Withdrawn' rows only when the record was previously 'Pending'" do
       allow(CSV).to receive(:open).and_return(data_book4)
       allow(CSV).to receive(:foreach).and_yield(fake_backup[0]).and_yield(fake_backup[1]).and_yield(fake_backup[2])
       allow_any_instance_of(OspData::OspImporter).to receive(:is_good_date).and_return(true)
@@ -189,17 +191,18 @@ RSpec.describe OspData::OspImporter do
       expect(Contract.count).to eq(3)
       expect(Contract.first.status).to eq('Awarded')
       expect(Contract.second.status).to eq('Withdrawn')
+      expect(Contract.second.osp_key).to eq(123_456)
       expect(Contract.third.status).to eq('Purged')
+      expect(Contract.third.osp_key).to eq(193_848)
     end
 
-    it "removes rows with 'Not Funded' status" do
+    it "keeps rows with 'Not Funded' status (and any other status that is not 'Purged' or 'Withdrawn')" do
       allow(CSV).to receive(:open).and_return(data_book6)
-      allow(CSV).to receive(:foreach).and_yield(fake_backup[0]).and_yield(fake_backup[1]).and_yield(fake_backup[2])
       allow_any_instance_of(OspData::OspImporter).to receive(:is_good_date).and_return(true)
       allow_any_instance_of(OspData::OspImporter).to receive(:is_user).and_return(true)
       osp_parser_obj.format_and_populate
-      expect(Contract.count).to eq(1)
-      expect(Contract.first.status).to eq('Awarded')
+      expect(Contract.count).to eq(2)
+      expect(Contract.pluck(:status)).to contain_exactly('Not Funded', 'Awarded')
     end
   end
 
