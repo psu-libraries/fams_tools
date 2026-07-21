@@ -62,9 +62,7 @@ RSpec.describe ActivityInsightCommitteeJob, type: :job do
     describe 'window computation' do
       let(:current_date) { Date.new(2026, 6, 18) }
 
-      around do |example|
-        travel_to(current_date) { example.run }
-      end
+      before { travel_to(current_date) }
 
       it 'defaults to 1 month back (May 10 → June 10)' do
         expect(importer_double).to receive(:import_all).with(
