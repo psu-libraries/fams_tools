@@ -1,11 +1,11 @@
 class OspData::OspImporter
-  attr_accessor :headers, :csv_obj, :pendnotfund
+  attr_accessor :headers, :csv_obj, :pending_osps
 
   def initialize(osp_path = "#{Rails.root.join('app/parsing_files/contract_grants.csv')}",
                  backup_path = "#{Rails.root.join('app/parsing_files/CONGRANT.csv')}")
     @csv_obj = CSV.open(osp_path, encoding: 'Windows-1252:UTF-8', force_quotes: true, quote_char: '"')
     @headers = @csv_obj.first
-    @pendnotfund = find_converts(backup_path)
+    @pending_osps = find_converts(backup_path)
   end
 
   # Run all local formatting methods then import to db
@@ -54,15 +54,16 @@ class OspData::OspImporter
     false
   end
 
-  # We want to update Not Funded to purged or withdrawn but we dont want to import any new Not Funded, withdrawn, or purged contracts
+  # We want to update 'Pending' contracts when their status changes to anything 
+  # (including but not limited to 'Purged', 'Withdrawn', and 'Not Funded'), 
+  # but we don't want to import any _new_ 'Withdrawn' or 'Purged' contracts.
   def is_proper_status(row)
     if %w[Purged Withdrawn].include?(row['status'])
-      return true if pendnotfund.include? row['ospkey']
+      return true if pending_osps.include? row['ospkey']
 
       false
-
     else
-      ['Not Funded'].exclude?(row['status'])
+      true
     end
   end
 
@@ -130,18 +131,18 @@ DateTime.strptime(row['accessid'],
   def find_converts(backup_path)
     index = 0
     keys = []
-    pendnotfund = []
+    pending_osps = []
     CSV.foreach(backup_path, encoding: 'ISO8859-1:UTF-8', force_quotes: true, quote_char: '"',
                              liberal_parsing: true) do |backup_row|
       if index == 0
         keys = backup_row
       else
         hashed = keys.zip(backup_row).to_h
-        pendnotfund << hashed['OSPKEY'] if ['Pending', 'Not Funded'].include?(hashed['STATUS'])
+        pending_osps << hashed['OSPKEY'] if ['Pending'].include?(hashed['STATUS'])
       end
       index += 1
     end
-    pendnotfund
+    pending_osps
   end
 
   def format_titles(row)
