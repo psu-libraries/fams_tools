@@ -1,5 +1,3 @@
-require 'etda/committee_records_client'
-
 module CommitteeData
   class EtdaImporter
     class DegreeTypeError < RuntimeError; end

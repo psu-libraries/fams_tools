@@ -1,5 +1,3 @@
-require 'concerns/xlsx_output'
-
 class Work < ApplicationRecord
   belongs_to :publication_listing
   has_many :authors, dependent: :delete_all

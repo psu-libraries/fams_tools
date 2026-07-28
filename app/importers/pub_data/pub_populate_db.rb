@@ -1,5 +1,3 @@
-require 'pub_data/get_pub_data'
-
 # Import designed specifically for data from Metadata database.
 class PubData::PubPopulateDb
   def populate(pub_hash, user_id)

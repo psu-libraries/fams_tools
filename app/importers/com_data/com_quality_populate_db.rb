@@ -1,5 +1,3 @@
-require 'com_data/com_parser'
-
 class ComData::ComQualityPopulateDb
   attr_accessor :com_parser
 

@@ -1,5 +1,3 @@
-require 'lionpath_data/lionpath_parser'
-
 class LionpathData::LionpathPopulateDb
   attr_accessor :lionpath_parser
 
