@@ -24,7 +24,7 @@ gem 'ed25519'
 # For scheduled tasks
 gem 'whenever'
 
-gem 'rails', '~> 8.1'
+gem 'rails', '~> 8.1.4'
 # Use mysql as the database for Active Record
 # ActiveRecord only works with specific versions of mysql2.
 gem 'mysql2', '= 0.5.4'
@@ -76,7 +76,7 @@ gem 'webrick'
 gem 'date', '= 3.3.3'
 gem 'nio4r'
 gem 'racc', '= 1.6.2'
-gem 'websocket-driver', '= 0.7.5'
+gem 'websocket-driver', '= 0.8.2'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
