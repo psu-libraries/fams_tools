@@ -29,7 +29,7 @@ RSpec.describe LionpathData::LionpathXmlBuilder do
                                  f_name: row['f_name'],
                                  l_name: row['l_name'],
                                  m_name: row['m_name'],
-                                 college: 'EN')
+                                 college: 'SIA')
 
         Section.create(course:,
                        faculty:,
@@ -51,8 +51,6 @@ RSpec.describe LionpathData::LionpathXmlBuilder do
       end
       FactoryBot.create(:section, course: FactoryBot.create(:course),
                                   faculty: FactoryBot.create(:faculty, college: 'EE'))
-      FactoryBot.create(:section, course: FactoryBot.create(:course),
-                                  faculty: FactoryBot.create(:faculty, college: 'SIA'))
       expect(xml_builder_obj.xmls_enumerator.first).to eq(
         '<?xml version="1.0" encoding="UTF-8"?>
 <Data>
