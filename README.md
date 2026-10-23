@@ -9,9 +9,9 @@ This app parses data from faculty CVs, and integrates data into Activity Insight
 
 ## Dependencies
 
-  -ruby 3.4
+  -ruby 3.4.11
   
-  -rails 8.1
+  -rails 8.1.4
 
   -mariadb 11
   
