@@ -14,6 +14,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends g++ \
     libmariadb-dev \
     libyaml-dev \
     jq \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 
 USER app
