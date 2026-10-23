@@ -1,4 +1,4 @@
-FROM harbor.libraries.psu.edu/library/ruby-3.4.11-node-22-yarn-4.18.1 AS base
+FROM ruby:3.4.11 AS base
 ARG UID=1001
 WORKDIR /app
 
@@ -7,36 +7,14 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN useradd -l -u ${UID} app -d /app && \
   chown -R app /app
 
-# hadolint ignore=DL3008
 RUN apt-get update && apt-get install -y --no-install-recommends g++ \
-    libqt5webkit5-dev \
     zip \
     unzip \
     openssh-server \
-    gstreamer1.0-plugins-base \
-    gstreamer1.0-tools \
-    gstreamer1.0-x \
     libmariadb-dev \
     libyaml-dev \
-    xvfb \
-    qtbase5-dev \
-    curl \
     jq \
     && rm -rf /var/lib/apt/lists/*
-
-RUN apt-get update && apt-get install -y google-chrome-stable
-
-RUN CHROME_VERSION=$(google-chrome --version | grep -oP '\d+\.\d+\.\d+') && \
-    MAJOR_VERSION=$(echo $CHROME_VERSION | cut -d. -f1) && \
-    LATEST_DRIVER=$(curl -sS https://googlechromelabs.github.io/chrome-for-testing/LATEST_RELEASE_${MAJOR_VERSION}) && \
-    if [ -z "$LATEST_DRIVER" ]; then \
-      LATEST_DRIVER=$(curl -sS https://googlechromelabs.github.io/chrome-for-testing/LATEST_RELEASE); \
-    fi && \
-    wget -q "https://storage.googleapis.com/chrome-for-testing-public/${LATEST_DRIVER}/linux64/chromedriver-linux64.zip" && \
-    unzip chromedriver-linux64.zip && \
-    mv chromedriver-linux64/chromedriver /usr/local/bin/chromedriver && \
-    chmod +x /usr/local/bin/chromedriver && \
-    rm -rf chromedriver-linux64.zip chromedriver-linux64
 
 USER app
 COPY --chown=app Gemfile Gemfile.lock /app/
@@ -47,6 +25,13 @@ RUN gem install bundler -v "$(grep -A 1 "BUNDLED WITH" Gemfile.lock | tail -n 1)
 # - - - - - - - - - - - -
 FROM base AS dev
 WORKDIR /app
+USER root
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    xvfb \
+    chromium \
+    chromium-driver \
+    && ln -s /usr/bin/chromium /usr/local/bin/google-chrome \
+    && rm -rf /var/lib/apt/lists/*
 USER app
 COPY --chown=app . /app
 CMD ["/app/bin/startup"]
