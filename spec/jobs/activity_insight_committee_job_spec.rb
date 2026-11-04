@@ -3,9 +3,11 @@ require 'rails_helper'
 RSpec.describe ActivityInsightCommitteeJob, type: :job do
   include ActiveSupport::Testing::TimeHelpers
 
-  describe '#integrate' do
+  describe '#perform' do
     let(:target) { 'test_target' }
+    let(:params) { { target: } }
     let(:xml_enumerator) { ['<xml>test</xml>'].to_enum }
+    let!(:integration) { FactoryBot.create(:integration) }
 
     let(:builder_double) do
       instance_double(
@@ -26,6 +28,9 @@ RSpec.describe ActivityInsightCommitteeJob, type: :job do
     end
 
     before do
+      logger = instance_double(Logger, info: true, error: true)
+      allow(Logger).to receive(:new).and_return(logger)
+
       allow(CommitteeData::EtdaImporter)
         .to receive(:new)
         .and_return(importer_double)
@@ -42,7 +47,7 @@ RSpec.describe ActivityInsightCommitteeJob, type: :job do
 
     it 'calls the XML builder to get the xml enumerator' do
       expect(CommitteeData::CommitteeXmlBuilder).to receive(:new)
-      described_class.new.integrate(target)
+      described_class.perform_now(params, 'log/committee_errors.log')
     end
 
     it 'initializes ActivityInsight::IntegrateData with correct arguments' do
@@ -50,12 +55,12 @@ RSpec.describe ActivityInsightCommitteeJob, type: :job do
         .to receive(:new)
         .with(xml_enumerator, target, :post)
 
-      described_class.new.integrate(target)
+      described_class.perform_now(params, 'log/committee_errors.log')
     end
 
     it 'calls integrate on the integrator and returns its errors' do
       expect(integrator_double).to receive(:integrate)
-      result = described_class.new.integrate(target)
+      result = described_class.perform_now(params, 'log/committee_errors.log')
       expect(result).to eq([])
     end
 
@@ -69,7 +74,7 @@ RSpec.describe ActivityInsightCommitteeJob, type: :job do
           since: Date.new(2026, 5, 10),
           until_date: Date.new(2026, 6, 10)
         )
-        described_class.new.integrate(target)
+        described_class.perform_now(params, 'log/committee_errors.log')
       end
 
       it 'with month_range: 3 fetches from March 10 → June 10' do
@@ -77,7 +82,7 @@ RSpec.describe ActivityInsightCommitteeJob, type: :job do
           since: Date.new(2026, 3, 10),
           until_date: Date.new(2026, 6, 10)
         )
-        described_class.new.integrate(target, month_range: 3)
+        described_class.perform_now(params.merge(month_range: 3), 'log/committee_errors.log')
       end
 
       it 'with month_range: 6 fetches from December 10 2025 → June 10 2026' do
@@ -85,7 +90,7 @@ RSpec.describe ActivityInsightCommitteeJob, type: :job do
           since: Date.new(2025, 12, 10),
           until_date: Date.new(2026, 6, 10)
         )
-        described_class.new.integrate(target, month_range: 6)
+        described_class.perform_now(params.merge(month_range: 6), 'log/committee_errors.log')
       end
     end
   end
